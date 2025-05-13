@@ -1,13 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { X, Menu, UserPlus, Facebook, Twitter, Instagram } from "lucide-react"
+import { X, Menu, UserPlus, Facebook, Twitter, Instagram, DollarSign, Newspaper, Gift } from "lucide-react"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { T, useLanguage } from "@/contexts/LanguageContext"
+import Image from "next/image"
+import { ScrollAnimation } from "@/components/scroll-animation"
 
 export default function HomePage() {
   const router = useRouter()
@@ -18,8 +20,26 @@ export default function HomePage() {
     router.push("/volunteer/register")
   }
 
+  const handleVolunteerInfo = () => {
+    router.push("/volunteer/info")
+  }
+
+  const handleFundraiserStart = () => {
+    router.push("/fundraiser/new")
+  }
+
+  const handleCampaignLearnMore = () => {
+    router.push("/campaign/learn")
+  }
+
+  const handleNewsExplore = () => {
+    router.push("/news/ongoing")
+  }
+
   return (
-    <div className="min-h-screen flex flex-col bg-blue-50/30">
+    <div className="min-h-screen flex flex-col">
+      {/* Content wrapper */}
+      <div className="flex flex-col min-h-screen">
       {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b bg-white">
         <div className="container flex h-16 items-center justify-between">
@@ -74,18 +94,28 @@ export default function HomePage() {
         )}
       </header>
 
-      {/* Hero Section with High-Quality Image */}
-      <section className="relative py-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-700/70 z-10"></div>
-        <div className="relative h-[500px] overflow-hidden">
-          <img
-            src="/placeholder.svg?height=500&width=1200&text=Ultra+4K+Image+of+Children+in+Care"
-            alt="Children in care"
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="container absolute inset-0 z-20 flex items-center">
-          <div className="max-w-2xl text-white space-y-6">
+      {/* Hero Section with image2.jpg background for entire top section */}
+      <section className="relative min-h-[600px] py-12 md:py-24 flex items-center">
+        {/* Image background for entire hero section with subtle zoom animation */}
+        <div
+          className="absolute inset-0 w-full h-full -z-10 animate-zoom-bg"
+          style={{
+            backgroundImage: 'url(/image/image2.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'brightness(0.7)',
+            transformOrigin: 'center center',
+            willChange: 'transform',
+            transform: 'translateZ(0)'
+          }}
+        ></div>
+        {/* Gradient overlay for text readability */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-900/70 to-blue-900/30"></div>
+        
+        <div className="container mx-auto px-4 md:px-6 z-20">
+          <div 
+            className="max-w-2xl text-white space-y-8 p-8 backdrop-blur-sm bg-blue-900/10 rounded-lg shadow-xl relative overflow-hidden"
+          >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter drop-shadow-md">
               <T k="home.hero.title" />
             </h1>
@@ -95,12 +125,16 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-4">
               <Button
                 size="lg"
-                className="bg-white text-blue-700 hover:bg-blue-50 transition-all transform hover:scale-105"
+                className="bg-white text-blue-700 hover:bg-blue-50 transition-all transform hover:scale-105 shadow-lg"
                 onClick={handleVolunteerRegistration}
               >
                 <T k="home.volunteer.register" />
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 transition-all">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-white hover:bg-white/20 transition-all shadow-lg"
+              >
                 <T k="home.learn.more" />
               </Button>
             </div>
@@ -108,52 +142,77 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Mission Stats with improved styling */}
-      <section className="py-16 bg-white">
+      {/* Rest of the content with background */}
+      <div className="flex-grow bg-gradient-animate" 
+         style={{ 
+           backgroundImage: 'url(/image/backgroundwallpaper.jpg)', 
+           backgroundSize: 'cover',
+           backgroundAttachment: 'fixed',
+           backgroundPosition: 'center',
+           backgroundRepeat: 'no-repeat',
+           position: 'relative',
+           transition: 'background-position 8s ease'
+         }}>
+        {/* Background overlay with subtle animation for better text readability */}
+        <div className="absolute inset-0 bg-white/30 backdrop-blur-sm z-0"></div>
+        
+        {/* Content wrapper */}
+        <div className="relative z-10">
+      
+      {/* Mission Stats with improved styling and performance optimized animation */}
+      <section className="py-16 bg-white/90 backdrop-blur-md mt-10 rounded-t-3xl">
         <div className="container px-4 md:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-blue-800 mb-4">
+          <ScrollAnimation className="text-center mb-12" animationClass="animate-fade-in">
+            <h2 className="text-3xl font-bold text-blue-800 mb-4 relative inline-block">
               <T k="home.mission.title" />
+              <span className="absolute bottom-0 left-0 w-full h-1 bg-blue-500 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100"></span>
             </h2>
             <p className="text-blue-600 mt-2 max-w-2xl mx-auto">
               <T k="home.mission.description" />
             </p>
-          </div>
+          </ScrollAnimation>
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+            <ScrollAnimation className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all" animationClass="animate-fade-in" delay={100}>
               <div className="text-5xl font-bold text-blue-700 mb-2">100+</div>
               <p className="text-lg text-gray-600">
                 <T k="home.mission.children" />
               </p>
-            </div>
-            <div className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+            </ScrollAnimation>
+            <ScrollAnimation className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all" animationClass="animate-fade-in" delay={200}>
               <div className="text-5xl font-bold text-blue-700 mb-2">$50K+</div>
               <p className="text-lg text-gray-600">
                 <T k="home.mission.funds" />
               </p>
-            </div>
-            <div className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+            </ScrollAnimation>
+            <ScrollAnimation className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all" animationClass="animate-fade-in" delay={300}>
               <div className="text-5xl font-bold text-blue-700 mb-2">25+</div>
               <p className="text-lg text-gray-600">
                 <T k="home.mission.campaigns" />
               </p>
-            </div>
+            </ScrollAnimation>
           </div>
         </div>
       </section>
 
-      {/* Volunteer Registration Card with improved styling */}
-      <section className="py-16 bg-gradient-to-b from-blue-50 to-white">
+      {/* Volunteer Card with improved styling */}
+      {/* <section className="py-16 bg-gradient-to-b from-blue-50/80 to-white/80 backdrop-blur-sm">
         <div className="container px-4 md:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-blue-800 mb-4">
-              <T k="home.volunteer.title" />
+              Become a Volunteer
             </h2>
             <p className="text-blue-600 mt-2 max-w-2xl mx-auto">
-              <T k="home.volunteer.subtitle" />
+              Your time and dedication can transform children's lives
             </p>
           </div>
-          <Card className="max-w-2xl mx-auto border-blue-100 shadow-xl hover:shadow-2xl transition-all">
+          <Card className="max-w-2xl mx-auto border-blue-100 shadow-xl hover:shadow-2xl transition-all overflow-hidden">
+            <div className="h-64 overflow-hidden">
+              <img
+                src="/image/image1.jpg"
+                alt="Volunteering"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </div>
             <CardHeader className="bg-white border-b border-blue-50">
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-blue-100 rounded-full">
@@ -161,10 +220,10 @@ export default function HomePage() {
                 </div>
                 <div>
                   <CardTitle className="text-blue-800">
-                    <T k="home.volunteer.become" />
+                    Join Our Volunteer Team
                   </CardTitle>
                   <CardDescription>
-                    <T k="home.volunteer.help" />
+                    Make a direct impact in children's lives through service
                   </CardDescription>
                 </div>
               </div>
@@ -172,7 +231,7 @@ export default function HomePage() {
             <CardContent className="pt-6 bg-white">
               <div className="space-y-4">
                 <p className="text-gray-600">
-                  <T k="home.volunteer.description" />
+                  Become a volunteer and help create a nurturing environment for children. Your skills and compassion can provide support, guidance, and opportunities that change lives forever.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">
@@ -197,17 +256,162 @@ export default function HomePage() {
             <CardFooter className="bg-white border-t border-blue-50">
               <Button
                 className="w-full bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
-                onClick={handleVolunteerRegistration}
+                onClick={handleVolunteerInfo}
               >
-                <T k="home.volunteer.register" />
+                Become a Volunteer
               </Button>
             </CardFooter>
           </Card>
         </div>
+      </section> */}
+
+      {/* Impact and Involvement Cards Section with performance optimized animation */}
+      <section className="py-16 bg-white/90 backdrop-blur-sm">
+        <div className="container px-4 md:px-6">
+          <ScrollAnimation className="text-center mb-12" animationClass="animate-fade-in">
+            <h2 className="text-3xl font-bold text-blue-800 mb-4 drop-shadow-md">
+              Making a Difference Together
+            </h2>
+            <p className="text-blue-700 mt-2 max-w-2xl mx-auto">
+              Discover how our orphanage is transforming lives and how you can be part of this journey
+            </p>
+          </ScrollAnimation>
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Volunteer Card */}
+            <ScrollAnimation className="" animationClass="animate-slide-up" delay={100}>
+            <Card className="border-blue-100 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="/image/image1.jpg"
+                  alt="Volunteering"
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform hover:scale-110 duration-500"
+                />
+              </div>
+              <CardHeader className="bg-white border-b border-blue-50">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-blue-100 rounded-full">
+                    <UserPlus className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-blue-800">
+                      Start Volunteer With Us
+                    </CardTitle>
+                    <CardDescription>
+                      Join our team to support children in need
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-6 bg-white">
+                <p className="text-gray-600">
+                  Become a volunteer and make a direct impact on children's lives. Your time and 
+                  skills can help create a brighter future for those who need it most.
+                </p>
+              </CardContent>
+              <CardFooter className="bg-white border-t border-blue-50">
+                <Button
+                  className="w-full bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
+                  onClick={handleVolunteerInfo}
+                >
+                  Volunteer With Us
+                </Button>
+              </CardFooter>
+            </Card>
+            </ScrollAnimation>
+
+            {/* News Card */}
+            <ScrollAnimation className="" animationClass="animate-slide-up" delay={200}>
+            <Card className="border-blue-100 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="/image/card2.jpg"
+                  alt="Ongoing News"
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform hover:scale-110 duration-500"
+                />
+              </div>
+              <CardHeader className="bg-white border-b border-blue-50">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-blue-100 rounded-full">
+                    <Newspaper className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-blue-800">
+                      Ongoing News
+                    </CardTitle>
+                    <CardDescription>
+                      Stay updated with the latest news and events
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-6 bg-white">
+                <p className="text-gray-600">
+                  Get the latest updates on our campaigns, success stories, and upcoming events. 
+                  Stay connected with our community and see the impact of our collective efforts.
+                </p>
+              </CardContent>
+              <CardFooter className="bg-white border-t border-blue-50">
+                <Button
+                  className="w-full bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
+                  onClick={handleNewsExplore}
+                >
+                  Explore News
+                </Button>
+              </CardFooter>
+            </Card>
+            </ScrollAnimation>
+
+            {/* Campaign Impact Card */}
+            <ScrollAnimation className="" animationClass="animate-slide-up" delay={300}>
+            <Card className="border-blue-100 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 overflow-hidden">
+              <div className="h-48 overflow-hidden">
+                <img
+                  src="/image/image2.jpg"
+                  alt="Campaign Impact"
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform hover:scale-110 duration-500"
+                />
+              </div>
+              <CardHeader className="bg-white border-b border-blue-50">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-blue-100 rounded-full">
+                    <Gift className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-blue-800">
+                      Join a Campaign
+                    </CardTitle>
+                    <CardDescription>
+                      Participate in our ongoing initiatives
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-6 bg-white">
+                <p className="text-gray-600">
+                  Join our campaigns to make a difference. Our campaigns, fundraising, and orphanage initiatives
+                  provide essential support, education, and healthcare to children in need. Your participation creates
+                  meaningful change in these children's lives.
+                </p>
+              </CardContent>
+              <CardFooter className="bg-white border-t border-blue-50">
+                <Button
+                  className="w-full bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
+                  onClick={handleCampaignLearnMore}
+                >
+                  Learn More
+                </Button>
+              </CardFooter>
+            </Card>
+            </ScrollAnimation>
+          </div>
+        </div>
       </section>
 
       {/* Footer with improved styling */}
-      <footer className="py-12 bg-blue-900 text-white">
+      <footer className="py-12 bg-blue-900/85 backdrop-blur-md text-white mt-10">
         <div className="container px-4 md:px-6">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
@@ -286,6 +490,9 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
+        </div>
+      </div>
+      </div>
     </div>
   )
 }

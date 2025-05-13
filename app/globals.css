@@ -18,6 +18,90 @@
   --muted-foreground: #6b7280;
 }
 
+/* Custom Animations */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes zoomBg {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.8s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s ease-out forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulse 6s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-zoom-bg {
+  animation: zoomBg 40s ease-in-out infinite;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Background animations */
+.bg-gradient-animate {
+  background-size: 300% 300%;
+  animation: gradientAnimation 30s ease-in-out infinite;
+  will-change: background-position;
+  transform: translateZ(0);
+}
+
 [data-theme="dark"] {
   --background: #1f2937;
   --foreground: #ffffff;
