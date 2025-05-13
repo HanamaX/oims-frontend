@@ -21,15 +21,19 @@ export interface Fundraiser {
 }
 
 export interface FundraiserCreateRequest {
-  name: string
-  description: string
-  targetAmount: number
-  startDate: string
-  endDate: string
+  eventName: string
+  fundraisingReason: string
+  goal: number
+  amountPayedPerIndividual: number
+  orphanageAmountPerIndividual: number
+  purpose: string
+  budgetBreakdown: string
+  eventStartDate: string
+  eventEndDate: string
   branchPublicId: string
   coordinatorName: string
   coordinatorEmail: string
-  coordinatorPhone: string
+  phoneNumber: string
 }
 
 const FundraiserService = {

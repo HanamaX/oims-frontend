@@ -95,7 +95,7 @@ export default function VolunteerRegistrationPage() {
     <div className="min-h-screen bg-blue-50/50 py-12 px-4">
       <div className="container mx-auto max-w-3xl">
         <Card className="border-blue-100">
-          <CardHeader className="bg-blue-50">
+          <CardHeader className="bg-blue-200/100 border-b">
             <div className="flex items-center gap-3">
               <UserPlus className="h-8 w-8 text-blue-600" />
               <div>
@@ -218,7 +218,7 @@ export default function VolunteerRegistrationPage() {
               </div>
             </CardContent>
 
-            <CardFooter className="flex justify-between border-t bg-blue-50 mt-6">
+            <CardFooter className="flex justify-between border-t bg-blue-200/100 p-6 border-t-blue-100">
               <Button variant="outline" type="button" onClick={() => router.push("/")}>
                 Home
               </Button>

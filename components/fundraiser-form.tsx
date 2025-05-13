@@ -18,20 +18,20 @@ import { cn } from "@/lib/utils"
 import { isValidEmail } from "@/lib/validation"
 
 // Update the component to include onSubmit prop
-export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) => void }) {
+export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmitting }: { onSubmit?: (data: any) => void, isSubmitting?: boolean }) {
   const router = useRouter()
   const [formData, setFormData] = useState({
-    title: "",
+    eventName: "",
     purpose: "",
-    objective: "",
-    reason: "",
-    fundraisingMethod: "",
+    fundraisingReason: "",
     budgetBreakdown: "",
-    timeline: "",
-    promotionPlan: "",
     coordinatorName: "",
-    coordinatorEmail: "", // Add this line
-    targetAmount: "",
+    coordinatorEmail: "",
+    phoneNumber: "",
+    goal: "",
+    amountPayedPerIndividual: "100", // Default value
+    orphanageAmountPerIndividual: "80", // Default value
+    branchPublicId: "default" // Typically would come from context or props
   })
   const [startDate, setStartDate] = useState<Date>()
   const [endDate, setEndDate] = useState<Date>()
@@ -40,6 +40,8 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState({
     coordinatorEmail: "",
+    phoneNumber: "",
+    goal: ""
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -72,14 +74,32 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
     // Reset errors
     setErrors({
       coordinatorEmail: "",
+      phoneNumber: "",
+      goal: ""
     })
 
     // Validate fields
     let hasErrors = false
 
-    if (formData.coordinatorEmail && !isValidEmail(formData.coordinatorEmail)) {
+    if (!formData.coordinatorEmail || !isValidEmail(formData.coordinatorEmail)) {
       setErrors((prev) => ({ ...prev, coordinatorEmail: "Please enter a valid email address" }))
       hasErrors = true
+    }
+
+    if (!formData.phoneNumber) {
+      setErrors((prev) => ({ ...prev, phoneNumber: "Phone number is required" }))
+      hasErrors = true
+    }
+    
+    if (!formData.goal || isNaN(Number(formData.goal)) || Number(formData.goal) <= 0) {
+      setErrors((prev) => ({ ...prev, goal: "Please enter a valid fundraising goal amount" }))
+      hasErrors = true
+    }
+
+    if (!startDate || !endDate) {
+      hasErrors = true
+      alert("Please select both start and end dates")
+      return
     }
 
     if (hasErrors) {
@@ -88,24 +108,41 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
 
     setIsSubmitting(true)
 
-    // In a real app, this would send the data to the server
-    console.log("Form submitted:", { ...formData, startDate, endDate, posterFile })
+    // Format data according to backend API requirements
+    const fundraiserData = {
+      eventName: formData.eventName,
+      purpose: formData.purpose,
+      fundraisingReason: formData.fundraisingReason,
+      goal: Number(formData.goal),
+      amountPayedPerIndividual: Number(formData.amountPayedPerIndividual),
+      orphanageAmountPerIndividual: Number(formData.orphanageAmountPerIndividual),
+      budgetBreakdown: formData.budgetBreakdown,
+      eventStartDate: startDate ? startDate.toISOString().split('T')[0] : '',
+      eventEndDate: endDate ? endDate.toISOString().split('T')[0] : '',
+      coordinatorName: formData.coordinatorName,
+      coordinatorEmail: formData.coordinatorEmail,
+      phoneNumber: formData.phoneNumber,
+      branchPublicId: formData.branchPublicId
+    }
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false)
-      if (onSubmit) {
-        onSubmit({ ...formData, startDate, endDate, posterFile })
-      } else {
+    console.log("Form data formatted for API:", fundraiserData)
+    
+    if (onSubmit) {
+      // Include the posterFile separately as it needs to be uploaded in a separate request
+      onSubmit({ ...fundraiserData, posterFile })
+    } else {
+      // For development/testing
+      setTimeout(() => {
+        setIsSubmitting(false)
         router.push("/thank-you?type=fundraiser")
-      }
-    }, 1500)
+      }, 1500)
+    }
   }
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <form onSubmit={handleSubmit}>
-        <CardHeader className="bg-blue-50 border-b">
+        <CardHeader className=" border-b bg-blue-200 border-blue-100">
           <CardTitle>Start a Fundraising Campaign</CardTitle>
           <CardDescription>
             Fill in the details below to create a new fundraising campaign for the orphanage
@@ -114,12 +151,12 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
         <CardContent className="space-y-6 pt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="title">Campaign Title</Label>
+              <Label htmlFor="eventName">Campaign Title</Label>
               <Input
-                id="title"
-                name="title"
-                placeholder="e.g., Education for All Children"
-                value={formData.title}
+                id="eventName"
+                name="eventName"
+                placeholder="e.g., Back to School Drive"
+                value={formData.eventName}
                 onChange={handleInputChange}
                 required
               />
@@ -137,18 +174,35 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="coordinatorEmail">Coordinator Email</Label>
-            <Input
-              id="coordinatorEmail"
-              name="coordinatorEmail"
-              type="email"
-              placeholder="e.g., coordinator@example.com"
-              value={formData.coordinatorEmail}
-              onChange={handleInputChange}
-              className={errors.coordinatorEmail ? "border-red-500" : ""}
-            />
-            {errors.coordinatorEmail && <p className="text-sm text-red-500">{errors.coordinatorEmail}</p>}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="coordinatorEmail">Coordinator Email</Label>
+              <Input
+                id="coordinatorEmail"
+                name="coordinatorEmail"
+                type="email"
+                placeholder="e.g., coordinator@example.com"
+                value={formData.coordinatorEmail}
+                onChange={handleInputChange}
+                className={errors.coordinatorEmail ? "border-red-500" : ""}
+                required
+              />
+              {errors.coordinatorEmail && <p className="text-sm text-red-500">{errors.coordinatorEmail}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phoneNumber">Phone Number</Label>
+              <Input
+                id="phoneNumber"
+                name="phoneNumber"
+                type="tel"
+                placeholder="e.g., 1234567890"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+                className={errors.phoneNumber ? "border-red-500" : ""}
+                required
+              />
+              {errors.phoneNumber && <p className="text-sm text-red-500">{errors.phoneNumber}</p>}
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -156,65 +210,65 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
             <Textarea
               id="purpose"
               name="purpose"
-              placeholder="Describe the purpose of this fundraising campaign"
+              placeholder="Describe the purpose of this fundraising campaign (e.g., School supplies for orphans)"
               value={formData.purpose}
               onChange={handleInputChange}
               required
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="objective">Objective</Label>
-              <Textarea
-                id="objective"
-                name="objective"
-                placeholder="What are the specific objectives of this campaign?"
-                value={formData.objective}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="reason">Reason</Label>
-              <Textarea
-                id="reason"
-                name="reason"
-                placeholder="Why is this campaign necessary?"
-                value={formData.reason}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="fundraisingReason">Reason</Label>
+            <Textarea
+              id="fundraisingReason"
+              name="fundraisingReason"
+              placeholder="Why is this campaign necessary? (e.g., Educational Support)"
+              value={formData.fundraisingReason}
+              onChange={handleInputChange}
+              required
+            />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="fundraisingMethod">Fundraising Method</Label>
-              <Select onValueChange={(value) => handleSelectChange("fundraisingMethod", value)} required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a method" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="online">Online Donations</SelectItem>
-                  <SelectItem value="event">Charity Event</SelectItem>
-                  <SelectItem value="corporate">Corporate Sponsorship</SelectItem>
-                  <SelectItem value="community">Community Fundraising</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="targetAmount">Target Amount ($)</Label>
+              <Label htmlFor="goal">Target Amount ($)</Label>
               <Input
-                id="targetAmount"
-                name="targetAmount"
+                id="goal"
+                name="goal"
                 type="number"
                 placeholder="e.g., 5000"
-                value={formData.targetAmount}
+                value={formData.goal}
+                onChange={handleInputChange}
+                className={errors.goal ? "border-red-500" : ""}
+                required
+              />
+              {errors.goal && <p className="text-sm text-red-500">{errors.goal}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="amountPayedPerIndividual">Amount Per Individual ($)</Label>
+              <Input
+                id="amountPayedPerIndividual"
+                name="amountPayedPerIndividual"
+                type="number"
+                placeholder="e.g., 100"
+                value={formData.amountPayedPerIndividual}
                 onChange={handleInputChange}
                 required
               />
+              <p className="text-xs text-gray-500">Suggested contribution per individual</p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="orphanageAmountPerIndividual">Orphanage Amount ($)</Label>
+              <Input
+                id="orphanageAmountPerIndividual"
+                name="orphanageAmountPerIndividual"
+                type="number"
+                placeholder="e.g., 80"
+                value={formData.orphanageAmountPerIndividual}
+                onChange={handleInputChange}
+                required
+              />
+              <p className="text-xs text-gray-500">Amount going directly to orphanage per individual</p>
             </div>
           </div>
 
@@ -223,7 +277,7 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
             <Textarea
               id="budgetBreakdown"
               name="budgetBreakdown"
-              placeholder="Provide a breakdown of how the funds will be used"
+              placeholder="Provide a breakdown of how the funds will be used (e.g., Books: $2000, Stationery: $1500, Uniforms: $1500)"
               value={formData.budgetBreakdown}
               onChange={handleInputChange}
               required
@@ -232,7 +286,7 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Start Date</Label>
+              <Label>Event Start Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -247,9 +301,10 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
                   <Calendar mode="single" selected={startDate} onSelect={setStartDate} initialFocus />
                 </PopoverContent>
               </Popover>
+              <p className="text-xs text-gray-500">Event start date (format: YYYY-MM-DD)</p>
             </div>
             <div className="space-y-2">
-              <Label>End Date</Label>
+              <Label>Event End Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -264,19 +319,8 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
                   <Calendar mode="single" selected={endDate} onSelect={setEndDate} initialFocus />
                 </PopoverContent>
               </Popover>
+              <p className="text-xs text-gray-500">Event end date (format: YYYY-MM-DD)</p>
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="promotionPlan">Promotion Plan</Label>
-            <Textarea
-              id="promotionPlan"
-              name="promotionPlan"
-              placeholder="How will you promote this campaign?"
-              value={formData.promotionPlan}
-              onChange={handleInputChange}
-              required
-            />
           </div>
 
           <div className="space-y-2">
@@ -306,14 +350,23 @@ export default function FundraiserForm({ onSubmit }: { onSubmit?: (data: any) =>
                 </div>
               )}
             </div>
+            <p className="text-xs text-amber-600">Note: The image will be uploaded after the fundraiser is created.</p>
           </div>
+          
+          {/* Hidden branch ID field - typically would come from context or user selection */}
+          <Input
+            type="hidden"
+            name="branchPublicId"
+            value={formData.branchPublicId}
+          />
         </CardContent>
-        <CardFooter className="flex justify-between border-t bg-blue-50 mt-6">
+        <CardFooter className="flex justify-between border-t bg-blue-200
+        border-blue-100 p-6">
           <Button variant="outline" type="button" onClick={() => router.push("/")}>
             Go Back Home
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Submitting..." : "Submit"}
+          <Button type="submit" disabled={isSubmitting || externalIsSubmitting}>
+            {isSubmitting || externalIsSubmitting ? "Submitting..." : "Submit Fundraiser"}
           </Button>
         </CardFooter>
       </form>
