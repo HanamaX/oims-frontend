@@ -1,0 +1,66 @@
+// Update handler functions in orphan-details-personal.tsx
+
+export const handleUpdateGuardian = async (guardianData: Guardian) => {
+  setIsSubmitting(true)
+  
+  try {
+    // Make sure we include publicId and orphanPublicId in the request
+    const enrichedData = {
+      ...guardianData,
+      publicId: orphan.guardian?.publicId,
+      orphanPublicId: orphan.publicId
+    }
+    
+    // Update guardian via API - use PATCH to correct endpoint
+    const response = await API.patch(`/app/oims/orphans/guardians`, enrichedData)
+    
+    // Show success message
+    toast({
+      title: "Guardian Updated",
+      description: "Guardian information has been successfully updated."
+    })
+    
+    // Close form and refresh page
+    setIsGuardianFormOpen(false)
+    window.location.reload()
+  } catch (error: any) {
+    console.error("Failed to update guardian:", error)
+    toast({
+      title: "Failed to Update Guardian",
+      description: error.response?.data?.message || "An error occurred. Please try again.",
+      variant: "destructive"
+    })
+  } finally {
+    setIsSubmitting(false)
+  }
+}
+
+export const handleDeleteGuardian = async () => {
+  if (!orphan?.guardian?.publicId) return;
+  
+  setIsSubmitting(true)
+  
+  try {
+    // Delete guardian via API - use correct endpoint with guardian's publicId
+    await API.delete(`/app/oims/orphans/guardians/${orphan.guardian.publicId}`)
+    
+    // Show success message
+    toast({
+      title: "Guardian Deleted",
+      description: "Guardian information has been successfully deleted."
+    })
+    
+    // Close dialog and refresh page
+    setIsDeleteGuardianDialogOpen(false)
+    window.location.reload()
+  } catch (error: any) {
+    console.error("Failed to delete guardian:", error)
+    toast({
+      title: "Failed to Delete Guardian",
+      description: error.response?.data?.message || "An error occurred. Please try again.",
+      variant: "destructive"
+    })
+  } finally {
+    setIsSubmitting(false)
+  }
+}

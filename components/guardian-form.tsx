@@ -1,0 +1,190 @@
+"use client"
+
+import React, { useState, useEffect } from 'react'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { Guardian } from '@/lib/orphan-types'
+
+interface GuardianFormProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onSubmit: (data: Guardian) => void
+  guardian: Guardian | null
+}
+
+export default function GuardianForm({ open, onOpenChange, onSubmit, guardian }: GuardianFormProps) {
+  const [name, setName] = useState('')
+  const [relationship, setRelationship] = useState('')
+  const [contactNumber, setContactNumber] = useState('')
+  const [sex, setSex] = useState('Male')
+  const [email, setEmail] = useState('')
+  const [address, setAddress] = useState('')
+  const [occupation, setOccupation] = useState('')
+  
+  // Load guardian data when the component opens or guardian data changes
+  useEffect(() => {
+    if (guardian) {
+      setName(guardian.name || '')
+      setRelationship(guardian.relationship || '')
+      setContactNumber(guardian.contactNumber || '')
+      setSex(guardian.sex || 'Male')
+      setEmail(guardian.email || '')
+      setAddress(guardian.address || '')
+      setOccupation(guardian.occupation || '')
+    }
+  }, [guardian])
+  
+  // Function to handle form submission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Validate required fields
+    if (!name || !relationship || !contactNumber) {
+      alert('Please fill in all required fields')
+      return
+    }
+    
+    // Create guardian data object
+    const guardianData: Guardian = {
+      name,
+      relationship,
+      contactNumber,
+      sex,
+      email,
+      address,
+      occupation
+    }
+    
+    // Submit the data
+    onSubmit(guardianData)
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className='sm:max-w-[500px] bg-white'>
+        <DialogHeader>
+          <DialogTitle>{guardian ? 'Edit Guardian' : 'Add Guardian'}</DialogTitle>
+          <DialogDescription>
+            {guardian ? 'Update the guardian information below.' : 'Enter the guardian details below.'} Required fields are marked with an asterisk (*).
+          </DialogDescription>
+        </DialogHeader>
+        
+        <form onSubmit={handleSubmit} className='space-y-4 py-4'>
+          <div className='grid gap-4'>
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='name' className='text-right'>
+                Full Name *
+              </Label>
+              <Input
+                id='name'
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className='col-span-3'
+                required
+              />
+            </div>
+            
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='relationship' className='text-right'>
+                Relationship *
+              </Label>              
+              <Select value={relationship} onValueChange={setRelationship} required>
+                <SelectTrigger className='col-span-3'>
+                  <SelectValue placeholder='Select relationship' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='Parent'>Parent</SelectItem>
+                  <SelectItem value='Grandparent'>Grandparent</SelectItem>
+                  <SelectItem value='Sibling'>Sibling</SelectItem>
+                  <SelectItem value='Uncle'>Uncle</SelectItem>
+                  <SelectItem value='Aunt'>Aunt</SelectItem>
+                  <SelectItem value='Cousin'>Cousin</SelectItem>
+                  <SelectItem value='Guardian'>Guardian</SelectItem>
+                  <SelectItem value='Family Friend'>Family Friend</SelectItem>
+                  <SelectItem value='Other'>Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='contactNumber' className='text-right'>
+                Phone Number *
+              </Label>
+              <Input
+                id='contactNumber'
+                value={contactNumber}
+                onChange={(e) => setContactNumber(e.target.value)}
+                className='col-span-3'
+                required
+              />
+            </div>
+            
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='sex' className='text-right'>
+                Sex
+              </Label>
+              <Select value={sex} onValueChange={setSex}>
+                <SelectTrigger className='col-span-3'>
+                  <SelectValue placeholder='Select sex' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='Male'>Male</SelectItem>
+                  <SelectItem value='Female'>Female</SelectItem>
+                  <SelectItem value='Other'>Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='email' className='text-right'>
+                Email
+              </Label>
+              <Input
+                id='email'
+                type='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className='col-span-3'
+              />
+            </div>
+            
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='address' className='text-right'>
+                Address
+              </Label>
+              <Textarea
+                id='address'
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className='col-span-3'
+              />
+            </div>
+            
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='occupation' className='text-right'>
+                Occupation
+              </Label>
+              <Input
+                id='occupation'
+                value={occupation}
+                onChange={(e) => setOccupation(e.target.value)}
+                className='col-span-3'
+              />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button type='button' variant='outline' onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <Button type='submit'>{guardian ? 'Update Guardian' : 'Add Guardian'}</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}

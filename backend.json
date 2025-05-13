@@ -1,0 +1,3199 @@
+{
+	"info": {
+		"_postman_id": "ed634583-7a64-4c2e-a9fa-ccf4ba2aba8b",
+		"name": "OIMS API Collection - Core Endpoints",
+		"description": "Focused collection of OIMS API endpoints for Academic Records, Admin, Auth, Branch, Contributor, Events, Fundraiser, Guardian, Inventory, Inventory Transaction, Medical Record, Notification, Orphanage, Orphan, and Volunteer controllers",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37130738"
+	},
+	"item": [
+		{
+			"name": "Academic Record Endpoints",
+			"item": [
+				{
+					"name": "Add Academic Record",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"orphanPublicId\": \"string\",\n  \"semester\": \"string\",\n  \"grade_level\": \"string\",\n  \"school_name\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/academic/records",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"academic",
+								"records"
+							]
+						},
+						"description": "Create a new academic record for an orphan"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Academic Subject",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"academicRecordPublicId\": \"string\",\n  \"name\": \"string\",\n  \"code\": \"string\",\n  \"grade\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/academic/subjects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"academic",
+								"subjects"
+							]
+						},
+						"description": "Add an academic subject to an existing academic record"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Academic Records",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/academic/records/{orphanPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"academic",
+								"records",
+								"{orphanPublicId}"
+							],
+							"variable": [
+								{
+									"key": "orphanPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get academic records for a specific orphan"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Academic Record Summaries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/academic/records/summary/{orphanPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"academic",
+								"records",
+								"summary",
+								"{orphanPublicId}"
+							],
+							"variable": [
+								{
+									"key": "orphanPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get summarized academic records for an orphan (lightweight version with minimal fields)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Academic Record Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/academic/record-details/{recordPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"academic",
+								"record-details",
+								"{recordPublicId}"
+							],
+							"variable": [
+								{
+									"key": "recordPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get detailed information for a specific academic record including subjects"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Academic Record",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"academicRecordPublicId\": \"string\",\n  \"semester\": \"string\",\n  \"grade_level\": \"string\",\n  \"school_name\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/academic/records",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"academic",
+								"records"
+							]
+						},
+						"description": "Update an existing academic record"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Academic Subject",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"academicSubjectPublicId\": \"string\",\n  \"name\": \"string\",\n  \"code\": \"string\",\n  \"grade\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/academic/subjects",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"academic",
+								"subjects"
+							]
+						},
+						"description": "Update an existing academic subject"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Academic Record",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/academic/records/{recordPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"academic",
+								"records",
+								"{recordPublicId}"
+							],
+							"variable": [
+								{
+									"key": "recordPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete an academic record"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Academic Subject",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/academic/subjects/{subjectPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"academic",
+								"subjects",
+								"{subjectPublicId}"
+							],
+							"variable": [
+								{
+									"key": "subjectPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete an academic subject"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for managing academic records"
+		},
+		{
+			"name": "Auth Endpoints",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"yourpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/authorization/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"authorization",
+								"login"
+							]
+						},
+						"description": "User login endpoint"
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/app/oims/authorization/forgot-password?email=user@example.com",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"authorization",
+								"forgot-password"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "user@example.com"
+								}
+							]
+						},
+						"description": "Reset password for a user"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"activationToken\": \"string\",\n  \"password\": \"newpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/authorization/change-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"authorization",
+								"change-password"
+							]
+						},
+						"description": "Change user password"
+					},
+					"response": []
+				},
+				{
+					"name": "Activate Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"activationToken\": \"string\",\n  \"password\": \"newpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/authorization/activate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"authorization",
+								"activate"
+							]
+						},
+						"description": "Activate user account"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for authentication and authorization"
+		},
+		{
+			"name": "Admin Endpoints",
+			"item": [
+				{
+					"name": "Get All Admins",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/admins/centre",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"admins",
+								"centre"
+							]
+						},
+						"description": "Get all admin users (super admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Admin by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/admins/{publicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"admins",
+								"{publicId}"
+							],
+							"variable": [
+								{
+									"key": "publicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get a specific admin by ID (super admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"role\": \"Admin\",\n  \"email\": \"admin@example.com\",\n  \"branchPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/admins/add",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"admins",
+								"add"
+							]
+						},
+						"description": "Create a new admin user (super admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Admin Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/path/to/image.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/admins/image",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"admins",
+								"image"
+							]
+						},
+						"description": "Upload admin profile image (uses authenticated user's profile)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Admin",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/admins/del/{publicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"admins",
+								"del",
+								"{publicId}"
+							],
+							"variable": [
+								{
+									"key": "publicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete an admin user (super admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Super Admin Update Admin",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"adminPublicId\": \"string\",\n  \"role\": \"ADMIN\",\n  \"branchPublicId\": \"string\",\n  \"suspend\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/admins/supupdate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"admins",
+								"supupdate"
+							]
+						},
+						"description": "Update admin information (super admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Admin Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"string\",\n  \"lastName\": \"string\",\n  \"email\": \"string\",\n  \"phoneNumber\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/admins/update",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"admins",
+								"update"
+							]
+						},
+						"description": "Update own admin profile (available to all authenticated users)"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"oldPassword\": \"string\",\n  \"newPassword\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/admins/change-password",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"admins",
+								"change-password"
+							]
+						},
+						"description": "Change own password (available to all authenticated users)"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for admin management"
+		},
+		{
+			"name": "Branch Endpoints",
+			"item": [
+				{
+					"name": "Get All Branches",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/branches",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"branches"
+							]
+						},
+						"description": "Get all branches (Super Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Branch by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/branches/{branchId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"branches",
+								"{branchId}"
+							],
+							"variable": [
+								{
+									"key": "branchId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get details of a specific branch"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Branch",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdXBlcmFkbWluIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6IlJPTEVfU1VQRVJfQURNSU4ifV0sImlhdCI6MTc0Njc5NzkwOSwiZXhwIjoxNzQ2ODg0MzA5fQ.iC7xTc4dYRClXBqRfoZAswr3dIMlXKrayzy8dklFL48",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Mapinga branch\",\n  \"location\": \"Eastlands 243\",\n  \"phoneNumber\": \"0987654321\",\n  \"isHQ\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/branches",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"branches"
+							]
+						},
+						"description": "Create a new branch (Super Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Branch",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"branchPublicId\": \"string\",\n  \"name\": \"Updated Branch Name\",\n  \"location\": \"Updated Location\",\n  \"phoneNumber\": \"9876543210\",\n  \"isHQ\": false,\n  \"orphanageCentrePublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/branches/update",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"branches",
+								"update"
+							]
+						},
+						"description": "Update an existing branch"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Branch",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/branches/{branchId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"branches",
+								"{branchId}"
+							],
+							"variable": [
+								{
+									"key": "branchId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete a branch (Super Admin only)"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for branch management"
+		},
+		{
+			"name": "Contributor Endpoints",
+			"item": [
+				{
+					"name": "Get Contributors by Campaign",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/contributors/{campaignId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"contributors",
+								"{campaignId}"
+							],
+							"variable": [
+								{
+									"key": "campaignId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get all contributors for a specific fundraising campaign"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contributor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Contributor Name\",\n  \"email\": \"contributor@example.com\",\n  \"phoneNumber\": \"1234567890\",\n  \"paymentMethod\": \"Credit Card\",\n  \"campaignPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/contributors",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"contributors"
+							]
+						},
+						"description": "Add a new contributor to a fundraising campaign (public endpoint)"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for contributor management"
+		},
+		{
+			"name": "Events Endpoints",
+			"item": [
+				{
+					"name": "Get All Campaigns",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/campaigns/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"campaigns",
+								"all"
+							]
+						},
+						"description": "Get all fundraising campaigns (public endpoint)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Campaign Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/updatecampaign/{campaignId}/status?status=ACTIVE",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"updatecampaign",
+								"{campaignId}",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "ACTIVE"
+								}
+							],
+							"variable": [
+								{
+									"key": "campaignId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Update the status of a fundraising campaign"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for events management"
+		},
+		{
+			"name": "Fundraiser Endpoints",
+			"item": [
+				{
+					"name": "Get Fundraisers by Branch",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/fundraisers/{branchId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"fundraisers",
+								"{branchId}"
+							],
+							"variable": [
+								{
+									"key": "branchId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get fundraisers for a specific branch"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fundraiser by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/fundraisers/detail/{fundraiserId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"fundraisers",
+								"detail",
+								"{fundraiserId}"
+							],
+							"variable": [
+								{
+									"key": "fundraiserId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get details of a specific fundraiser"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Fundraisers by Centre",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/fundraisers/centre/{centreId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"fundraisers",
+								"centre",
+								"{centreId}"
+							],
+							"variable": [
+								{
+									"key": "centreId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get fundraisers for an entire centre (Super Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Fundraiser",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"coordinatorName\": \"John Doe\",\n  \"goal\": 5000.0,\n  \"purpose\": \"School supplies for orphans\",\n  \"budgetBreakdown\": \"Books: $2000, Stationery: $1500, Uniforms: $1500\",\n  \"amountPayedPerIndividual\": 100.0,\n  \"orphanageAmountPerIndividual\": 80.0,\n  \"eventName\": \"Back to School Drive\",\n  \"coordinatorEmail\": \"john.doe@example.com\",\n  \"fundraisingReason\": \"Educational Support\",\n  \"phoneNumber\": \"1234567890\",\n  \"eventStartDate\": \"2025-06-01\",\n  \"eventEndDate\": \"2025-06-30\",\n  \"branchPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/fundraisers",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"fundraisers"
+							]
+						},
+						"description": "Create a new fundraiser (public endpoint)"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Fundraiser Image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/path/to/image.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/fundraisers/image/{fundraiserId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"fundraisers",
+								"image",
+								"{fundraiserId}"
+							],
+							"variable": [
+								{
+									"key": "fundraiserId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Upload an image for a fundraiser (public endpoint)"
+					},
+					"response": []
+				},
+				{
+					"name": "Send Fundraising Feedback",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fundraiserEmail\": \"john.doe@example.com\",\n  \"fundraiserName\": \"John Doe\",\n  \"campaignName\": \"Back to School Drive\",\n  \"campaignPurpose\": \"Educational Support\",\n  \"adminFeedback\": \"Thank you for your successful campaign!\",\n  \"amountRaised\": 4800.0,\n  \"goalAmount\": 5000.0\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/fundraisers/feedback",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"fundraisers",
+								"feedback"
+							]
+						},
+						"description": "Send feedback for a fundraiser (Super Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Fundraiser Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/fundraisers/{fundraiserId}/status?status=APPROVED",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"fundraisers",
+								"{fundraiserId}",
+								"status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "APPROVED"
+								}
+							],
+							"variable": [
+								{
+									"key": "fundraiserId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Update the status of a fundraiser (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Fundraiser",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/fundraisers/{fundraiserId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"fundraisers",
+								"{fundraiserId}"
+							],
+							"variable": [
+								{
+									"key": "fundraiserId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete a fundraiser (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Fundraisers (Superadmin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/fundraisers/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"fundraisers",
+								"all"
+							]
+						},
+						"description": "Get all fundraisers across all branches (superadmin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Branch Fundraisers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/events/fundraisers/current-branch",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"events",
+								"fundraisers",
+								"current-branch"
+							]
+						},
+						"description": "Get fundraisers for the current user's branch without providing branch ID"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for fundraiser management"
+		},
+		{
+			"name": "Guardian Endpoints",
+			"item": [
+				{
+					"name": "Add Guardian",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Smith\",\n  \"sex\": \"Male\",\n  \"relationship\": \"Uncle\",\n  \"contactNumber\": \"1234567890\",\n  \"email\": \"john.smith@example.com\",\n  \"address\": \"123 Main St, Anytown\",\n  \"occupation\": \"Teacher\",\n  \"orphanPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/guardians",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+									"guardians"
+							]
+						},
+						"description": "Add a guardian for an orphan"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Guardian with Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "guardianData",
+									"type": "text",
+									"value": "{\n  \"name\": \"Jane Smith\",\n  \"sex\": \"Female\",\n  \"relationship\": \"Aunt\",\n  \"contactNumber\": \"9876543210\",\n  \"email\": \"jane.smith@example.com\",\n  \"address\": \"456 Oak St, Anytown\",\n  \"occupation\": \"Nurse\",\n  \"orphanPublicId\": \"string\"\n}"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/path/to/guardian-photo.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/guardians/addguardianwithimage",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"guardians",
+								"addguardianwithimage"
+							]
+						},
+						"description": "Add a guardian with photo in a single request"
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Guardian Photo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/path/to/photo.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/guardians/image/{guardianPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"guardians",
+								"image",
+								"{guardianPublicId}"
+							],
+							"variable": [
+								{
+									"key": "guardianPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Upload a photo for a guardian"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Guardian",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"publicId\": \"string\",\n  \"name\": \"John Smith\",\n  \"sex\": \"Male\",\n  \"relationship\": \"Uncle\",\n  \"contactNumber\": \"9876543210\",\n  \"email\": \"john.smith.updated@example.com\",\n  \"address\": \"456 New St, Anytown\",\n  \"occupation\": \"Professor\",\n  \"orphanPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/guardians",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"guardians"
+							]
+						},
+						"description": "Update guardian information"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Guardian",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/guardians/{guardianPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"guardians",
+								"{guardianPublicId}"
+							],
+							"variable": [
+								{
+									"key": "guardianPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete a guardian"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for guardian management"
+		},
+		{
+			"name": "Inventory Endpoints",
+			"item": [
+				{
+					"name": "Get Centre Inventory Items",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/inventory/items/centre",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"inventory",
+								"items",
+								"centre"
+							]
+						},
+						"description": "Get all inventory items across all branches (Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Branch Inventory Items",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/inventory/items/{branchPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"inventory",
+								"items",
+								"{branchPublicId}"
+							],
+							"variable": [
+								{
+									"key": "branchPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get inventory items for a specific branch"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Branch Inventory Items",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/inventory/items/current",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"inventory",
+								"items",
+								"current"
+							]
+						},
+						"description": "Get inventory items for the current user's branch without providing branch ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Specific Inventory Item",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/inventory/items/item/{itemPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"inventory",
+								"items",
+								"item",
+								"{itemPublicId}"
+							],
+							"variable": [
+								{
+									"key": "itemPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get a specific inventory item by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Inventory Item",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJicmFuY2hJZCI6ImM1NmU5NWQ3LWI2MjMtNDk5YS05NGNmLTNhNzI1NzNlYTRiOSIsInN1YiI6ImFkbWluMSIsImF1dGhvcml0aWVzIjpbeyJhdXRob3JpdHkiOiJST0xFX0FETUlOIn1dLCJpYXQiOjE3NDY4MzAxMTYsImV4cCI6MTc0NjkxNjUxNn0.u90UkJ0BUX9h790HQN1iQ1PC4tz9JYZYmEROCjwJtAU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"itemName\": \"Art Supplies\",\n  \"itemCategory\": \"Creative\",\n  \"minQuantity\":\"10\",\n  \"itemPrice\": \"750.00\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/inventory/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"inventory",
+								"items"
+							]
+						},
+						"description": "Add a new inventory item"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Inventory Item",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"itemPublicId\": \"string\",\n  \"itemName\": \"Updated School Books\",\n  \"itemCategory\": \"Educational Supplies\",\n  \"itemPrice\": \"600.00\",\n  \"branchPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/inventory/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"inventory",
+								"items"
+							]
+						},
+						"description": "Update an existing inventory item"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Inventory Item",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/inventory/items/{itemPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"inventory",
+								"items",
+								"{itemPublicId}"
+							],
+							"variable": [
+								{
+									"key": "itemPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete an inventory item"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for inventory management"
+		},
+		{
+			"name": "Inventory Transaction Endpoints",
+			"item": [
+				{
+					"name": "Add Inventory Transaction",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"transactionType\": \"IN\",\n  \"transactionQuantity\": \"50\",\n  \"transactionDescription\": \"New shipment of school books\",\n  \"inventoryItemPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/inventory/transactions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"inventory",
+								"transactions"
+							]
+						},
+						"description": "Add a new inventory transaction"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Inventory Transaction",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"transactionPublicId\": \"string\",\n  \"transactionType\": \"OUT\",\n  \"transactionQuantity\": \"25\",\n  \"transactionDescription\": \"Distributed school books to children\",\n  \"inventoryItemPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/inventory/transactions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"inventory",
+								"transactions"
+							]
+						},
+						"description": "Update an existing inventory transaction"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Inventory Transaction",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/inventory/transactions/{transactionPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"inventory",
+								"transactions",
+								"{transactionPublicId}"
+							],
+							"variable": [
+								{
+									"key": "transactionPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete an inventory transaction"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for inventory transaction management"
+		},
+		{
+			"name": "Medical Record Endpoints",
+			"item": [
+				{
+					"name": "Get Medical Record Summaries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/medical/records/summary/{orphanPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"medical",
+								"records",
+								"summary",
+								"{orphanPublicId}"
+							],
+							"variable": [
+								{
+									"key": "orphanPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get summarized medical records for an orphan (lightweight version with minimal fields)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Medical Record Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/medical/record-details/{recordPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"medical",
+								"record-details",
+								"{recordPublicId}"
+							],
+							"variable": [
+								{
+									"key": "recordPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get detailed information for a specific medical record"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Medical Record",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"diagnosis\": \"Common cold\",\n  \"treatment\": \"Rest and medication\",\n  \"description\": \"Patient presented with fever and cough\",\n  \"doctorName\": \"Dr. Jane Smith\",\n  \"hospitalName\": \"City General Hospital\",\n  \"hospitalAddress\": \"456 Hospital Lane, Anytown\",\n  \"hospitalPhoneNumber\": \"1234567890\",\n  \"orphanPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/medical/records",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"medical",
+								"records"
+							]
+						},
+						"description": "Create a new medical record for an orphan"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Medical Record",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"medicalRecordPublicId\": \"string\",\n  \"diagnosis\": \"Influenza\",\n  \"treatment\": \"Updated medication and rest for 5 days\",\n  \"description\": \"Patient symptoms worsened, diagnosed as influenza\",\n  \"doctorName\": \"Dr. Jane Smith\",\n  \"hospitalName\": \"City General Hospital\",\n  \"hospitalAddress\": \"456 Hospital Lane, Anytown\",\n  \"hospitalPhoneNumber\": \"1234567890\",\n  \"orphanPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/medical/records",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"medical",
+								"records"
+							]
+						},
+						"description": "Update an existing medical record"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Medical Record",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphans/medical/records/{recordPublicId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphans",
+								"medical",
+								"records",
+								"{recordPublicId}"
+							],
+							"variable": [
+								{
+									"key": "recordPublicId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete a medical record"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for medical record management"
+		},
+		{
+			"name": "Notification Endpoints",
+			"item": [
+				{
+					"name": "Get Unread Notifications for Current Branch",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/notifications",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"notifications"
+							]
+						},
+						"description": "Get unread notifications for the current authenticated user's branch (Branch Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Notifications for Current Branch",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/notifications/all-current",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"notifications",
+								"all-current"
+							]
+						},
+						"description": "Get all notifications (both read and unread) for the current authenticated user's branch (Branch Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Unread Notifications by Branch ID (Explicit)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/notifications/unread/{recipientId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"notifications",
+								"unread",
+								"{recipientId}"
+							],
+							"variable": [
+								{
+									"key": "recipientId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get unread notifications for a specific branch ID (Super Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Notifications by Branch ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/notifications/all-by-branch/{recipientId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"notifications",
+								"all-by-branch",
+								"{recipientId}"
+							],
+							"variable": [
+								{
+									"key": "recipientId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Get all notifications (both read and unread) for a specific branch ID (Super Admin or Branch Admin of the specified branch)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Unread Notifications Across All Branches",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/notifications/all-unread",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"notifications",
+								"all-unread"
+							]
+						},
+						"description": "Get all unread notifications across all branches (Super Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Notifications Across All Branches",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/notifications/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"notifications",
+								"all"
+							]
+						},
+						"description": "Get all notifications across all branches (Super Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Notification as Read",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/notifications/read/{notificationId}?isRead=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"notifications",
+								"read",
+								"{notificationId}"
+							],
+							"query": [
+								{
+									"key": "isRead",
+									"value": "true"
+								}
+							],
+							"variable": [
+								{
+									"key": "notificationId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Mark a specific notification as read or unread"
+					},
+					"response": []
+				},
+				{
+					"name": "Mark All Notifications as Read",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/notifications/read/all/{recipientId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"notifications",
+								"read",
+								"all",
+								"{recipientId}"
+							],
+							"variable": [
+								{
+									"key": "recipientId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Mark all notifications for a branch as read"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/notifications/{notificationId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"notifications",
+								"{notificationId}"
+							],
+							"variable": [
+								{
+									"key": "notificationId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete a specific notification (Super Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete All Notifications",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/notifications/all/{recipientId}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"notifications",
+								"all",
+								"{recipientId}"
+							],
+							"variable": [
+								{
+									"key": "recipientId",
+									"value": "string"
+								}
+							]
+						},
+						"description": "Delete all notifications for a branch"
+					},
+					"response": []
+				}
+			],
+			"description": "API endpoints for notification management"
+		},
+		{
+			"name": "Orphanage Endpoints",
+			"item": [
+				{
+					"name": "Get Orphanage Centre",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/centre",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"centre"
+							]
+						},
+						"description": "Get orphanage center information (accessible to all authenticated users)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Orphanage",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Hope Orphanage Centre\",\n    \"location\": \"Nairobi\",\n    \"address\": \"123 Charity Road, Westlands\",\n    \"phoneNumber\": \"1234567890\",\n    \"email\": \"contact@hopeorphanage.org\",\n    \"description\": \"A nurturing home for children in need\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/addorphanage",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"addorphanage"
+							]
+						},
+						"description": "Create a new orphanage center (Super Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Orphanage",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"centrePublicId\": \"string\",\n  \"name\": \"Hope Orphanage Centre\",\n  \"location\": \"Nairobi\",\n  \"address\": \"456 Charity Lane, Westlands\",\n  \"phoneNumber\": \"0987654321\",\n  \"email\": \"info@hopeorphanage.org\",\n  \"description\": \"A nurturing home providing care, education, and support for children in need\",\n  \"superAdminPublicId\": \"string\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/app/oims/orphanages/updateorphanage",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"app",
+								"oims",
+								"orphanages",
+								"updateorphanage"
+							]
+						},
+						"description": "Update an existing orphanage center (Super Admin only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Orphanage",
+					"request": {
+							"method": "DELETE",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/orphanages/delorphanage/{centreId}",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"orphanages",
+									"delorphanage",
+									"{centreId}"
+								],
+								"variable": [
+									{
+										"key": "centreId",
+										"value": "string"
+									}
+								]
+							},
+							"description": "Delete an orphanage center (Super Admin only)"
+						},
+						"response": []
+					}
+				],
+				"description": "API endpoints for orphanage center management"
+			},
+			{
+				"name": "Orphan Endpoints",
+				"item": [
+					{
+						"name": "Get Orphans by Branch",
+						"request": {
+							"method": "GET",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/orphans/branch/{branchPublicId}",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"orphans",
+									"branch",
+									"{branchPublicId}"
+								],
+								"variable": [
+									{
+										"key": "branchPublicId",
+										"value": "string"
+									}
+								]
+							},
+							"description": "Get orphans belonging to a specific branch"
+						},
+						"response": []
+					},
+					{
+						"name": "Get Current Branch Orphans",
+						"request": {
+							"method": "GET",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/orphans/branch/current",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"orphans",
+									"branch",
+									"current"
+								]
+							},
+							"description": "Get orphans belonging to the current user's branch"
+						},
+						"response": []
+					},
+					{
+						"name": "Get Orphan by ID",
+						"request": {
+							"method": "GET",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/orphans/orphan/{orphanPublicId}",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"orphans",
+									"orphan",
+									"{orphanPublicId}"
+								],
+								"variable": [
+									{
+										"key": "orphanPublicId",
+										"value": "string"
+									}
+								]
+							},
+							"description": "Get a specific orphan's details by ID"
+						},
+						"response": []
+					},
+					{
+						"name": "Get All Orphans (Admin)",
+						"request": {
+							"method": "GET",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/orphans/centre/all",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"orphans",
+									"centre",
+									"all"
+								]
+							},
+							"description": "Get all orphans across all branches (Super Admin only)"
+						},
+						"response": []
+					},
+					{
+						"name": "Add Orphan",
+						"request": {
+							"method": "POST",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"body": {
+								"mode": "raw",
+								"raw": "{\n  \"origin\": \"Mombasa\",\n  \"fullName\": \"John Doe\",\n  \"dateOfBirth\": \"2018-05-12\",\n  \"religion\": \"Christian\",\n  \"adoptionReason\": \"Lost parents in accident\",\n  \"gender\": \"Male\",\n  \"bloodGroup\": \"O+\",\n  \"allergies\": [\"Peanuts\", \"Dust\"],\n  \"medicalHistory\": \"Generally healthy, had chicken pox in 2020\",\n  \"specialNeeds\": \"None\",\n  \"hobbies\": \"Drawing, football\",\n  \"educationLevel\": \"Primary\",\n  \"previousSchoolName\": \"Sunshine Primary School\"\n}"
+							},
+							"url": {
+								"raw": "{{base_url}}/app/oims/orphans/addorphan",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"orphans",
+									"addorphan"
+								]
+							},
+							"description": "Add a new orphan (Branch Admin only)"
+						},
+						"response": []
+					},
+					{
+						"name": "Add Orphan with Image",
+						"request": {
+							"method": "POST",
+							"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+							],
+							"url": {
+							"raw": "{{base_url}}/app/oims/orphans/addorphanwithimage",
+							"host": ["{{base_url}}"],
+							"path": ["app", "oims", "orphans", "addorphanwithimage"]
+							},
+							"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+								"key": "orphanData",
+								"type": "text",
+								"value": "{\n  \"origin\": \"Mombasa\",\n  \"fullName\": \"Jane Doe\",\n  \"dateOfBirth\": \"2019-03-15\",\n  \"religion\": \"Christian\",\n  \"adoptionReason\": \"Abandoned at hospital\",\n  \"gender\": \"Female\",\n  \"bloodGroup\": \"A+\",\n  \"allergies\": [\"None\"],\n  \"medicalHistory\": \"Generally healthy\",\n  \"specialNeeds\": \"None\",\n  \"hobbies\": \"Singing, painting\",\n  \"educationLevel\": \"Kindergarten\",\n  \"previousSchoolName\": \"Little Angels Kindergarten\"\n}"
+								},
+								{
+								"key": "file",
+								"type": "file",
+								"src": "/path/to/orphan-photo.jpg"
+								}
+							]
+							},
+							"description": "Add a new orphan with photo in a single request (Branch Admin only)"
+						},
+						"response": []
+					},
+					{
+						"name": "Upload Orphan Photo",
+						"request": {
+							"method": "POST",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"body": {
+								"mode": "formdata",
+								"formdata": [
+									{
+										"key": "file",
+										"type": "file",
+										"src": "/path/to/photo.jpg"
+									}
+								]
+							},
+							"url": {
+								"raw": "{{base_url}}/app/oims/orphans/orphanimage/{orphanPublicId}",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"orphans",
+									"orphanimage",
+									"{orphanPublicId}"
+								],
+								"variable": [
+									{
+										"key": "orphanPublicId",
+										"value": "string"
+									}
+								]
+							},
+							"description": "Upload a photo for an orphan"
+						},
+						"response": []
+					},
+					{
+						"name": "Update Orphan",
+						"request": {
+							"method": "PATCH",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"body": {
+								"mode": "raw",
+								"raw": "{\n  \"orphanPublicId\": \"string\",\n  \"origin\": \"Mombasa\",\n  \"fullName\": \"John Doe\",\n  \"dateOfBirth\": \"2018-05-12\",\n  \"religion\": \"Christian\",\n  \"adoptionReason\": \"Lost parents in accident\",\n  \"gender\": \"Male\",\n  \"bloodGroup\": \"O+\",\n  \"allergies\": [\"Peanuts\", \"Dust\", \"Milk\"],\n  \"medicalHistory\": \"Generally healthy, had chicken pox in 2020, recovered well\",\n  \"specialNeeds\": \"Mild asthma\",\n  \"hobbies\": \"Drawing, football, reading\",\n  \"educationLevel\": \"Primary\",\n  \"previousSchoolName\": \"Sunshine Primary School\"\n}"
+							},
+							"url": {
+								"raw": "{{base_url}}/app/oims/orphans/updateorphan",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"orphans",
+									"updateorphan"
+								]
+							},
+							"description": "Update an orphan's information"
+						},
+						"response": []
+					},
+					{
+						"name": "Delete Orphan",
+						"request": {
+							"method": "DELETE",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/orphans/delorphan/{orphanPublicId}",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"orphans",
+									"delorphan",
+									"{orphanPublicId}"
+								],
+								"variable": [
+									{
+										"key": "orphanPublicId",
+										"value": "string"
+									}
+								]
+							},
+							"description": "Delete an orphan"
+						},
+						"response": []
+					}
+				],
+				"description": "API endpoints for orphan management"
+			},
+			{
+				"name": "Volunteer Endpoints",
+				"item": [
+					{
+						"name": "Get Volunteers by Branch",
+						"request": {
+							"method": "GET",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/events/volunteers/{branchId}",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"events",
+									"volunteers",
+									"{branchId}"
+								],
+								"variable": [
+									{
+										"key": "branchId",
+										"value": "string"
+									}
+								]
+							},
+							"description": "Get volunteers for a specific branch"
+						},
+						"response": []
+					},
+					{
+						"name": "Get Volunteer by ID",
+						"request": {
+							"method": "GET",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/events/volunteers/detail/{volunteerId}",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"events",
+									"volunteers",
+									"detail",
+									"{volunteerId}"
+								],
+								"variable": [
+									{
+										"key": "volunteerId",
+										"value": "string"
+									}
+								]
+							},
+							"description": "Get details of a specific volunteer"
+						},
+						"response": []
+					},
+					{
+						"name": "Get Volunteers by Centre",
+						"request": {
+							"method": "GET",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/events/volunteers/centre/{centreId}",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"events",
+									"volunteers",
+									"centre",
+									"{centreId}"
+								],
+								"variable": [
+									{
+										"key": "centreId",
+										"value": "string"
+									}
+								]
+							},
+							"description": "Get volunteers for an entire centre (Super Admin only)"
+						},
+						"response": []
+					},
+					{
+						"name": "Register Volunteer",
+						"request": {
+							"method": "POST",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": {
+								"mode": "raw",
+								"raw": "{\n  \"name\": \"Jane Smith\",\n  \"email\": \"jane.smith@example.com\",\n  \"phoneNumber\": \"1234567890\",\n  \"scheduledDate\": \"2025-06-15\",\n  \"jobRole\": \"Teaching Assistant\",\n  \"branchPublicId\": \"string\"\n}"
+							},
+							"url": {
+								"raw": "{{base_url}}/app/oims/events/volunteers",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"events",
+									"volunteers"
+								]
+							},
+							"description": "Register a new volunteer (public endpoint)"
+						},
+						"response": []
+					},
+					{
+						"name": "Get Volunteers by Current Branch",
+						"request": {
+							"method": "GET",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/events/volunteers/current",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"events",
+									"volunteers",
+									"current"
+								]
+							},
+							"description": "Get volunteers for the current user's branch without providing branch ID"
+						},
+						"response": []
+					},
+					{
+						"name": "Update Volunteer Status",
+						"request": {
+							"method": "PATCH",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/events/volunteers/{volunteerId}/status?status=APPROVED",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"events",
+									"volunteers",
+									"{volunteerId}",
+									"status"
+								],
+								"query": [
+									{
+										"key": "status",
+										"value": "APPROVED"
+									}
+								],
+								"variable": [
+									{
+										"key": "volunteerId",
+										"value": "string"
+									}
+								]
+							},
+							"description": "Update the status of a volunteer (Admin only)"
+						},
+						"response": []
+					},
+					{
+						"name": "Delete Volunteer",
+						"request": {
+							"method": "DELETE",
+							"header": [
+								{
+									"key": "Authorization",
+									"value": "Bearer {{token}}",
+									"type": "text"
+								}
+							],
+							"url": {
+								"raw": "{{base_url}}/app/oims/events/volunteers/{volunteerId}",
+								"host": [
+									"{{base_url}}"
+								],
+								"path": [
+									"app",
+									"oims",
+									"events",
+									"volunteers",
+									"{volunteerId}"
+								],
+								"variable": [
+									{
+										"key": "volunteerId",
+										"value": "string"
+									}
+								]
+							},
+							"description": "Delete a volunteer (Admin only)"
+						},
+						"response": []
+					}
+				],
+				"description": "API endpoints for volunteer management"
+			}
+		],
+		"event": [
+			{
+				"listen": "prerequest",
+				"script": {
+					"type": "text/javascript",
+					"exec": [
+						""
+					]
+				}
+			},
+			{
+				"listen": "test",
+				"script": {
+					"type": "text/javascript",
+					"exec": [
+						""
+					]
+				}
+			}
+		],
+		"variable": [
+			{
+				"key": "base_url",
+				"value": "http://localhost:8080",
+				"type": "string"
+			},
+			{
+				"key": "token",
+				"value": "your_jwt_token_here",
+				"type": "string"
+			}
+		]
+	}
