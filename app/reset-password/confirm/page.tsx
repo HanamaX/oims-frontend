@@ -62,8 +62,7 @@ function ResetPasswordConfirmForm() {
     
     try {      // Prepare the data for API request
       const passwordData: ChangePasswordRequest = {
-        email: "", // Empty email is fine because the token already identifies the user
-        activationToken: token,
+        token: token,
         password
       }
       

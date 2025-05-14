@@ -44,14 +44,13 @@ export interface ForgotPasswordRequest {
 }
 
 export interface ChangePasswordRequest {
-  email: string // The backend requires this, but we'll send an empty string as the token is sufficient
-  activationToken: string
+  token: string
   password: string
 }
 
 export interface ActivateAccountRequest {
-  email: string // This is used for the username in the activation context
-  activationToken: string
+  username: string // This is used for the username in the activation context
+  token: string
   password: string
 }
 
@@ -163,18 +162,40 @@ const AuthService = {
 
   forgotPassword: async (email: string): Promise<void> => {
     try {
-      console.log("Sending forgot password request for email:", email)
-      
-      // Try using axios directly for more control over the request
-      // Send a JSON object that includes the email field
-      const requestData = { email: email }; 
-      console.log("Sending request with data:", requestData);
-      
-      const response = await API.post("/app/oims/authorization/forgot-password", requestData);
-      console.log("Forgot password request sent successfully:", response);
+      // Use XMLHttpRequest to have full control over URL construction
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        const url = `${API.defaults.baseURL}/app/oims/authorization/forgot-password?email=${email}`;
+        console.log("Making request to:", url);
+        
+        xhr.open("POST", url);
+        
+        // Add authorization token if available
+        const token = localStorage.getItem("jwt_token");
+        if (token) {
+          xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+        }
+        
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            console.log("Forgot password success:", xhr.responseText);
+            resolve();
+          } else {
+            console.error("Forgot password failed:", xhr.status, xhr.responseText);
+            reject(new Error(`Request failed with status ${xhr.status}: ${xhr.responseText}`));
+          }
+        };
+        
+        xhr.onerror = function() {
+          console.error("XMLHttpRequest network error");
+          reject(new Error("Network error during request"));
+        };
+        
+        xhr.send();
+      });
     } catch (error) {
-      console.error("Forgot password error:", error);
-      throw error;
+      console.error("Forgot password error:", error)
+      throw error
     }
   },
 

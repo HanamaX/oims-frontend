@@ -69,8 +69,8 @@ function ActivateAccountForm() {
     try {
       // Prepare the data for API request - using username instead of email
       const activationData: ActivateAccountRequest = {
-        email: username, // Using username as the email field per your requirements
-        activationToken: token,
+        username: username, // Using username as the email field per your requirements
+        token: token,
         password
       }
       
