@@ -1,16 +1,16 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { CheckCircle2, AlertCircle, Eye, EyeOff } from "lucide-react"
+import { CheckCircle2, AlertCircle, Eye, EyeOff, Loader2 } from "lucide-react"
 import AuthService, { type ActivateAccountRequest } from "@/lib/auth-service"
 
-export default function ActivateAccountPage() {
+function ActivateAccountForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [token, setToken] = useState<string | null>(null)  
@@ -208,5 +208,31 @@ export default function ActivateAccountPage() {
         )}
       </Card>
     </div>
+  )
+}
+
+// Add a loading fallback for the Suspense boundary
+function ActivateAccountLoading() {
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle>Account Activation</CardTitle>
+          <CardDescription>Loading activation details...</CardDescription>
+        </CardHeader>
+        <CardContent className="flex justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+// Export the main component with a Suspense boundary
+export default function ActivateAccountPage() {
+  return (
+    <Suspense fallback={<ActivateAccountLoading />}>
+      <ActivateAccountForm />
+    </Suspense>
   )
 }

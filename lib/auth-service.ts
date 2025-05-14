@@ -163,12 +163,18 @@ const AuthService = {
 
   forgotPassword: async (email: string): Promise<void> => {
     try {
-      await API.post("/app/oims/authorization/forgot-password", null, {
-        params: { email },
-      })
+      console.log("Sending forgot password request for email:", email)
+      
+      // Try using axios directly for more control over the request
+      // Send a JSON object that includes the email field
+      const requestData = { email: email }; 
+      console.log("Sending request with data:", requestData);
+      
+      const response = await API.post("/app/oims/authorization/forgot-password", requestData);
+      console.log("Forgot password request sent successfully:", response);
     } catch (error) {
-      console.error("Forgot password error:", error)
-      throw error
+      console.error("Forgot password error:", error);
+      throw error;
     }
   },
 

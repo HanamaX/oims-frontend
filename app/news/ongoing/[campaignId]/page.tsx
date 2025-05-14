@@ -46,8 +46,7 @@ export default function CampaignDetailPage({ params }: { params: { campaignId: s
   // Fetch campaign details from the API
   useEffect(() => {
     const fetchCampaignDetails = async () => {
-      try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+      try {        const baseUrl = 'https://oims-4510ba404e0e.herokuapp.com';
         const response = await fetch(`${baseUrl}/app/oims/events/campaigns/all`);
         
         if (!response.ok) {

@@ -49,10 +49,9 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
     }
     
     setLoading(true);
-    
-    try {
-      // Replace with your actual API endpoint and implementation
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+      try {
+      // Use the Heroku URL for the API
+      const baseUrl = 'https://oims-4510ba404e0e.herokuapp.com';
       const response = await fetch(`${baseUrl}/app/oims/events/campaigns/contribute`, {
         method: 'POST',
         headers: {
