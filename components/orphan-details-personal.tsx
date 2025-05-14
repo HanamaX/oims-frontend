@@ -25,9 +25,10 @@ import OrphanFormEdit from "./orphan-form-edit"
 
 interface OrphanDetailsPersonalProps {
   readonly orphan: OrphanDetails | null
+  readOnly?: boolean
 }
 
-export default function OrphanDetailsPersonal({ orphan }: Readonly<OrphanDetailsPersonalProps>) {
+export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Readonly<OrphanDetailsPersonalProps>) {
   const { toast } = useToast()
   const [isGuardianFormOpen, setIsGuardianFormOpen] = useState(false)
   const [isDeleteGuardianDialogOpen, setIsDeleteGuardianDialogOpen] = useState(false)
@@ -197,28 +198,29 @@ export default function OrphanDetailsPersonal({ orphan }: Readonly<OrphanDetails
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* Main Details */}
-      <Card className="md:col-span-2">
-        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="md:col-span-2">        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Personal Information</CardTitle>
-          <div className="flex space-x-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setIsEditOrphanOpen(true)}
-            >
-              <Edit className="h-4 w-4 mr-1" />
-              Edit Details
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
-              onClick={() => setIsDeleteOrphanDialogOpen(true)}
-            >
-              <Trash className="h-4 w-4 mr-1" />
-              Delete
-            </Button>
-          </div>
+          {!readOnly && (
+            <div className="flex space-x-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setIsEditOrphanOpen(true)}
+              >
+                <Edit className="h-4 w-4 mr-1" />
+                Edit Details
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+                onClick={() => setIsDeleteOrphanDialogOpen(true)}
+              >
+                <Trash className="h-4 w-4 mr-1" />
+                Delete
+              </Button>
+            </div>
+          )}
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
@@ -309,43 +311,44 @@ export default function OrphanDetailsPersonal({ orphan }: Readonly<OrphanDetails
           </div>
         </CardContent>
       </Card>
-      
-      {/* Guardian Information */}
+        {/* Guardian Information */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle>Guardian Information</CardTitle>
             <CardDescription>Information about the primary guardian</CardDescription>
           </div>
-          {orphan.guardian ? (
-            <div className="flex space-x-2">
+          {!readOnly && (
+            orphan.guardian ? (
+              <div className="flex space-x-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setIsGuardianFormOpen(true)}
+                >
+                  <Edit className="h-4 w-4 mr-1" />
+                  Edit
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-red-500"
+                  onClick={() => setIsDeleteGuardianDialogOpen(true)}
+                >
+                  <Trash className="h-4 w-4 mr-1" />
+                  Delete
+                </Button>
+              </div>
+            ) : (
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={() => setIsGuardianFormOpen(true)}
               >
-                <Edit className="h-4 w-4 mr-1" />
-                Edit
+                <Plus className="h-4 w-4 mr-1" />
+                Add Guardian
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-red-500"
-                onClick={() => setIsDeleteGuardianDialogOpen(true)}
-              >
-                <Trash className="h-4 w-4 mr-1" />
-                Delete
-              </Button>
-            </div>
-          ) : (
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setIsGuardianFormOpen(true)}
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              Add Guardian
-            </Button>
+            )
           )}
         </CardHeader>
         <CardContent>
@@ -380,72 +383,75 @@ export default function OrphanDetailsPersonal({ orphan }: Readonly<OrphanDetails
           )}
         </CardContent>
       </Card>
-      
-      {/* Guardian Form Dialog */}
-      <GuardianForm 
-        open={isGuardianFormOpen} 
-        onOpenChange={setIsGuardianFormOpen} 
-        onSubmit={orphan.guardian ? handleUpdateGuardian : handleAddGuardian} 
-        guardian={orphan.guardian} 
-      />
-      
-      {/* Delete Guardian Dialog */}
-      <AlertDialog open={isDeleteGuardianDialogOpen} onOpenChange={setIsDeleteGuardianDialogOpen}>
-        <AlertDialogContent className="bg-white">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action will permanently delete the guardian information. This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={(e) => {
-                e.preventDefault()
-                handleDeleteGuardian()
-              }}
-              disabled={isSubmitting}
-              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
-            >
-              {isSubmitting ? "Deleting..." : "Delete Guardian"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-      
-      {/* Edit Orphan Form */}
-      <OrphanFormEdit 
-        open={isEditOrphanOpen} 
-        onOpenChange={setIsEditOrphanOpen} 
-        onSubmit={handleEditOrphan} 
-        orphan={orphan}
-      />
-      
-      {/* Delete Orphan Dialog */}
-      <AlertDialog open={isDeleteOrphanDialogOpen} onOpenChange={setIsDeleteOrphanDialogOpen}>
-        <AlertDialogContent className="bg-white">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action will permanently delete the orphan record and all associated information. This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={(e) => {
-                e.preventDefault()
-                handleDeleteOrphan()
-              }}
-              disabled={isSubmitting}
-              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
-            >
-              {isSubmitting ? "Deleting..." : "Delete Orphan"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        {/* Guardian Form Dialog - Only render when not in readOnly mode */}
+      {!readOnly && (
+        <>
+          <GuardianForm 
+            open={isGuardianFormOpen} 
+            onOpenChange={setIsGuardianFormOpen} 
+            onSubmit={orphan.guardian ? handleUpdateGuardian : handleAddGuardian} 
+            guardian={orphan.guardian} 
+          />
+          
+          {/* Delete Guardian Dialog */}
+          <AlertDialog open={isDeleteGuardianDialogOpen} onOpenChange={setIsDeleteGuardianDialogOpen}>
+            <AlertDialogContent className="bg-white">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action will permanently delete the guardian information. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleDeleteGuardian()
+                  }}
+                  disabled={isSubmitting}
+                  className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+                >
+                  {isSubmitting ? "Deleting..." : "Delete Guardian"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          
+          {/* Edit Orphan Form */}
+          <OrphanFormEdit 
+            open={isEditOrphanOpen} 
+            onOpenChange={setIsEditOrphanOpen} 
+            onSubmit={handleEditOrphan} 
+            orphan={orphan}
+          />
+          
+          {/* Delete Orphan Dialog */}
+          <AlertDialog open={isDeleteOrphanDialogOpen} onOpenChange={setIsDeleteOrphanDialogOpen}>
+            <AlertDialogContent className="bg-white">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action will permanently delete the orphan record and all associated information. This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
+                <AlertDialogAction 
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleDeleteOrphan()
+                  }}
+                  disabled={isSubmitting}
+                  className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+                >
+                  {isSubmitting ? "Deleting..." : "Delete Orphan"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
+      )}
     </div>
   )
 }

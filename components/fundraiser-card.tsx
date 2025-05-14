@@ -25,9 +25,10 @@ interface FundraiserCardProps {
   onDelete?: (id: string) => void
   onApprove?: (id: string) => void
   onReject?: (id: string) => void
+  readOnly?: boolean
 }
 
-export default function FundraiserCard({ fundraiser, onEdit, onDelete, onApprove, onReject }: Readonly<FundraiserCardProps>) {
+export default function FundraiserCard({ fundraiser, onEdit, onDelete, onApprove, onReject, readOnly = false }: Readonly<FundraiserCardProps>) {
   // Format date
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -55,14 +56,22 @@ export default function FundraiserCard({ fundraiser, onEdit, onDelete, onApprove
 
   return (
     <Card className="w-full overflow-hidden">
-      <div className="grid md:grid-cols-3 gap-4">
-        {/* Image section */}
+      <div className="grid md:grid-cols-3 gap-4">        {/* Image section */}
         <div className="md:col-span-1">
           <div className="aspect-[4/3] w-full overflow-hidden">
             <img
-              src={fundraiser.imageUrl ?? "/placeholder.svg?height=300&width=400&text=Fundraiser+Image"}
+              src={fundraiser.imageUrl 
+                ? fundraiser.imageUrl.startsWith('http') 
+                  ? fundraiser.imageUrl 
+                  : `https://oims-4510ba404e0e.herokuapp.com${fundraiser.imageUrl}`
+                : "/placeholder.svg?height=300&width=400&text=Fundraiser+Image"}
               alt={fundraiser.eventName}
               className="w-full h-full object-cover rounded-l"
+              onError={(e) => {
+                // Handle image load error by falling back to placeholder
+                console.error(`Failed to load image: ${fundraiser.imageUrl}`)
+                e.currentTarget.src = "/placeholder.svg?height=300&width=400&text=Fundraiser+Image"
+              }}
             />
           </div>
         </div>
@@ -80,21 +89,20 @@ export default function FundraiserCard({ fundraiser, onEdit, onDelete, onApprove
               <CardDescription className="flex items-center gap-1">
                 <span className="font-medium">Coordinator:</span> {fundraiser.coordinatorName}
               </CardDescription>
-            </div>
-            <div className="flex space-x-2">
-              {onEdit && (
+            </div>            <div className="flex space-x-2">
+              {!readOnly && onEdit && (
                 <Button variant="outline" size="icon" onClick={() => onEdit(fundraiser.publicId)}>
                   <Edit className="h-4 w-4" />
                 </Button>
               )}
-              {onDelete && (
-                <AlertDialog>
+              {!readOnly && onDelete && (
+                <AlertDialog >
                   <AlertDialogTrigger asChild>
                     <Button variant="outline" size="icon">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent className="bg-white">
                     <AlertDialogHeader>
                       <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                       <AlertDialogDescription>
@@ -174,20 +182,11 @@ export default function FundraiserCard({ fundraiser, onEdit, onDelete, onApprove
               </div>
             </div>
           </div>
-          
-          <div className="mt-5">
+            <div className="mt-5">
             <p className="text-sm font-medium">Budget Breakdown</p>
             <p className="text-sm text-muted-foreground">{fundraiser.budgetBreakdown}</p>
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button 
-              onClick={() => window.location.href = `/dashboard/admin/fundraisers/${fundraiser.publicId}`}
-            >
-              View Details
-            </Button>
-            
-            {fundraiser.status === "PENDING" && onApprove && onReject && (
+          </div>          <div className="mt-6 flex flex-wrap gap-3">
+            {!readOnly && fundraiser.status === "PENDING" && onApprove && onReject && (
               <>
                 <Button 
                   variant="outline" 

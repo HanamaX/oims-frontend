@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode, useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import AuthService from "@/lib/auth-service"
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { Phone } from "lucide-react"
 
 type UserRole = "admin" | "superadmin" | null

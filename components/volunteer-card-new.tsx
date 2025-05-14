@@ -35,13 +35,15 @@ interface VolunteerCardProps {
   onApprove?: (id: string) => void
   onReject?: (id: string) => void
   onDelete?: (id: string) => void
+  readOnly?: boolean
 }
 
 export default function VolunteerCardNew({ 
   volunteer, 
   onApprove, 
   onReject, 
-  onDelete 
+  onDelete,
+  readOnly = false
 }: Readonly<VolunteerCardProps>) {
   // Format date
   const formatDate = (dateString: string) => {
@@ -70,20 +72,19 @@ export default function VolunteerCardNew({
     <Card className="w-full hover:shadow-md transition-shadow">
       <CardHeader>
         <div className="flex justify-between items-start">
-          <div>
-            <div className="flex items-center gap-2">
+          <div>        <div className="flex items-center gap-2">
               <CardTitle>{volunteer.name}</CardTitle>
               {getStatusBadge(volunteer.status)}
             </div>
             <CardDescription>{volunteer.branchName ?? `Branch ID: ${volunteer.branchPublicId}`}</CardDescription>
           </div>
           <div className="flex space-x-2">
-            {volunteer.status.toUpperCase() === "PENDING" && onApprove && (
+            {!readOnly && volunteer.status.toUpperCase() === "PENDING" && onApprove && (
               <Button variant="outline" size="sm" className="bg-green-50 text-green-600 border-green-200 hover:bg-green-100" onClick={() => onApprove(volunteer.publicId)}>
                 <CheckCircle className="h-4 w-4 mr-1" /> Approve
               </Button>
             )}
-            {volunteer.status.toUpperCase() === "PENDING" && onReject && (
+            {!readOnly && volunteer.status.toUpperCase() === "PENDING" && onReject && (
               <Button variant="outline" size="sm" className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100" onClick={() => onReject(volunteer.publicId)}>
                 <XCircle className="h-4 w-4 mr-1" /> Reject
               </Button>
@@ -127,9 +128,8 @@ export default function VolunteerCardNew({
               <p className="text-sm">{volunteer.createdAt ? formatDate(volunteer.createdAt) : "Unknown"}</p>
             </div>
           </div>
-        </div>
-      </CardContent><CardFooter className="flex justify-end">
-        {onDelete && (
+        </div>      </CardContent><CardFooter className="flex justify-end">
+        {onDelete && !readOnly && (
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button 

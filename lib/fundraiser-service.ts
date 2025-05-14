@@ -36,30 +36,70 @@ export interface FundraiserCreateRequest {
   phoneNumber: string
 }
 
-const FundraiserService = {
-  createFundraiser: async (fundraiserData: FundraiserCreateRequest): Promise<Fundraiser> => {
+const FundraiserService = {  createFundraiser: async (fundraiserData: FundraiserCreateRequest): Promise<Fundraiser> => {
     try {
-      const response = await API.post<Fundraiser>("/app/oims/events/fundraisers", fundraiserData)
-      return response.data
+      const response = await API.post("/app/oims/events/fundraisers", fundraiserData)
+      console.log("Fundraiser created successfully:", response.data)
+      return response.data.data  
     } catch (error) {
       console.error("Create fundraiser error:", error)
       throw error
     }
-  },
-
-  uploadFundraiserImage: async (fundraiserId: string, file: File): Promise<void> => {
+  },  uploadFundraiserImage: async (fundraiserId: string, file: File): Promise<void> => {
+    // Validation checks
+    if (!fundraiserId) {
+      console.error("Cannot upload image: Missing fundraiserId");
+      throw new Error("Missing fundraiserId");
+    }
+    
+    if (!file || !(file instanceof File)) {
+      console.error("Cannot upload image: Invalid file object", file);
+      throw new Error("Invalid file object");
+    }
+    
     try {
-      const formData = new FormData()
-      formData.append("file", file)
-
-      await API.post(`/app/oims/events/fundraisers/image/${fundraiserId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      const formData = new FormData();
+      
+      // Add the file with the field name that backend expects
+      formData.append("file", file);
+      
+      // Log detailed debugging info
+      console.log(`Uploading image for fundraiser ${fundraiserId}:`, {
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        lastModified: new Date(file.lastModified).toISOString()
+      });
+      
+      console.log("Uploading image to endpoint:", `/app/oims/events/fundraisers/image/${fundraiserId}`);
+      
+      // Use XMLHttpRequest which handles multipart requests more reliably
+      return new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `${API.defaults.baseURL}/app/oims/events/fundraisers/image/${fundraiserId}`);
+        
+        // Don't set content-type header, browser will set it with the correct boundary
+        
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            console.log("Image upload successful:", xhr.responseText);
+            resolve();
+          } else {
+            console.error("Image upload failed:", xhr.status, xhr.responseText);
+            reject(new Error(`Upload failed with status ${xhr.status}: ${xhr.responseText}`));
+          }
+        };
+        
+        xhr.onerror = function() {
+          console.error("XMLHttpRequest network error");
+          reject(new Error("Network error during upload"));
+        };
+        
+        xhr.send(formData);
+      });
     } catch (error) {
-      console.error("Upload fundraiser image error:", error)
-      throw error
+      console.error("Failed to upload fundraiser image:", error);
+      throw error;
     }
   },
 

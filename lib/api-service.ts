@@ -16,14 +16,21 @@ API.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
       
-      // Don't override content-type if it's multipart/form-data (for file uploads)
-      if (config.headers['Content-Type'] !== 'multipart/form-data') {
+      // CRITICAL FIX: Special handling for FormData/file uploads
+      const isFormData = config.data instanceof FormData;
+      if (isFormData) {
+        // For FormData, DON'T set Content-Type so browser can set it with boundary
+        delete config.headers['Content-Type'];
+        console.log(`FormData detected - removed Content-Type to let browser handle it`);
+      } else if (config.headers['Content-Type'] !== 'multipart/form-data') {
+        // For JSON data, set content type explicitly
         config.headers['Content-Type'] = 'application/json'
       }
       
-      // Debug to check token is being sent
+      // Debug info
       console.debug(`API Request to ${config.url} with auth token: ${token.substring(0, 15)}...`)
-      console.debug(`Request content type: ${config.headers['Content-Type']}`)
+      console.debug(`Request content type: ${config.headers['Content-Type'] ? String(config.headers['Content-Type']) : 'auto (FormData)'}`)
+      console.debug(`Request body type: ${isFormData ? 'FormData' : typeof config.data}`)
     } else {
       console.warn(`API Request to ${config.url} without auth token!`)
     }

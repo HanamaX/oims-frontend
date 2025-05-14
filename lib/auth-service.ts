@@ -44,21 +44,23 @@ export interface ForgotPasswordRequest {
 }
 
 export interface ChangePasswordRequest {
-  email: string
+  email: string // The backend requires this, but we'll send an empty string as the token is sufficient
   activationToken: string
   password: string
 }
 
 export interface ActivateAccountRequest {
-  email: string
+  email: string // This is used for the username in the activation context
   activationToken: string
   password: string
 }
 
 export interface UpdateProfileRequest {
   fullName?: string
+  username?: string
   email?: string
   phone?: string
+  phoneNumber?: string // Add this in case the backend expects phoneNumber instead of phone
   imageUrl?: string
   gender?: string
   sex?: string  // API might expect sex instead of gender
@@ -172,6 +174,7 @@ const AuthService = {
 
   changePassword: async (data: ChangePasswordRequest): Promise<void> => {
     try {
+      // Using the exact endpoint as specified
       await API.post("/app/oims/authorization/change-password", data)
     } catch (error) {
       console.error("Change password error:", error)
@@ -181,6 +184,7 @@ const AuthService = {
 
   activateAccount: async (data: ActivateAccountRequest): Promise<void> => {
     try {
+      // Using the exact endpoint as specified
       await API.post("/app/oims/authorization/activate", data)
     } catch (error) {
       console.error("Activate account error:", error)
@@ -190,7 +194,10 @@ const AuthService = {
 
   updateProfile: async (data: UpdateProfileRequest): Promise<void> => {
     try {
+      // Log the exact data being sent to the API
+      console.log("Sending profile update data:", JSON.stringify(data, null, 2))
       await API.patch("/app/oims/admins/update", data)
+      console.log("Profile update API call successful")
     } catch (error) {
       console.error("Update profile error:", error)
       throw error
@@ -199,7 +206,7 @@ const AuthService = {
 
   updatePassword: async (data: UpdatePasswordRequest): Promise<void> => {
     try {
-      await API.patch("/app/oims/admins/update-password", data)
+      await API.patch("/app/oims/admins/change-password", data)
     } catch (error) {
       console.error("Update password error:", error)
       throw error
@@ -221,14 +228,43 @@ const AuthService = {
       formData.append("file", file)
       
       console.log("Uploading image file:", file.name, file.size, file.type)
-      const response = await API.post<UploadProfileImageResponse>("/app/oims/admins/image", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
       
-      console.log("Image upload success response:", response.data)
-      return response.data
+      // Use XMLHttpRequest which handles multipart/form-data more reliably
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `${API.defaults.baseURL}/app/oims/admins/image`);
+        
+        // Get token for authentication
+        const token = localStorage.getItem("jwt_token");
+        if (token) {
+          xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+        }
+        
+        // Don't set Content-Type header, let browser set it with the boundary
+        
+        xhr.onload = function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            console.log("Image upload success response:", xhr.responseText);
+            try {
+              const response = JSON.parse(xhr.responseText);
+              resolve(response);
+            } catch (error) {
+              console.error("Error parsing response:", error);
+              reject(new Error("Invalid response format"));
+            }
+          } else {
+            console.error("Image upload failed:", xhr.status, xhr.responseText);
+            reject(new Error(`Upload failed with status ${xhr.status}: ${xhr.responseText}`));
+          }
+        };
+        
+        xhr.onerror = function() {
+          console.error("XMLHttpRequest network error");
+          reject(new Error("Network error during upload"));
+        };
+        
+        xhr.send(formData);
+      });
     } catch (error) {
       console.error("Upload profile image error:", error)
       throw error

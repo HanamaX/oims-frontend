@@ -23,13 +23,15 @@ interface MedicalRecordDetailsProps {
   isOpen: boolean
   onClose: () => void
   onRecordUpdated?: () => void
+  readOnly?: boolean
 }
 
 export default function MedicalRecordDetails({
   recordId,
   isOpen,
   onClose,
-  onRecordUpdated
+  onRecordUpdated,
+  readOnly = false
 }: Readonly<MedicalRecordDetailsProps>) {
   const [record, setRecord] = useState<MedicalRecordDetail | null>(null)
   const [loading, setLoading] = useState(false)
@@ -127,27 +129,28 @@ export default function MedicalRecordDetails({
   }
 
   return (
-    <>
-      <RecordDetailsDialog 
+    <>      <RecordDetailsDialog 
         title="Medical Record Details" 
         isOpen={isOpen} 
         onClose={onClose}
         actions={
-          <>
-            <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
-              onClick={() => setDeleteDialogOpen(true)}
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              Delete
-            </Button>
-          </>
+          !readOnly ? (
+            <>
+              <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+                <Edit className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+                onClick={() => setDeleteDialogOpen(true)}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete
+              </Button>
+            </>
+          ) : undefined
         }
       >
         <div className="space-y-6">

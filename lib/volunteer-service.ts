@@ -30,13 +30,18 @@ export interface CurrentVolunteerResponse {
 }
 
 export interface VolunteerCreateRequest {
-  firstName: string
-  lastName: string
+  name: string
   email: string
   phoneNumber: string
-  skills: string
-  availability: string
+  scheduledDate?: string
+  jobRole: string
   branchPublicId: string
+}
+
+export interface Branch {
+  publicId: string
+  name: string
+  location?: string
 }
 
 const VolunteerService = {
@@ -47,6 +52,27 @@ const VolunteerService = {
     } catch (error) {
       console.error("Register volunteer error:", error)
       throw error
+    }
+  },
+
+  getBranches: async (): Promise<Branch[]> => {
+    try {
+      const response = await API.get("/app/oims/public/branches")
+      console.log("Branches response:", response.data)
+      // Check if response.data is an array or if it has a data/content property containing the array
+      if (Array.isArray(response.data)) {
+        return response.data
+      } else if (Array.isArray(response.data?.data)) {
+        return response.data.data
+      } else if (Array.isArray(response.data?.content)) {
+        return response.data.content
+      } else {
+        console.error("Unexpected branches response format:", response.data)
+        return [] // Return empty array as fallback
+      }
+    } catch (error) {
+      console.error("Get branches error:", error)
+      return [] // Return empty array on error
     }
   },
 

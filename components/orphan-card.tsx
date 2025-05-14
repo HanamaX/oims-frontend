@@ -66,6 +66,7 @@ interface OrphanCardProps {
   guardian?: Guardian
   onEdit?: (orphanId: number) => void
   onDelete?: (orphanId: number) => void
+  readOnly?: boolean
 }
 
 export default function OrphanCard({
@@ -76,7 +77,8 @@ export default function OrphanCard({
   guardian,
   onEdit,
   onDelete,
-}: OrphanCardProps) {
+  readOnly = false,
+}: Readonly<OrphanCardProps>) {
   const [activeTab, setActiveTab] = useState("personal")
 
   // Calculate age from date of birth
@@ -103,12 +105,12 @@ export default function OrphanCard({
             </CardDescription>
           </div>
           <div className="flex space-x-2">
-            {onEdit && (
+            {onEdit && !readOnly && (
               <Button variant="outline" size="icon" onClick={() => onEdit(orphan.orphanId)}>
                 <Edit className="h-4 w-4" />
               </Button>
             )}
-            {onDelete && (
+            {onDelete && !readOnly && (
               <Button variant="outline" size="icon" onClick={() => onDelete(orphan.orphanId)}>
                 <Trash2 className="h-4 w-4" />
               </Button>

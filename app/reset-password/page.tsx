@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import AuthService from "@/lib/auth-service"
 
 export default function ResetPasswordPage() {
   const router = useRouter()
@@ -20,13 +21,13 @@ export default function ResetPasswordPage() {
     setIsSubmitting(true)
     setMessage("")
 
-    // Simulate API call to backend for password reset
     try {
-      // In a real app, this would be an API call to your backend
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // Call the actual forgot password API endpoint
+      await AuthService.forgotPassword(email)
       setMessage("Password reset link has been sent to your email.")
-    } catch (error) {
-      setMessage("An error occurred. Please try again.")
+    } catch (error: any) {
+      console.error("Forgot password error:", error)
+      setMessage(error.response?.data?.message || "An error occurred. Please try again.")
     } finally {
       setIsSubmitting(false)
     }

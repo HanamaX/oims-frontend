@@ -111,9 +111,7 @@ function DashboardLayoutContent({
               </li>
             </ul>
           </div>
-        )}
-
-        {user?.role === "superadmin" && (
+        )}        {user?.role === "superadmin" && (
           <div className="dashboard-section">
             <div className="dashboard-section-title">
               Management
@@ -135,7 +133,44 @@ function DashboardLayoutContent({
                   <T k="dashboard.center" />
                 </Link>
               </li>
-
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/orphans"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/orphans") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.orphans" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/volunteers"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/volunteers") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.volunteers" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/fundraisers"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/fundraisers") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.fundraisers" />
+                </Link>
+              </li>              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/inventory"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/inventory") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.inventory" />
+                </Link>
+              </li>              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/staff"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/staff") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.staff" />
+                </Link>
+              </li>
             </ul>
           </div>
         )}

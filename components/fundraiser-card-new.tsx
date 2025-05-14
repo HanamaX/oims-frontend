@@ -172,19 +172,12 @@ export default function FundraiserCardNew({ fundraiser, onEdit, onDelete, onAppr
               </div>
             </div>
           </div>
-          
-          <div className="mt-5">
+            <div className="mt-5">
             <p className="text-sm font-medium">Budget Breakdown</p>
             <p className="text-sm text-muted-foreground">{fundraiser.budgetBreakdown}</p>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button 
-              onClick={() => window.location.href = `/dashboard/admin/fundraisers/${fundraiser.publicId}`}
-            >
-              View Details
-            </Button>
-            
             {fundraiser.status === "PENDING" && onApprove && onReject && (
               <>
                 <Button 

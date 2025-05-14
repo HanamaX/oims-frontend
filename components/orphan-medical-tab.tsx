@@ -18,6 +18,7 @@ interface MedicalTabProps {
   readonly error: string | null
   readonly onRetry: () => void
   readonly fetchRecords: () => void
+  readonly readOnly?: boolean
 }
 
 export default function OrphanMedicalTab({
@@ -26,7 +27,8 @@ export default function OrphanMedicalTab({
   isLoading,
   error,
   onRetry,
-  fetchRecords
+  fetchRecords,
+  readOnly = false
 }: Readonly<MedicalTabProps>) {
   // UI state
   const [showForm, setShowForm] = useState(false)
@@ -143,10 +145,12 @@ export default function OrphanMedicalTab({
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-12">
           <p className="text-muted-foreground mb-4">No medical records found for this orphan</p>
-          <Button variant="outline" onClick={() => setShowForm(true)}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Medical Record
-          </Button>
+          {!readOnly && (
+            <Button variant="outline" onClick={() => setShowForm(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Medical Record
+            </Button>
+          )}
         </CardContent>
       </Card>
     )
@@ -161,15 +165,18 @@ export default function OrphanMedicalTab({
           isOpen={!!selectedRecordId}
           onClose={() => setSelectedRecordId(null)}
           onRecordUpdated={fetchRecords}
+          readOnly={readOnly}
         />
       )}
       
-      <div className="flex justify-end mb-6">
-        <Button onClick={() => setShowForm(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Add New Record
-        </Button>
-      </div>
+      {!readOnly && (
+        <div className="flex justify-end mb-6">
+          <Button onClick={() => setShowForm(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Add New Record
+          </Button>
+        </div>
+      )}
       
       {records.map((record) => (
         <Card key={record.publicId || `medical-${record.diagnosis}`} className="mb-4">

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,7 +15,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { isValidEmail, isValidPhone } from "@/lib/validation"
-import VolunteerService from "@/lib/volunteer-service"
+import VolunteerService, { Branch } from "@/lib/volunteer-service"
+import { toast } from "@/hooks/use-toast"
 
 export default function VolunteerRegistrationPage() {
   const router = useRouter()
@@ -24,16 +25,50 @@ export default function VolunteerRegistrationPage() {
     lastName: "",
     email: "",
     phoneNumber: "",
-    skills: "",
-    availability: "",
+    jobRole: "",
     branchPublicId: "",
   })
   const [scheduledDate, setScheduledDate] = useState<Date>()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [branches, setBranches] = useState<Branch[]>([])
+  const [isLoading, setIsLoading] = useState(true)
   const [errors, setErrors] = useState({
     email: "",
     phoneNumber: "",
   })
+  // Fetch branches on component mount
+  useEffect(() => {
+    const loadBranches = async () => {
+      try {
+        const branchData = await VolunteerService.getBranches()
+        console.log("Branches loaded:", branchData)
+        // Make sure branchData is an array
+        if (Array.isArray(branchData)) {
+          setBranches(branchData)
+        } else {
+          console.error("Branches data is not an array:", branchData)
+          setBranches([])
+          toast({
+            title: "Warning",
+            description: "Branch data format is unexpected. Some features may not work correctly.",
+            variant: "destructive",
+          })
+        }
+      } catch (error) {
+        console.error("Error loading branches:", error)
+        setBranches([]) // Ensure it's always an array
+        toast({
+          title: "Error",
+          description: "Failed to load branches. Please try again later.",
+          variant: "destructive",
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadBranches()
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -76,17 +111,32 @@ export default function VolunteerRegistrationPage() {
     setIsSubmitting(true)
 
     try {
-      // In a real app, this would send the data to the server
+      // Create the volunteer with the required format
       await VolunteerService.registerVolunteer({
-        ...formData,
-        skills: formData.skills || "General volunteering",
-        availability: scheduledDate ? format(scheduledDate, "yyyy-MM-dd") : "Flexible",
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+        scheduledDate: scheduledDate ? format(scheduledDate, "yyyy-MM-dd") : undefined,
+        jobRole: formData.jobRole || "General volunteering",
+        branchPublicId: formData.branchPublicId,
+      })
+
+      // Show success toast
+      toast({
+        title: "Success",
+        description: "Volunteer registered successfully!",
+        duration: 5000,
       })
 
       // Navigate to thank you page
       router.push("/thank-you?type=volunteer")
     } catch (error) {
       console.error("Error registering volunteer:", error)
+      toast({
+        title: "Error",
+        description: "Failed to register volunteer. Please try again.",
+        variant: "destructive",
+      })
       setIsSubmitting(false)
     }
   }
@@ -176,25 +226,24 @@ export default function VolunteerRegistrationPage() {
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {scheduledDate ? format(scheduledDate, "PPP") : "Select date"}
                       </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
+                    </PopoverTrigger>                    <PopoverContent className="w-auto p-0 bg-white">                      <Calendar
                         mode="single"
                         selected={scheduledDate}
                         onSelect={setScheduledDate}
                         initialFocus
                         disabled={(date) => date < new Date()}
+                        className="bg-white"
                       />
                     </PopoverContent>
                   </Popover>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="skills">Skills</Label>
+                  <Label htmlFor="jobRole">Role / Skills</Label>
                   <Input
-                    id="skills"
-                    name="skills"
-                    placeholder="e.g., Teaching, Counseling, etc."
-                    value={formData.skills}
+                    id="jobRole"
+                    name="jobRole"
+                    placeholder="e.g., Teaching Assistant, Counselor, etc."
+                    value={formData.jobRole}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -202,18 +251,31 @@ export default function VolunteerRegistrationPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="branchPublicId">Branch</Label>
-                  <Select onValueChange={(value) => handleSelectChange("branchPublicId", value)} required>
+                  <Label htmlFor="branchPublicId">Branch</Label>                  <Select 
+                    onValueChange={(value) => handleSelectChange("branchPublicId", value)} 
+                    required
+                    disabled={isLoading}
+                  >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a branch" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">Springfield Branch</SelectItem>
-                      <SelectItem value="2">Downtown Branch</SelectItem>
-                      <SelectItem value="3">Riverside Branch</SelectItem>
-                      <SelectItem value="4">Hillside Branch</SelectItem>
+                      <SelectValue placeholder={isLoading ? "Loading branches..." : "Select a branch"} />
+                    </SelectTrigger>                    <SelectContent className="bg-white">
+                      {Array.isArray(branches) && branches.length > 0 ? (
+                        branches.map((branch) => (
+                          <SelectItem key={branch.publicId} value={branch.publicId} className="bg-white">
+                            {branch.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-branches" disabled className="bg-white">
+                          No branches available
+                        </SelectItem>
+                      )}
                     </SelectContent>
                   </Select>
+                  {isLoading && <p className="text-sm text-muted-foreground mt-1">Loading branches...</p>}
+                  {!isLoading && (!Array.isArray(branches) || branches.length === 0) && (
+                    <p className="text-sm text-red-500 mt-1">No branches available. Please contact support.</p>
+                  )}
                 </div>
               </div>
             </CardContent>

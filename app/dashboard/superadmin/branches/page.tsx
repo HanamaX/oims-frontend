@@ -462,9 +462,6 @@ export default function BranchManagementPage() {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between space-x-2">
-                <Button variant="outline" onClick={() => navigateToBranch(branch.publicId!)}>
-                  View Branch
-                </Button>
                 <div className="flex space-x-2">
                   <Button variant="outline" size="icon" onClick={() => handleEdit(branch.publicId!)}>
                     <Edit className="h-4 w-4" />

@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, Home, Loader2, LogIn } from "lucide-react"
+import { AlertCircle, Home, Loader2, LogIn, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
@@ -18,6 +18,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isLoggingIn, setIsLoggingIn] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const { login } = useAuth()
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -147,15 +148,28 @@ export default function LoginPage() {
                         Forgot password?
                       </Link>
                     </div>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="h-11"
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="h-11 pr-10"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600"
+                        tabIndex={-1}
+                      >
+                        {showPassword ? 
+                          <EyeOff className="h-4 w-4" /> : 
+                          <Eye className="h-4 w-4" />
+                        }
+                      </button>
+                    </div>
                   </div>
 
                   <Button type="submit" className="w-full h-11" disabled={isLoggingIn}>

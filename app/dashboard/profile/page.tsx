@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlertCircle, Check, User, Upload } from "lucide-react"
+import { AlertCircle, Check, User, Upload, Eye, EyeOff } from "lucide-react"
 import AuthService, { type UpdatePasswordRequest, type UpdateProfileRequest } from "@/lib/auth-service"
 import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -38,7 +38,6 @@ export default function ProfilePage() {
   const [profileSuccess, setProfileSuccess] = useState(false)
   const [isProfileUpdating, setIsProfileUpdating] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
-
   // Password state
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
@@ -46,6 +45,11 @@ export default function ProfilePage() {
   const [passwordError, setPasswordError] = useState("")
   const [passwordSuccess, setPasswordSuccess] = useState(false)
   const [isPasswordUpdating, setIsPasswordUpdating] = useState(false)
+  
+  // Password visibility state
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   
   // Helper functions for formatting display values
   const formatGenderDisplay = (genderValue: string): string => {
@@ -208,27 +212,41 @@ export default function ProfilePage() {
           setIsProfileUpdating(false)
           return
         }
-      }
-      
-      const profileData: UpdateProfileRequest = {
+      }        const profileData: UpdateProfileRequest = {
         fullName,
+        username,
         email,
         phone: phone ?? undefined,
+        phoneNumber: phone ?? undefined, // Send both variants in case backend expects phoneNumber
         imageUrl: imageUrl ?? undefined,
         gender: gender ?? undefined,
         sex: gender ?? undefined, // Send the same value to both fields for compatibility
       }
+      
+      // Remove any undefined fields to ensure they're not sent as null
+      Object.keys(profileData).forEach(key => {
+        if (profileData[key as keyof UpdateProfileRequest] === undefined) {
+          delete profileData[key as keyof UpdateProfileRequest];
+        }
+      });
+      
+      console.log("ProfileUpdate - form values:", {
+        fullName,
+        username,
+        email,
+        phone,
+        gender
+      });
 
       await AuthService.updateProfile(profileData)
-      console.log("Profile updated with image URL:", imageUrl)
-
-      // Update local storage with new profile data
+      console.log("Profile updated with image URL:", imageUrl)      // Update local storage with new profile data
       const storedUser = localStorage.getItem("user")
       if (storedUser) {
         const userData = JSON.parse(storedUser)
         const nameParts = fullName.split(" ")
         userData.firstName = nameParts[0]
         userData.lastName = nameParts.slice(1).join(" ")
+        userData.username = username
         userData.email = email
         userData.phoneNumber = phone
         userData.phone = phone // Store both ways for compatibility
@@ -438,14 +456,25 @@ export default function ProfilePage() {
               ) : (
                 /* Profile Edit Mode */
                 <form onSubmit={handleProfileUpdate} className="bg-white">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
+                  <div className="space-y-4">                    <div className="space-y-2">
                       <Label htmlFor="fullName">Full Name</Label>
                       <Input
                         id="fullName"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="Your full name"
+                        className="bg-white"
+                      />
+                    </div>
+                    
+                    {/* Username field for editing */}
+                    <div className="space-y-2">
+                      <Label htmlFor="username">Username</Label>
+                      <Input
+                        id="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Your username"
                         className="bg-white"
                       />
                     </div>
@@ -606,41 +635,79 @@ export default function ProfilePage() {
               )}
 
               <form onSubmit={handlePasswordUpdate}>
-                <div className="space-y-4">
-                  <div className="space-y-2">
+                <div className="space-y-4">                  <div className="space-y-2">
                     <Label htmlFor="currentPassword">Current Password</Label>
-                    <Input
-                      id="currentPassword"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      placeholder="Your current password"
-                      className="bg-white"
-                    />
+                    <div className="relative">
+                      <Input
+                        id="currentPassword"
+                        type={showCurrentPassword ? "text" : "password"}
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        placeholder="Your current password"
+                        className="bg-white pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                        className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600"
+                        tabIndex={-1}
+                      >
+                        {showCurrentPassword ? 
+                          <EyeOff className="h-4 w-4" /> : 
+                          <Eye className="h-4 w-4" />
+                        }
+                      </button>
+                    </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="newPassword">New Password</Label>
-                    <Input
-                      id="newPassword"
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Your new password"
-                      className="bg-white"
-                    />
+                    <div className="relative">
+                      <Input
+                        id="newPassword"
+                        type={showNewPassword ? "text" : "password"}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        placeholder="Your new password"
+                        className="bg-white pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600"
+                        tabIndex={-1}
+                      >
+                        {showNewPassword ? 
+                          <EyeOff className="h-4 w-4" /> : 
+                          <Eye className="h-4 w-4" />
+                        }
+                      </button>
+                    </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="Confirm your new password"
-                      className="bg-white"
-                    />
+                    <div className="relative">
+                      <Input
+                        id="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Confirm your new password"
+                        className="bg-white pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-400 hover:text-gray-600"
+                        tabIndex={-1}
+                      >
+                        {showConfirmPassword ? 
+                          <EyeOff className="h-4 w-4" /> : 
+                          <Eye className="h-4 w-4" />
+                        }
+                      </button>
+                    </div>
                   </div>
 
                   <Button type="submit" className="w-full" disabled={isPasswordUpdating}>
