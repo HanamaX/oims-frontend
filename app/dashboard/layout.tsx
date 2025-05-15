@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation"
 import { AuthProvider, useAuth } from "@/components/auth-provider"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { T } from "@/contexts/LanguageContext"
-import { User } from "lucide-react"
+import { useState, useEffect } from "react"
+import { User, Menu, X } from "lucide-react"
 import "./dashboard.css"
 
 function DashboardLayoutContent({
@@ -16,6 +17,35 @@ function DashboardLayoutContent({
 }>) {
   const pathname = usePathname()
   const { user, logout } = useAuth()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Check if we're on mobile
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkIsMobile();
+    
+    // Listen for window resize
+    window.addEventListener('resize', checkIsMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  // Close sidebar when route changes on mobile
+  useEffect(() => {
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  }, [pathname, isMobile]);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(prev => !prev);
+  };
 
   const isActive = (path: string) => {
     return pathname === path
@@ -23,7 +53,18 @@ function DashboardLayoutContent({
 
   return (
     <div className="dashboard-container">
-      <nav className="dashboard-sidebar">
+      {/* Hamburger menu button - only visible on mobile */}
+      <button 
+        className="mobile-menu-button" 
+        onClick={toggleSidebar}
+        aria-label={sidebarOpen ? "Close menu" : "Open menu"}
+      >
+        {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+      
+      <div className={`sidebar-backdrop ${sidebarOpen ? 'visible' : ''}`} onClick={() => setSidebarOpen(false)}></div>
+      
+      <nav className={`dashboard-sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="dashboard-header">
           <h2 className="dashboard-title">
             <T k="app.name" />
@@ -173,9 +214,7 @@ function DashboardLayoutContent({
               </li>
             </ul>
           </div>
-        )}
-
-        <div className="dashboard-footer">
+        )}        <div className="dashboard-footer">
           <div className="dashboard-footer-row">
             <LanguageSwitcher />
           </div>
@@ -190,7 +229,7 @@ function DashboardLayoutContent({
         </div>
       </nav>
 
-      <main className="dashboard-main">{children}</main>
+      <main className={`dashboard-main ${sidebarOpen ? 'main-pushed' : ''}`}>{children}</main>
     </div>
   )
 }

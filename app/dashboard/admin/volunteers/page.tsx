@@ -3,10 +3,20 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, AlertTriangle } from "lucide-react"
+import { Search, AlertTriangle, Loader2 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import VolunteerCardNew from "@/components/volunteer-card-new"
-import VolunteerService, { CurrentVolunteerResponse } from "@/lib/volunteer-service"
+import VolunteerService, { CurrentVolunteerResponse, EventStatus } from "@/lib/volunteer-service"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 export default function VolunteersPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -19,6 +29,12 @@ export default function VolunteersPage() {
     type: "success" | "error";
     visible: boolean;
   } | null>(null)
+  
+  // State for rejection dialog
+  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false)
+  const [rejectReason, setRejectReason] = useState("")
+  const [selectedVolunteerId, setSelectedVolunteerId] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Fetch volunteers
   useEffect(() => {
@@ -50,16 +66,15 @@ export default function VolunteersPage() {
 
     return matchesSearch && matchesStatus
   })
-
   // Handle approve volunteer
   const handleApprove = async (id: string) => {
     try {
-      await VolunteerService.updateVolunteerStatus(id, "APPROVED")
+      await VolunteerService.approveVolunteer(id)
       
       // Update local state
       setVolunteers(
         volunteers.map((volunteer) => 
-          volunteer.publicId === id ? { ...volunteer, status: "APPROVED" } : volunteer
+          volunteer.publicId === id ? { ...volunteer, status: EventStatus.APPROVED } : volunteer
         )
       )
       
@@ -92,15 +107,30 @@ export default function VolunteersPage() {
     }
   }
 
-  // Handle reject volunteer
-  const handleReject = async (id: string) => {
+  // Initialize rejection process by opening the dialog
+  const initiateReject = (id: string) => {
+    setSelectedVolunteerId(id);
+    setRejectReason("");
+    setIsRejectDialogOpen(true);
+  }
+
+  // Handle reject volunteer with reason
+  const handleReject = async () => {
+    if (!selectedVolunteerId || !rejectReason.trim()) return;
+    
+    setIsSubmitting(true);
     try {
-      await VolunteerService.updateVolunteerStatus(id, "REJECTED")
-      
-      // Update local state
+      await VolunteerService.rejectVolunteer(selectedVolunteerId, rejectReason)
+        // Update local state
       setVolunteers(
         volunteers.map((volunteer) => 
-          volunteer.publicId === id ? { ...volunteer, status: "REJECTED" } : volunteer
+          volunteer.publicId === selectedVolunteerId 
+            ? { 
+                ...volunteer, 
+                status: EventStatus.REJECTED,
+                reason: rejectReason 
+              } 
+            : volunteer
         )
       )
       
@@ -110,6 +140,11 @@ export default function VolunteersPage() {
         type: "success",
         visible: true
       })
+      
+      // Close dialog and reset state
+      setIsRejectDialogOpen(false);
+      setSelectedVolunteerId(null);
+      setRejectReason("");
       
       // Auto-hide notification after 5 seconds
       setTimeout(() => {
@@ -130,6 +165,8 @@ export default function VolunteersPage() {
       setTimeout(() => {
         setNotification(null)
       }, 5000)
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -246,6 +283,56 @@ export default function VolunteersPage() {
         </div>
       )}
       
+      {/* Rejection Dialog */}
+      <AlertDialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reject Volunteer</AlertDialogTitle>
+            <AlertDialogDescription>
+              Please provide a reason for rejecting this volunteer. 
+              This information will be stored and displayed in the volunteer record.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="mt-2">
+            <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-1">
+              Reason for rejection <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="reason"
+              className="w-full min-h-[100px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Explain why you're rejecting this volunteer application..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+            ></textarea>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              onClick={() => {
+                setRejectReason("");
+                setIsRejectDialogOpen(false);
+              }}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleReject}
+              disabled={!rejectReason.trim() || isSubmitting}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-500"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Reject"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Volunteer Management</h1>
         <p className="text-muted-foreground mt-2">Review, approve, and manage volunteer applications</p>
@@ -283,7 +370,7 @@ export default function VolunteersPage() {
             key={volunteer.publicId}
             volunteer={volunteer}
             onApprove={handleApprove}
-            onReject={handleReject}
+            onReject={initiateReject}
             onDelete={handleDelete}
           />
         ))}

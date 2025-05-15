@@ -375,7 +375,7 @@ export default function AdminDashboard() {
               </div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="overflow-y-auto max-h-[340px]">
             {notifications.length === 0 ? (
               <p className="text-sm text-muted-foreground py-4 text-center">No notifications at this time</p>
             ) : (

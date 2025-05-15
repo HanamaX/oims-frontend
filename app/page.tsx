@@ -122,26 +122,9 @@ export default function HomePage() {
             <p className="text-xl md:text-2xl text-white/90 drop-shadow">
               <T k="home.hero.description" />
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Button
-                size="lg"
-                className="bg-white text-blue-700 hover:bg-blue-50 transition-all transform hover:scale-105 shadow-lg"
-                onClick={handleVolunteerRegistration}
-              >
-                <T k="home.volunteer.register" />
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white text-white hover:bg-white/20 transition-all shadow-lg"
-              >
-                <T k="home.learn.more" />
-              </Button>
-            </div>
           </div>
         </div>
       </section>
-
       {/* Rest of the content with background */}
       <div className="flex-grow bg-gradient-animate" 
          style={{ 

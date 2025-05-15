@@ -88,7 +88,8 @@ function ResetPasswordConfirmForm() {
   
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <Card className="w-full max-w-md">        <CardHeader className="text-center bg-slate-50 border-b">
+      <Card className="w-full max-w-md">        
+        <CardHeader className="text-center bg-slate-50 border-b">
           <CardTitle className="text-2xl font-bold">Reset Your Password</CardTitle>
           <CardDescription>
             Please enter a new password for your account. Your identity has already been verified by the link in your email.

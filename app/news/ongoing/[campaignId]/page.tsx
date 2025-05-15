@@ -1,9 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
+import * as ProgressPrimitive from "@radix-ui/react-progress"
 import { ChevronRight, Calendar, Users, DollarSign, ClipboardList, Loader2 } from "lucide-react"
 import Link from "next/link"
 import ContributionForm from "./contribution-form"
@@ -37,7 +36,11 @@ interface Campaign {
   fundraiser: Fundraiser;
 }
 
-export default function CampaignDetailPage({ params }: { params: { campaignId: string } }) {
+export default function CampaignDetailPage({ params }: { readonly params: { campaignId: string } }) {
+  // Unwrap the params object using React.use() with proper typing
+  const unwrappedParams = React.use(params as any) as { campaignId: string };
+  const campaignId = unwrappedParams.campaignId;
+  
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +49,8 @@ export default function CampaignDetailPage({ params }: { params: { campaignId: s
   // Fetch campaign details from the API
   useEffect(() => {
     const fetchCampaignDetails = async () => {
-      try {        const baseUrl = 'https://oims-4510ba404e0e.herokuapp.com';
+      try {        
+        const baseUrl = 'https://oims-4510ba404e0e.herokuapp.com';
         const response = await fetch(`${baseUrl}/app/oims/events/campaigns/all`);
         
         if (!response.ok) {
@@ -54,7 +58,7 @@ export default function CampaignDetailPage({ params }: { params: { campaignId: s
         }
         
         const data = await response.json();
-        const campaignData = data.data.find((c: Campaign) => c.publicId === params.campaignId);
+        const campaignData = data.data.find((c: Campaign) => c.publicId === campaignId);
         
         if (!campaignData) {
           setError('Campaign not found');
@@ -70,7 +74,7 @@ export default function CampaignDetailPage({ params }: { params: { campaignId: s
     };
     
     fetchCampaignDetails();
-  }, [params.campaignId]);
+  }, [campaignId]);
 
   // Format date string from YYYY-MM-DD to more readable format
   const formatDate = (dateStr: string) => {
@@ -95,7 +99,7 @@ export default function CampaignDetailPage({ params }: { params: { campaignId: s
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center bg-red-50 p-8 rounded-lg">
-            <h2 className="text-2xl text-red-600 font-bold mb-4">{error || 'Campaign not found'}</h2>
+            <h2 className="text-2xl text-red-600 font-bold mb-4">{error ?? 'Campaign not found'}</h2>
             <p className="mb-6">The campaign you're looking for does not exist or may have been removed.</p>
             <Link href="/news/ongoing">
               <Button className="bg-blue-600 hover:bg-blue-700">
@@ -107,9 +111,34 @@ export default function CampaignDetailPage({ params }: { params: { campaignId: s
       </div>
     );
   }
-
   const progressPercentage = (campaign.raisedAmount / campaign.fundraiser.goal) * 100;
-  const isCompleted = campaign.campignStatus !== "ACTIVE";
+  
+  // Define different campaign statuses
+  const campaignStatus =  campaign.campignStatus;
+  const isActive = campaignStatus === "APPROVED" || campaignStatus === "ACTIVE";
+  const isCompleted = campaignStatus === "COMPLETED";
+  const isPending = campaignStatus === "PENDING";
+  const isCancelled = campaignStatus === "REJECTED" || campaignStatus === "CANCELLED";
+  
+  // Set progress bar color based on status
+  const getProgressBarColor = () => {
+    if (isCompleted) return "bg-green-500";
+    if (isActive) return "bg-blue-500";
+    if (isPending) return "bg-amber-500";
+    if (isCancelled) return "bg-gray-500";
+    return "bg-blue-500"; // default
+  };
+  
+  // Set status display text and color
+  const getStatusDisplay = () => {
+    if (isCompleted) return { text: "COMPLETED", color: "text-green-600 bg-green-100" };
+    if (isActive) return { text: "ACTIVE", color: "text-blue-600 bg-blue-100" };
+    if (isPending) return { text: "PENDING", color: "text-amber-600 bg-amber-100" };
+    if (isCancelled) return { text: "CANCELLED", color: "text-red-600 bg-red-100" };
+    return { text: "UNKNOWN", color: "text-gray-600 bg-gray-100" };
+  };
+  
+  const statusDisplay = getStatusDisplay();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12">
@@ -123,7 +152,7 @@ export default function CampaignDetailPage({ params }: { params: { campaignId: s
           <div className="bg-white rounded-xl shadow-lg overflow-hidden">
             <div className="h-64 overflow-hidden">
               <img
-                src={campaign.fundraiser.imageUrl || defaultImage}
+                src={campaign.fundraiser.imageUrl ?? defaultImage}
                 alt={campaign.fundraiser.eventName}
                 className="w-full h-full object-cover"
               />
@@ -131,17 +160,24 @@ export default function CampaignDetailPage({ params }: { params: { campaignId: s
             
             <div className="p-6 md:p-8">
               <h1 className="text-3xl font-bold text-blue-800 mb-2">{campaign.fundraiser.eventName}</h1>
-              <p className="text-lg text-gray-600 mb-6">{campaign.fundraiser.purpose}</p>
-              
-              <div className="mb-6">
-                <div className="flex justify-between text-sm mb-2">
+              <p className="text-lg text-gray-600 mb-6">{campaign.fundraiser.purpose}</p>                <div className="mb-6">
+                <div className="flex justify-between items-center text-sm mb-2">
                   <span className="font-semibold text-lg">${campaign.raisedAmount.toLocaleString()} raised</span>
-                  <span className="text-gray-600 text-lg">Goal: ${campaign.fundraiser.goal.toLocaleString()}</span>
-                </div>
-                <Progress 
-                  value={progressPercentage} 
-                  className={`h-3 ${isCompleted ? 'bg-green-500' : 'bg-blue-100'}`}
-                />
+                  <div className="flex items-center">
+                    <span className="text-gray-600 text-lg mr-3">Goal: ${campaign.fundraiser.goal.toLocaleString()}</span>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusDisplay.color}`}>
+                      {statusDisplay.text}
+                    </span>
+                  </div>
+                </div>                <ProgressPrimitive.Root
+                  className="relative h-3 w-full overflow-hidden rounded-full bg-gray-100"
+                  value={progressPercentage}
+                >
+                  <ProgressPrimitive.Indicator
+                    className={`h-full w-full flex-1 ${getProgressBarColor()} transition-all`}
+                    style={{ transform: `translateX(-${100 - (progressPercentage || 0)}%)` }}
+                  />
+                </ProgressPrimitive.Root>
                 <div className="flex justify-between text-sm mt-2">
                   <span className="text-gray-600">{campaign.contributors} contributors</span>
                   <span className="text-gray-600">${campaign.amountRemaining.toLocaleString()} remaining</span>
@@ -191,28 +227,60 @@ export default function CampaignDetailPage({ params }: { params: { campaignId: s
                   </div>
                 </div>
               </div>
-              
-              {!isCompleted && (
                 <div className="border-t border-gray-200 pt-6 mt-6">
-                  {!showContributionForm ? (
-                    <div className="text-center">
-                      <p className="text-lg text-gray-700 mb-4">Ready to make a difference?</p>
-                      <Button 
-                        className="bg-blue-600 hover:bg-blue-700 text-lg py-6 px-8"
-                        onClick={() => setShowContributionForm(true)}
-                      >
-                        Contribute to this Campaign
-                      </Button>
-                    </div>
-                  ) : (
-                    <ContributionForm 
-                      campaignId={campaign.publicId} 
-                      suggestedAmount={campaign.fundraiser.amountPayedPerIndividual}
-                      onCancel={() => setShowContributionForm(false)}
-                    />
-                  )}
-                </div>
-              )}
+                {isActive && !showContributionForm && (
+                  <div className="text-center">
+                    <p className="text-lg text-gray-700 mb-4">Ready to make a difference?</p>
+                    <Button 
+                      className="bg-blue-600 hover:bg-blue-700 text-lg py-6 px-8"
+                      onClick={() => setShowContributionForm(true)}
+                    >
+                      Contribute to this Campaign
+                    </Button>
+                    <p className="text-sm text-gray-500 mt-3">
+                      Minimum contribution: ${campaign.fundraiser.amountPayedPerIndividual.toLocaleString()}
+                    </p>
+                  </div>
+                )}
+                
+                {isActive && showContributionForm && (
+                  <ContributionForm 
+                    campaignId={campaign.publicId} 
+                    suggestedAmount={campaign.fundraiser.amountPayedPerIndividual}
+                    onCancel={() => setShowContributionForm(false)}
+                  />
+                )}
+                
+                {isPending && (
+                  <div className="text-center bg-amber-50 p-6 rounded-lg">
+                    <h3 className="text-xl font-semibold text-amber-700 mb-3">This Campaign is Still Pending</h3>
+                    <p className="text-gray-700">
+                      This fundraising campaign is currently under review and not yet open for contributions. 
+                      Please check back later when the campaign is active.
+                    </p>
+                  </div>
+                )}
+                
+                {isCompleted && (
+                  <div className="text-center bg-green-50 p-6 rounded-lg">
+                    <h3 className="text-xl font-semibold text-green-700 mb-3">Campaign Completed</h3>
+                    <p className="text-gray-700">
+                      Thank you to everyone who contributed! This fundraising campaign has reached its goal 
+                      and is no longer accepting contributions.
+                    </p>
+                  </div>
+                )}
+                
+                {isCancelled && (
+                  <div className="text-center bg-red-50 p-6 rounded-lg">
+                    <h3 className="text-xl font-semibold text-red-700 mb-3">Campaign Cancelled</h3>
+                    <p className="text-gray-700">
+                      This fundraising campaign has been cancelled and is no longer accepting contributions. 
+                      Thank you for your interest.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           

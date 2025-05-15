@@ -19,8 +19,6 @@ export interface Fundraiser {
   coordinatorName: string
   coordinatorEmail: string
   phoneNumber: string
-  reason?: string // For rejection, cancellation, or completion reasons
-  inactiveReason?: string // Alternative field name for rejection reason
 }
 
 export interface FundraiserCreateRequest {
@@ -124,86 +122,41 @@ const FundraiserService = {
       throw error;
     }
   },
+
   getFundraisersByBranch: async (branchId: string): Promise<Fundraiser[]> => {
     try {
       const response = await API.get<Fundraiser[]>(`/app/oims/events/fundraisers/${branchId}`)
-      
-      // Map the response data to ensure we handle both reason and inactiveReason fields
-      const fundraisers = response.data.map(fundraiser => {
-        // If the API returns inactiveReason but not reason, map inactiveReason to reason
-        if (fundraiser.inactiveReason && !fundraiser.reason) {
-          return {
-            ...fundraiser,
-            reason: fundraiser.inactiveReason
-          };
-        }
-        return fundraiser;
-      });
-      
-      return fundraisers;
+      return response.data
     } catch (error) {
       console.error("Get fundraisers by branch error:", error)
       throw error
     }
   },
+
   getFundraiserById: async (fundraiserId: string): Promise<Fundraiser> => {
     try {
       const response = await API.get<Fundraiser>(`/app/oims/events/fundraisers/detail/${fundraiserId}`)
-      const fundraiser = response.data;
-      
-      // If the API returns inactiveReason but not reason, map inactiveReason to reason
-      if (fundraiser.inactiveReason && !fundraiser.reason) {
-        return {
-          ...fundraiser,
-          reason: fundraiser.inactiveReason
-        };
-      }
-      
-      return fundraiser;
+      return response.data
     } catch (error) {
       console.error("Get fundraiser by ID error:", error)
       throw error
     }
   },
-    getCurrentBranchFundraisers: async (): Promise<Fundraiser[]> => {
+  
+  getCurrentBranchFundraisers: async (): Promise<Fundraiser[]> => {
     try {
       const response = await API.get<{data: Fundraiser[], message: string, status: string}>(`/app/oims/events/fundraisers/current`)
-      
-      // Map the response data to ensure we handle both reason and inactiveReason fields
-      const fundraisers = response.data.data.map(fundraiser => {
-        // If the API returns inactiveReason but not reason, map inactiveReason to reason
-        if (fundraiser.inactiveReason && !fundraiser.reason) {
-          return {
-            ...fundraiser,
-            reason: fundraiser.inactiveReason
-          };
-        }
-        return fundraiser;
-      });
-      
-      return fundraisers;
+      return response.data.data
     } catch (error) {
       console.error("Get current branch fundraisers error:", error)
       throw error
     }
   },
+
   getCentreFundraisers: async (centreId: string): Promise<Fundraiser[]> => {
     try {
       const response = await API.get<Fundraiser[]>(`/app/oims/events/fundraisers/centre/${centreId}`)
-      
-      // Map the response data to ensure we handle both reason and inactiveReason fields
-      const fundraisers = response.data.map(fundraiser => {
-        // If the API returns inactiveReason but not reason, map inactiveReason to reason
-        if (fundraiser.inactiveReason && !fundraiser.reason) {
-          return {
-            ...fundraiser,
-            reason: fundraiser.inactiveReason
-          };
-        }
-        return fundraiser;
-      });
-      
-      return fundraisers;
+      return response.data
     } catch (error) {
       console.error("Get centre fundraisers error:", error)
       throw error
@@ -289,23 +242,11 @@ const FundraiserService = {
       throw error
     }
   },
-    getAllCampaigns: async (): Promise<Fundraiser[]> => {
+  
+  getAllCampaigns: async (): Promise<Fundraiser[]> => {
     try {
       const response = await API.get<Fundraiser[]>("/app/oims/events/campaigns/all")
-      
-      // Map the response data to ensure we handle both reason and inactiveReason fields
-      const campaigns = response.data.map(fundraiser => {
-        // If the API returns inactiveReason but not reason, map inactiveReason to reason
-        if (fundraiser.inactiveReason && !fundraiser.reason) {
-          return {
-            ...fundraiser,
-            reason: fundraiser.inactiveReason
-          };
-        }
-        return fundraiser;
-      });
-      
-      return campaigns;
+      return response.data
     } catch (error) {
       console.error("Get all campaigns error:", error)
       throw error

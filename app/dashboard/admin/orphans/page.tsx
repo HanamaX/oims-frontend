@@ -56,6 +56,8 @@ export default function OrphansPage() {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
   const [branchFilter, setBranchFilter] = useState<string>("all")
+  // Add status filter with default to "active"
+  const [statusFilter, setStatusFilter] = useState<string>("active")
   const [orphans, setOrphans] = useState<Orphan[]>([])
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
@@ -114,8 +116,7 @@ export default function OrphansPage() {
   useEffect(() => {
     fetchOrphans();
   }, []);
-  
-  // Filter orphans based on search term and branch filter
+    // Filter orphans based on search term, branch filter, and status filter
   const filteredOrphans = orphans.filter((orphan) => {
     const matchesSearch =
       orphan.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -124,8 +125,12 @@ export default function OrphansPage() {
 
     // Apply branch filter if selected
     const matchesBranch = branchFilter === "all" || orphan.branchName === branchFilter;
+    
+    // Apply status filter
+    const orphanStatus = orphan.status?.toLowerCase() || "active";
+    const matchesStatus = statusFilter === "all" || orphanStatus === statusFilter.toLowerCase();
 
-    return matchesSearch && matchesBranch;
+    return matchesSearch && matchesBranch && matchesStatus;
   })
   
   // Update displayed orphans when filters change or page changes
@@ -210,9 +215,7 @@ export default function OrphansPage() {
         <Button onClick={() => setIsFormOpen(true)}>
           <Plus className="mr-2 h-4 w-4" /> Add Orphan
         </Button>
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+      </div>      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
         <div className="flex items-center space-x-2 flex-1">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
@@ -223,28 +226,52 @@ export default function OrphansPage() {
           />
         </div>
 
-        <div className="w-full md:w-[200px]">
-          <Select 
-            defaultValue="all"
-            value={branchFilter} 
-            onValueChange={(value) => {
-              if (value !== branchFilter) {
-                setCurrentPage(1); // Reset to first page when filter changes
-                setBranchFilter(value);
-              }
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Filter by branch" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Branches</SelectItem>
-              {/* Dynamically generate branch options from available data */}
-              {Array.from(new Set(orphans.map(o => o.branchName))).map(branch => (
-                <SelectItem key={branch} value={branch}>{branch}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="w-full md:w-[180px]">
+            <Select 
+              defaultValue="all"
+              value={branchFilter} 
+              onValueChange={(value) => {
+                if (value !== branchFilter) {
+                  setCurrentPage(1); // Reset to first page when filter changes
+                  setBranchFilter(value);
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Filter by branch" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Branches</SelectItem>
+                {/* Dynamically generate branch options from available data */}
+                {Array.from(new Set(orphans.map(o => o.branchName))).map(branch => (
+                  <SelectItem key={branch} value={branch}>{branch}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="w-full md:w-[180px]">
+            <Select 
+              defaultValue="active"
+              value={statusFilter} 
+              onValueChange={(value) => {
+                if (value !== statusFilter) {
+                  setCurrentPage(1); // Reset to first page when filter changes
+                  setStatusFilter(value);
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
@@ -276,11 +303,19 @@ export default function OrphansPage() {
           return (
             <Card key={orphan.publicId} className="overflow-hidden bg-white hover:shadow-md transition-shadow">
               <CardContent className="p-6">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                  <div className="space-y-1">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">                <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-lg">{orphan.fullName}</h3>
                       <Badge className="bg-gray-100 text-gray-800">{orphan.age} years old</Badge>
+                      {orphan.status && (
+                        <Badge 
+                          className={`${orphan.status?.toLowerCase() === 'active' 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-orange-100 text-orange-800'}`}
+                        >
+                          {orphan.status}
+                        </Badge>
+                      )}
                     </div>
                     <p className="text-sm text-muted-foreground">Branch: {orphan.branchName || 'N/A'}</p>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-1 text-sm mt-1">

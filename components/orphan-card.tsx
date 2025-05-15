@@ -110,11 +110,7 @@ export default function OrphanCard({
                 <Edit className="h-4 w-4" />
               </Button>
             )}
-            {onDelete && !readOnly && (
-              <Button variant="outline" size="icon" onClick={() => onDelete(orphan.orphanId)}>
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            )}
+            {/* Delete button removed as requested */}
           </div>
         </div>
       </CardHeader>

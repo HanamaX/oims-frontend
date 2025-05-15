@@ -225,25 +225,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error("Login failed:", error)
 
       // Show more specific error messages
-      if (error.message === "Network Error") {
-        toast({
-          title: "Connection Error",
-          description: "Unable to connect to the server. The service might be down or unreachable.",
-          variant: "destructive",
-        })
-      } else if (error.response?.status === 401) {
-        toast({
-          title: "Authentication Failed",
-          description: "Invalid username or password.",
-          variant: "destructive",
-        })
-      } else {
-        toast({
-          title: "Login Error",
-          description: "An unexpected error occurred. Please try again later.",
-          variant: "destructive",
-        })
-      }
+      // if (error.message === "Network Error") {
+      //   toast({
+      //     title: "Connection Error",
+      //     description: "Unable to connect to the server. The service might be down or unreachable.",
+      //     variant: "destructive",
+      //   })
+      // } else if (error.response?.status === 403) {
+      //   toast({
+      //     title: "Authentication Failed",
+      //     description: "Invalid username or password.",
+      //     variant: "destructive",
+      //   })
+      // } else {
+      //   toast({
+      //     title: "Login Error",
+      //     description: "An unexpected error occurred. Please try again later.",
+      //     variant: "destructive",
+      //   })
+      // }
 
       setIsLoading(false)
       return false

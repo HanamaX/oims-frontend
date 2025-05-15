@@ -4,10 +4,20 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
-import { Search, AlertTriangle, Plus } from "lucide-react"
+import { Search, AlertTriangle, Plus, Loader2 } from "lucide-react"
 import FundraiserCard from "@/components/fundraiser-card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import FundraiserService, { Fundraiser } from "@/lib/fundraiser-service"
+import FundraiserService, { Fundraiser, EventStatus } from "@/lib/fundraiser-service"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 export default function FundraisersPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -20,6 +30,12 @@ export default function FundraisersPage() {
     type: "success" | "error";
     visible: boolean;
   } | null>(null)
+  
+  // State for rejection dialog
+  const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false)
+  const [rejectReason, setRejectReason] = useState("")
+  const [selectedFundraiserId, setSelectedFundraiserId] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Fetch fundraisers from API
   useEffect(() => {
@@ -56,10 +72,10 @@ export default function FundraisersPage() {
   // Handle approve and reject
   const handleApprove = async (id: string) => {
     try {
-      await FundraiserService.updateFundraiserStatus(id, "APPROVED")
+      await FundraiserService.updateFundraiserStatus(id, EventStatus.APPROVED)
       setFundraisers(
         fundraisers.map((fundraiser) =>
-          fundraiser.publicId === id ? { ...fundraiser, status: "APPROVED" } : fundraiser,
+          fundraiser.publicId === id ? { ...fundraiser, status: EventStatus.APPROVED } : fundraiser,
         ),
       )
       
@@ -87,36 +103,66 @@ export default function FundraisersPage() {
     }
   }
 
-  const handleReject = async (id: string) => {
+  // Initialize rejection process by opening the dialog
+  const initiateReject = (id: string) => {
+    setSelectedFundraiserId(id);
+    setRejectReason("");
+    setIsRejectDialogOpen(true);
+  }
+
+  // Handle rejection with reason
+  const handleReject = async () => {
+    if (!selectedFundraiserId || !rejectReason.trim()) return;
+    
+    setIsSubmitting(true);
     try {
-      await FundraiserService.updateFundraiserStatus(id, "REJECTED")
+      await FundraiserService.rejectFundraiser(selectedFundraiserId, rejectReason)
+      
+      // Update local state
       setFundraisers(
-        fundraisers.map((fundraiser) =>
-          fundraiser.publicId === id ? { ...fundraiser, status: "REJECTED" } : fundraiser,
-        ),
+        fundraisers.map((fundraiser) => 
+          fundraiser.publicId === selectedFundraiserId 
+            ? { 
+                ...fundraiser, 
+                status: EventStatus.REJECTED,
+                reason: rejectReason 
+              } 
+            : fundraiser
+        )
       )
       
+      // Show success notification
       setNotification({
         message: "Fundraiser rejected successfully",
         type: "success",
         visible: true
       })
       
+      // Close dialog and reset state
+      setIsRejectDialogOpen(false);
+      setSelectedFundraiserId(null);
+      setRejectReason("");
+      
+      // Auto-hide notification after 5 seconds
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     } catch (error) {
       console.error("Failed to reject fundraiser:", error)
       
+      // Show error notification
       setNotification({
         message: "Failed to reject fundraiser. Please try again.",
         type: "error",
         visible: true
       })
       
+      // Auto-hide notification after 5 seconds
       setTimeout(() => {
         setNotification(null)
       }, 5000)
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -140,6 +186,74 @@ export default function FundraisersPage() {
       
       setNotification({
         message: "Failed to delete fundraiser. Please try again.",
+        type: "error",
+        visible: true
+      })
+      
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    }
+  }
+  
+  // Handle complete (mark as completed)
+  const handleComplete = async (id: string, reason?: string) => {
+    try {
+      await FundraiserService.updateFundraiserStatus(id, EventStatus.COMPLETED, reason)
+      setFundraisers(
+        fundraisers.map((fundraiser) =>
+          fundraiser.publicId === id ? { ...fundraiser, status: EventStatus.COMPLETED } : fundraiser,
+        ),
+      )
+      
+      setNotification({
+        message: "Fundraiser marked as completed successfully",
+        type: "success",
+        visible: true
+      })
+      
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    } catch (error) {
+      console.error("Failed to complete fundraiser:", error)
+      
+      setNotification({
+        message: "Failed to mark fundraiser as completed. Please try again.",
+        type: "error",
+        visible: true
+      })
+      
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    }
+  }
+  
+  // Handle cancel
+  const handleCancel = async (id: string, reason: string) => {
+    try {
+      await FundraiserService.updateFundraiserStatus(id, EventStatus.CANCELLED, reason)
+      setFundraisers(
+        fundraisers.map((fundraiser) =>
+          fundraiser.publicId === id ? { ...fundraiser, status: EventStatus.CANCELLED } : fundraiser,
+        ),
+      )
+      
+      setNotification({
+        message: "Fundraiser cancelled successfully",
+        type: "success",
+        visible: true
+      })
+      
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    } catch (error) {
+      console.error("Failed to cancel fundraiser:", error)
+      
+      setNotification({
+        message: "Failed to cancel fundraiser. Please try again.",
         type: "error",
         visible: true
       })
@@ -181,6 +295,56 @@ export default function FundraisersPage() {
 
   return (
     <div className="space-y-6">
+      {/* Rejection Dialog */}
+      <AlertDialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reject Fundraiser</AlertDialogTitle>
+            <AlertDialogDescription>
+              Please provide a reason for rejecting this fundraiser. 
+              This information will be stored and displayed in the fundraiser record.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="mt-2">
+            <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-1">
+              Reason for rejection <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="reason"
+              className="w-full min-h-[100px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Explain why you're rejecting this fundraiser..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+            ></textarea>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              onClick={() => {
+                setRejectReason("");
+                setIsRejectDialogOpen(false);
+              }}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleReject}
+              disabled={!rejectReason.trim() || isSubmitting}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-500"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Reject"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
       {notification && notification.visible && (
         <div className={`p-4 rounded-md ${
           notification.type === "success" 
@@ -231,8 +395,12 @@ export default function FundraisersPage() {
           <h1 className="text-3xl font-bold tracking-tight">Fundraiser Management</h1>
           <p className="text-muted-foreground mt-2">Review, approve, and manage fundraising campaigns</p>
         </div>
-        <Button onClick={() => window.location.href = "/dashboard/admin/fundraisers/new"}>
-          <Plus className="mr-2 h-4 w-4" /> Create Fundraiser
+        <Button 
+          onClick={() => window.open('/news/ongoing', '_blank')}
+          className="bg-blue-600 hover:bg-blue-700"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          View Public Campaigns
         </Button>
       </div>
 
@@ -272,6 +440,8 @@ export default function FundraisersPage() {
                 onDelete={handleDelete}
                 onApprove={handleApprove}
                 onReject={handleReject}
+                onComplete={handleComplete}
+                onCancel={handleCancel}
               />
             </CardContent>
           </Card>

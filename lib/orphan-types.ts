@@ -33,6 +33,7 @@ export interface OrphanDetails {
   branchPublicId: string
   branchName: string
   guardian: Guardian | null
+  status?: string
 }
 
 export interface AcademicSubject {
@@ -95,4 +96,5 @@ export interface Orphan {
   imageUrl: string | null
   branchPublicId: string
   branchName: string
+  status?: string
 }

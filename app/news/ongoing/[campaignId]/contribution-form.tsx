@@ -6,30 +6,41 @@ import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
 import { Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 interface ContributionFormProps {
-  campaignId: string;
-  suggestedAmount: number;
-  onCancel: () => void;
+  readonly campaignId: string;
+  readonly suggestedAmount: number;
+  readonly onCancel: () => void;
 }
 
 export default function ContributionForm({ campaignId, suggestedAmount, onCancel }: ContributionFormProps) {
   const [paymentMethod, setPaymentMethod] = useState("credit-card");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [amount, setAmount] = useState(suggestedAmount.toString());
   const [accountNumber, setAccountNumber] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { toast } = useToast();
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  
+  // Helper functions to extract nested ternary operations
+  const getPaymentFieldLabel = () => {
+    if (paymentMethod === 'credit-card') return 'Card Number';
+    if (paymentMethod === 'bank-transfer') return 'Bank Account Number';
+    return 'Mobile Money Number';
+  };
+  
+  const getPaymentFieldPlaceholder = () => {
+    if (paymentMethod === 'credit-card') return '1234 5678 9012 3456';
+    if (paymentMethod === 'bank-transfer') return 'Enter account number';
+    return 'Enter mobile number';
+  };const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate the form
-    if (!email || !amount || !accountNumber) {
+      // Validate the form
+    if (!name || !email || !amount || !accountNumber) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields.",
@@ -48,21 +59,32 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
       return;
     }
     
+    // Check if the amount is at least the suggested amount
+    const numAmount = parseFloat(amount);
+    if (isNaN(numAmount) || numAmount < suggestedAmount) {
+      toast({
+        title: "Invalid Contribution Amount",
+        description: `Your contribution amount must be at least $${suggestedAmount.toLocaleString()}.`,
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setLoading(true);
       try {
-      // Use the Heroku URL for the API
+      // Use the Heroku URL for the API with the new endpoint
       const baseUrl = 'https://oims-4510ba404e0e.herokuapp.com';
-      const response = await fetch(`${baseUrl}/app/oims/events/campaigns/contribute`, {
+      const response = await fetch(`${baseUrl}/app/oims/events/contributors`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          campaignId,
-          email,
-          amount: parseFloat(amount),
-          paymentMethod,
-          accountNumber
+        },        body: JSON.stringify({
+          name: name,
+          email: email,
+          paymentNumber: accountNumber,
+          paymentMethod: paymentMethod,
+          paidAmount: amount,
+          campaignPublicId: campaignId
         }),
       });
       
@@ -88,17 +110,18 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
       setLoading(false);
     }
   };
-  
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Only allow numbers and decimal point
     const value = e.target.value.replace(/[^\d.]/g, '');
+    
+    // Allow empty string for UX purposes (so user can delete and type from scratch)
+    // The form validation will catch this later
     setAmount(value);
   };
-
   if (submitted) {
     return (
       <Card className="bg-green-50 p-6 text-center">
-        <h3 className="text-xl font-bold text-green-700 mb-4">Thank You for Your Contribution!</h3>
+        <h3 className="text-xl font-bold text-green-700 mb-4">Thank You for Your Contribution, {name}!</h3>
         <p className="text-green-600 mb-4">
           Your contribution of ${parseFloat(amount).toLocaleString()} has been received. 
           We appreciate your support in making this campaign a success.
@@ -116,9 +139,20 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
   return (
     <Card className="p-6 bg-blue-50">
       <h3 className="text-xl font-bold text-blue-800 mb-4">Make a Contribution</h3>
-      
-      <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
         <div className="space-y-4">
+          <div>
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your full name"
+              required
+              className="mt-1"
+            />
+          </div>
           <div>
             <Label htmlFor="email">Email Address</Label>
             <Input
@@ -130,9 +164,7 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
               required
               className="mt-1"
             />
-          </div>
-
-          <div>
+          </div><div>
             <Label htmlFor="amount">Contribution Amount ($)</Label>
             <Input
               id="amount"
@@ -141,10 +173,13 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
               onChange={handleAmountChange}
               placeholder="Enter amount"
               required
-              className="mt-1"
+              className={`mt-1 ${parseFloat(amount) < suggestedAmount ? "border-red-500" : ""}`}
             />
-            <p className="text-sm text-gray-500 mt-1">
-              Suggested contribution: ${suggestedAmount.toLocaleString()}
+            <p className={`text-sm mt-1 ${parseFloat(amount) < suggestedAmount ? "text-red-500 font-medium" : "text-gray-500"}`}>
+              {parseFloat(amount) < suggestedAmount 
+                ? `Minimum contribution: $${suggestedAmount.toLocaleString()} (your amount is too low)`
+                : `Minimum contribution: $${suggestedAmount.toLocaleString()}`
+              }
             </p>
           </div>
 
@@ -168,28 +203,16 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
                 <Label htmlFor="mobile-money">Mobile Money</Label>
               </div>
             </RadioGroup>
-          </div>
-
-          <div>
+          </div>          <div>
             <Label htmlFor="accountNumber">
-              {paymentMethod === 'credit-card' 
-                ? 'Card Number' 
-                : paymentMethod === 'bank-transfer' 
-                  ? 'Bank Account Number' 
-                  : 'Mobile Money Number'}
+              {getPaymentFieldLabel()}
             </Label>
             <Input
               id="accountNumber"
               type="text"
               value={accountNumber}
               onChange={(e) => setAccountNumber(e.target.value)}
-              placeholder={
-                paymentMethod === 'credit-card' 
-                  ? '1234 5678 9012 3456' 
-                  : paymentMethod === 'bank-transfer' 
-                    ? 'Enter account number' 
-                    : 'Enter mobile number'
-              }
+              placeholder={getPaymentFieldPlaceholder()}
               required
               className="mt-1"
             />

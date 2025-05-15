@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Edit, Plus, Trash } from "lucide-react"
+import { Edit, Plus, Trash, Loader2 } from "lucide-react"
 import { OrphanDetails, Guardian } from "@/lib/orphan-types"
 import GuardianForm from "./guardian-form"
 import { useToast } from "@/hooks/use-toast"
@@ -35,6 +35,11 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
   const [isDeleteOrphanDialogOpen, setIsDeleteOrphanDialogOpen] = useState(false)
   const [isEditOrphanOpen, setIsEditOrphanOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  // Add states for status change dialogs
+  const [isActivateDialogOpen, setIsActivateDialogOpen] = useState(false)
+  const [isInactivateDialogOpen, setIsInactivateDialogOpen] = useState(false)
+  const [statusChangeReason, setStatusChangeReason] = useState("")
   
   if (!orphan) return null
   
@@ -194,12 +199,74 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       setIsDeleteOrphanDialogOpen(false)
     }
   }
+
+  // Handle orphan status changes
+  const handleActivateOrphan = async () => {
+    if (!orphan?.publicId || !statusChangeReason) return;
+    
+    setIsSubmitting(true);
+    try {
+      await OrphanService.activateOrphan(orphan.publicId, statusChangeReason);
+      
+      toast({
+        title: "Orphan Activated",
+        description: "The orphan has been successfully activated."
+      });
+      
+      setIsActivateDialogOpen(false);
+      setStatusChangeReason("");
+      window.location.reload();
+    } catch (error: any) {
+      console.error("Failed to activate orphan:", error);
+      toast({
+        title: "Activation Failed",
+        description: error.friendlyMessage || "An error occurred. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  const handleInactivateOrphan = async () => {
+    if (!orphan?.publicId || !statusChangeReason) return;
+    
+    setIsSubmitting(true);
+    try {
+      await OrphanService.inactivateOrphan(orphan.publicId, statusChangeReason);
+      
+      toast({
+        title: "Orphan Inactivated",
+        description: "The orphan has been successfully inactivated."
+      });
+      
+      setIsInactivateDialogOpen(false);
+      setStatusChangeReason("");
+      window.location.reload();
+    } catch (error: any) {
+      console.error("Failed to inactivate orphan:", error);
+      toast({
+        title: "Inactivation Failed",
+        description: error.friendlyMessage || "An error occurred. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* Main Details */}
       <Card className="md:col-span-2">        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Personal Information</CardTitle>
+          <div className="flex items-center space-x-2">
+            <CardTitle>Personal Information</CardTitle>
+            {orphan.status && (
+              <Badge className={`${orphan.status?.toLowerCase() === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                {orphan.status || 'Active'}
+              </Badge>
+            )}
+          </div>
           {!readOnly && (
             <div className="flex space-x-2">
               <Button 
@@ -210,15 +277,26 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                 <Edit className="h-4 w-4 mr-1" />
                 Edit Details
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
-                onClick={() => setIsDeleteOrphanDialogOpen(true)}
-              >
-                <Trash className="h-4 w-4 mr-1" />
-                Delete
-              </Button>
+              {orphan.status?.toLowerCase() !== 'active' && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-green-50 text-green-700 hover:bg-green-100"
+                  onClick={() => setIsActivateDialogOpen(true)}
+                >
+                  Activate
+                </Button>
+              )}
+              {orphan.status?.toLowerCase() === 'active' && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-orange-50 text-orange-700 hover:bg-orange-100"
+                  onClick={() => setIsInactivateDialogOpen(true)}
+                >
+                  Inactivate
+                </Button>
+              )}
             </div>
           )}
         </CardHeader>
@@ -311,7 +389,109 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
           </div>
         </CardContent>
       </Card>
-        {/* Guardian Information */}
+      
+      {/* Orphan Activation Dialog */}
+      <AlertDialog open={isActivateDialogOpen} onOpenChange={setIsActivateDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Activate Orphan</AlertDialogTitle>
+            <AlertDialogDescription>
+              You are about to change the status of this orphan to active. 
+              Please provide a reason for this change.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="mt-2">
+            <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-1">
+              Reason for activation <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="reason"
+              className="w-full min-h-[100px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Explain why you're activating this orphan..."
+              value={statusChangeReason}
+              onChange={(e) => setStatusChangeReason(e.target.value)}
+            ></textarea>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              onClick={() => {
+                setStatusChangeReason("");
+                setIsActivateDialogOpen(false);
+              }}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleActivateOrphan}
+              disabled={!statusChangeReason.trim() || isSubmitting}
+              className="bg-green-600 hover:bg-green-700 focus:ring-green-500"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Activate"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
+      {/* Orphan Inactivation Dialog */}
+      <AlertDialog open={isInactivateDialogOpen} onOpenChange={setIsInactivateDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Inactivate Orphan</AlertDialogTitle>
+            <AlertDialogDescription>
+              You are about to change the status of this orphan to inactive. 
+              This will remove them from active lists but preserve their records.
+              Please provide a reason for this change.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="mt-2">
+            <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-1">
+              Reason for inactivation <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="reason"
+              className="w-full min-h-[100px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Explain why you're inactivating this orphan..."
+              value={statusChangeReason}
+              onChange={(e) => setStatusChangeReason(e.target.value)}
+            ></textarea>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              onClick={() => {
+                setStatusChangeReason("");
+                setIsInactivateDialogOpen(false);
+              }}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleInactivateOrphan}
+              disabled={!statusChangeReason.trim() || isSubmitting}
+              className="bg-orange-600 hover:bg-orange-700 focus:ring-orange-500"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                "Inactivate"
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
+      {/* Guardian Information */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
@@ -319,8 +499,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             <CardDescription>Information about the primary guardian</CardDescription>
           </div>
           {!readOnly && (
-            orphan.guardian ? (
-              <div className="flex space-x-2">
+            orphan.guardian ? (              <div className="flex space-x-2">
                 <Button 
                   variant="outline" 
                   size="sm" 
@@ -329,15 +508,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                   <Edit className="h-4 w-4 mr-1" />
                   Edit
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="text-red-500"
-                  onClick={() => setIsDeleteGuardianDialogOpen(true)}
-                >
-                  <Trash className="h-4 w-4 mr-1" />
-                  Delete
-                </Button>
+                {/* Delete button removed as requested */}
               </div>
             ) : (
               <Button 
@@ -392,31 +563,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             onSubmit={orphan.guardian ? handleUpdateGuardian : handleAddGuardian} 
             guardian={orphan.guardian} 
           />
-          
-          {/* Delete Guardian Dialog */}
-          <AlertDialog open={isDeleteGuardianDialogOpen} onOpenChange={setIsDeleteGuardianDialogOpen}>
-            <AlertDialogContent className="bg-white">
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action will permanently delete the guardian information. This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
-                <AlertDialogAction 
-                  onClick={(e) => {
-                    e.preventDefault()
-                    handleDeleteGuardian()
-                  }}
-                  disabled={isSubmitting}
-                  className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
-                >
-                  {isSubmitting ? "Deleting..." : "Delete Guardian"}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+            {/* Delete Guardian Dialog removed as requested */}
           
           {/* Edit Orphan Form */}
           <OrphanFormEdit 
@@ -425,31 +572,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             onSubmit={handleEditOrphan} 
             orphan={orphan}
           />
-          
-          {/* Delete Orphan Dialog */}
-          <AlertDialog open={isDeleteOrphanDialogOpen} onOpenChange={setIsDeleteOrphanDialogOpen}>
-            <AlertDialogContent className="bg-white">
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action will permanently delete the orphan record and all associated information. This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
-                <AlertDialogAction 
-                  onClick={(e) => {
-                    e.preventDefault()
-                    handleDeleteOrphan()
-                  }}
-                  disabled={isSubmitting}
-                  className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
-                >
-                  {isSubmitting ? "Deleting..." : "Delete Orphan"}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+            {/* Delete Orphan Dialog removed as requested */}
         </>
       )}
     </div>

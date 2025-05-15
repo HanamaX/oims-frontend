@@ -17,6 +17,8 @@ interface Volunteer {
   branchName?: string
   status: string
   createdAt?: string
+  reason?: string  // For rejection reason
+  inactiveReason?: string // Alternative field name for rejection reason
 }
 
 interface VolunteerCardProps {
@@ -57,8 +59,15 @@ export default function VolunteerCard({ volunteer, onApprove, onReject, onDelete
             )}
           </div>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
+      </CardHeader>      <CardContent className="space-y-4">
+        {/* Rejection reason shown for rejected volunteers */}
+        {volunteer.status === "REJECTED" && (volunteer.reason || volunteer.inactiveReason) && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-sm font-medium text-red-700">Rejection Reason:</p>
+            <p className="text-sm text-red-600">{volunteer.reason || volunteer.inactiveReason}</p>
+          </div>
+        )}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
             <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
