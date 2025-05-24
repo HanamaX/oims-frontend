@@ -5,6 +5,7 @@ import { Users, UserPlus, Bell, Loader2 } from "lucide-react"
 import { useEffect, useState } from "react"
 import API from "@/lib/api-service"
 import { useAuth } from "@/components/auth-provider"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 import { 
   Pagination, 
   PaginationContent, 
@@ -42,14 +43,14 @@ export default function AdminDashboard() {
   const [notificationsPerPage] = useState(5)
   const [markingAsRead, setMarkingAsRead] = useState<string | null>(null)
   const { user, isAuthenticated } = useAuth()
-  
-  // Define mock events with proper IDs
+  const { t } = useLanguage()
+    // Define mock events with proper IDs
   const events: Event[] = [
-    { id: 'event-1', title: "Medical Camp", date: "May 15, 2025" },
-    { id: 'event-2', title: "Education Workshop", date: "May 22, 2025" },
-    { id: 'event-3', title: "Volunteer Orientation", date: "May 25, 2025" },
-    { id: 'event-4', title: "Fundraising Gala", date: "June 5, 2025" },
-    { id: 'event-5', title: "Sports Day", date: "June 12, 2025" },
+    { id: 'event-1', title: t("admin.dashboard.medicalCamp"), date: "May 15, 2025" },
+    { id: 'event-2', title: t("admin.dashboard.educationWorkshop"), date: "May 22, 2025" },
+    { id: 'event-3', title: t("admin.dashboard.volunteerOrientation"), date: "May 25, 2025" },
+    { id: 'event-4', title: t("admin.dashboard.fundraisingGala"), date: "June 5, 2025" },
+    { id: 'event-5', title: t("admin.dashboard.sportsDay"), date: "June 12, 2025" },
   ];
 
   // Function to mark a notification as read
@@ -255,38 +256,35 @@ export default function AdminDashboard() {
     return null
   }
 
-  if (loading) {
-    return (
+  if (loading) {    return (
       <div className="flex justify-center items-center h-64">
         <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-        <span className="ml-2">Loading dashboard...</span>
+        <span className="ml-2"><T k="admin.dashboard.loading" /></span>
       </div>
     )
   }
 
-  return (
-    <div className="space-y-6">
+  return (    <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight"><T k="admin.dashboard.title" /></h1>
         <p className="text-muted-foreground">
-          Welcome back, {user?.username ?? "Admin"}! {user?.branchName ? `Here's an overview of ${user.branchName}.` : "Here's an overview of your branch."}
+          <T k="admin.dashboard.welcome" />, {user?.username ?? "Admin"}! {user?.branchName ? 
+            <><T k="admin.dashboard.overview" /> {user.branchName}.</> : 
+            <><T k="admin.dashboard.overview" /> <T k="admin.dashboard.yourBranch" />.</>}
         </p>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      </div>      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orphans</CardTitle>
+            <CardTitle className="text-sm font-medium"><T k="admin.dashboard.totalOrphans" /></CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold animate-in fade-in-50 duration-700">{stats.totalOrphans}</div>
-            <p className="text-xs text-muted-foreground">Current branch total</p>
+            <p className="text-xs text-muted-foreground"><T k="admin.dashboard.currentBranchTotal" /></p>
           </CardContent>
-        </Card>
-        <Card>
+        </Card>        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Funds</CardTitle>
+            <CardTitle className="text-sm font-medium"><T k="admin.dashboard.totalFunds" /></CardTitle>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
               <circle cx="12" cy="12" r="10"/>
               <path d="M12 6v12"/>
@@ -295,12 +293,11 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold animate-in fade-in-50 duration-700 delay-100">${stats.totalFundraising ?? 0}</div>
-            <p className="text-xs text-muted-foreground">Total funds raised</p>
+            <p className="text-xs text-muted-foreground"><T k="admin.dashboard.fundsRaised" /></p>
           </CardContent>
-        </Card>
-        <Card>
+        </Card>        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Branch Name</CardTitle>
+            <CardTitle className="text-sm font-medium"><T k="admin.dashboard.branchName" /></CardTitle>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
               <path d="M3 6h18"/>
               <path d="M7 12h10"/>
@@ -308,18 +305,17 @@ export default function AdminDashboard() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold animate-in fade-in-50 duration-700 delay-200 truncate">{user?.branchName ?? "Active Branch"}</div>
-            <p className="text-xs text-muted-foreground">Current location</p>
+            <div className="text-2xl font-bold animate-in fade-in-50 duration-700 delay-200 truncate">{user?.branchName ?? t("admin.dashboard.activeBranch")}</div>
+            <p className="text-xs text-muted-foreground"><T k="admin.dashboard.currentLocation" /></p>
           </CardContent>
-        </Card>
-        <Card>
+        </Card>        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Volunteers</CardTitle>
+            <CardTitle className="text-sm font-medium"><T k="admin.dashboard.volunteers" /></CardTitle>
             <UserPlus className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold animate-in fade-in-50 duration-700 delay-300">{stats.totalVolunteers}</div>
-            <p className="text-xs text-muted-foreground">+3 from last month</p>
+            <p className="text-xs text-muted-foreground"><T k="admin.dashboard.fromLastMonth" /></p>
           </CardContent>
         </Card>
       </div>
@@ -337,17 +333,17 @@ export default function AdminDashboard() {
                         {allNotifications.filter(n => !n.isRead).length}
                       </span>
                     )}
-                  </div>
-                  Recent Activities
+                  </div>                  <T k="admin.dashboard.recentActivities" />
                 </CardTitle>
-                <CardDescription>You have {user?.unreadNotificationsCount ?? 0} unread notifications {user?.branchName ? `in ${user.branchName}` : "in your branch"}</CardDescription>
+                <CardDescription>
+                  <T k="admin.dashboard.unreadNotifications" /> {user?.unreadNotificationsCount ?? 0} <T k="admin.dashboard.unreadNotificationsIn" /> {user?.branchName || <T k="admin.dashboard.yourBranch" />}
+                </CardDescription>
               </div>
               <div className="flex items-center gap-3">
                 <button 
                   className="text-xs text-gray-500 hover:text-gray-800"
                   onClick={refreshNotifications}
-                  disabled={loading}
-                  title="Refresh notifications"
+                  disabled={loading}                  title={t("admin.dashboard.refreshNotifications")}
                 >
                   {loading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -369,15 +365,14 @@ export default function AdminDashboard() {
                     }}
                     disabled={markingAsRead !== null || loading}
                   >
-                    {markingAsRead === 'all' ? 'Marking all...' : 'Mark all as read'}
+                    {markingAsRead === 'all' ? t("admin.dashboard.markingAll") : t("admin.dashboard.markAllAsRead")}
                   </button>
                 )}
               </div>
             </div>
           </CardHeader>
-          <CardContent className="overflow-y-auto max-h-[340px]">
-            {notifications.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">No notifications at this time</p>
+          <CardContent className="overflow-y-auto max-h-[340px]">            {notifications.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-4 text-center"><T k="admin.dashboard.noNotifications" /></p>
             ) : (
               <>
                 <div className="space-y-4">
@@ -394,13 +389,12 @@ export default function AdminDashboard() {
                           <p className="text-sm font-medium whitespace-pre-line">{notification.message}</p>
                           <div className="flex justify-between items-center mt-1">
                             <p className="text-xs text-muted-foreground">
-                              {notification.createdDate ? new Date(notification.createdDate.replace(' ', 'T')).toLocaleString() : 'Date unavailable'}
-                            </p>
+                              {notification.createdDate ? new Date(notification.createdDate.replace(' ', 'T')).toLocaleString() : t("admin.dashboard.dateUnavailable")}                            </p>
                             {!notification.isRead && markingAsRead !== notification.publicId && (
-                              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">New</span>
+                              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full"><T k="admin.dashboard.new" /></span>
                             )}
                             {markingAsRead === notification.publicId && (
-                              <span className="text-xs text-muted-foreground">Marking as read...</span>
+                              <span className="text-xs text-muted-foreground"><T k="admin.dashboard.markingAsRead" /></span>
                             )}
                           </div>
                         </div>
@@ -467,11 +461,10 @@ export default function AdminDashboard() {
               </>
             )}
           </CardContent>
-        </Card>
-        <Card className="col-span-1">
+        </Card>        <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Upcoming Events</CardTitle>
-            <CardDescription>Events scheduled for the next 30 days</CardDescription>
+            <CardTitle><T k="admin.dashboard.upcomingEvents" /></CardTitle>
+            <CardDescription><T k="admin.dashboard.eventsScheduled" /></CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

@@ -8,6 +8,7 @@ import { Search, AlertTriangle, Plus, Loader2 } from "lucide-react"
 import FundraiserCard from "@/components/fundraiser-card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import FundraiserService, { Fundraiser, EventStatus } from "@/lib/fundraiser-service"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,6 +31,7 @@ export default function FundraisersPage() {
     type: "success" | "error";
     visible: boolean;
   } | null>(null)
+  const { t } = useLanguage()
   
   // State for rejection dialog
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false)
@@ -389,11 +391,10 @@ export default function FundraisersPage() {
           </div>
         </div>
       )}
-      
-      <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Fundraiser Management</h1>
-          <p className="text-muted-foreground mt-2">Review, approve, and manage fundraising campaigns</p>
+          <h1 className="text-3xl font-bold tracking-tight"><T k="fundraiser.management" /></h1>
+          <p className="text-muted-foreground mt-2"><T k="fundraiser.description" /></p>
         </div>
         <Button 
           onClick={() => window.open('/news/ongoing', '_blank')}
@@ -402,13 +403,11 @@ export default function FundraisersPage() {
           <Plus className="mr-2 h-4 w-4" />
           View Public Campaigns
         </Button>
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+      </div>      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
         <div className="flex items-center space-x-2 flex-1">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search fundraisers..."
+            placeholder={t("fundraiser.search")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
@@ -418,14 +417,14 @@ export default function FundraisersPage() {
         <div className="w-full md:w-[200px]">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by status" />
+              <SelectValue placeholder={t("fundraiser.filter.status")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Campaigns</SelectItem>
-              <SelectItem value="PENDING">Pending Approval</SelectItem>
-              <SelectItem value="APPROVED">Active</SelectItem>
-              <SelectItem value="COMPLETED">Completed</SelectItem>
-              <SelectItem value="REJECTED">Rejected</SelectItem>
+              <SelectItem value="all"><T k="fundraiser.filter.all" /></SelectItem>
+              <SelectItem value="PENDING"><T k="fundraiser.filter.pending" /></SelectItem>
+              <SelectItem value="APPROVED"><T k="fundraiser.filter.active" /></SelectItem>
+              <SelectItem value="COMPLETED"><T k="fundraiser.filter.completed" /></SelectItem>
+              <SelectItem value="REJECTED"><T k="fundraiser.filter.rejected" /></SelectItem>
             </SelectContent>
           </Select>
         </div>

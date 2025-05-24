@@ -10,8 +10,7 @@ import InventoryForm from "@/components/inventory-form"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import InventoryService, { CurrentInventoryItemResponse } from "@/lib/inventory-service"
-
-
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 export default function InventoryPage() {
   const router = useRouter()
@@ -27,6 +26,7 @@ export default function InventoryPage() {
     type: "success" | "error";
     visible: boolean;
   } | null>(null)
+  const { t } = useLanguage()
 
   // Fetch inventory items
   useEffect(() => {
@@ -83,10 +83,9 @@ export default function InventoryPage() {
       
       // Add the new item to the current state
       setInventoryItems([...inventoryItems, newItem])
-      
-      // Show success notification
+        // Show success notification
       setNotification({
-        message: `Inventory item "${data.itemName}" added successfully`,
+        message: t("inventory.addSuccess").replace("{0}", data.itemName),
         type: "success",
         visible: true
       })
@@ -100,7 +99,7 @@ export default function InventoryPage() {
       
       // Show error notification
       setNotification({
-        message: "Failed to add inventory item. Please try again.",
+        message: t("inventory.addFail"),
         type: "error",
         visible: true
       })
@@ -132,18 +131,16 @@ export default function InventoryPage() {
         return "bg-gray-100 text-gray-800 border-gray-200"
     }
   }
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="spinner h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading inventory items...</p>
+          <p className="text-muted-foreground"><T k="inventory.loading" /></p>
         </div>
       </div>
     )
   }
-
   if (error) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -155,7 +152,7 @@ export default function InventoryPage() {
             className="mt-4"
             variant="outline"
           >
-            Try Again
+            <T k="inventory.tryAgain" />
           </Button>
         </div>
       </div>
@@ -191,8 +188,7 @@ export default function InventoryPage() {
                 <button
                   type="button"
                   onClick={() => setNotification(null)}
-                  aria-label="Close notification"
-                  title="Close"
+                  aria-label="Close notification"                  title={t("inventory.close")}
                   className={`inline-flex rounded-md p-1.5 ${
                     notification.type === "success"
                       ? "bg-green-100 text-green-500 hover:bg-green-200"
@@ -208,25 +204,22 @@ export default function InventoryPage() {
           </div>
         </div>
       )}
-      
-      <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Inventory Management</h1>
-          <p className="text-muted-foreground mt-2">View and manage all inventory items in the system</p>
+          <h1 className="text-3xl font-bold tracking-tight"><T k="inventory.management" /></h1>
+          <p className="text-muted-foreground mt-2"><T k="inventory.viewManage" /></p>
         </div>
         <Button 
           onClick={() => setIsFormOpen(true)} 
           disabled={isSubmitting}
         >
-          <Plus className="mr-2 h-4 w-4" /> Add Item
+          <Plus className="mr-2 h-4 w-4" /> <T k="inventory.addItem" />
         </Button>
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+      </div>      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
         <div className="flex items-center space-x-2 flex-1">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search inventory..."
+            placeholder={t("inventory.search")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
@@ -236,12 +229,12 @@ export default function InventoryPage() {
         <div className="w-full md:w-[200px]">
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by category" />
+              <SelectValue placeholder={t("inventory.filterByCategory")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all"><T k="inventory.allCategories" /></SelectItem>
               {getUniqueCategories().map(category => (
-                <SelectItem key={category} value={category}>{category}</SelectItem>
+                <SelectItem key={category} value={category}>{t(`inventory.${category.toLowerCase()}`) || category}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -258,47 +251,42 @@ export default function InventoryPage() {
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <Package className="h-5 w-5 text-blue-500" />
-                      <h3 className="font-semibold text-lg">{item.itemName}</h3>
-                      <Badge className={getCategoryColor(item.itemCategory)}>{item.itemCategory}</Badge>
+                      <h3 className="font-semibold text-lg">{item.itemName}</h3>                      <Badge className={getCategoryColor(item.itemCategory)}>{t(`inventory.${item.itemCategory.toLowerCase()}`) || item.itemCategory}</Badge>
                       {item.lowStock && (
                         <Badge variant="outline" className="bg-red-50 text-red-800 border-red-200">
-                          Low Stock
+                          <T k="inventory.lowStock" />
                         </Badge>
                       )}
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-1 text-sm mt-1">
+                    </div>                    <div className="flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-1 text-sm mt-1">
                       <span>
-                        Quantity: <span className="font-medium">{item.itemQuantity}</span>
+                        <T k="inventory.quantity" />: <span className="font-medium">{item.itemQuantity}</span>
                       </span>
                       <span>
-                        Price: <span className="font-medium">${item.itemPrice}</span>
+                        <T k="inventory.price" />: <span className="font-medium">${item.itemPrice}</span>
                       </span>
                       <span>
-                        Min Quantity: <span className="font-medium">{item.minQuantity}</span>
+                        <T k="inventory.minQuantity" />: <span className="font-medium">{item.minQuantity}</span>
                       </span>
-                      <span>Created: {new Date(item.createdDate).toLocaleDateString()}</span>
+                      <span><T k="inventory.created" />: {new Date(item.createdDate).toLocaleDateString()}</span>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-2 mt-2 lg:mt-0">
-                    <Button 
+                  <div className="flex flex-wrap gap-2 mt-2 lg:mt-0">                    <Button 
                       variant="outline" 
                       size="sm"
                       onClick={() => router.push(`/dashboard/admin/inventory/${item.publicId}`)}
                     >
                       <Eye className="mr-2 h-4 w-4" />
-                      View Details & Transactions
+                      <T k="inventory.viewDetails" />
                     </Button>
                   </div>
                 </div>
               </CardContent>
             </Card>
           )
-        })}
-
-        {filteredItems.length === 0 && (
+        })}        {filteredItems.length === 0 && (
           <div className="text-center py-10 bg-white rounded-lg shadow">
-            <p className="text-muted-foreground">No inventory items found matching your criteria.</p>
+            <p className="text-muted-foreground"><T k="inventory.noItems" /></p>
           </div>
         )}
       </div>

@@ -7,6 +7,7 @@ import { Search, AlertTriangle, Loader2 } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import VolunteerCardNew from "@/components/volunteer-card-new"
 import VolunteerService, { CurrentVolunteerResponse, EventStatus } from "@/lib/volunteer-service"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,6 +30,7 @@ export default function VolunteersPage() {
     type: "success" | "error";
     visible: boolean;
   } | null>(null)
+  const { t } = useLanguage()
   
   // State for rejection dialog
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false)
@@ -331,18 +333,15 @@ export default function VolunteersPage() {
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>
-
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Volunteer Management</h1>
-        <p className="text-muted-foreground mt-2">Review, approve, and manage volunteer applications</p>
+      </AlertDialog>      <div>
+        <h1 className="text-3xl font-bold tracking-tight"><T k="volunteer.management" /></h1>
+        <p className="text-muted-foreground mt-2"><T k="volunteer.description" /></p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-        <div className="flex items-center space-x-2 flex-1">
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">        <div className="flex items-center space-x-2 flex-1">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search volunteers..."
+            placeholder={t("volunteer.search")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
@@ -352,13 +351,13 @@ export default function VolunteersPage() {
         <div className="w-full md:w-[200px]">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by status" />
+              <SelectValue placeholder={t("volunteer.filter.status")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Volunteers</SelectItem>
-              <SelectItem value="PENDING">Pending Approval</SelectItem>
-              <SelectItem value="APPROVED">Approved</SelectItem>
-              <SelectItem value="REJECTED">Rejected</SelectItem>
+              <SelectItem value="all"><T k="volunteer.filter.all" /></SelectItem>
+              <SelectItem value="PENDING"><T k="volunteer.filter.pending" /></SelectItem>
+              <SelectItem value="APPROVED"><T k="volunteer.filter.approved" /></SelectItem>
+              <SelectItem value="REJECTED"><T k="volunteer.filter.rejected" /></SelectItem>
             </SelectContent>
           </Select>
         </div>
