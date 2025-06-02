@@ -1,0 +1,24 @@
+  "orphan.details": {
+    en: "Orphan Details",
+    sw: "Maelezo ya Yatima",
+  },
+  "orphan.academic.records": {
+    en: "Academic Records",
+    sw: "Rekodi za Elimu",
+  },
+  "orphan.medical.records": {
+    en: "Medical Records",
+    sw: "Rekodi za Matibabu",
+  },
+  "ui.backToOrphans": {
+    en: "Back to Orphans",
+    sw: "Rudi kwa Yatima",
+  },
+  "ui.goBack": {
+    en: "Go Back",
+    sw: "Rudi Nyuma",
+  },
+  "ui.unknown": {
+    en: "Unknown",
+    sw: "Haijulikani",
+  },

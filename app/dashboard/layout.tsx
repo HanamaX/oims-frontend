@@ -150,6 +150,14 @@ function DashboardLayoutContent({
                   <T k="dashboard.volunteers" />
                 </Link>
               </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/admin/reports"
+                  className={`dashboard-link ${isActive("/dashboard/admin/reports") ? "dashboard-link-active" : ""}`}
+                >
+                  Reports
+                </Link>
+              </li>
             </ul>
           </div>
         )}        {user?.role === "superadmin" && (
@@ -203,13 +211,20 @@ function DashboardLayoutContent({
                   className={`dashboard-link ${isActive("/dashboard/superadmin/inventory") ? "dashboard-link-active" : ""}`}
                 >
                   <T k="dashboard.inventory" />
-                </Link>
-              </li>              <li className="dashboard-nav-item">
+                </Link>              </li>              <li className="dashboard-nav-item">
                 <Link
                   href="/dashboard/superadmin/staff"
                   className={`dashboard-link ${isActive("/dashboard/superadmin/staff") ? "dashboard-link-active" : ""}`}
                 >
                   <T k="dashboard.staff" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/reports"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/reports") ? "dashboard-link-active" : ""}`}
+                >
+                  Reports
                 </Link>
               </li>
             </ul>

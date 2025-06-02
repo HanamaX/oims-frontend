@@ -39,6 +39,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.2);
   cursor: pointer;
   align-items: center;
   justify-content: center;
@@ -130,8 +131,8 @@
 }
 
 .dashboard-link-active {
-  color: var(--primary);
-  background-color: var(--accent);
+  color: var(--primary-foreground);
+  background-color: var(--primary);
   font-weight: bold;
 }
 
@@ -171,6 +172,11 @@
   cursor: pointer;
   font-weight: medium;
   font-size: 0.875rem;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard-logout-btn:hover {
+  background-color: var(--accent);
 }
 
 .dashboard-main {
