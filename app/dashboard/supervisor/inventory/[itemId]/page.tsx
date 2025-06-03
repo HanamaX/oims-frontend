@@ -124,9 +124,8 @@ export default function InventoryItemDetailsPage() {
         description: "The inventory item has been successfully deleted.",
         variant: "default"
       })
-      
-      // Navigate back to inventory list
-      router.push('/dashboard/admin/inventory')
+        // Navigate back to inventory list
+      router.push('/dashboard/supervisor/inventory')
     } catch (err) {
       console.error("Error deleting inventory item:", err)
       toast({

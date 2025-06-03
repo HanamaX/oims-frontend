@@ -19,7 +19,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
-export default function SupervisorVolunteersPage() {
+export default function VolunteersPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [volunteers, setVolunteers] = useState<CurrentVolunteerResponse[]>([])

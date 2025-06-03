@@ -184,7 +184,7 @@ export default function SupervisorDashboard() {
       clearInterval(intervalId);
     };
   }, [isAuthenticated, user]);
-  useEffect(() => {    // Only fetch data if user is authenticated and is a supervisor
+  useEffect(() => {    // Only fetch data if user is authenticated and is a supervisor or admin
     if (!isAuthenticated || (user?.role !== "supervisor" && user?.role !== "admin")) {
       return
     }
@@ -248,7 +248,7 @@ export default function SupervisorDashboard() {
     // as it would create an infinite loop when it's updated inside this effect
   }, [user, isAuthenticated])
   // If not authenticated or not a supervisor, don't render anything
-  if (!isAuthenticated || user?.role !== "supervisor") {
+  if (!isAuthenticated || (user?.role !== "supervisor" && user?.role !== "admin")) {
     return null
   }
 

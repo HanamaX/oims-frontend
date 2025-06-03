@@ -142,7 +142,7 @@ export default function SuperAdminInventoryDetailsPage() {
     <div className="space-y-8">
       {/* Header with back button */}
       <div>
-        <Button variant="ghost" onClick={() => router.push("/dashboard/superadmin/inventory")} className="mb-4">
+        <Button variant="ghost" onClick={() => router.push("/dashboard/orphanage_admin/inventory")} className="mb-4">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Inventory
         </Button>

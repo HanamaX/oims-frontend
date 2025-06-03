@@ -317,12 +317,10 @@ export default function SupervisorOrphansPage() {
                       }</span>
                       {orphan.imageUrl && <span>{t("orphan.hasProfileImage")}</span>}
                     </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mt-2 lg:mt-0">                    <Button 
+                  </div>                  <div className="flex flex-wrap gap-2 mt-2 lg:mt-0">                    <Button 
                       variant="outline" 
                       size="sm" 
-                      onClick={() => router.push(`/dashboard/admin/orphans/${orphan.publicId}`)}
+                      onClick={() => router.push(`/dashboard/supervisor/orphans/${orphan.publicId}`)}
                     >
                       <Eye className="mr-2 h-4 w-4" />
                       <T k="orphans.details" />

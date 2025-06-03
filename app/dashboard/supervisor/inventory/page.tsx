@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import InventoryService, { CurrentInventoryItemResponse } from "@/lib/inventory-service"
 import { T, useLanguage } from "@/contexts/LanguageContext"
 
-export default function SupervisorInventoryPage() {
+export default function InventoryPage() {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
   const [categoryFilter, setCategoryFilter] = useState<string>("all")
@@ -269,12 +269,10 @@ export default function SupervisorInventoryPage() {
                       </span>
                       <span><T k="inventory.created" />: {new Date(item.createdDate).toLocaleDateString()}</span>
                     </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mt-2 lg:mt-0">                    <Button 
+                  </div>                  <div className="flex flex-wrap gap-2 mt-2 lg:mt-0">                    <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => router.push(`/dashboard/admin/inventory/${item.publicId}`)}
+                      onClick={() => router.push(`/dashboard/supervisor/inventory/${item.publicId}`)}
                     >
                       <Eye className="mr-2 h-4 w-4" />
                       <T k="inventory.viewDetails" />
