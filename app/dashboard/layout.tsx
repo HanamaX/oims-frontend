@@ -224,12 +224,164 @@ function DashboardLayoutContent({
           <p className="dashboard-subtitle">
             <T k="dashboard.title" />
           </p>
-        </div>        <GeneralNavigation user={user} isActive={isActive} />
+        </div>
 
-        {(user?.role === "supervisor" || user?.role === "admin") && <SupervisorNavigation isActive={isActive} />}
-        {(user?.role === "orphanage_admin" || user?.role === "super_admin") && <OrphanageAdminNavigation isActive={isActive} />}
+        <div className="dashboard-section">
+          <div className="dashboard-section-title">
+            General
+          </div>
+          <ul className="dashboard-nav">
+            {user?.role === "admin" && (
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/admin"
+                  className={`dashboard-link ${isActive("/dashboard/admin") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.title" />
+                </Link>
+              </li>
+            )}
+            {user?.role === "superadmin" && (
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.title" />
+                </Link>
+              </li>
+            )}
+            <li className="dashboard-nav-item">
+              <Link
+                href="/dashboard/profile"
+                className={`dashboard-link-flex ${isActive("/dashboard/profile") ? "dashboard-link-active" : ""}`}
+              >
+                <User size={16} />
+                <span>My Profile</span>
+              </Link>
+            </li>
+          </ul>
+        </div>
 
-        <div className="dashboard-footer">
+        {user?.role === "admin" && (
+          <div className="dashboard-section">
+            <div className="dashboard-section-title">
+              Management
+            </div>
+            <ul className="dashboard-nav">
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/admin/orphans"
+                  className={`dashboard-link ${isActive("/dashboard/admin/orphans") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.orphans" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/admin/inventory"
+                  className={`dashboard-link ${isActive("/dashboard/admin/inventory") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.inventory" />
+                </Link>
+              </li>
+
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/admin/fundraisers"
+                  className={`dashboard-link ${isActive("/dashboard/admin/fundraisers") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.fundraisers" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/admin/volunteers"
+                  className={`dashboard-link ${isActive("/dashboard/admin/volunteers") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.volunteers" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/admin/reports"
+                  className={`dashboard-link ${isActive("/dashboard/admin/reports") ? "dashboard-link-active" : ""}`}
+                >
+                  Reports
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}        {user?.role === "superadmin" && (
+          <div className="dashboard-section">
+            <div className="dashboard-section-title">
+              Management
+            </div>
+            <ul className="dashboard-nav">
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/branches"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/branches") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.branches" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/center"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/center") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.center" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/orphans"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/orphans") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.orphans" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/volunteers"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/volunteers") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.volunteers" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/fundraisers"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/fundraisers") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.fundraisers" />
+                </Link>
+              </li>              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/inventory"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/inventory") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.inventory" />
+                </Link>              </li>              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/staff"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/staff") ? "dashboard-link-active" : ""}`}
+                >
+                  <T k="dashboard.staff" />
+                </Link>
+              </li>
+              <li className="dashboard-nav-item">
+                <Link
+                  href="/dashboard/superadmin/reports"
+                  className={`dashboard-link ${isActive("/dashboard/superadmin/reports") ? "dashboard-link-active" : ""}`}
+                >
+                  Reports
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}        <div className="dashboard-footer">
           <div className="dashboard-footer-row">
             <LanguageSwitcher />
           </div>
