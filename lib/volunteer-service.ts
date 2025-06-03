@@ -189,7 +189,7 @@ const VolunteerService = {
       await VolunteerService.updateVolunteerStatus(
         volunteerId, 
         EventStatus.REJECTED, 
-        "Removal requested by administrator"
+        "Removal requested by supervisor"
       );
       
       return Promise.resolve();

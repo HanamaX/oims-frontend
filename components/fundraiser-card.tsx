@@ -213,7 +213,7 @@ export default function FundraiserCard({
                         id="rejectReason"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
                         placeholder="Enter reason for rejection"
-                        defaultValue="Rejected by administrator"
+                        defaultValue="Rejected by supervisor"
                       />
                     </div>
                     <AlertDialogFooter>
@@ -221,7 +221,7 @@ export default function FundraiserCard({
                       <AlertDialogAction 
                         onClick={() => {
                           const reasonInput = document.getElementById('rejectReason') as HTMLInputElement;
-                          onReject(fundraiser.publicId, reasonInput?.value || "Rejected by administrator")
+                          onReject(fundraiser.publicId, reasonInput?.value || "Rejected by supervisor")
                         }}
                       >
                         Confirm Rejection
@@ -239,7 +239,7 @@ export default function FundraiserCard({
                       const { pathname } = window.location;
                       // Use router navigation if in Next.js, otherwise fallback to direct navigation
                       if (typeof window !== "undefined" && window.history) {
-                        window.location.href = `/dashboard/admin/fundraisers/campaign/${fundraiser.publicId}`;
+                        window.location.href = `/dashboard/supervisor/fundraisers/campaign/${fundraiser.publicId}`;
                       }
                     }}
                   >
@@ -280,7 +280,7 @@ export default function FundraiserCard({
                             id="cancelReason"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md"
                             placeholder="Enter reason for cancellation"
-                            defaultValue="Cancelled by administrator"
+                            defaultValue="Cancelled by supervisor"
                           />
                         </div>
                         <AlertDialogFooter>
@@ -288,7 +288,7 @@ export default function FundraiserCard({
                           <AlertDialogAction 
                             onClick={() => {
                               const reasonInput = document.getElementById('cancelReason') as HTMLInputElement;
-                              onCancel(fundraiser.publicId, reasonInput?.value || "Cancelled by administrator")
+                              onCancel(fundraiser.publicId, reasonInput?.value || "Cancelled by supervisor")
                             }}
                           >
                             Confirm Cancellation

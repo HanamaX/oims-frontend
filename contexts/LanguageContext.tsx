@@ -1644,10 +1644,13 @@ const translations: Record<string, Record<Language, string>> = {
   "profile.gender.preferNot": {
     en: "Prefer not to say",
     sw: "Napendelea kutosema",
+  },  "profile.role.orphanageAdmin": {
+    en: "Orphanage Admin",
+    sw: "Msimamizi wa Yatima",
   },
-  "profile.role.superAdmin": {
-    en: "Super Admin",
-    sw: "Msimamizi Mkuu",
+  "profile.role.supervisor": {
+    en: "Supervisor",
+    sw: "Msimamizi",
   },
   "profile.role.admin": {
     en: "Admin",
@@ -1692,10 +1695,13 @@ const translations: Record<string, Record<Language, string>> = {
   "profile.error.name": {
     en: "Name is required",
     sw: "Jina linahitajika",
-  },
-  "profile.error.email": {
+  },  "profile.error.email": {
     en: "Email is required",
     sw: "Barua pepe inahitajika",
+  },
+  "profile.error.gender": {
+    en: "Gender is required",
+    sw: "Jinsia inahitajika",
   },
   "profile.error.update": {
     en: "Failed to update profile. Please try again.",
