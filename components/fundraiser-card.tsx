@@ -1,9 +1,11 @@
 "use client"
 
+import { useState, useCallback, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Edit, Calendar, Mail, Phone, DollarSign, ClipboardList } from "lucide-react"
+import Image from "next/image"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,6 +42,28 @@ export default function FundraiserCard({
   onCancel,
   readOnly = false 
 }: Readonly<FundraiserCardProps>) {
+  const [imageError, setImageError] = useState(false)
+
+  // Helper function to construct image URLs consistently
+  const getImageUrl = useCallback((imageUrl?: string) => {
+    if (!imageUrl || imageUrl.trim() === "") return null
+    if (imageUrl.startsWith('http')) {
+      return imageUrl
+    }
+    return `https://oims-4510ba404e0e.herokuapp.com${imageUrl}`
+  }, [])
+
+  // Memoized image URL to prevent unnecessary recalculations
+  const fundraiserImageUrl = useMemo(() => {
+    if (!fundraiser?.imageUrl || imageError) return null
+    return getImageUrl(fundraiser.imageUrl)
+  }, [fundraiser?.imageUrl, imageError, getImageUrl])
+
+  // Handle image error
+  const handleImageError = useCallback(() => {
+    setImageError(true)
+  }, [])
+
   // Format date
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -63,34 +87,33 @@ export default function FundraiserCard({
         return "bg-gray-100 text-gray-800 border-gray-200"
     }
   }
-  
-  // Helper function to handle the image URL logic
-  const getImageUrl = (imageUrl?: string) => {
-    if (!imageUrl) {
-      return "/placeholder.svg?height=300&width=400&text=Fundraiser+Image";
-    }
-    
-    if (imageUrl.startsWith('http')) {
-      return imageUrl;
-    }
-    
-    return `https://oims-4510ba404e0e.herokuapp.com${imageUrl}`;
-  }
 
   return (
-    <Card className="w-full overflow-hidden">
-      <div className="grid md:grid-cols-3 gap-4">        {/* Image section */}
+    <Card className="w-full overflow-hidden">      <div className="grid md:grid-cols-3 gap-4">
+        {/* Image section */}
         <div className="md:col-span-1">
-          <div className="aspect-[4/3] w-full overflow-hidden">            <img
-              src={getImageUrl(fundraiser.imageUrl)}
-              alt={fundraiser.eventName}
-              className="w-full h-full object-cover rounded-l"
-              onError={(e) => {
-                // Handle image load error by falling back to placeholder
-                console.error(`Failed to load image: ${fundraiser.imageUrl}`)
-                e.currentTarget.src = "/placeholder.svg?height=300&width=400&text=Fundraiser+Image"
-              }}
-            />
+          <div className="aspect-[4/3] w-full overflow-hidden">
+            {fundraiserImageUrl ? (
+              <div className="w-full h-full relative">
+                <Image
+                  src={fundraiserImageUrl}
+                  alt={fundraiser.eventName}
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="rounded-l"
+                  onError={handleImageError}
+                  unoptimized
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="w-full h-full bg-gray-100 rounded-l flex items-center justify-center">
+                <div className="text-center text-gray-500">
+                  <div className="text-3xl mb-2">🖼️</div>
+                  <p className="text-xs">Fundraiser Image</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         
@@ -103,12 +126,11 @@ export default function FundraiserCard({
                 <Badge className={getStatusColor(fundraiser.status)}>
                   {fundraiser.status.charAt(0) + fundraiser.status.slice(1).toLowerCase()}
                 </Badge>
-              </div>
-                {/* Show rejection reason if status is REJECTED */}
-              {fundraiser.status === 'REJECTED' && (fundraiser.reason || fundraiser.inactiveReason) && (
+              </div>              {/* Show rejection reason if status is REJECTED */}
+              {fundraiser.status === 'REJECTED' && (fundraiser.reason ?? fundraiser.inactiveReason) && (
                 <div className="mt-2 mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
                   <p className="text-sm font-medium text-red-700">Rejection Reason:</p>
-                  <p className="text-sm text-red-600">{fundraiser.reason || fundraiser.inactiveReason}</p>
+                  <p className="text-sm text-red-600">{fundraiser.reason ?? fundraiser.inactiveReason}</p>
                 </div>
               )}
               <CardDescription className="flex items-center gap-1">
@@ -231,15 +253,13 @@ export default function FundraiserCard({
                 </AlertDialog>
               </>
             )}              {!readOnly && fundraiser.status === "APPROVED" && (
-                <>
-                  <Button 
+                <>                  <Button 
                     variant="outline" 
                     className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-200"
                     onClick={() => {
-                      const { pathname } = window.location;
                       // Use router navigation if in Next.js, otherwise fallback to direct navigation
                       if (typeof window !== "undefined" && window.history) {
-                        window.location.href = `/dashboard/supervisor/fundraisers/campaign/${fundraiser.publicId}`;
+                        window.location.href = `/dashboard/shared/campaign/${fundraiser.publicId}`;
                       }
                     }}
                   >
@@ -294,12 +314,22 @@ export default function FundraiserCard({
                             Confirm Cancellation
                           </AlertDialogAction>
                         </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                      </AlertDialogContent>                    </AlertDialog>
                   )}
                 </>
               )
-            }
+            }            {/* View Details button for read-only mode (orphanage admin view) */}
+            {readOnly && fundraiser.status === "APPROVED" && (
+              <Button 
+                variant="outline" 
+                className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-200"
+                onClick={() => {
+                  window.location.href = `/dashboard/shared/campaign/${fundraiser.publicId}`;
+                }}
+              >
+                View Details
+              </Button>
+            )}
           </div>
         </div>
       </div>

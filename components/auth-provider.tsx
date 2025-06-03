@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode, useRef } from "react"
+import { createContext, useContext, useState, useEffect, type ReactNode, useRef, useMemo } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import AuthService from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
@@ -38,7 +38,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [user, setUser] = useState<{
     role: UserRole
     firstLogin?: boolean
@@ -101,18 +101,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // List of protected routes
     const protectedRoutes = ["/dashboard", "/orphans", "/volunteers", "/fundraisers", "/inventory", "/profile"]
 
-    // Public routes that should be accessible without auth
-    const publicRoutes = ["/", "/login", "/about-us", "/reset-password"]
-
     // Check if current path is protected
     const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
-    const isPublicRoute = publicRoutes.some((route) => pathname === route)
 
     // If trying to access protected route without auth, redirect to login
     if (isProtectedRoute && !user) {
       console.log("Redirecting to login: Protected route without auth")
       router.push("/login")
-      return
     }
 
     // If authenticated and trying to access login page, redirect to appropriate dashboard
@@ -123,21 +118,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else if (user.role === "orphanage_admin" || user.role === "super_admin") {
         router.push("/dashboard/orphanage_admin")
       }
-      return
     }
 
     // If trying to access supervisor routes without supervisor role
     if (pathname.includes("/dashboard/supervisor") && user?.role !== "supervisor" && user?.role !== "admin") {
       console.log("Unauthorized access to supervisor routes")
       router.push("/")
-      return
     }
 
     // If trying to access orphanage_admin routes without orphanage_admin role
     if (pathname.includes("/dashboard/orphanage_admin") && user?.role !== "orphanage_admin" && user?.role !== "super_admin") {
       console.log("Unauthorized access to orphanage_admin routes")
       router.push("/")
-      return
     }
   }, [pathname, user, router, isLoading, isInitialized, redirectAfterLogout])
 
@@ -184,26 +176,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const userData = {
         role: role,
-        firstName: adminData.fullName?.split(" ")[0] || adminData.username,
-        lastName: adminData.fullName?.split(" ").slice(1).join(" ") || "",
-        email: adminData.email,
+        firstName: adminData.fullName?.split(" ")[0] ?? adminData.username,
+        lastName: adminData.fullName?.split(" ").slice(1).join(" ") ?? "",
+        email: adminData.email ?? "",
         phone: adminData.phone,
         // Explicitly check and log branchName
-        branchName: response.data.branchName || "",
-        imageUrl: adminData.imageUrl,
+        branchName: response.data.branchName ?? "",
+        imageUrl: adminData.imageUrl ?? "",
         sex: adminData.sex,
         enabled: adminData.enabled,
         username: adminData.username,
         publicId: adminData.publicId,
-        firstLogin: response.data.isFirstTimeLogin || false,
-        isCentreCreated: response.data.isCentreCreated || false,
+        firstLogin: response.data.isFirstTimeLogin ?? false,
+        isCentreCreated: response.data.isCentreCreated ?? false,
         dashboardStats: {
-          totalOrphans: response.data.totalOrphans || 0,
-          totalBranches: response.data.totalBranches || 0,
-          totalVolunteers: response.data.totalVolunteers || 0,
-          totalFundraising: response.data.totalFundraising || 0,
+          totalOrphans: response.data.totalOrphans ?? 0,
+          totalBranches: response.data.totalBranches ?? 0,
+          totalVolunteers: response.data.totalVolunteers ?? 0,
+          totalFundraising: response.data.totalFundraising ?? 0,
         },
-        unreadNotificationsCount: response.data.unreadNotificationsCount || 0,
+        unreadNotificationsCount: response.data.unreadNotificationsCount ?? 0,
       }
       
       console.log("Branch name before saving to localStorage:", userData.branchName)
@@ -271,8 +263,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     window.location.href = "/login"
   }
 
+  const contextValue = useMemo(() => ({
+    user,
+    login,
+    logout,
+    isAuthenticated: !!user,
+    isLoading
+  }), [user, isLoading])
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, isLoading }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   )
