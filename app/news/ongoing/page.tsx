@@ -113,11 +113,10 @@ export default function OngoingNewsPage() {
                       <CardTitle className="text-blue-800">{campaign.fundraiser.eventName}</CardTitle>
                       <CardDescription>{campaign.fundraiser.purpose}</CardDescription>
                     </CardHeader>
-                    <CardContent className="pb-2">
-                      <div className="mb-2">
+                    <CardContent className="pb-2">                      <div className="mb-2">
                         <div className="flex justify-between text-sm mb-1">
-                          <span className="font-medium">${campaign.raisedAmount.toLocaleString()} raised</span>
-                          <span className="text-gray-500">Goal: ${campaign.fundraiser.goal.toLocaleString()}</span>
+                          <span className="font-medium">Tshs {campaign.raisedAmount.toLocaleString()} raised</span>
+                          <span className="text-gray-500">Goal: Tshs {campaign.fundraiser.goal.toLocaleString()}</span>
                         </div>
                         <Progress 
                           value={progressPercentage} 

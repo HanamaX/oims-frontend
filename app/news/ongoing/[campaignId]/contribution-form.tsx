@@ -58,13 +58,12 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
       });
       return;
     }
-    
-    // Check if the amount is at least the suggested amount
+      // Check if the amount is at least the suggested amount
     const numAmount = parseFloat(amount);
     if (isNaN(numAmount) || numAmount < suggestedAmount) {
       toast({
         title: "Invalid Contribution Amount",
-        description: `Your contribution amount must be at least $${suggestedAmount.toLocaleString()}.`,
+        description: `Your contribution amount must be at least Tshs ${suggestedAmount.toLocaleString()}.`,
         variant: "destructive"
       });
       return;
@@ -117,13 +116,12 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
     // Allow empty string for UX purposes (so user can delete and type from scratch)
     // The form validation will catch this later
     setAmount(value);
-  };
-  if (submitted) {
+  };  if (submitted) {
     return (
       <Card className="bg-green-50 p-6 text-center">
         <h3 className="text-xl font-bold text-green-700 mb-4">Thank You for Your Contribution, {name}!</h3>
         <p className="text-green-600 mb-4">
-          Your contribution of ${parseFloat(amount).toLocaleString()} has been received. 
+          Your contribution of Tshs {parseFloat(amount).toLocaleString()} has been received. 
           We appreciate your support in making this campaign a success.
         </p>
         <p className="text-green-600 mb-6">
@@ -165,7 +163,7 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
               className="mt-1"
             />
           </div><div>
-            <Label htmlFor="amount">Contribution Amount ($)</Label>
+            <Label htmlFor="amount">Contribution Amount (Tshs)</Label>
             <Input
               id="amount"
               type="text"
@@ -177,8 +175,8 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
             />
             <p className={`text-sm mt-1 ${parseFloat(amount) < suggestedAmount ? "text-red-500 font-medium" : "text-gray-500"}`}>
               {parseFloat(amount) < suggestedAmount 
-                ? `Minimum contribution: $${suggestedAmount.toLocaleString()} (your amount is too low)`
-                : `Minimum contribution: $${suggestedAmount.toLocaleString()}`
+                ? `Minimum contribution: Tshs ${suggestedAmount.toLocaleString()} (your amount is too low)`
+                : `Minimum contribution: Tshs ${suggestedAmount.toLocaleString()}`
               }
             </p>
           </div>

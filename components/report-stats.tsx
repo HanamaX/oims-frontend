@@ -12,15 +12,12 @@ interface ReportStatsProps {
 export default function ReportStats({ data, type }: ReportStatsProps) {
   // Green theme color palette for charts - inspired by Spotify
   const colors = ["#10b981", "#059669", "#047857", "#065f46", "#064e3b", "#22c55e", "#15803d"]
-
   // Format currency values
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return `Tshs ${new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(value)
+    }).format(value)}`
   }
 
   // Generate appropriate chart based on report type

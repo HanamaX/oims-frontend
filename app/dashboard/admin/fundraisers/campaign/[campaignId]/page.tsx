@@ -142,17 +142,15 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                 
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-xl font-semibold mb-2">Campaign Progress</h2>                    <div className="mb-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="font-medium">${(campaign.raisedAmount || 0).toLocaleString()} raised</span>
-                        <span className="text-muted-foreground">Goal: ${(fundraiser.goal || 0).toLocaleString()}</span>
+                    <h2 className="text-xl font-semibold mb-2">Campaign Progress</h2>                    <div className="mb-2">                      <div className="flex justify-between text-sm">
+                        <span className="font-medium">Tshs {(campaign.raisedAmount || 0).toLocaleString()} raised</span>
+                        <span className="text-muted-foreground">Goal: Tshs {(fundraiser.goal || 0).toLocaleString()}</span>
                       </div>
                       <Progress value={progressPercentage} className="h-2 mt-2" />
-                    </div>
-                    <div className="text-sm text-muted-foreground mt-2">
+                    </div>                    <div className="text-sm text-muted-foreground mt-2">
                       <span className="font-medium">{campaign.contributors || 0} contributors</span>
                       {(campaign.amountRemaining || 0) > 0 && (
-                        <span className="ml-4">${(campaign.amountRemaining || 0).toLocaleString()} remaining</span>
+                        <span className="ml-4">Tshs {(campaign.amountRemaining || 0).toLocaleString()} remaining</span>
                       )}
                     </div>
                   </div>
@@ -191,12 +189,11 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                         <p className="text-muted-foreground">{fundraiser.phoneNumber}</p>
                       </div>
                     </div>
-                    
-                    <div className="flex items-start">
+                      <div className="flex items-start">
                       <DollarSign className="h-5 w-5 text-muted-foreground mr-2 flex-shrink-0" />
                       <div>
                         <p className="font-medium">Suggested Contribution</p>
-                        <p className="text-muted-foreground">${fundraiser.amountPayedPerIndividual?.toLocaleString()}</p>
+                        <p className="text-muted-foreground">Tshs {fundraiser.amountPayedPerIndividual?.toLocaleString()}</p>
                       </div>
                     </div>
                   </div>
@@ -222,27 +219,23 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                   <div className="mt-6">
                     <h3 className="text-lg font-semibold mb-2">Distribution</h3>                      <div className="grid grid-cols-2 gap-4 mt-4">
                       <div className="bg-slate-50 p-4 rounded-md text-center">
-                        <p className="font-medium text-sm">Orphanage Amount</p>
-                        <p className="text-2xl font-bold text-blue-600 mt-1">
-                          ${(campaign.orphanageAmount || 0).toLocaleString()}
+                        <p className="font-medium text-sm">Orphanage Amount</p>                        <p className="text-2xl font-bold text-blue-600 mt-1">
+                          Tshs {(campaign.orphanageAmount || 0).toLocaleString()}
                         </p>
                       </div>
                       <div className="bg-slate-50 p-4 rounded-md text-center">
-                        <p className="font-medium text-sm">Event Amount</p>
-                        <p className="text-2xl font-bold text-blue-600 mt-1">
-                          ${(campaign.eventAmount || 0).toLocaleString()}
+                        <p className="font-medium text-sm">Event Amount</p>                        <p className="text-2xl font-bold text-blue-600 mt-1">
+                          Tshs {(campaign.eventAmount || 0).toLocaleString()}
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              
-              <div className="mt-8">
+                <div className="mt-8">
                 <Link 
                   href={`/news/ongoing/${campaign.publicId}`} 
                   className="text-blue-600 hover:text-blue-800 underline"
-                  target="_blank"
                 >
                   View Public Campaign Page
                 </Link>
@@ -279,7 +272,7 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                         <tr key={contributor.publicId} className="border-b hover:bg-slate-50">                          <td className="py-3">{contributor.name || "Anonymous"}</td>
                           <td className="py-3">{contributor.email || "N/A"}</td>
                           <td className="py-3">{contributor.phoneNumber || "N/A"}</td>
-                          <td className="py-3">${(contributor.amount || 0).toLocaleString()}</td>
+                          <td className="py-3">Tshs {(contributor.amount || 0).toLocaleString()}</td>
                           <td className="py-3">{formatDate(contributor.date || "")}</td>
                           <td className="py-3">{contributor.paymentMethod || "N/A"}</td>
                           <td className="py-3">

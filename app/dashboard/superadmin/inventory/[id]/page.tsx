@@ -175,15 +175,14 @@ export default function SuperAdminInventoryDetailsPage() {
             <p className="text-2xl font-bold">{item?.itemQuantity}</p>
           </div>
           
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-1">Unit Price</h3>
-            <p className="text-2xl font-bold">${parseFloat(item?.itemPrice ?? "0").toFixed(2)}</p>
+          <div>            <h3 className="text-sm font-medium text-muted-foreground mb-1">Unit Price</h3>
+            <p className="text-2xl font-bold">Tshs {parseFloat(item?.itemPrice ?? "0").toFixed(2)}</p>
           </div>
           
           <div>
             <h3 className="text-sm font-medium text-muted-foreground mb-1">Total Value</h3>
             <p className="text-2xl font-bold">
-              ${(parseFloat(item?.itemPrice ?? "0") * parseInt(item?.itemQuantity ?? "0")).toFixed(2)}
+              Tshs {(parseFloat(item?.itemPrice ?? "0") * parseInt(item?.itemQuantity ?? "0")).toFixed(2)}
             </p>
           </div>
         </div>

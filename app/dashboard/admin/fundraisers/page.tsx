@@ -395,9 +395,8 @@ export default function FundraisersPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight"><T k="fundraiser.management" /></h1>
           <p className="text-muted-foreground mt-2"><T k="fundraiser.description" /></p>
-        </div>
-        <Button 
-          onClick={() => window.open('/news/ongoing', '_blank')}
+        </div>        <Button 
+          onClick={() => window.location.href = '/news/ongoing'}
           className="bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="mr-2 h-4 w-4" />

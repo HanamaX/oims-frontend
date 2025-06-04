@@ -298,9 +298,8 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="goal">Target Amount ($)</Label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">            <div className="space-y-2">
+              <Label htmlFor="goal">Target Amount (Tshs)</Label>
               <Input
                 id="goal"
                 name="goal"
@@ -312,9 +311,8 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
                 required
               />
               {errors.goal && <p className="text-sm text-red-500">{errors.goal}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="amountPayedPerIndividual">Amount Per Individual ($)</Label>
+            </div>            <div className="space-y-2">
+              <Label htmlFor="amountPayedPerIndividual">Amount Per Individual (Tshs)</Label>
               <Input
                 id="amountPayedPerIndividual"
                 name="amountPayedPerIndividual"
@@ -325,9 +323,8 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
                 required
               />
               <p className="text-xs text-gray-500">Suggested contribution per individual</p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="orphanageAmountPerIndividual">Orphanage Amount ($)</Label>
+            </div>            <div className="space-y-2">
+              <Label htmlFor="orphanageAmountPerIndividual">Orphanage Amount (Tshs)</Label>
               <Input
                 id="orphanageAmountPerIndividual"
                 name="orphanageAmountPerIndividual"
@@ -342,11 +339,10 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="budgetBreakdown">Budget Breakdown</Label>
-            <Textarea
+            <Label htmlFor="budgetBreakdown">Budget Breakdown</Label>            <Textarea
               id="budgetBreakdown"
               name="budgetBreakdown"
-              placeholder="Provide a breakdown of how the funds will be used (e.g., Books: $2000, Stationery: $1500, Uniforms: $1500)"
+              placeholder="Provide a breakdown of how the funds will be used (e.g., Books: Tshs 2000, Stationery: Tshs 1500, Uniforms: Tshs 1500)"
               value={formData.budgetBreakdown}
               onChange={handleInputChange}
               required

@@ -217,9 +217,8 @@ export default function SuperAdminInventoryPage() {
                   <div className="flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-1 text-sm mt-1">
                     <span>
                       Quantity: <span className="font-medium">{item.itemQuantity}</span>
-                    </span>
-                    <span>
-                      Price: <span className="font-medium">${parseFloat(item.itemPrice).toFixed(2)}</span>
+                    </span>                    <span>
+                      Price: <span className="font-medium">Tshs {parseFloat(item.itemPrice).toFixed(2)}</span>
                     </span>
                     <span>
                       Min Quantity: <span className="font-medium">{item.minQuantity}</span>

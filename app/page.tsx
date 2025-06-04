@@ -154,15 +154,14 @@ export default function HomePage() {
               <T k="home.mission.description" />
             </p>
           </ScrollAnimation>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <ScrollAnimation className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all" animationClass="animate-fade-in" delay={100}>
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">            <ScrollAnimation className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all" animationClass="animate-fade-in" delay={100}>
               <div className="text-5xl font-bold text-blue-700 mb-2">100+</div>
               <p className="text-lg text-gray-600">
                 <T k="home.mission.children" />
               </p>
             </ScrollAnimation>
             <ScrollAnimation className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all" animationClass="animate-fade-in" delay={200}>
-              <div className="text-5xl font-bold text-blue-700 mb-2">$50K+</div>
+              <div className="text-5xl font-bold text-blue-700 mb-2">Tshs 50K+</div>
               <p className="text-lg text-gray-600">
                 <T k="home.mission.funds" />
               </p>

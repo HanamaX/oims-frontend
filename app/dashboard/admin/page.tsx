@@ -289,10 +289,9 @@ export default function AdminDashboard() {
               <circle cx="12" cy="12" r="10"/>
               <path d="M12 6v12"/>
               <path d="M16 10H9.5a2.5 2.5 0 0 0 0 5H12a2.5 2.5 0 0 1 0 5H8"/>
-            </svg>
-          </CardHeader>
+            </svg>          </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold animate-in fade-in-50 duration-700 delay-100">${stats.totalFundraising ?? 0}</div>
+            <div className="text-2xl font-bold animate-in fade-in-50 duration-700 delay-100">Tshs {stats.totalFundraising ?? 0}</div>
             <p className="text-xs text-muted-foreground"><T k="admin.dashboard.fundsRaised" /></p>
           </CardContent>
         </Card>        <Card>

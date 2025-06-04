@@ -260,9 +260,8 @@ export default function InventoryPage() {
                     </div>                    <div className="flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-1 text-sm mt-1">
                       <span>
                         <T k="inventory.quantity" />: <span className="font-medium">{item.itemQuantity}</span>
-                      </span>
-                      <span>
-                        <T k="inventory.price" />: <span className="font-medium">${item.itemPrice}</span>
+                      </span>                      <span>
+                        <T k="inventory.price" />: <span className="font-medium">Tshs {item.itemPrice}</span>
                       </span>
                       <span>
                         <T k="inventory.minQuantity" />: <span className="font-medium">{item.minQuantity}</span>

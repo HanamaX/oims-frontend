@@ -9,13 +9,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { DateRangePicker } from "@/components/ui/date-range-picker"
-import { AlertCircle, BarChart3, Calendar, Download, FileText, Filter, Loader2 } from "lucide-react"
-import ReportStats from "@/components/report-stats"
+import { AlertCircle, Calendar, Download, FileText, Filter, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import ReportService, { ReportType, ReportFilters } from "@/lib/report-service"
 import { format } from "date-fns"
 import { buttonVariants, ANIMATION_DURATION } from "./report-animations"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 interface ReportComponentProps {
   userRole: "admin" | "superadmin"
@@ -27,9 +27,9 @@ interface ReportComponentProps {
 
 export default function ReportComponent({ userRole, branchId, branchName, orphanId, orphanName }: ReportComponentProps) {
   const { toast } = useToast()
+  const { t } = useLanguage()
   const [loading, setLoading] = useState(false)
   const [generating, setGenerating] = useState(false)
-  const [showAnalytics, setShowAnalytics] = useState(false)
   const [activeTab, setActiveTab] = useState<ReportType>("orphans")
   const [availableBranches, setAvailableBranches] = useState<any[]>([])
   const [selectedBranch, setSelectedBranch] = useState<string>("all")
@@ -166,153 +166,143 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
     switch (activeTab) {
       case "orphans":
         return (
-          <>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="category">Age Group</Label>
+          <>            <div className="flex flex-col space-y-2">
+              <Label htmlFor="category">{t("report.ageGroup")}</Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
                 <SelectTrigger className="border-green-200 focus:ring-green-500">
-                  <SelectValue placeholder="Select age group" />
+                  <SelectValue placeholder={t("report.ageGroup")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Age Groups</SelectItem>
-                  <SelectItem value="infant">Infant (0-2 years)</SelectItem>
-                  <SelectItem value="toddler">Toddler (3-5 years)</SelectItem>
-                  <SelectItem value="child">Child (6-12 years)</SelectItem>
-                  <SelectItem value="teenager">Teenager (13-17 years)</SelectItem>
+                  <SelectItem value="all">{t("report.allAgeGroups")}</SelectItem>
+                  <SelectItem value="infant">{t("report.infant")}</SelectItem>
+                  <SelectItem value="toddler">{t("report.toddler")}</SelectItem>
+                  <SelectItem value="child">{t("report.child")}</SelectItem>
+                  <SelectItem value="teenager">{t("report.teenager")}</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">Status</Label>
+            </div>            <div className="flex flex-col space-y-2">
+              <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-green-200 focus:ring-green-500">
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
-                  <SelectItem value="adopted">Adopted</SelectItem>
+                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
+                  <SelectItem value="active">{t("report.active")}</SelectItem>
+                  <SelectItem value="inactive">{t("report.inactive")}</SelectItem>
+                  <SelectItem value="adopted">{t("report.adopted")}</SelectItem>
                 </SelectContent>
-              </Select>
-            </div>
+              </Select>            </div>
           </>
-        )
-
+        );
       case "inventory":
         return (
           <>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category">{t("report.category")}</Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
                 <SelectTrigger className="border-green-200 focus:ring-green-500">
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder={t("report.category")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="food">Food</SelectItem>
-                  <SelectItem value="clothing">Clothing</SelectItem>
-                  <SelectItem value="medicine">Medicine</SelectItem>
-                  <SelectItem value="school">School Supplies</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="all">{t("report.allCategories")}</SelectItem>
+                  <SelectItem value="food">{t("report.food")}</SelectItem>
+                  <SelectItem value="clothing">{t("report.clothing")}</SelectItem>
+                  <SelectItem value="medicine">{t("report.medicine")}</SelectItem>
+                  <SelectItem value="school">{t("report.schoolSupplies")}</SelectItem>
+                  <SelectItem value="other">{t("report.other")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-green-200 focus:ring-green-500">
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="in_stock">In Stock</SelectItem>
-                  <SelectItem value="low_stock">Low Stock</SelectItem>
-                  <SelectItem value="out_of_stock">Out of Stock</SelectItem>
+                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
+                  <SelectItem value="in_stock">{t("report.inStock")}</SelectItem>
+                  <SelectItem value="low_stock">{t("report.lowStock")}</SelectItem>
+                  <SelectItem value="out_of_stock">{t("report.outOfStock")}</SelectItem>
                 </SelectContent>
-              </Select>
-            </div>
+              </Select>            </div>
           </>
-        )
+        );
 
       case "fundraising":
         return (
           <>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-green-200 focus:ring-green-500">
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="PENDING">Pending</SelectItem>
-                  <SelectItem value="APPROVED">Approved</SelectItem>
-                  <SelectItem value="REJECTED">Rejected</SelectItem>
-                  <SelectItem value="COMPLETED">Completed</SelectItem>
+                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
+                  <SelectItem value="PENDING">{t("report.pending")}</SelectItem>
+                  <SelectItem value="APPROVED">{t("report.approved")}</SelectItem>
+                  <SelectItem value="REJECTED">{t("report.rejected")}</SelectItem>
+                  <SelectItem value="COMPLETED">{t("report.completed")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-          </>
-        )
+          </>        );
 
       case "volunteers":
         return (
           <>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-green-200 focus:ring-green-500">
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="ACTIVE">Active</SelectItem>
-                  <SelectItem value="INACTIVE">Inactive</SelectItem>
-                  <SelectItem value="PENDING">Pending</SelectItem>
+                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
+                  <SelectItem value="ACTIVE">{t("report.active")}</SelectItem>
+                  <SelectItem value="INACTIVE">{t("report.inactive")}</SelectItem>
+                  <SelectItem value="PENDING">{t("report.pending")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </>
-        )
-
-      case "staff":
+        );      case "staff":
         return (
           <>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-green-200 focus:ring-green-500">
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
+                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
+                  <SelectItem value="active">{t("report.active")}</SelectItem>
+                  <SelectItem value="inactive">{t("report.inactive")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </>
-        )
-
-      case "branches":
+        );      case "branches":
         return (
           <>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-green-200 focus:ring-green-500">
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="inactive">Inactive</SelectItem>
+                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
+                  <SelectItem value="active">{t("report.active")}</SelectItem>
+                  <SelectItem value="inactive">{t("report.inactive")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </>
-        )
+        );
 
       default:
         return null
@@ -324,14 +314,13 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
       <Card className="w-full border-green-200 shadow-lg hover:shadow-xl transition-all">
         <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
           <div className="flex justify-between items-center">
-            <div>
-              <CardTitle className="text-2xl text-green-800">Generate Reports</CardTitle>
+            <div>              <CardTitle className="text-2xl text-green-800">{t("report.generator")}</CardTitle>
               <CardDescription className="text-green-700">
                 {orphanId 
-                  ? `Generate report for ${orphanName || "selected orphan"}`
+                  ? `${t("report.generate")} ${orphanName || t("orphan.selected")}`
                   : userRole === "admin"
-                    ? `Generate reports for ${branchName || "your branch"}`
-                    : "Generate system-wide or branch-specific reports"
+                    ? `${t("report.generate")} ${branchName || t("branch.your")}`
+                    : t("report.comprehensive")
                 }
               </CardDescription>
             </div>
@@ -341,44 +330,42 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
         <CardContent className="pt-6">
           {!orphanId && (
             <Tabs defaultValue="orphans" onValueChange={(value) => setActiveTab(value as ReportType)}>
-              <TabsList className="grid grid-cols-3 md:grid-cols-6 w-full mb-6 bg-green-100">
-                <TabsTrigger 
+              <TabsList className="grid grid-cols-3 md:grid-cols-6 w-full mb-6 bg-green-100">                <TabsTrigger 
                   value="orphans" 
                   className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                 >
-                  Orphans
+                  {t("report.orphans")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="inventory"
                   className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                 >
-                  Inventory
+                  {t("report.inventory")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="fundraising"
                   className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                 >
-                  Fundraising
+                  {t("report.fundraising")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="volunteers"
                   className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                 >
-                  Volunteers
+                  {t("report.volunteers")}
                 </TabsTrigger>
                 {userRole === "superadmin" && (
-                  <>
-                    <TabsTrigger 
+                  <>                    <TabsTrigger 
                       value="staff"
                       className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                     >
-                      Staff
+                      {t("report.staff")}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="branches"
                       className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                     >
-                      Branches
+                      {t("report.branches")}
                     </TabsTrigger>
                   </>
                 )}
@@ -386,14 +373,13 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
               
               <div className="grid gap-4">
                 {userRole === "superadmin" && (
-                  <div className="flex flex-col space-y-2">
-                    <Label htmlFor="branch">Branch</Label>
+                  <div className="flex flex-col space-y-2">                    <Label htmlFor="branch">{t("branch.label")}</Label>
                     <Select value={selectedBranch} onValueChange={setSelectedBranch}>
                       <SelectTrigger className="border-green-200 focus:ring-green-500">
-                        <SelectValue placeholder="Select branch" />
+                        <SelectValue placeholder={t("report.selectBranch")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Branches (System Report)</SelectItem>
+                        <SelectItem value="all">{t("branch.all")} ({t("report.systemReport")})</SelectItem>
                         {availableBranches.map((branch) => (
                           <SelectItem key={branch.id} value={branch.id}>
                             {branch.name}
@@ -403,11 +389,10 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                     </Select>
                   </div>
                 )}
-                
-                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="date-range">Date Range</Label>
+                      <Label htmlFor="date-range">{t("report.dateRange")}</Label>
                       <div className="mt-2">
                         <DateRangePicker
                           date={{ from: dateRange.from, to: dateRange.to }}
@@ -417,7 +402,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                     </div>
                     
                     <div>
-                      <Label>Report Format</Label>
+                      <Label>{t("report.format")}</Label>
                       <div className="flex gap-4 mt-2">
                         <Button
                           type="button"
@@ -448,18 +433,16 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
           )}
           
           {orphanId && (
-            <div className="grid gap-6">
-              <Alert className="bg-green-50 border-green-200">
+            <div className="grid gap-6">              <Alert className="bg-green-50 border-green-200">
                 <AlertCircle className="h-4 w-4 text-green-600" />
-                <AlertTitle>Orphan-specific report</AlertTitle>
+                <AlertTitle>{t("report.orphanSpecific")}</AlertTitle>
                 <AlertDescription>
-                  Generating detailed report for {orphanName || "the selected orphan"} including personal information, medical records, and academic history.
+                  {t("report.generatingDetailed")} {orphanName || t("orphan.selected")} {t("report.personalInfo")}.
                 </AlertDescription>
               </Alert>
               
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="date-range">Date Range</Label>
+              <div className="grid md:grid-cols-2 gap-6">              <div>
+                  <Label htmlFor="date-range">{t("report.dateRange")}</Label>
                   <div className="mt-2">
                     <DateRangePicker
                       date={{ from: dateRange.from, to: dateRange.to }}
@@ -469,7 +452,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                 </div>
                 
                 <div>
-                  <Label>Report Format</Label>
+                  <Label>{t("report.format")}</Label>
                   <div className="flex gap-4 mt-2">
                     <Button
                       type="button"
@@ -494,23 +477,15 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
           )}
         </CardContent>
         
-        <CardFooter className="flex flex-col space-y-4">
-          <div className="flex justify-between w-full">
+        <CardFooter className="flex flex-col space-y-4">          <div className="flex justify-between w-full">
             <Alert variant="default" className="w-full mr-4 border-green-200">
-              <AlertCircle className="h-4 w-4 text-green-600" />
-              <AlertTitle>Reports will include data from the selected date range.</AlertTitle>
+              <AlertCircle className="h-4 w-4 text-green-600" />              <AlertTitle>{t("report.includeData")}</AlertTitle>
               <AlertDescription>
-                Make sure to select the appropriate filters for the most relevant results.
+                {t("report.selectFilters")}
               </AlertDescription>
             </Alert>
             <div className="flex space-x-4">
               <Button 
-                className="min-w-[150px] transition-all hover:scale-105 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white" 
-                onClick={() => setShowAnalytics(!showAnalytics)}
-              >
-                <BarChart3 className="mr-2 h-4 w-4" /> 
-                {showAnalytics ? "Hide Analytics" : "Show Analytics"}
-              </Button>              <Button 
                 className={`min-w-[150px] ${buttonVariants.idle} bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg`} 
                 onClick={handleGenerateReport}
                 disabled={loading}
@@ -521,72 +496,14 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                     {generating ? "Generating Report..." : "Processing"}
                   </>
                 ) : (
-                  <>
-                    <Download className="mr-2 h-4 w-4" /> 
-                    Generate Report
+                  <>                    <Download className="mr-2 h-4 w-4" /> 
+                    {t("report.generateReport")}
                   </>
                 )}
               </Button>
             </div>
           </div>
-          
-          {showAnalytics && (
-            <div className="w-full mt-4 transition-all animate-in fade-in duration-300">
-              <Card className="w-full border-green-200">
-                <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-                  <CardTitle className="text-xl text-green-800">Analytics Dashboard</CardTitle>
-                  <CardDescription>
-                    Visualized data for the selected report type and filters
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-[400px]">
-                    <ReportStats type={activeTab} data={
-                      // This would be replaced with real data from an API
-                      {
-                        demographics: [
-                          { name: "Male", value: 132 },
-                          { name: "Female", value: 108 },
-                        ],
-                        ageGroups: [
-                          { name: "0-2 years", value: 45 },
-                          { name: "3-5 years", value: 62 },
-                          { name: "6-12 years", value: 83 },
-                          { name: "13-17 years", value: 50 },
-                        ],
-                        statusDistribution: [
-                          { name: "Active", value: 198 },
-                          { name: "Adopted", value: 27 },
-                          { name: "Inactive", value: 15 },
-                        ],
-                        // Additional data for other report types would be included here based on the activeTab
-                        categories: [
-                          { name: "Food", value: 280 },
-                          { name: "Clothing", value: 150 },
-                          { name: "Medicine", value: 95 },
-                          { name: "School", value: 120 },
-                          { name: "Other", value: 75 },
-                        ],
-                        stockStatus: [
-                          { name: "In Stock", value: 550 },
-                          { name: "Low Stock", value: 120 },
-                          { name: "Out of Stock", value: 50 },
-                        ],
-                        transactions: [
-                          { date: "Jan", value: 42 },
-                          { date: "Feb", value: 38 },
-                          { date: "Mar", value: 55 },
-                          { date: "Apr", value: 47 },
-                          { date: "May", value: 63 },
-                          { date: "Jun", value: 52 },
-                        ],
-                      }
-                    } />
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
+  
         </CardFooter>
       </Card>
     </div>

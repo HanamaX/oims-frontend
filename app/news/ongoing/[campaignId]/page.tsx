@@ -162,14 +162,14 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
               <h1 className="text-3xl font-bold text-blue-800 mb-2">{campaign.fundraiser.eventName}</h1>
               <p className="text-lg text-gray-600 mb-6">{campaign.fundraiser.purpose}</p>                <div className="mb-6">
                 <div className="flex justify-between items-center text-sm mb-2">
-                  <span className="font-semibold text-lg">${campaign.raisedAmount.toLocaleString()} raised</span>
+                  <span className="font-semibold text-lg">Tshs {campaign.raisedAmount.toLocaleString()} raised</span>
                   <div className="flex items-center">
-                    <span className="text-gray-600 text-lg mr-3">Goal: ${campaign.fundraiser.goal.toLocaleString()}</span>
+                    <span className="text-gray-600 text-lg mr-3">Goal: Tshs {campaign.fundraiser.goal.toLocaleString()}</span>
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusDisplay.color}`}>
                       {statusDisplay.text}
                     </span>
                   </div>
-                </div>                <ProgressPrimitive.Root
+                </div><ProgressPrimitive.Root
                   className="relative h-3 w-full overflow-hidden rounded-full bg-gray-100"
                   value={progressPercentage}
                 >
@@ -177,10 +177,9 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
                     className={`h-full w-full flex-1 ${getProgressBarColor()} transition-all`}
                     style={{ transform: `translateX(-${100 - (progressPercentage || 0)}%)` }}
                   />
-                </ProgressPrimitive.Root>
-                <div className="flex justify-between text-sm mt-2">
+                </ProgressPrimitive.Root>                <div className="flex justify-between text-sm mt-2">
                   <span className="text-gray-600">{campaign.contributors} contributors</span>
-                  <span className="text-gray-600">${campaign.amountRemaining.toLocaleString()} remaining</span>
+                  <span className="text-gray-600">Tshs {campaign.amountRemaining.toLocaleString()} remaining</span>
                 </div>
               </div>
               
@@ -203,12 +202,11 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
                         <p className="font-medium">Coordinator</p>
                         <p className="text-gray-600">{campaign.fundraiser.coordinatorName}</p>
                       </div>
-                    </div>
-                    <div className="flex items-start">
+                    </div>                    <div className="flex items-start">
                       <DollarSign className="h-5 w-5 text-blue-600 mr-2 mt-0.5" />
                       <div>
                         <p className="font-medium">Suggested Contribution</p>
-                        <p className="text-gray-600">${campaign.fundraiser.amountPayedPerIndividual.toLocaleString()}</p>
+                        <p className="text-gray-600">Tshs {campaign.fundraiser.amountPayedPerIndividual.toLocaleString()}</p>
                       </div>
                     </div>
                   </div>
@@ -228,8 +226,7 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
                 </div>
               </div>
                 <div className="border-t border-gray-200 pt-6 mt-6">
-                {isActive && !showContributionForm && (
-                  <div className="text-center">
+                {isActive && !showContributionForm && (                  <div className="text-center">
                     <p className="text-lg text-gray-700 mb-4">Ready to make a difference?</p>
                     <Button 
                       className="bg-blue-600 hover:bg-blue-700 text-lg py-6 px-8"
@@ -238,7 +235,7 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
                       Contribute to this Campaign
                     </Button>
                     <p className="text-sm text-gray-500 mt-3">
-                      Minimum contribution: ${campaign.fundraiser.amountPayedPerIndividual.toLocaleString()}
+                      Minimum contribution: Tshs {campaign.fundraiser.amountPayedPerIndividual.toLocaleString()}
                     </p>
                   </div>
                 )}

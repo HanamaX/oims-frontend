@@ -159,9 +159,8 @@ export default function EditInventoryForm({
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="itemPrice" className="text-blue-800">
-                  Price (per unit)
+              <div className="space-y-2">                <Label htmlFor="itemPrice" className="text-blue-800">
+                  Price (Tshs per unit)
                 </Label>
                 <Input
                   id="itemPrice"

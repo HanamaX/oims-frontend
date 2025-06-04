@@ -486,14 +486,13 @@ export default function InventoryItemDetailsPage() {
               <span className="text-sm font-medium text-muted-foreground mb-1">Current Quantity</span>
               <span className="text-2xl font-bold">{itemDetails.itemQuantity}</span>
             </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-muted-foreground mb-1">Unit Price</span>
-              <span className="text-2xl font-bold">${itemDetails.itemPrice}</span>
+            <div className="flex flex-col">              <span className="text-sm font-medium text-muted-foreground mb-1">Unit Price</span>
+              <span className="text-2xl font-bold">Tshs {itemDetails.itemPrice}</span>
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-medium text-muted-foreground mb-1">Total Value</span>
               <span className="text-2xl font-bold">
-                ${(parseFloat(itemDetails.itemPrice) * parseFloat(itemDetails.itemQuantity)).toFixed(2)}
+                Tshs {(parseFloat(itemDetails.itemPrice) * parseFloat(itemDetails.itemQuantity)).toFixed(2)}
               </span>
             </div>
           </div>

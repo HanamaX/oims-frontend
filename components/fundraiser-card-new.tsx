@@ -134,12 +134,11 @@ export default function FundraiserCardNew({ fundraiser, onEdit, onDelete, onAppr
                   <p className="text-sm">{fundraiser.phoneNumber}</p>
                 </div>
               </div>
-              
-              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 <div>
                   <p className="text-xs text-muted-foreground">Fundraising Goal</p>
-                  <p className="text-sm">${fundraiser.goal.toLocaleString()}</p>
+                  <p className="text-sm">Tshs {fundraiser.goal.toLocaleString()}</p>
                 </div>
               </div>
               

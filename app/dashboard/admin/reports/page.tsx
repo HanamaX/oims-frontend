@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useAuth } from "@/components/auth-provider"
+import { useLanguage } from "@/contexts/LanguageContext"
 import ReportComponent from "@/components/report-generator-new"
 import ReportStats from "@/components/report-stats-new"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -101,6 +102,7 @@ const sampleData = {
 
 export default function AdminReportsPage() {
   const { user } = useAuth()
+  const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState<ReportType>("orphans")
   
   if (!user) {
@@ -111,21 +113,21 @@ export default function AdminReportsPage() {
     <div className="container mx-auto py-6 space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Reports & Analytics</h1>
+          <h1 className="text-3xl font-bold">{t("report.title")}</h1>
           <p className="text-muted-foreground">
-            Generate detailed reports and view analytics for your branch
+            {t("report.generate")}
           </p>
         </div>
         <Badge variant="outline" className="px-3 py-1 text-base">
-          {user.branchName || "Branch"}
+          {user.branchName || t("branch.label")}
         </Badge>
       </div>
 
       <div className="grid gap-6">        <Alert className="bg-green-50 border-green-200">
           <AlertCircle className="h-4 w-4 text-green-600" />
-          <AlertTitle>Report access is restricted</AlertTitle>
+          <AlertTitle>{t("report.restricted")}</AlertTitle>
           <AlertDescription>
-            Branch administrators can only generate reports for data within their assigned branch.
+            {t("report.restriction.description")}
           </AlertDescription>
         </Alert><Tabs defaultValue="generator" className="space-y-6">
           <TabsList className="grid w-full grid-cols-2 bg-green-100">
@@ -134,14 +136,14 @@ export default function AdminReportsPage() {
               className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
             >
               <FileType className="mr-2 h-4 w-4" />
-              Report Generator
+              {t("report.generator")}
             </TabsTrigger>
             <TabsTrigger 
               value="analytics"
               className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
             >
               <BarChart3 className="mr-2 h-4 w-4" />
-              Analytics Dashboard
+              {t("report.analytics")}
             </TabsTrigger>
           </TabsList>
           
@@ -154,30 +156,29 @@ export default function AdminReportsPage() {
           </TabsContent>
           
           <TabsContent value="analytics" className="space-y-6">            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ReportType)}>
-              <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 bg-green-100">
-                <TabsTrigger 
+              <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 bg-green-100">                <TabsTrigger 
                   value="orphans"
                   className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                 >
-                  Orphans
+                  {t("report.orphans")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="inventory"
                   className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                 >
-                  Inventory
+                  {t("report.inventory")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="fundraising"
                   className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                 >
-                  Fundraising
+                  {t("report.fundraising")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="volunteers"
                   className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                 >
-                  Volunteers
+                  {t("report.volunteers")}
                 </TabsTrigger>
               </TabsList>
               
@@ -195,47 +196,45 @@ export default function AdminReportsPage() {
                   type={activeTab}
                 />
               </div>
-                <div className="grid gap-6 md:grid-cols-2">
-                <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="grid gap-6 md:grid-cols-2">                <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-                    <CardTitle className="text-base text-green-800">Summary</CardTitle>
-                    <CardDescription>Branch overview at a glance</CardDescription>
+                    <CardTitle className="text-base text-green-800">{t("report.summary")}</CardTitle>
+                    <CardDescription>{t("report.branchOverview")}</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4 pt-4">
                     <div className="flex justify-between">
-                      <span className="text-green-700">Total Orphans</span>
+                      <span className="text-green-700">{t("report.totalOrphans")}</span>
                       <span className="font-medium text-green-800">{user.dashboardStats?.totalOrphans || 0}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-green-700">Active Volunteers</span>
+                      <span className="text-green-700">{t("report.activeVolunteers")}</span>
                       <span className="font-medium text-green-800">{user.dashboardStats?.totalVolunteers || 0}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-green-700">Fundraising Campaigns</span>
+                      <span className="text-green-700">{t("report.fundraisingCampaigns")}</span>
                       <span className="font-medium text-green-800">{user.dashboardStats?.totalFundraising || 0}</span>
                     </div>
                   </CardContent>
-                </Card>
-                  <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">                  <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-                    <CardTitle className="text-base text-green-800">Recent Reports</CardTitle>
-                    <CardDescription>Previously generated reports</CardDescription>
+                </Card>                  <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">                  <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
+                    <CardTitle className="text-base text-green-800">{t("report.recentReports")}</CardTitle>
+                    <CardDescription>{t("report.previouslyGenerated")}</CardDescription>
                   </CardHeader>
                   <CardContent className="pt-4">
                     <ul className="space-y-3">
                       <li className="flex items-center justify-between text-sm">
-                        <span className="text-green-700">Monthly Orphan Report</span>
+                        <span className="text-green-700">{t("report.monthlyOrphan")}</span>
                         <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
                       </li>
                       <li className="flex items-center justify-between text-sm">
-                        <span className="text-green-700">Inventory Status</span>
+                        <span className="text-green-700">{t("report.inventoryStatus")}</span>
                         <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
                       </li>
                       <li className="flex items-center justify-between text-sm">
-                        <span className="text-green-700">Volunteer Hours Q2</span>
+                        <span className="text-green-700">{t("report.volunteerHours")}</span>
                         <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
                       </li>
                       <li className="flex items-center justify-between text-sm">
-                        <span className="text-green-700">Fundraising Summary</span>
+                        <span className="text-green-700">{t("report.fundraisingSummary")}</span>
                         <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
                       </li>
                     </ul>
