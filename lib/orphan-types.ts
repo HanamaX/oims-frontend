@@ -10,6 +10,7 @@ export interface Guardian {
   address: string
   occupation: string
   orphanPublicId?: string
+  imageUrl?: string | null
 }
 
 export interface OrphanDetails {

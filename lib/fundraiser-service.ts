@@ -249,7 +249,7 @@ const FundraiserService = {
       await FundraiserService.updateFundraiserStatus(
         fundraiserId, 
         EventStatus.CANCELLED, 
-        "Deletion requested by administrator"
+        "Deletion requested by supervisor"
       );
       
       return Promise.resolve();

@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Edit, Plus, Trash, Loader2 } from "lucide-react"
+import { Edit, Plus, Loader2, User } from "lucide-react"
 import { OrphanDetails, Guardian } from "@/lib/orphan-types"
 import GuardianForm from "./guardian-form"
 import { useToast } from "@/hooks/use-toast"
@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import OrphanFormEdit from "./orphan-form-edit"
+import Image from "next/image"
 
 interface OrphanDetailsPersonalProps {
   readonly orphan: OrphanDetails | null
@@ -41,6 +42,40 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
   const [isInactivateDialogOpen, setIsInactivateDialogOpen] = useState(false)
   const [statusChangeReason, setStatusChangeReason] = useState("")
   
+  // Image error states
+  const [orphanImageError, setOrphanImageError] = useState(false)
+  const [guardianImageError, setGuardianImageError] = useState(false)
+
+  // Memoize image URLs to prevent recalculation on every render
+  const orphanImageUrl = useMemo(() => {
+    if (!orphan?.imageUrl || orphanImageError) return null
+    
+    if (orphan.imageUrl.startsWith('http')) {
+      return orphan.imageUrl
+    }
+    
+    return `https://oims-4510ba404e0e.herokuapp.com${orphan.imageUrl}`
+  }, [orphan?.imageUrl, orphanImageError])
+
+  const guardianImageUrl = useMemo(() => {
+    if (!orphan?.guardian?.imageUrl || guardianImageError) return null
+    
+    if (orphan.guardian.imageUrl.startsWith('http')) {
+      return orphan.guardian.imageUrl
+    }
+    
+    return `https://oims-4510ba404e0e.herokuapp.com${orphan.guardian.imageUrl}`
+  }, [orphan?.guardian?.imageUrl, guardianImageError])
+
+  // Image error handlers
+  const handleOrphanImageError = useCallback(() => {
+    setOrphanImageError(true)
+  }, [])
+
+  const handleGuardianImageError = useCallback(() => {
+    setGuardianImageError(true)
+  }, [])
+  
   if (!orphan) return null
   
   // Handle guardian operations
@@ -55,7 +90,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       }
       
       // Save guardian via API - correct endpoint based on backend.json
-      const response = await API.post(`/app/oims/orphans/guardians`, enrichedData)
+      await API.post(`/app/oims/orphans/guardians`, enrichedData)
       
       // Show success message
       toast({
@@ -184,9 +219,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
         title: "Orphan Deleted",
         description: "Orphan has been successfully deleted."
       })
-      
-      // Redirect to orphans list page
-      window.location.href = '/dashboard/admin/orphans'
+        // Redirect to orphans list page
+      window.location.href = '/dashboard/supervisor/orphans'
     } catch (error: any) {
       console.error("Failed to delete orphan:", error)
       toast({
@@ -254,11 +288,42 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       setIsSubmitting(false);
     }
   };
-  
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    return (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      {/* Orphan Image */}
+      <Card className="md:col-span-1">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <User className="h-5 w-5" />
+            Profile Image
+          </CardTitle>
+        </CardHeader>        
+        <CardContent className="flex flex-col items-center">
+          {orphanImageUrl ? (
+            <div className="w-64 h-64 overflow-hidden relative rounded-full border">
+              <Image 
+                src={orphanImageUrl}
+                alt={`${orphan.fullName} Profile`}
+                fill
+                style={{ objectFit: "cover" }}
+                className="rounded-full"
+                onError={handleOrphanImageError}
+                unoptimized
+                priority
+              />
+            </div>
+          ) : (
+            <div className="w-64 h-64 bg-gray-100 rounded-full border flex items-center justify-center">
+              <div className="text-blue-500">
+                <User className="h-12 w-12" />
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Main Details */}
-      <Card className="md:col-span-2">        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="md:col-span-2"><CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center space-x-2">
             <CardTitle>Personal Information</CardTitle>
             {orphan.status && (
@@ -499,7 +564,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             <CardDescription>Information about the primary guardian</CardDescription>
           </div>
           {!readOnly && (
-            orphan.guardian ? (              <div className="flex space-x-2">
+            orphan.guardian ? (              
+            <div className="flex space-x-2">
                 <Button 
                   variant="outline" 
                   size="sm" 
@@ -521,32 +587,58 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
               </Button>
             )
           )}
-        </CardHeader>
-        <CardContent>
+        </CardHeader>        <CardContent>
           {orphan.guardian ? (
-            <div className="space-y-3">
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Name</h3>
-                <p className="text-base font-medium">{orphan.guardian.name}</p>
+            <div className="space-y-4">              {/* Guardian Image - centered at top */}
+              <div className="flex flex-col items-center">
+                {guardianImageUrl ? (
+                  <div className="w-32 h-32 overflow-hidden relative rounded-full border">
+                    <Image 
+                      src={guardianImageUrl}
+                      alt={`${orphan.guardian.name} Profile`}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      className="rounded-full"
+                      onError={handleGuardianImageError}
+                      unoptimized
+                      priority
+                    />
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 bg-gray-100 rounded-full border flex items-center justify-center">
+                    <div className="text-blue-500">
+                      <User className="h-12 w-12" />
+                    </div>
+                  </div>
+                )}
               </div>
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Relationship</h3>
-                <p className="text-base">{orphan.guardian.relationship}</p>
-              </div>
-              <div>                <h3 className="text-sm font-medium text-muted-foreground">Phone Number</h3>
-                <p className="text-base">{orphan.guardian.contactNumber || "-"}</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Email</h3>
-                <p className="text-base">{orphan.guardian.email || "-"}</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Address</h3>
-                <p className="text-base">{orphan.guardian.address || "-"}</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-muted-foreground">Occupation</h3>
-                <p className="text-base">{orphan.guardian.occupation || "-"}</p>
+              
+              {/* Guardian Details */}
+              <div className="space-y-3">
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground">Name</h3>
+                  <p className="text-base font-medium">{orphan.guardian.name}</p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground">Relationship</h3>
+                  <p className="text-base">{orphan.guardian.relationship}</p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground">Phone Number</h3>
+                  <p className="text-base">{orphan.guardian.contactNumber || "-"}</p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground">Email</h3>
+                  <p className="text-base">{orphan.guardian.email || "-"}</p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground">Address</h3>
+                  <p className="text-base">{orphan.guardian.address || "-"}</p>
+                </div>
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground">Occupation</h3>
+                  <p className="text-base">{orphan.guardian.occupation || "-"}</p>
+                </div>
               </div>
             </div>
           ) : (

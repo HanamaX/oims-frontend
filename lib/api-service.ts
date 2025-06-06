@@ -3,6 +3,7 @@ import axios from "axios"
 // Create an axios instance with default config
 const API = axios.create({
   baseURL: "https://oims-4510ba404e0e.herokuapp.com",
+  // baseURL: "http://localhost:8080", // Use localhost for local development
   timeout: 15000, // 15 seconds timeout
   headers: {
     "Content-Type": "application/json",

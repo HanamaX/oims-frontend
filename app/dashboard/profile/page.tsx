@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { useAuth } from "@/components/auth-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,7 +15,7 @@ import AuthService, { type UpdatePasswordRequest, type UpdateProfileRequest } fr
 import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import API from "@/lib/api-service"
-import axios from "axios"
+import Image from "next/image"
 import { T, useLanguage } from "@/contexts/LanguageContext"
 
 export default function ProfilePage() {
@@ -25,12 +25,10 @@ export default function ProfilePage() {
   // Profile state
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("");
-  const [profileImage, setProfileImage] = useState<string>("")
-  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [imageError, setImageError] = useState(false)
+  const [phone, setPhone] = useState("");  const [profileImage, setProfileImage] = useState<string>("")
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);  const [imageError, setImageError] = useState(false)
+  const [profileImageError, setProfileImageError] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [imageBlob, setImageBlob] = useState<string | null>(null)
   const [gender, setGender] = useState("")
   const [username, setUsername] = useState("")
   const [role, setRole] = useState("")
@@ -52,6 +50,21 @@ export default function ProfilePage() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  
+  // Helper function to get image URL
+  const getImageUrl = useCallback((imageUrl: string | null | undefined): string => {
+    if (!imageUrl || imageUrl.trim() === "") return ""
+    return imageUrl.startsWith('http') ? imageUrl : `${API.defaults.baseURL}${imageUrl}`
+  }, [])
+
+  // Memoized image URL to prevent unnecessary recalculations
+  const profileImageUrl = useMemo(() => getImageUrl(profileImage), [profileImage, getImageUrl])
+
+  // Handle profile image error
+  const handleProfileImageError = useCallback(() => {
+    setProfileImageError(true)
+  }, [])
+
     // Helper functions for formatting display values
   const formatGenderDisplay = (genderValue: string): string => {
     if (!genderValue) return t("profile.notSpecified");
@@ -64,47 +77,17 @@ export default function ProfilePage() {
       default: return genderValue;
     }
   };
-  
-  const formatRoleDisplay = (roleValue: string): string => {
+    const formatRoleDisplay = (roleValue: string): string => {
     if (!roleValue) return t("profile.notSpecified");
-    if (roleValue === "superadmin") return t("profile.role.superAdmin");
+    if (roleValue === "orphanage_admin") return t("profile.role.orphanageAdmin");
     
     switch (roleValue) {
-      case "admin": return t("profile.role.admin");
+      case "supervisor": return t("profile.role.supervisor");
       case "volunteer": return t("profile.role.volunteer");
       case "donor": return t("profile.role.donor");
-      default: return roleValue.charAt(0).toUpperCase() + roleValue.slice(1);
-    }
+      default: return roleValue.charAt(0).toUpperCase() + roleValue.slice(1);    }
   };
 
-  // This function loads the profile image as a blob with proper authorization
-  const fetchProfileImage = async (imagePath: string) => {
-    if (!imagePath) return;
-    
-    try {
-      const token = localStorage.getItem("jwt_token");
-      if (!token) {
-        setImageError(true);
-        return;
-      }
-        // Check if the image path is already a complete URL (starts with http:// or https://)
-      const imageUrl = imagePath.startsWith('http') ? imagePath : `${API.defaults.baseURL}${imagePath}`;
-      console.log("Fetching image from:", imageUrl);
-      
-      const response = await axios.get(imageUrl, {
-        responseType: 'blob',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-        const blobUrl = URL.createObjectURL(response.data);
-      console.log("Successfully loaded profile image as blob");
-      setImageBlob(blobUrl);
-      setImageError(false);
-    } catch (error) {
-      console.error("Failed to load profile image:", error);
-      setImageError(true);
-    }  }
     // Load user data
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -132,11 +115,13 @@ export default function ProfilePage() {
           console.log("Loading profile image from localStorage:", imageUrl)
           setProfileImage(imageUrl)
           
-          // If we have an image path, fetch the image as blob
-          if (imageUrl) {
-            fetchProfileImage(imageUrl)
-          } else {
+          // Reset image error states based on whether we have a valid image URL
+          if (!imageUrl) {
             setImageError(true)
+            setProfileImageError(true)
+          } else {
+            setImageError(false)
+            setProfileImageError(false)
           }
           
           setGender(userData.sex ?? userData.gender ?? "")
@@ -163,7 +148,8 @@ export default function ProfilePage() {
     if (file) {
       setProfileImageFile(file)
       setImageError(false)
-
+      setProfileImageError(false)
+      
       // Create a preview URL
       const reader = new FileReader()
       reader.onloadend = () => {
@@ -177,14 +163,18 @@ export default function ProfilePage() {
     e.preventDefault()
     setProfileError("")
     setProfileSuccess(false);
-    
-    if (!fullName) {
+      if (!fullName) {
       setProfileError(t("profile.error.name"))
       return
     }
-
+    
     if (!email) {
       setProfileError(t("profile.error.email"))
+      return
+    }
+
+    if (!gender) {
+      setProfileError(t("profile.error.gender"))
       return
     }
 
@@ -202,17 +192,12 @@ export default function ProfilePage() {
           return
         }
         
-      try {
-          const response = await AuthService.uploadProfileImage(profileImageFile)
+      try {          const response = await AuthService.uploadProfileImage(profileImageFile)
           imageUrl = response.imageUrl
           console.log("Successfully uploaded image, received URL:", imageUrl)
           // Reset image error state since we have a new image
           setImageError(false)
-          
-          // Fetch the newly uploaded image
-          if (imageUrl) {
-            fetchProfileImage(imageUrl)
-          }
+          setProfileImageError(false)
         } catch (err) {
           console.error("Profile image upload error:", err)
           setProfileError(t("profile.image.error.upload"))
@@ -335,16 +320,7 @@ export default function ProfilePage() {
       console.error("Password update error:", err);          setPasswordError(t("profile.password.error.update"))
     } finally {
       setIsPasswordUpdating(false)
-    }
-  }
-  // Clean up blob URLs when component unmounts
-  useEffect(() => {
-    return () => {
-      if (imageBlob) {
-        URL.revokeObjectURL(imageBlob);
-      }
-    };
-  }, [imageBlob]);
+    }  }
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[80vh]">
@@ -366,11 +342,11 @@ export default function ProfilePage() {
                 <CardTitle><T k="profile.view.title" /></CardTitle>
                 <CardDescription><T k="profile.view.description" /></CardDescription>
               </div>
-              {!isEditing && (
-                <Button 
+              {!isEditing && (                <Button 
                   onClick={() => {
                     setIsEditing(true);
                     setImageError(false); // Reset image error when entering edit mode
+                    setProfileImageError(false); // Reset profile image error when entering edit mode
                   }} 
                   variant="outline"
                 >
@@ -393,15 +369,18 @@ export default function ProfilePage() {
               )}
 
               {/* Profile View Mode */}
-              {!isEditing ? (
-                <div className="space-y-6">                  <div className="flex justify-center mb-6">
-                    <Avatar className="h-32 w-32 border-2 border-gray-200">
-                      {imageBlob ? (
-                        <img
-                          src={imageBlob}
-                          alt={fullName || "User"}
-                          className="h-full w-full object-cover rounded-full"
-                          onError={() => setImageError(true)}
+              {!isEditing ? (                <div className="space-y-6">                  <div className="flex justify-center mb-6">
+                    <Avatar className="h-32 w-32 border-2 border-gray-200 relative">
+                      {profileImageUrl && !profileImageError ? (
+                        <Image 
+                          src={profileImageUrl}
+                          alt={`${fullName || "Admin"} Profile`}
+                          fill
+                          style={{ objectFit: "cover" }}
+                          className="rounded-full"
+                          onError={handleProfileImageError}
+                          unoptimized
+                          priority
                         />
                       ) : (
                         <AvatarFallback className="text-blue-500 bg-gray-100">
@@ -432,12 +411,11 @@ export default function ProfilePage() {
                       <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.gender" /></p>
                       <p className="font-medium">{formatGenderDisplay(gender)}</p>
                     </div>
-                    
-                    <div className="space-y-2">
+                      <div className="space-y-2">
                       <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.role" /></p>
                       <p className="font-medium">{formatRoleDisplay(role)}</p>
                     </div>
-                    {role === "admin" && branch && (
+                    {role === "supervisor" && branch && (
                       <div className="space-y-2">
                         <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.branch" /></p>
                         <p className="font-medium">{branch}</p>
@@ -498,7 +476,7 @@ export default function ProfilePage() {
                         className="bg-white"
                       />
                     </div>                    <div className="space-y-2">
-                      <Label htmlFor="gender"><T k="profile.label.genderOptional" /></Label>
+                      <Label htmlFor="gender"><T k="profile.label.gender" /></Label>
                       <Select
                         value={gender}
                         onValueChange={setGender}
@@ -523,10 +501,9 @@ export default function ProfilePage() {
                         readOnly
                         disabled
                         className="bg-gray-50"
-                      />
-                    </div>
+                      />                    </div>
 
-                    {role === "admin" && branch && (
+                    {role === "supervisor" && branch && (
                       <div className="space-y-2">
                         <Label htmlFor="branch"><T k="profile.label.branch" /></Label>
                         <Input
@@ -540,14 +517,14 @@ export default function ProfilePage() {
                     )}
 
                     {/* Cancel and Save buttons */}
-                    <div className="flex gap-3 pt-2">
-                      <Button 
+                    <div className="flex gap-3 pt-2">                      <Button 
                         type="button" 
                         onClick={() => {
                           setIsEditing(false);
                           setImagePreview(null);
                           setProfileImageFile(null);
                           setImageError(false);
+                          setProfileImageError(false);
                         }} 
                         variant="outline" 
                         className="flex-1"
@@ -565,11 +542,20 @@ export default function ProfilePage() {
 
                     {/* Profile Image Upload Section */}
                     <div className="space-y-2">
-                      <Label htmlFor="profileImage"><T k="profile.label.profileImage" /></Label>
-                      <div className="flex gap-4 items-start">
+                      <Label htmlFor="profileImage"><T k="profile.label.profileImage" /></Label>                      <div className="flex gap-4 items-start">
                         <div className="flex-1 border rounded-md p-4 bg-white">
                           <label htmlFor="profileImage" className="flex flex-col items-center gap-2 cursor-pointer">
-                            <Upload className="h-8 w-8 text-blue-500" />
+                            {imagePreview ? (
+                              <div className="relative w-32 h-32 mx-auto mb-2">
+                                <img 
+                                  src={imagePreview} 
+                                  alt="Profile Preview" 
+                                  className="w-full h-full object-cover rounded-full"
+                                />
+                              </div>
+                            ) : (
+                              <Upload className="h-8 w-8 text-blue-500" />
+                            )}
                             <span className="text-sm text-muted-foreground"><T k="profile.image.upload.click" /></span>
                             <span className="text-xs text-muted-foreground"><T k="profile.image.upload.formats" /></span>
                             <Input

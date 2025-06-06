@@ -76,7 +76,7 @@ export interface UploadProfileImageResponse {
   status: string
 }
 
-export interface SuperAdminUpdateRequest {
+export interface OrphanageAdminUpdateRequest {
   role?: string
   branchPublicId?: string
   suspend?: boolean
@@ -97,9 +97,9 @@ const AuthService = {
       localStorage.setItem("jwt_token", response.data.data.token)
 
       // Determine role from the roles array
-      const isAdmin = response.data.data.admin.roles.includes("ROLE_ADMIN")
-      const isSuperAdmin = response.data.data.admin.roles.includes("ROLE_SUPER_ADMIN")
-      const role = isSuperAdmin ? "superadmin" : isAdmin ? "admin" : null
+      const isSupervisor = response.data.data.admin.roles.includes("ROLE_SUPERVISOR")
+      const isOrphanageAdmin = response.data.data.admin.roles.includes("ROLE_ORPHANAGE_ADMIN")
+      const role = isOrphanageAdmin ? "orphanage_admin" : isSupervisor ? "supervisor" : null
       
       // Get fullName parts
       const adminData = response.data.data.admin
@@ -240,11 +240,11 @@ const AuthService = {
     }
   },
 
-  superAdminUpdate: async (data: SuperAdminUpdateRequest): Promise<void> => {
+  orphanageAdminUpdate: async (data: OrphanageAdminUpdateRequest): Promise<void> => {
     try {
       await API.patch("/app/oims/admin/supupdate", data)
     } catch (error) {
-      console.error("Super admin update error:", error)
+      console.error("Orphanage admin update error:", error)
       throw error
     }
   },
