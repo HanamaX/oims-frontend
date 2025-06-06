@@ -1992,6 +1992,155 @@ const translations: Record<string, Record<Language, string>> = {
     en: "Administration",
     sw: "Utawala",
   },
+
+  // Profile
+  "profile.title": {
+    en: "My Profile",
+    sw: "Wasifu Wangu"
+  },
+  "profile.tab.info": {
+    en: "Profile Information",
+    sw: "Taarifa za Wasifu"
+  },
+  "profile.tab.password": {
+    en: "Change Password",
+    sw: "Badilisha Nenosiri"
+  },
+  "profile.view.title": {
+    en: "Profile Details",
+    sw: "Maelezo ya Wasifu"
+  },
+  "profile.view.description": {
+    en: "View and manage your personal information",
+    sw: "Angalia na simamia taarifa zako za kibinafsi"
+  },
+  "profile.button.edit": {
+    en: "Edit Profile",
+    sw: "Hariri Wasifu"
+  },
+  "profile.label.fullName": {
+    en: "Full Name",
+    sw: "Jina Kamili"
+  },
+  "profile.label.username": {
+    en: "Username",
+    sw: "Jina la Mtumiaji"
+  },
+  "profile.label.email": {
+    en: "Email Address",
+    sw: "Anwani ya Barua Pepe"
+  },
+  "profile.label.phone": {
+    en: "Phone Number",
+    sw: "Namba ya Simu"
+  },
+  "profile.label.gender": {
+   
+   
+   
+    en: "Gender",
+    sw: "Jinsia"
+  },
+  "profile.notSpecified": {
+    en: "Not specified",
+    sw: "Haijabainishwa"
+  },
+  "profile.label.role": {
+    en: "Role",
+    sw: "Wajibu"
+  },
+  "profile.gender.male": {
+    en: "Male",
+    sw: "Mwanaume"
+  },
+  "profile.gender.female": {
+    en: "Female",
+    sw: "Mwanamke"
+  },
+  "profile.gender.other": {
+    en: "Other",
+    sw: "Nyingine"
+  },
+  "profile.gender.preferNot": {
+    en: "Prefer not to say",
+    sw: "Napendelea kutosema"
+  },
+  "profile.loading": {
+    en: "Loading profile...",
+    sw: "Inapakia wasifu..."
+  },
+  "profile.success.update": {
+    en: "Profile updated successfully",
+    sw: "Wasifu umesasishwa kwa mafanikio"
+  },
+  "profile.password.title": {
+    en: "Change Password",
+    sw: "Badilisha Nenosiri"
+  },
+  "profile.password.description": {
+    en: "Update your account password",
+    sw: "Sasisha nenosiri la akaunti yako"
+  },
+  "profile.password.label.current": {
+    en: "Current Password",
+    sw: "Nenosiri la Sasa"
+  },
+  "profile.password.placeholder.current": {
+    en: "Enter your current password",
+    sw: "Ingiza nenosiri lako la sasa"
+  },
+  "profile.password.label.new": {
+    en: "New Password",
+    sw: "Nenosiri Jipya"
+  },
+  "profile.password.placeholder.new": {
+    en: "Enter new password",
+    sw: "Ingiza nenosiri jipya"
+  },
+  "profile.password.label.confirm": {
+    en: "Confirm Password",
+    sw: "Thibitisha Nenosiri"
+  },
+  "profile.password.placeholder.confirm": {
+    en: "Confirm your new password",
+    sw: "Thibitisha nenosiri jipya"
+  },
+  "profile.password.success": {
+    en: "Password updated successfully",
+    sw: "Nenosiri limesasishwa kwa mafanikio"
+  },
+  "profile.password.error.current": {
+    en: "Current password is required",
+    sw: "Nenosiri la sasa linahitajika"
+  },
+  "profile.password.error.new": {
+    en: "New password is required",
+    sw: "Nenosiri jipya linahitajika"
+  },
+  "profile.password.error.match": {
+    en: "Passwords do not match",
+    sw: "Manenosiri hayalingani"
+  },
+  "profile.password.error.length": {
+    en: "Password must be at least 8 characters long",
+    sw: "Nenosiri lazima liwe na angalau herufi 8"
+  },
+  "profile.password.error.update": {
+    en: "Failed to update password. Please check your current password and try again.",
+    sw: "Imeshindwa kusasisha nenosiri. Tafadhali angalia nenosiri lako la sasa na ujaribu tena."
+  },
+  "profile.button.cancel": {
+    en: "Cancel",
+    sw: "Ghairi"
+  },
+  "profile.button.save": {
+    en: "Save Changes",
+    sw: "Hifadhi Mabadiliko"
+  },
+  "profile.button.updating": {
+    en: "Updating...",
+    sw: "Inasasisha..."
+  },
 }
 
 // Create the context with default values
@@ -2040,7 +2189,14 @@ export function useLanguage() {
 }
 
 // Translation component for easy usage in JSX
-export function T({ k }: { k: string }) {
-  const { t } = useLanguage()
-  return <>{t(k)}</>
+export const T = ({ k }: { k: string }) => {
+  const { language } = useLanguage()
+  
+  // Make sure the key exists in translations
+  if (translations[k] && translations[k][language]) {
+    return <>{translations[k][language]}</>
+  }
+  
+  console.log(`Missing translation: ${k}`)
+  return <>{k}</>
 }
