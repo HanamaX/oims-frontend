@@ -1,249 +1,98 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useAuth } from "@/components/auth-provider"
+import { useState } from "react"
 import { useLanguage } from "@/contexts/LanguageContext"
-import ReportComponent from "@/components/report-generator-new"
-import ReportStats from "@/components/report-stats-new"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { BarChart3, FileType, AlertCircle, Download } from "lucide-react"
-import { ReportType } from "@/lib/report-service"
+import { Button } from "@/components/ui/button"
+import { Calendar, Download, FileText, BarChart3, Users, Package, CalendarClock } from "lucide-react"
+import { useAuth } from "@/components/auth-provider"
 
-// Sample data for charts (this would come from your API in a real app)
-const sampleData = {
-  orphans: {
-    demographics: [
-      { name: "Male", value: 123 },
-      { name: "Female", value: 104 },
-    ],
-    ageGroups: [
-      { name: "0-2 years", value: 42 },
-      { name: "3-5 years", value: 58 },
-      { name: "6-12 years", value: 87 },
-      { name: "13-17 years", value: 40 },
-    ],
-    statusDistribution: [
-      { name: "Active", value: 188 },
-      { name: "Adopted", value: 23 },
-      { name: "Inactive", value: 16 },
-    ],
-  },
-  inventory: {
-    categories: [
-      { name: "Food", value: 280 },
-      { name: "Clothing", value: 150 },
-      { name: "Medicine", value: 95 },
-      { name: "School", value: 120 },
-      { name: "Other", value: 75 },
-    ],
-    stockStatus: [
-      { name: "In Stock", value: 550 },
-      { name: "Low Stock", value: 120 },
-      { name: "Out of Stock", value: 50 },
-    ],
-    transactions: [
-      { date: "Jan", value: 42 },
-      { date: "Feb", value: 38 },
-      { date: "Mar", value: 55 },
-      { date: "Apr", value: 47 },
-      { date: "May", value: 63 },
-      { date: "Jun", value: 52 },
-    ],
-  },
-  fundraising: {
-    amounts: [
-      { name: "Education", value: 45000 },
-      { name: "Healthcare", value: 32500 },
-      { name: "Facilities", value: 28000 },
-      { name: "Food", value: 22000 },
-      { name: "Activities", value: 15000 },
-    ],
-    status: [
-      { name: "Pending", value: 7 },
-      { name: "Approved", value: 12 },
-      { name: "Completed", value: 8 },
-      { name: "Rejected", value: 3 },
-    ],
-    timeline: [
-      { date: "Jan", value: 12000 },
-      { date: "Feb", value: 18500 },
-      { date: "Mar", value: 25000 },
-      { date: "Apr", value: 22000 },
-      { date: "May", value: 35000 },
-      { date: "Jun", value: 30000 },
-    ],
-  },
-  volunteers: {
-    status: [
-      { name: "Active", value: 45 },
-      { name: "Inactive", value: 12 },
-      { name: "Pending", value: 8 },
-    ],
-    activities: [
-      { name: "Education", value: 25 },
-      { name: "Healthcare", value: 12 },
-      { name: "Facilities", value: 8 },
-      { name: "Events", value: 15 },
-      { name: "Administration", value: 5 },
-    ],
-    hours: [
-      { date: "Jan", value: 320 },
-      { date: "Feb", value: 285 },
-      { date: "Mar", value: 375 },
-      { date: "Apr", value: 410 },
-      { date: "May", value: 390 },
-      { date: "Jun", value: 425 },
-    ],
-  },
-}
-
-export default function AdminReportsPage() {
-  const { user } = useAuth()
+export default function SupervisorReportsPage() {
   const { t } = useLanguage()
-  const [activeTab, setActiveTab] = useState<ReportType>("orphans")
+  const { user } = useAuth()
+  const [selectedReport, setSelectedReport] = useState<string>("orphans")
   
-  if (!user) {
-    return <div>Loading...</div>
-  }
-
+  const reportTypes = [
+    { id: "orphans", name: t("supervisor.reports.orphans"), icon: <Users className="h-5 w-5" /> },
+    { id: "inventory", name: t("supervisor.reports.inventory"), icon: <Package className="h-5 w-5" /> },
+    { id: "staff", name: t("supervisor.reports.staff"), icon: <Users className="h-5 w-5" /> },
+    { id: "volunteers", name: t("supervisor.reports.volunteers"), icon: <CalendarClock className="h-5 w-5" /> },
+  ]  
   return (
-    <div className="container mx-auto py-6 space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">{t("report.title")}</h1>
-          <p className="text-muted-foreground">
-            {t("report.generate")}
-          </p>
-        </div>
-        <Badge variant="outline" className="px-3 py-1 text-base">
-          {user.branchName || t("branch.label")}
-        </Badge>
-      </div>
-
-      <div className="grid gap-6">        <Alert className="bg-green-50 border-green-200">
-          <AlertCircle className="h-4 w-4 text-green-600" />
-          <AlertTitle>{t("report.restricted")}</AlertTitle>
-          <AlertDescription>
-            {t("report.restriction.description")}
-          </AlertDescription>
-        </Alert><Tabs defaultValue="generator" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 bg-green-100">
+    <div className="p-6 space-y-6">
+      <Tabs defaultValue={selectedReport} onValueChange={setSelectedReport} className="w-full">
+        <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 bg-blue-100">
+          {reportTypes.map(report => (
             <TabsTrigger 
-              value="generator"
-              className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+              key={report.id}
+              value={report.id}
+              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
             >
-              <FileType className="mr-2 h-4 w-4" />
-              {t("report.generator")}
-            </TabsTrigger>
-            <TabsTrigger 
-              value="analytics"
-              className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
-            >
-              <BarChart3 className="mr-2 h-4 w-4" />
-              {t("report.analytics")}
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="generator" className="space-y-6">
-            <ReportComponent 
-              userRole="admin" 
-              branchId={user.publicId || ""} 
-              branchName={user.branchName || ""}
-            />
-          </TabsContent>
-          
-          <TabsContent value="analytics" className="space-y-6">            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ReportType)}>
-              <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 bg-green-100">                <TabsTrigger 
-                  value="orphans"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
-                >
-                  {t("report.orphans")}
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="inventory"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
-                >
-                  {t("report.inventory")}
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="fundraising"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
-                >
-                  {t("report.fundraising")}
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="volunteers"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
-                >
-                  {t("report.volunteers")}
-                </TabsTrigger>
-              </TabsList>
-              
-              <div className="mb-6">
-                <ReportStats 
-                  data={
-                    activeTab === "orphans" 
-                      ? sampleData.orphans 
-                      : activeTab === "inventory" 
-                        ? sampleData.inventory 
-                        : activeTab === "fundraising" 
-                          ? sampleData.fundraising 
-                          : sampleData.volunteers
-                  } 
-                  type={activeTab}
-                />
+              <div className="flex items-center space-x-2">
+                {report.icon}
+                <span>{report.name}</span>
               </div>
-                <div className="grid gap-6 md:grid-cols-2">                <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-                    <CardTitle className="text-base text-green-800">{t("report.summary")}</CardTitle>
-                    <CardDescription>{t("report.branchOverview")}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4 pt-4">
-                    <div className="flex justify-between">
-                      <span className="text-green-700">{t("report.totalOrphans")}</span>
-                      <span className="font-medium text-green-800">{user.dashboardStats?.totalOrphans || 0}</span>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        
+        {reportTypes.map(report => (
+          <TabsContent key={report.id} value={report.id} className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  {report.icon}
+                  <span>{report.name}</span>
+                </CardTitle>
+                <CardDescription>{t("report.note")}</CardDescription>
+              </CardHeader>
+              
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Card className="border p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-medium flex items-center">
+                        <FileText className="h-5 w-5 mr-2" />
+                        {t("report.action.generate")}
+                      </h3>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-green-700">{t("report.activeVolunteers")}</span>
-                      <span className="font-medium text-green-800">{user.dashboardStats?.totalVolunteers || 0}</span>
+                    <div className="space-y-4">
+                      <div className="flex items-center">
+                        <Calendar className="h-4 w-4 mr-2 text-blue-500" />
+                        <span className="text-sm">{t("report.dateRange")}</span>
+                      </div>
+                      <Button className="w-full">
+                        <Download className="h-4 w-4 mr-2" />
+                        {t("report.action.generate")}
+                      </Button>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-green-700">{t("report.fundraisingCampaigns")}</span>
-                      <span className="font-medium text-green-800">{user.dashboardStats?.totalFundraising || 0}</span>
+                  </Card>
+                  
+                  <Card className="border p-4 shadow-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-medium flex items-center">
+                        <BarChart3 className="h-5 w-5 mr-2" />
+                        {t("report.action.view")}
+                      </h3>
                     </div>
-                  </CardContent>
-                </Card>                  <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">                  <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-                    <CardTitle className="text-base text-green-800">{t("report.recentReports")}</CardTitle>
-                    <CardDescription>{t("report.previouslyGenerated")}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-4">
-                    <ul className="space-y-3">
-                      <li className="flex items-center justify-between text-sm">
-                        <span className="text-green-700">{t("report.monthlyOrphan")}</span>
-                        <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
-                      </li>
-                      <li className="flex items-center justify-between text-sm">
-                        <span className="text-green-700">{t("report.inventoryStatus")}</span>
-                        <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
-                      </li>
-                      <li className="flex items-center justify-between text-sm">
-                        <span className="text-green-700">{t("report.volunteerHours")}</span>
-                        <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
-                      </li>
-                      <li className="flex items-center justify-between text-sm">
-                        <span className="text-green-700">{t("report.fundraisingSummary")}</span>
-                        <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>              </div>
-            </Tabs>
+                    <div className="space-y-4">
+                      <p className="text-sm text-gray-500">
+                        {t("supervisor.reports.description")}
+                      </p>
+                      <Button variant="outline" className="w-full">
+                        {t("report.action.view")}
+                      </Button>
+                    </div>
+                  </Card>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
-        </Tabs>
-      </div>
+        ))}
+      </Tabs>
+    </div>
+  )
     </div>
   )
 }

@@ -99,13 +99,11 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
     }
 
     // List of protected routes
-    const protectedRoutes = ["/dashboard", "/orphans", "/volunteers", "/fundraisers", "/inventory", "/profile"]
-
-    // Check if current path is protected
-    const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
-
-    // If trying to access protected route without auth, redirect to login
-    if (isProtectedRoute && !user) {
+    const protectedRoutes = ["/dashboard", "/orphans", "/volunteers", "/fundraisers", "/inventory", "/profile"]    // Check if current path is protected
+    const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))    // If trying to access protected route without auth, redirect to login
+    // Skip this check for superuser routes or if superuser auth is set
+    const superuserAuth = typeof window !== 'undefined' && localStorage.getItem('superuser_auth') === 'true';
+    if (isProtectedRoute && !user && !pathname.startsWith("/superuser") && !superuserAuth) {
       console.log("Redirecting to login: Protected route without auth")
       router.push("/login")
     }

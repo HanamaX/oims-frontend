@@ -18,7 +18,7 @@ export function ThemedPageLayout({
   className = ""
 }: PageLayoutProps) {
   return (
-    <div className={`space-y-6 p-6 pb-16 fade-in ${className}`}>
+    <div className={`w-full space-y-6 p-6 pb-16 fade-in ${className}`}>
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-bold tracking-tight text-theme-text-primary">

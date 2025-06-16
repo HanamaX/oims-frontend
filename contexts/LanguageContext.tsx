@@ -14,6 +14,54 @@ type LanguageContextType = {
 
 // Create translations object
 const translations: Record<string, Record<Language, string>> = {
+  // Common UI elements
+  "loading": {
+    en: "Loading...",
+    sw: "Inapakia...",
+  },
+  
+  // Supervisor Dashboard
+  "supervisor.title": {
+    en: "Supervisor Dashboard",
+    sw: "Dashibodi ya Msimamizi",
+  },
+  "supervisor.overview": {
+    en: "Overview",
+    sw: "Muhtasari",
+  },
+  "supervisor.reports.title": {
+    en: "Reports & Analytics",
+    sw: "Ripoti na Uchambuzi",
+  },
+  "supervisor.reports.description": {
+    en: "Generate reports and view analytics for your center",
+    sw: "Tengeneza ripoti na angalia uchambuzi wa kituo chako",
+  },
+  "supervisor.reports.generate": {
+    en: "Generate Report",
+    sw: "Tengeneza Ripoti",
+  },
+  "supervisor.reports.view": {
+    en: "View Reports",
+    sw: "Angalia Ripoti",
+  },
+  "supervisor.reports.orphans": {
+    en: "Orphan Reports",
+    sw: "Ripoti za Yatima",
+  },
+  "supervisor.reports.inventory": {
+    en: "Inventory Reports",
+    sw: "Ripoti za Bidhaa",
+  },
+  "supervisor.reports.staff": {
+    en: "Staff Reports",
+    sw: "Ripoti za Wafanyakazi",
+  },
+  "supervisor.reports.volunteers": {
+    en: "Volunteer Reports",
+    sw: "Ripoti za Wajitolea",
+  },
+  
   // Common
   "app.name": {
     en: "HopeFoundation",
@@ -44,6 +92,10 @@ const translations: Record<string, Record<Language, string>> = {
   "nav.logout": {
     en: "Log out",
     sw: "Toka",
+  },
+  "nav.superuser": {
+    en: "Superuser",
+    sw: "Mtumiaji mkuu"
   },
 
   // Dashboard
@@ -1708,8 +1760,8 @@ const translations: Record<string, Record<Language, string>> = {
   },
   // Report generator form fields and labels
   "report.dateRange": {
-    en: "Date Range",
-    sw: "Kipindi cha Tarehe",
+    en: "Select Date Range",
+    sw: "Chagua Kipindi cha Tarehe",
   },
   "report.ageGroup": {
     en: "Age Group",
@@ -1987,6 +2039,7 @@ const translations: Record<string, Record<Language, string>> = {
   "report.activities": {
     en: "Activities",
     sw: "Shughuli",
+      
   },
   "report.administration": {
     en: "Administration",
@@ -2035,6 +2088,7 @@ const translations: Record<string, Record<Language, string>> = {
     sw: "Namba ya Simu"
   },
   "profile.label.gender": {
+   
    
    
    

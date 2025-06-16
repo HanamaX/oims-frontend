@@ -39,10 +39,9 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Content wrapper */}
-      <div className="flex flex-col min-h-screen">
-      {/* Navigation */}
+      <div className="flex flex-col min-h-screen">      {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container flex h-16 items-center justify-between">
+        <div className="w-full px-4 md:px-8 flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/" className="font-bold text-xl text-blue-700">
               <T k="app.name" />
@@ -52,12 +51,17 @@ export default function HomePage() {
                 <T k="nav.about" />
               </Link>
             </nav>
-          </div>
-          <div className="flex items-center gap-4">
+          </div><div className="flex items-center gap-4">
             <LanguageSwitcher />
             <Link href="/login">
               <Button variant="outline">
                 <T k="nav.login" />
+              </Button>
+            </Link>
+            {/* Always display superuser button */}
+            <Link href="/superuser/dashboard">
+              <Button variant="default" className="bg-green-600 hover:bg-green-700 !important">
+                <T k="nav.superuser" />
               </Button>
             </Link>
             <Button
@@ -70,18 +74,22 @@ export default function HomePage() {
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
-        </div>
-
-        {/* Mobile menu */}
+        </div>        {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t">
-            <div className="container py-4 space-y-2">
-              <Link
+          <div className="md:hidden bg-white border-t w-full">
+            <div className="w-full px-4 md:px-8 py-4 space-y-2">              <Link
                 href="/about-us"
                 className="block px-3 py-2 text-sm font-medium rounded-md hover:bg-blue-50"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <T k="nav.about" />
+              </Link>{/* Always show superuser link in mobile menu */}
+              <Link
+                href="/superuser/dashboard"
+                className="block px-3 py-2 text-sm font-medium rounded-md bg-green-100 text-green-800 hover:bg-green-200 !important"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <T k="nav.superuser" />
               </Link>
               <div className="flex items-center gap-2 pt-2">
                 <div className="text-sm font-medium">
@@ -111,8 +119,7 @@ export default function HomePage() {
         ></div>
         {/* Gradient overlay for text readability */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-900/70 to-blue-900/30"></div>
-        
-        <div className="container mx-auto px-4 md:px-6 z-20">
+          <div className="w-full px-4 md:px-8 z-20">
           <div 
             className="max-w-2xl text-white space-y-8 p-8 backdrop-blur-sm bg-blue-900/10 rounded-lg shadow-xl relative overflow-hidden"
           >
@@ -141,10 +148,9 @@ export default function HomePage() {
         
         {/* Content wrapper */}
         <div className="relative z-10">
-      
-      {/* Mission Stats with improved styling and performance optimized animation */}
+        {/* Mission Stats with improved styling and performance optimized animation */}
       <section className="py-16 bg-white/90 backdrop-blur-md mt-10 rounded-t-3xl">
-        <div className="container px-4 md:px-6">
+        <div className="w-full px-4 md:px-8">
           <ScrollAnimation className="text-center mb-12" animationClass="animate-fade-in">
             <h2 className="text-3xl font-bold text-blue-800 mb-4 relative inline-block">
               <T k="home.mission.title" />

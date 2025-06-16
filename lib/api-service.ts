@@ -82,8 +82,7 @@ API.interceptors.response.use(
       console.error("Request timed out. Server might be overloaded or unreachable.");
       error.friendlyMessage = "Request timed out. Please try again later.";
     }
-    
-    // Handle authorization errors (401)
+      // Handle authorization errors (401)
     if (error.response?.status === 401) {
       console.error("Authentication error (401). Token might be invalid or expired.");
       error.friendlyMessage = "Your session has expired. Please log in again.";
@@ -92,8 +91,10 @@ API.interceptors.response.use(
       localStorage.removeItem("jwt_token");
       localStorage.removeItem("user");
       
-      // Only redirect if we're in a browser environment and not already on login page
-      if (typeof window !== "undefined" && !window.location.pathname.includes("/login")) {
+      // Only redirect if we're in a browser environment, not already on login page, and not a superuser route
+      if (typeof window !== "undefined" && 
+          !window.location.pathname.includes("/login") && 
+          !window.location.pathname.includes("/superuser")) {
         // Use a timeout to ensure the error is properly returned before redirect
         setTimeout(() => {
           window.location.href = "/login?expired=true";
