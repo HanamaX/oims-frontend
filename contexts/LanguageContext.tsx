@@ -14,6 +14,54 @@ type LanguageContextType = {
 
 // Create translations object
 const translations: Record<string, Record<Language, string>> = {
+  // Common UI elements
+  "loading": {
+    en: "Loading...",
+    sw: "Inapakia...",
+  },
+  
+  // Supervisor Dashboard
+  "supervisor.title": {
+    en: "Supervisor Dashboard",
+    sw: "Dashibodi ya Msimamizi",
+  },
+  "supervisor.overview": {
+    en: "Overview",
+    sw: "Muhtasari",
+  },
+  "supervisor.reports.title": {
+    en: "Reports & Analytics",
+    sw: "Ripoti na Uchambuzi",
+  },
+  "supervisor.reports.description": {
+    en: "Generate reports and view analytics for your center",
+    sw: "Tengeneza ripoti na angalia uchambuzi wa kituo chako",
+  },
+  "supervisor.reports.generate": {
+    en: "Generate Report",
+    sw: "Tengeneza Ripoti",
+  },
+  "supervisor.reports.view": {
+    en: "View Reports",
+    sw: "Angalia Ripoti",
+  },
+  "supervisor.reports.orphans": {
+    en: "Orphan Reports",
+    sw: "Ripoti za Yatima",
+  },
+  "supervisor.reports.inventory": {
+    en: "Inventory Reports",
+    sw: "Ripoti za Bidhaa",
+  },
+  "supervisor.reports.staff": {
+    en: "Staff Reports",
+    sw: "Ripoti za Wafanyakazi",
+  },
+  "supervisor.reports.volunteers": {
+    en: "Volunteer Reports",
+    sw: "Ripoti za Wajitolea",
+  },
+  
   // Common
   "app.name": {
     en: "HopeFoundation",
@@ -44,6 +92,10 @@ const translations: Record<string, Record<Language, string>> = {
   "nav.logout": {
     en: "Log out",
     sw: "Toka",
+  },
+  "nav.superuser": {
+    en: "Superuser",
+    sw: "Mtumiaji mkuu"
   },
 
   // Dashboard
@@ -156,10 +208,16 @@ const translations: Record<string, Record<Language, string>> = {
   "branch.orphanCapacity": {
     en: "Orphan Capacity",
     sw: "Uwezo wa Yatima",
-  },
-  "branch.orphans": {
+  },  "branch.orphans": {
     en: "orphans",
     sw: "yatima",
+  },  "branch.all": {
+    en: "All Branches",
+    sw: "Matawi Yote",
+  },
+  "branch.label": {
+    en: "Branch",
+    sw: "Tawi",
   },
   "branch.inventoryStatus": {
     en: "Inventory Status",
@@ -277,13 +335,24 @@ const translations: Record<string, Record<Language, string>> = {
   },
   "staff.finance": {
     en: "Finance",
-    sw: "Fedha",
-  },
+    sw: "Fedha",  },
 
   // Orphan
   "orphan.age": {
     en: "Age",
     sw: "Umri",
+  },
+  "orphan.yearsOld": {
+    en: "years old",
+    sw: "miaka",
+  },
+  "orphan.dateOfBirth": {
+    en: "Date of Birth",
+    sw: "Tarehe ya Kuzaliwa",
+  },
+  "orphan.hasProfileImage": {
+    en: "Has Profile Image",
+    sw: "Ana Picha ya Wasifu",
   },
   "orphan.gender": {
     en: "Gender",
@@ -314,6 +383,94 @@ const translations: Record<string, Record<Language, string>> = {
   "inventory.updated": {
     en: "Last Updated",
     sw: "Imesasishwa mwisho",
+  },
+  "inventory.management": {
+    en: "Inventory Management",
+    sw: "Usimamizi wa Bidhaa",
+  },
+  "inventory.viewManage": {
+    en: "View and manage all inventory items in the system",
+    sw: "Angalia na simamia bidhaa zote kwenye mfumo",
+  },
+  "inventory.addItem": {
+    en: "Add Item",
+    sw: "Ongeza Bidhaa",
+  },
+  "inventory.search": {
+    en: "Search inventory...",
+    sw: "Tafuta bidhaa...",
+  },
+  "inventory.filterByCategory": {
+    en: "Filter by category",
+    sw: "Chuja kwa kategoria",
+  },
+  "inventory.allCategories": {
+    en: "All Categories",
+    sw: "Kategoria Zote",
+  },
+  "inventory.loading": {
+    en: "Loading inventory items...",
+    sw: "Inapakia bidhaa...",
+  },
+  "inventory.tryAgain": {
+    en: "Try Again",
+    sw: "Jaribu Tena",
+  },
+  "inventory.price": {
+    en: "Price",
+    sw: "Bei",
+  },
+  "inventory.minQuantity": {
+    en: "Min Quantity",
+    sw: "Kiasi cha Chini",
+  },
+  "inventory.created": {
+    en: "Created",
+    sw: "Imeundwa",
+  },
+  "inventory.lowStock": {
+    en: "Low Stock",
+    sw: "Bidhaa Zinakaribia Kuisha",
+  },
+  "inventory.viewDetails": {
+    en: "View Details & Transactions",
+    sw: "Angalia Maelezo & Miamala",
+  },
+  "inventory.noItems": {
+    en: "No inventory items found matching your criteria.",
+    sw: "Hakuna bidhaa zilizopatikana zinazofanana na vigezo vyako.",
+  },
+  "inventory.addSuccess": {
+    en: "Inventory item \"{0}\" added successfully",
+    sw: "Bidhaa \"{0}\" imeongezwa kwa mafanikio",
+  },
+  "inventory.addFail": {
+    en: "Failed to add inventory item. Please try again.",
+    sw: "Imeshindwa kuongeza bidhaa. Tafadhali jaribu tena.",
+  },
+  "inventory.education": {
+    en: "Education",
+    sw: "Elimu",
+  },
+  "inventory.apparel": {
+    en: "Apparel",
+    sw: "Mavazi",
+  },
+  "inventory.nutrition": {
+    en: "Nutrition",
+    sw: "Lishe",
+  },
+  "inventory.medical": {
+    en: "Medical",
+    sw: "Matibabu",
+  },
+  "inventory.creative": {
+    en: "Creative",
+    sw: "Ubunifu",
+  },
+  "inventory.close": {
+    en: "Close",
+    sw: "Funga",
   },
 
   // Fundraiser
@@ -530,18 +687,1513 @@ const translations: Record<string, Record<Language, string>> = {
   "home.share.title": {
     en: "Share",
     sw: "Shiriki",
-  },
-  "home.share.description": {
+  },  "home.share.description": {
     en: "Share your campaign and reach more people via most popular social media channels.",
     sw: "Shiriki kampeni yako na ufikie watu wengi zaidi kupitia njia maarufu za mitandao ya kijamii.",
+  },
+  
+  // Impact cards section
+  "home.impact.title": {
+    en: "Making a Difference Together",
+    sw: "Kuleta Mabadiliko Pamoja",
+  },
+  "home.impact.subtitle": {
+    en: "Discover how our orphanage is transforming lives and how you can be part of this journey",
+    sw: "Gundua jinsi nyumba yetu ya watoto yatima inavyobadilisha maisha na jinsi unaweza kuwa sehemu ya safari hii",
+  },
+  "home.volunteer.card.title": {
+    en: "Start Volunteer With Us",
+    sw: "Anza Kujitolea Nasi",
+  },
+  "home.volunteer.card.description": {
+    en: "Join our team to support children in need",
+    sw: "Jiunge na timu yetu kusaidia watoto wanaohitaji",
+  },
+  "home.volunteer.card.content": {
+    en: "Become a volunteer and make a direct impact on children's lives. Your time and skills can help create a brighter future for those who need it most.",
+    sw: "Kuwa mjitolea na fanya athari ya moja kwa moja katika maisha ya watoto. Muda na ujuzi wako unaweza kusaidia kujenga mustakabali mzuri zaidi kwa wale wanaohitaji zaidi.",
+  },
+  "home.volunteer.card.button": {
+    en: "Volunteer With Us",
+    sw: "Jitolee Nasi",
+  },
+  "home.news.card.title": {
+    en: "Ongoing News",
+    sw: "Habari Zinazoendelea",
+  },
+  "home.news.card.description": {
+    en: "Stay updated with the latest news and events",
+    sw: "Endelea kupata habari za hivi karibuni na matukio",
+  },
+  "home.news.card.content": {
+    en: "Get the latest updates on our campaigns, success stories, and upcoming events. Stay connected with our community and see the impact of our collective efforts.",
+    sw: "Pata taarifa za hivi karibuni kuhusu kampeni zetu, hadithi za mafanikio, na matukio yajayo. Endelea kuwa na mawasiliano na jamii yetu na uone athari ya juhudi zetu za pamoja.",
+  },
+  "home.news.card.button": {
+    en: "Explore News",
+    sw: "Chunguza Habari",
+  },
+  "home.campaign.card.title": {
+    en: "Join a Campaign",
+    sw: "Jiunge na Kampeni",
+  },
+  "home.campaign.card.description": {
+    en: "Participate in our ongoing initiatives",
+    sw: "Shiriki katika mipango yetu inayoendelea",
+  },
+  "home.campaign.card.content": {
+    en: "Join our campaigns to make a difference. Our campaigns, fundraising, and orphanage initiatives provide essential support, education, and healthcare to children in need. Your participation creates meaningful change in these children's lives.",
+    sw: "Jiunge na kampeni zetu kuleta mabadiliko. Kampeni zetu, ukusanyaji wa fedha, na mipango ya makazi ya watoto yatima hutoa msaada muhimu, elimu, na huduma za afya kwa watoto wanaohitaji. Ushirika wako unaleta mabadiliko muhimu katika maisha ya watoto hawa.",
+  },
+  "home.campaign.card.button": {
+    en: "Learn More",
+    sw: "Jifunze Zaidi",
+  },
+  
+  // Footer section
+  "footer.about.title": {
+    en: "About",
+    sw: "Kuhusu",
+  },
+  "footer.about.aboutUs": {
+    en: "About Us",
+    sw: "Kuhusu Sisi",
+  },
+  "footer.about.why": {
+    en: "Why HopeFoundation",
+    sw: "Kwa Nini HopeFoundation",
+  },
+  "footer.about.impact": {
+    en: "Our Impact",
+    sw: "Athari Yetu",
+  },
+  "footer.resources.title": {
+    en: "Resources",
+    sw: "Rasilimali",
+  },
+  "footer.resources.faq": {
+    en: "FAQ",
+    sw: "Maswali",
+  },
+  "footer.resources.campaigns": {
+    en: "Discover Campaigns",
+    sw: "Gundua Kampeni",
+  },
+  "footer.legal.title": {
+    en: "Legal",
+    sw: "Kisheria",
+  },
+  "footer.legal.terms": {
+    en: "Terms of Service",
+    sw: "Masharti ya Huduma",
+  },
+  "footer.legal.privacy": {
+    en: "Privacy Policy",
+    sw: "Sera ya Faragha",
+  },
+  "footer.connect.title": {
+    en: "Connect",
+    sw: "Unganisha",
+  },
+  "footer.newsletter": {
+    en: "Sign up for our newsletter to stay updated",
+    sw: "Jisajili kwa jarida letu ili kuendelea kupata taarifa",
   },
   "footer.support": {
     en: "Support | Terms of Service | Privacy Policy",
     sw: "Msaada | Masharti ya Huduma | Sera ya Faragha",
-  },
-  "footer.copyright": {
+  },  "footer.copyright": {
     en: "© 2025 HopeFoundation. All rights reserved.",
     sw: "© 2025 HopeFoundation. Haki zote zimehifadhiwa.",
+  },
+
+  // About Us Page
+  // Navigation Header
+  "about.signin": {
+    en: "Sign In",
+    sw: "Ingia",
+  },
+
+  // Hero Section
+  "about.hero.title": {
+    en: "About Hope Foundation",
+    sw: "Kuhusu Hope Foundation",
+  },
+  "about.hero.description": {
+    en: "Dedicated to providing care, education, and opportunities for orphaned children since 2010",
+    sw: "Tumejitolea kutoa huduma, elimu, na fursa kwa watoto yatima tangu 2010",
+  },
+
+  // Mission & Vision
+  "about.mission.title": {
+    en: "Our Mission",
+    sw: "Dhamira Yetu",
+  },
+  "about.mission.description": {
+    en: "To provide a nurturing and supportive environment for orphaned children, ensuring they receive the care, education, and opportunities they need to thrive and become self-sufficient adults.",
+    sw: "Kutoa mazingira ya malezi na msaada kwa watoto yatima, kuhakikisha wanapata huduma, elimu, na fursa wanazohitaji kustawi na kuwa watu wazima wanaojitegemea.",
+  },
+  "about.vision.title": {
+    en: "Our Vision",
+    sw: "Maono Yetu",
+  },
+  "about.vision.description": {
+    en: "A world where every orphaned child has access to quality care, education, and the opportunity to reach their full potential, regardless of their background or circumstances.",
+    sw: "Dunia ambapo kila mtoto yatima ana uwezo wa kupata huduma bora, elimu, na fursa ya kufikia uwezo wao kamili, bila kujali historia yao au mazingira.",
+  },
+
+  // Our Story
+  "about.story.title": {
+    en: "Our Story",
+    sw: "Hadithi Yetu",
+  },
+  "about.story.subtitle": {
+    en: "How Hope Foundation began and where we are today",
+    sw: "Jinsi Hope Foundation ilianzishwa na tulipofikia leo",
+  },
+  "about.story.paragraph1": {
+    en: "Hope Foundation was established in 2010 by a group of dedicated individuals who recognized the urgent need to provide care and support for orphaned children in our community. What began as a small initiative with just 10 children has now grown into a comprehensive orphanage management system supporting over 150 children across multiple branches.",
+    sw: "Hope Foundation ilianzishwa mnamo 2010 na kikundi cha watu waliojitolea ambao walitambua hitaji la dharura la kutoa huduma na msaada kwa watoto yatima katika jamii yetu. Kilianza kama mpango mdogo wenye watoto 10 tu sasa umekua na kuwa mfumo kamili wa usimamizi wa makazi ya watoto yatima unaosaidia zaidi ya watoto 150 katika matawi mbalimbali.",
+  },
+  "about.story.paragraph2": {
+    en: "Our journey has been one of continuous growth and learning. We started with a single facility and limited resources, but through the generosity of donors and the dedication of our volunteers and staff, we have expanded our reach and improved our services year after year.",
+    sw: "Safari yetu imekuwa ya ukuaji na kujifunza endelevu. Tulianza na kituo kimoja na rasilimali chache, lakini kupitia ukarimu wa wafadhili na kujitolea kwa watu wetu wa kujitolea na wafanyakazi, tumepanua ufikiwaji wetu na kuboresha huduma zetu mwaka baada ya mwaka.",
+  },
+  "about.story.paragraph3": {
+    en: "Today, Hope Foundation operates four branches, each providing a safe and nurturing environment for orphaned children. We offer comprehensive care that includes not just shelter and food, but also education, healthcare, counseling, and various developmental programs designed to help our children grow into confident, self-sufficient adults.",
+    sw: "Leo, Hope Foundation inaendesha matawi manne, kila moja linatoa mazingira salama na ya malezi kwa watoto yatima. Tunatoa huduma kamili inayojumuisha si tu malazi na chakula, lakini pia elimu, huduma za afya, ushauri nasaha, na programu mbalimbali za maendeleo zilizoundwa kusaidia watoto wetu kukua na kuwa watu wazima wenye kujiamini na kujitegemea.",
+  },
+  "about.story.paragraph4": {
+    en: "Our success stories are numerous, with many of our former residents now pursuing higher education, building successful careers, and giving back to the community that once supported them. We remain committed to our mission and continue to seek ways to improve and expand our services to reach more children in need.",
+    sw: "Hadithi zetu za mafanikio ni nyingi, wengi wa wakazi wetu wa zamani sasa wanafuata elimu ya juu, wanajenga kazi za mafanikio, na kurudisha kwa jamii iliyowasaidia hapo awali. Tunaendelea kuwa tumejitolea kwa dhamira yetu na kuendelea kutafuta njia za kuboresha na kupanua huduma zetu kufikia watoto wengi zaidi wanaohitaji.",
+  },
+
+  // What We Do
+  "about.whatwedo.title": {
+    en: "What We Do",
+    sw: "Tunachofanya",
+  },
+  "about.whatwedo.subtitle": {
+    en: "Our comprehensive approach to orphan care",
+    sw: "Mbinu yetu kamili ya huduma kwa yatima",
+  },
+  "about.shelter.title": {
+    en: "Shelter & Care",
+    sw: "Makazi & Huduma",
+  },
+  "about.shelter.description": {
+    en: "We provide safe, comfortable housing and daily care for all children, ensuring their basic needs are met in a loving environment.",
+    sw: "Tunatoa makazi salama, ya starehe na huduma za kila siku kwa watoto wote, tukihakikisha mahitaji yao ya msingi yanatimizwa katika mazingira ya upendo.",
+  },
+  "about.education.title": {
+    en: "Education",
+    sw: "Elimu",
+  },
+  "about.education.description": {
+    en: "We ensure all children receive quality education, from primary school through higher education, tailored to their abilities and interests.",
+    sw: "Tunahakikisha watoto wote wanapata elimu bora, kuanzia shule ya msingi hadi elimu ya juu, iliyotengenezwa kulingana na uwezo na maslahi yao.",
+  },
+  "about.counseling.title": {
+    en: "Counseling & Support",
+    sw: "Ushauri & Msaada",
+  },
+  "about.counseling.description": {
+    en: "Our professional counselors provide emotional support and guidance to help children overcome trauma and build resilience.",
+    sw: "Washauri wetu wa kitaaluma hutoa msaada wa kihisia na mwongozo kusaidia watoto kushinda maumivu na kujenga ustahimilivu.",
+  },
+
+  // Contact Information
+  "about.contact.title": {
+    en: "Contact Us",
+    sw: "Wasiliana Nasi",
+  },
+  "about.contact.subtitle": {
+    en: "Get in touch with Hope Foundation",
+    sw: "Wasiliana na Hope Foundation",
+  },
+  "about.contact.office": {
+    en: "Main Office",
+    sw: "Ofisi Kuu",
+  },
+  "about.contact.address": {
+    en: "123 Hope Street, Springfield, ST 12345",
+    sw: "123 Hope Street, Springfield, ST 12345",
+  },
+  "about.contact.phone": {
+    en: "Phone",
+    sw: "Simu",
+  },
+  "about.contact.phoneNumber": {
+    en: "(123) 456-7890",
+    sw: "(123) 456-7890",
+  },
+  "about.contact.email": {
+    en: "Email",
+    sw: "Barua pepe",
+  },
+  "about.contact.emailAddress": {
+    en: "info@hopefoundation.org",
+    sw: "info@hopefoundation.org",
+  },
+  "about.contact.hours": {
+    en: "Office Hours",
+    sw: "Saa za Ofisi",
+  },
+  "about.contact.hoursDetails": {
+    en: "Monday - Friday: 9:00 AM - 5:00 PM",
+    sw: "Jumatatu - Ijumaa: 9:00 Asubuhi - 5:00 Jioni",
+  },
+
+  // Get Involved
+  "about.getinvolved.title": {
+    en: "Get Involved",
+    sw: "Shiriki",
+  },
+  "about.getinvolved.description": {
+    en: "There are many ways you can support our mission and make a difference in the lives of orphaned children.",
+    sw: "Kuna njia nyingi unaweza kusaidia dhamira yetu na kuleta tofauti katika maisha ya watoto yatima.",
+  },
+  "about.getinvolved.fundraiser": {
+    en: "Start a Fundraiser",
+    sw: "Anza Mchango",
+  },
+  "about.getinvolved.volunteer": {
+    en: "Volunteer With Us",
+    sw: "Jitolee Nasi",
+  },
+  "about.getinvolved.donate": {
+    en: "Make a Donation",
+    sw: "Fanya Mchango",
+  },
+
+  // Footer
+  "about.footer.copyright": {
+    en: "© 2025 Hope Foundation. All rights reserved.",
+    sw: "© 2025 Hope Foundation. Haki zote zimehifadhiwa.",
+  },  "about.footer.nonprofit": {
+    en: "A registered non-profit organization dedicated to orphan care.",
+    sw: "Shirika la kijamii lililosajiliwa na kujitolea kwa huduma ya watoto yatima.",
+  },
+  
+  // Login Page
+  "login.backToHome": {
+    en: "Back to Home",
+    sw: "Rudi Nyumbani",
+  },
+  "login.welcomeBack": {
+    en: "Welcome Back",
+    sw: "Karibu Tena",
+  },
+  "login.signInAccess": {
+    en: "Sign in to access your dashboard",
+    sw: "Ingia ili kupata dashibodi yako",
+  },  "login.username": {
+    en: "Username",
+    sw: "Jina la mtumiaji",
+  },
+  "login.enterUsername": {
+    en: "Enter your username",
+    sw: "Ingiza jina lako la mtumiaji",
+  },
+  "login.password": {
+    en: "Password",
+    sw: "Nenosiri",
+  },
+  "login.enterPassword": {
+    en: "Enter your password",
+    sw: "Ingiza nenosiri lako",
+  },
+  "login.forgotPassword": {
+    en: "Forgot password?",
+    sw: "Umesahau nenosiri?",
+  },
+  "login.signIn": {
+    en: "Sign In",
+    sw: "Ingia",
+  },
+  "login.loggingIn": {
+    en: "Logging in...",
+    sw: "Inaingia...",
+  },
+  "login.termsAgreement": {
+    en: "By logging in, you agree to our",
+    sw: "Kwa kuingia, unakubali",
+  },
+  "login.termsOfService": {
+    en: "Terms of Service",
+    sw: "Masharti ya Huduma",
+  },
+  "login.and": {
+    en: "and",
+    sw: "na",
+  },
+  "login.privacyPolicy": {
+    en: "Privacy Policy",
+    sw: "Sera ya Faragha",
+  },
+  "login.orphanageSystem": {
+    en: "Orphanage Management System",
+    sw: "Mfumo wa Usimamizi wa Makazi ya Watoto Yatima",
+  },
+  "login.empoweringCaregivers": {
+    en: "Empowering caregivers and administrators to provide the best support for children in need.",
+    sw: "Kuwawezesha walezi na wasimamizi kutoa msaada bora kwa watoto wanaohitaji.",
+  },
+  "login.copyright": {
+    en: "© 2025 Orphanage Management System. All rights reserved.",
+    sw: "© 2025 Mfumo wa Usimamizi wa Makazi ya Watoto Yatima. Haki zote zimehifadhiwa.",
+  },
+  "login.usernameRequired": {
+    en: "Username is required",
+    sw: "Jina la mtumiaji linahitajika",
+  },
+  "login.passwordRequired": {
+    en: "Password is required",
+    sw: "Nenosiri linahitajika",
+  },
+  "login.invalidCredentials": {
+    en: "Invalid username or password",
+    sw: "Jina la mtumiaji au nenosiri batili",
+  },
+  "login.networkError": {
+    en: "Unable to connect to the server. Please check your internet connection or try again later.",
+    sw: "Haiwezi kuunganisha na seva. Tafadhali angalia muunganisho wako wa intaneti au jaribu tena baadaye.",
+  },  "login.generalError": {
+    en: "An error occurred during login",
+    sw: "Hitilafu imetokea wakati wa kuingia",
+  },
+  
+  // Admin Dashboard
+  "admin.dashboard.title": {
+    en: "Admin Dashboard",
+    sw: "Dashibodi ya Msimamizi",
+  },
+  "admin.dashboard.welcome": {
+    en: "Welcome back",
+    sw: "Karibu tena",
+  },
+  "admin.dashboard.overview": {
+    en: "Here's an overview of",
+    sw: "Hapa ni muhtasari wa",
+  },
+  "admin.dashboard.yourBranch": {
+    en: "your branch",
+    sw: "tawi lako",
+  },
+  "admin.dashboard.loading": {
+    en: "Loading dashboard...",
+    sw: "Inapakia dashibodi...",
+  },
+  "admin.dashboard.totalOrphans": {
+    en: "Total Orphans",
+    sw: "Jumla ya Yatima",
+  },
+  "admin.dashboard.currentBranchTotal": {
+    en: "Current branch total",
+    sw: "Jumla ya tawi la sasa",
+  },
+  "admin.dashboard.totalFunds": {
+    en: "Total Funds",
+    sw: "Jumla ya Fedha",
+  },
+  "admin.dashboard.fundsRaised": {
+    en: "Total funds raised",
+    sw: "Jumla ya fedha zilizokusanywa",
+  },
+  "admin.dashboard.branchName": {
+    en: "Branch Name",
+    sw: "Jina la Tawi",
+  },
+  "admin.dashboard.currentLocation": {
+    en: "Current location",
+    sw: "Mahali pa sasa",
+  },
+  "admin.dashboard.activeBranch": {
+    en: "Active Branch",
+    sw: "Tawi Linalofanya Kazi",
+  },
+  "admin.dashboard.volunteers": {
+    en: "Volunteers",
+    sw: "Wajitolea",
+  },
+  "admin.dashboard.fromLastMonth": {
+    en: "+3 from last month",
+    sw: "+3 kutoka mwezi uliopita",
+  },
+  "admin.dashboard.recentActivities": {
+    en: "Recent Activities",
+    sw: "Shughuli za Hivi Karibuni",
+  },
+  "admin.dashboard.unreadNotifications": {
+    en: "You have",
+    sw: "Una",
+  },
+  "admin.dashboard.unreadNotificationsIn": {
+    en: "unread notifications in",
+    sw: "arifa zisizosomwa katika",
+  },
+  "admin.dashboard.refreshNotifications": {
+    en: "Refresh notifications",
+    sw: "Onyesha upya arifa",
+  },
+  "admin.dashboard.markAllAsRead": {
+    en: "Mark all as read",
+    sw: "Weka zote kama zimesomwa",
+  },
+  "admin.dashboard.markingAll": {
+    en: "Marking all...",
+    sw: "Inaweka zote...",
+  },
+  "admin.dashboard.noNotifications": {
+    en: "No notifications at this time",
+    sw: "Hakuna arifa kwa sasa",
+  },
+  "admin.dashboard.new": {
+    en: "New",
+    sw: "Mpya",
+  },
+  "admin.dashboard.markingAsRead": {
+    en: "Marking as read...",
+    sw: "Inaweka kama imesomwa...",
+  },
+  "admin.dashboard.upcomingEvents": {
+    en: "Upcoming Events",
+    sw: "Matukio Yajayo",
+  },
+  "admin.dashboard.eventsScheduled": {
+    en: "Events scheduled for the next 30 days",
+    sw: "Matukio yaliyopangwa kwa siku 30 zijazo",
+  },
+  "admin.dashboard.medicalCamp": {
+    en: "Medical Camp",
+    sw: "Kambi ya Matibabu",
+  },
+  "admin.dashboard.educationWorkshop": {
+    en: "Education Workshop",
+    sw: "Warsha ya Elimu",
+  },
+  "admin.dashboard.volunteerOrientation": {
+    en: "Volunteer Orientation",
+    sw: "Mwelekeo wa Kujitolea",
+  },
+  "admin.dashboard.fundraisingGala": {
+    en: "Fundraising Gala",
+    sw: "Sherehe ya Kukusanya Fedha",
+  },
+  "admin.dashboard.sportsDay": {
+    en: "Sports Day",
+    sw: "Siku ya Michezo",
+  },
+  "admin.dashboard.dateUnavailable": {
+    en: "Date unavailable",
+    sw: "Tarehe haipatikani",
+  },
+
+  // Orphan Management
+  "orphans.management": {
+    en: "Orphan Management",
+    sw: "Usimamizi wa Yatima",
+  },
+  "orphans.description": {
+    en: "View and manage orphans across all branches",
+    sw: "Angalia na simamia yatima katika matawi yote",
+  },
+  "orphans.add": {
+    en: "Add Orphan",
+    sw: "Ongeza Yatima",
+  },
+  "orphans.filter.all": {
+    en: "All Orphans",
+    sw: "Yatima Wote",
+  },
+  "orphans.filter.active": {
+    en: "Active Orphans",
+    sw: "Yatima Wanaishi",
+  },
+  "orphans.filter.graduated": {
+    en: "Graduated Orphans",
+    sw: "Yatima Waliohitimu",
+  },  "orphans.filter.inactive": {
+    en: "Inactive Orphans",
+    sw: "Yatima Wasiohai",
+  },
+  "orphans.search": {
+    en: "Search orphans...",
+    sw: "Tafuta yatima...",
+  },
+  "orphans.filter.branch": {
+    en: "Filter by branch",
+    sw: "Chuja kwa tawi",
+  },
+  "orphans.filter.status": {
+    en: "Filter by status",
+    sw: "Chuja kwa hali",
+  },
+  "orphans.loading": {
+    en: "Loading orphan records...",
+    sw: "Inapakia rekodi za yatima...",
+  },
+  "orphans.error": {
+    en: "Failed to load orphans data. Please try again later.",
+    sw: "Imeshindwa kupakia data za yatima. Tafadhali jaribu tena baadaye.",
+  },
+  "orphans.tryAgain": {
+    en: "Try Again",
+    sw: "Jaribu Tena",
+  },
+  "orphans.noData": {
+    en: "No orphans found matching your criteria.",
+    sw: "Hakuna yatima waliopatikana wanaolingana na vigezo vyako.",
+  },
+  "orphans.details": {
+    en: "View Details",
+    sw: "Angalia Maelezo",
+  },
+  "orphans.edit": {
+    en: "Edit Orphan",
+    sw: "Hariri Yatima",
+  },
+  "orphans.delete": {
+    en: "Delete Orphan",
+    sw: "Futa Yatima",
+  },
+  "orphans.confirmDelete": {
+    en: "Are you sure you want to delete this orphan record?",
+    sw: "Je, una uhakika unataka kufuta rekodi hii ya yatima?",
+  },
+  "orphans.deleteSuccess": {
+    en: "Orphan record deleted successfully",
+    sw: "Rekodi ya yatima imefutwa kwa mafanikio",
+  },
+  "orphans.deleteFail": {
+    en: "Failed to delete orphan record",
+    sw: "Imeshindwa kufuta rekodi ya yatima",
+  },
+  "orphans.addSuccess": {
+    en: "Orphan record added successfully",
+    sw: "Rekodi ya yatima imeongezwa kwa mafanikio",
+  },
+  "orphans.addFail": {
+    en: "Failed to add orphan record",
+    sw: "Imeshindwa kuongeza rekodi ya yatima",
+  },
+  "orphans.editSuccess": {
+    en: "Orphan record updated successfully",
+    sw: "Rekodi ya yatima imesasishwa kwa mafanikio",
+  },
+  "orphans.editFail": {
+    en: "Failed to update orphan record",
+    sw: "Imeshindwa kusasisha rekodi ya yatima",
+  },
+
+  // Volunteer Management
+  "volunteer.management": {
+    en: "Volunteer Management",
+    sw: "Usimamizi wa Kujitolea",
+  },
+  "volunteer.description": {
+    en: "Review, approve, and manage volunteer applications",
+    sw: "Kagua, idhinisha, na simamia maombi ya kujitolea",
+  },
+  "volunteer.search": {
+    en: "Search volunteers...",
+    sw: "Tafuta wajitolea...",
+  },
+  "volunteer.filter.all": {
+    en: "All Volunteers",
+    sw: "Wajitolea Wote",
+  },
+  "volunteer.filter.pending": {
+    en: "Pending Applications",
+    sw: "Maombi Yanayosubiri",
+  },
+  "volunteer.filter.approved": {
+    en: "Approved Volunteers",
+    sw: "Wajitolea Walioidhinishwa",
+  },
+  "volunteer.filter.rejected": {
+    en: "Rejected Applications",
+    sw: "Maombi Yaliyokataliwa",
+  },
+  "volunteer.filter.status": {
+    en: "Filter by status",
+    sw: "Chuja kwa hali",
+  },
+  "volunteer.loading": {
+    en: "Loading volunteers...",
+    sw: "Inapakia wajitolea...",
+  },
+  "volunteer.error": {
+    en: "Failed to load volunteers. Please try again later.",
+    sw: "Imeshindwa kupakia wajitolea. Tafadhali jaribu tena baadaye.",
+  },
+  "volunteer.tryAgain": {
+    en: "Try Again",
+    sw: "Jaribu Tena",
+  },
+  "volunteer.noData": {
+    en: "No volunteers found matching your criteria.",
+    sw: "Hakuna wajitolea waliopatikana wanaolingana na vigezo vyako.",
+  },
+  "volunteer.details": {
+    en: "View Details",
+    sw: "Angalia Maelezo",
+  },
+  "volunteer.approve": {
+    en: "Approve",
+    sw: "Idhinisha",
+  },
+  "volunteer.reject": {
+    en: "Reject",
+    sw: "Kataa",
+  },
+  "volunteer.delete": {
+    en: "Remove",
+    sw: "Ondoa",
+  },
+  "volunteer.approveSuccess": {
+    en: "Volunteer approved successfully",
+    sw: "Mjitolea ameidhinishwa kwa mafanikio",
+  },
+  "volunteer.approveFail": {
+    en: "Failed to approve volunteer. Please try again.",
+    sw: "Imeshindwa kuidhinisha mjitolea. Tafadhali jaribu tena.",
+  },
+  "volunteer.rejectSuccess": {
+    en: "Volunteer rejected successfully",
+    sw: "Mjitolea amekataliwa kwa mafanikio",
+  },
+  "volunteer.rejectFail": {
+    en: "Failed to reject volunteer. Please try again.",
+    sw: "Imeshindwa kukataa mjitolea. Tafadhali jaribu tena.",
+  },
+  "volunteer.deleteSuccess": {
+    en: "Volunteer removed successfully",
+    sw: "Mjitolea ameondolewa kwa mafanikio",
+  },
+  "volunteer.deleteFail": {
+    en: "Failed to remove volunteer. Please try again.",
+    sw: "Imeshindwa kuondoa mjitolea. Tafadhali jaribu tena.",
+  },
+  "volunteer.rejectDialog.title": {
+    en: "Reject Volunteer Application",
+    sw: "Kataa Maombi ya Kujitolea",
+  },
+  "volunteer.rejectDialog.description": {
+    en: "Please provide a reason for rejecting this volunteer application. This will be sent to the applicant.",
+    sw: "Tafadhali toa sababu ya kukataa maombi haya ya kujitolea. Hii itatumwa kwa mwombaji.",
+  },
+  "volunteer.rejectDialog.reason": {
+    en: "Rejection Reason",
+    sw: "Sababu ya Kukataa",
+  },
+  "volunteer.rejectDialog.placeholder": {
+    en: "Enter reason for rejection...",
+    sw: "Ingiza sababu ya kukataa...",
+  },
+  "volunteer.rejectDialog.cancel": {
+    en: "Cancel",
+    sw: "Ghairi",
+  },
+  "volunteer.rejectDialog.confirm": {
+    en: "Confirm Rejection",
+    sw: "Thibitisha Kukataa",
+  },
+  "volunteer.rejectDialog.required": {
+    en: "A reason is required",
+    sw: "Sababu inahitajika",
+  },
+
+  // Fundraiser Management
+  "fundraiser.management": {
+    en: "Fundraiser Management",
+    sw: "Usimamizi wa Michango",
+  },
+  "fundraiser.description": {
+    en: "View and manage fundraising campaigns",
+    sw: "Angalia na simamia kampeni za ukusanyaji fedha",
+  },
+  "fundraiser.add": {
+    en: "Add Fundraiser",
+    sw: "Ongeza Mchango",
+  },
+  "fundraiser.search": {
+    en: "Search fundraisers...",
+    sw: "Tafuta michango...",
+  },
+  "fundraiser.filter.status": {
+    en: "Filter by status",
+    sw: "Chuja kwa hali",
+  },
+  "fundraiser.filter.all": {
+    en: "All Fundraisers",
+    sw: "Michango Yote",
+  },
+  "fundraiser.filter.pending": {
+    en: "Pending Approval",
+    sw: "Inasubiri Idhini",
+  },
+  "fundraiser.filter.approved": {
+    en: "Approved",
+    sw: "Imeidhinishwa",
+  },
+  "fundraiser.filter.active": {
+    en: "Active",
+    sw: "Inafanya Kazi",
+  },
+  "fundraiser.filter.completed": {
+    en: "Completed",
+    sw: "Imekamilika",
+  },
+  "fundraiser.filter.rejected": {
+    en: "Rejected",
+    sw: "Imekataliwa",
+  },
+  "fundraiser.loading": {
+    en: "Loading fundraisers...",
+    sw: "Inapakia michango...",
+  },
+  "fundraiser.error": {
+    en: "Failed to load fundraisers. Please try again later.",
+    sw: "Imeshindwa kupakia michango. Tafadhali jaribu tena baadaye.",
+  },
+  "fundraiser.tryAgain": {
+    en: "Try Again",
+    sw: "Jaribu Tena",
+  },
+  "fundraiser.noData": {
+    en: "No fundraisers found matching your criteria.",
+    sw: "Hakuna michango iliyopatikana inayolingana na vigezo vyako.",
+  },
+  "fundraiser.details": {
+    en: "View Details",
+    sw: "Angalia Maelezo",
+  },
+  "fundraiser.approve": {
+    en: "Approve",
+    sw: "Idhinisha",
+  },
+  "fundraiser.reject": {
+    en: "Reject",
+    sw: "Kataa",
+  },
+  "fundraiser.complete": {
+    en: "Mark as Completed",
+    sw: "Weka kama Imekamilika",
+  },
+  "fundraiser.cancel": {
+    en: "Cancel Fundraiser",
+    sw: "Ghairi Mchango",
+  },
+  "fundraiser.delete": {
+    en: "Delete",
+    sw: "Futa",
+  },
+  "fundraiser.approveSuccess": {
+    en: "Fundraiser approved successfully",
+    sw: "Mchango umeidhinishwa kwa mafanikio",
+  },
+  "fundraiser.approveFail": {
+    en: "Failed to approve fundraiser. Please try again.",
+    sw: "Imeshindwa kuidhinisha mchango. Tafadhali jaribu tena.",
+  },
+  "fundraiser.rejectSuccess": {
+    en: "Fundraiser rejected successfully",
+    sw: "Mchango umekataliwa kwa mafanikio",
+  },
+  "fundraiser.rejectFail": {
+    en: "Failed to reject fundraiser. Please try again.",
+    sw: "Imeshindwa kukataa mchango. Tafadhali jaribu tena.",
+  },
+  "fundraiser.deleteSuccess": {
+    en: "Fundraiser deleted successfully",
+    sw: "Mchango umefutwa kwa mafanikio",
+  },
+  "fundraiser.deleteFail": {
+    en: "Failed to delete fundraiser. Please try again.",
+    sw: "Imeshindwa kufuta mchango. Tafadhali jaribu tena.",
+  },
+  "fundraiser.completeSuccess": {
+    en: "Fundraiser marked as completed successfully",
+    sw: "Mchango umewekwa kama umekamilika kwa mafanikio",
+  },
+  "fundraiser.completeFail": {
+    en: "Failed to mark fundraiser as completed. Please try again.",
+    sw: "Imeshindwa kuweka mchango kama umekamilika. Tafadhali jaribu tena.",
+  },
+  "fundraiser.cancelSuccess": {
+    en: "Fundraiser cancelled successfully",
+    sw: "Mchango umeghairiwa kwa mafanikio",
+  },
+  "fundraiser.cancelFail": {
+    en: "Failed to cancel fundraiser. Please try again.",
+    sw: "Imeshindwa kughairi mchango. Tafadhali jaribu tena.",
+  },
+  "fundraiser.rejectDialog.title": {
+    en: "Reject Fundraiser",
+    sw: "Kataa Mchango",
+  },
+  "fundraiser.rejectDialog.description": {
+    en: "Please provide a reason for rejecting this fundraiser. This will be sent to the organizer.",
+    sw: "Tafadhali toa sababu ya kukataa mchango huu. Hii itatumwa kwa mpangaji.",
+  },
+  "fundraiser.rejectDialog.reason": {
+    en: "Rejection Reason",
+    sw: "Sababu ya Kukataa",
+  },
+  "fundraiser.rejectDialog.placeholder": {
+    en: "Enter reason for rejection...",
+    sw: "Ingiza sababu ya kukataa...",
+  },
+  "fundraiser.rejectDialog.cancel": {
+    en: "Cancel",
+    sw: "Ghairi",
+  },
+  "fundraiser.rejectDialog.confirm": {
+    en: "Confirm Rejection",
+    sw: "Thibitisha Kukataa",
+  },
+  "fundraiser.rejectDialog.required": {
+    en: "A reason is required",
+    sw: "Sababu inahitajika",
+  },
+  "fundraiser.coordinator": {
+    en: "Coordinator",
+    sw: "Mratibu",
+  },
+  "fundraiser.purpose": {
+    en: "Purpose",
+    sw: "Madhumuni",
+  },
+  "fundraiser.date": {
+    en: "Date",
+    sw: "Tarehe",
+  },
+  "fundraiser.status": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "fundraiser.actions": {
+    en: "Actions",
+    sw: "Vitendo",
+  },
+
+  // Reports & Analytics
+  "report.title": {
+    en: "Reports & Analytics",
+    sw: "Ripoti na Uchambuzi",
+  },
+  "report.generate": {
+    en: "Generate detailed reports and view analytics for your branch",
+    sw: "Tengeneza ripoti za kina na angalia uchambuzi wa tawi lako",
+  },
+  "report.system": {
+    en: "System Reports & Analytics",
+    sw: "Ripoti na Uchambuzi wa Mfumo",
+  },
+  "report.comprehensive": {
+    en: "Comprehensive reports and analytics across all branches",
+    sw: "Ripoti kamili na uchambuzi katika matawi yote",
+  },
+  "report.restricted": {
+    en: "Report access is restricted",
+    sw: "Upatikanaji wa ripoti umezuiliwa",
+  },
+  "report.restriction.description": {
+    en: "Branch administrators can only generate reports for data within their assigned branch.",
+    sw: "Wasimamizi wa matawi wanaweza kutengeneza ripoti za data ndani ya tawi lao tu.",
+  },
+  "report.fullAccess": {
+    en: "Full system access",
+    sw: "Ufikiaji kamili wa mfumo",
+  },
+  "report.fullAccess.description": {
+    en: "As a Super Admin, you can generate reports for individual branches or the entire system.",
+    sw: "Kama Msimamizi Mkuu, unaweza kutengeneza ripoti kwa matawi ya mtu binafsi au mfumo mzima.",
+  },
+  "report.generator": {
+    en: "Report Generator",
+    sw: "Jenereta ya Ripoti",
+  },
+  "report.analytics": {
+    en: "Analytics Dashboard",
+    sw: "Dashibodi ya Uchambuzi",
+  },
+  "report.systemAnalytics": {
+    en: "System Analytics",
+    sw: "Uchambuzi wa Mfumo",
+  },
+  "report.orphans": {
+    en: "Orphans",
+    sw: "Yatima",
+  },
+  "report.inventory": {
+    en: "Inventory",
+    sw: "Bidhaa",
+  },
+  "report.fundraising": {
+    en: "Fundraising",
+    sw: "Ukusanyaji Fedha",
+  },
+  "report.volunteers": {
+    en: "Volunteers",
+    sw: "Wajitolea",
+  },
+  "report.staff": {
+    en: "Staff",
+    sw: "Wafanyakazi",
+  },
+  "report.branches": {
+    en: "Branches",
+    sw: "Matawi",
+  },
+  "report.summary": {
+    en: "Summary",
+    sw: "Muhtasari",
+  },
+  "report.branchOverview": {
+    en: "Branch overview at a glance",
+    sw: "Muhtasari wa tawi kwa haraka",
+  },
+  "report.systemSummary": {
+    en: "System Summary",
+    sw: "Muhtasari wa Mfumo",
+  },
+  "report.orgWide": {
+    en: "Organization-wide metrics",
+    sw: "Vipimo vya shirika zima",
+  },
+  "report.totalOrphans": {
+    en: "Total Orphans",
+    sw: "Jumla ya Yatima",
+  },
+  "report.activeVolunteers": {
+    en: "Active Volunteers",
+    sw: "Wajitolea Wanaofanya Kazi",
+  },
+  "report.fundraisingCampaigns": {
+    en: "Fundraising Campaigns",
+    sw: "Kampeni za Ukusanyaji Fedha",
+  },
+  "report.recentReports": {
+    en: "Recent Reports",
+    sw: "Ripoti za Hivi Karibuni",
+  },
+  "report.previouslyGenerated": {
+    en: "Previously generated reports",
+    sw: "Ripoti zilizotolewa awali",
+  },
+  "report.monthlyOrphan": {
+    en: "Monthly Orphan Report",
+    sw: "Ripoti ya Kila Mwezi ya Yatima",
+  },
+  "report.inventoryStatus": {
+    en: "Inventory Status",
+    sw: "Hali ya Bidhaa",
+  },  "report.volunteerHours": {
+    en: "Volunteer Hours Q2",
+    sw: "Masaa ya Kujitolea Robo ya 2",
+  },
+  "report.fundraisingSummary": {
+    en: "Fundraising Summary",
+    sw: "Muhtasari wa Ukusanyaji Fedha",
+  },
+  "report.branchComparison": {
+    en: "Branch Comparison",
+    sw: "Ulinganisho wa Matawi",
+  },
+  "report.performanceMetrics": {
+    en: "Performance metrics by branch",
+    sw: "Vipimo vya utendaji kwa tawi",
+  },
+  "report.totalBranches": {
+    en: "Total Branches",
+    sw: "Jumla ya Matawi",
+  },
+  "report.totalVolunteers": {
+    en: "Total Volunteers",
+    sw: "Jumla ya Wajitolea",
+  },
+  "report.totalFundraisers": {
+    en: "Total Fundraisers",
+    sw: "Jumla ya Ukusanyaji Fedha",
+  },
+  "report.branchPrefix": {
+    en: "Branch",
+    sw: "Tawi",
+  },
+  "report.topPerformer": {
+    en: "Top Performer",
+    sw: "Mtendeaji Bora Zaidi",
+  },
+  "report.highGrowth": {
+    en: "High Growth",
+    sw: "Ukuaji wa Juu",
+  },
+  "report.mostVolunteers": {
+    en: "Most Volunteers",
+    sw: "Wajitolea Wengi Zaidi",
+  },
+  "report.needsAttention": {
+    en: "Needs Attention",
+    sw: "Inahitaji Umakini",
+  },
+  "report.recentSystemReports": {
+    en: "Recent System Reports",
+    sw: "Ripoti za Mfumo za Hivi Karibuni",
+  },
+  "report.quarterlySystemOverview": {
+    en: "Quarterly System Overview",
+    sw: "Muhtasari wa Mfumo wa Robo Mwaka",
+  },
+  "report.branchPerformanceAnalysis": {
+    en: "Branch Performance Analysis",
+    sw: "Uchambuzi wa Utendaji wa Tawi",
+  },
+  "report.staffEfficiencyReport": {
+    en: "Staff Efficiency Report",
+    sw: "Ripoti ya Ufanisi wa Wafanyakazi",
+  },
+  "report.resourceAllocationSummary": {
+    en: "Resource Allocation Summary",
+    sw: "Muhtasari wa Ugawaji Rasilimali",
+  },
+  // Report generator form fields and labels
+  "report.dateRange": {
+    en: "Select Date Range",
+    sw: "Chagua Kipindi cha Tarehe",
+  },
+  "report.ageGroup": {
+    en: "Age Group",
+    sw: "Kikundi cha Umri",
+  },
+  "report.allAgeGroups": {
+    en: "All Age Groups",
+    sw: "Vikundi Vyote vya Umri",
+  },
+  "report.status": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "report.allStatuses": {
+    en: "All Statuses",
+    sw: "Hali Zote",
+  },
+  "report.format": {
+    en: "Report Format",
+    sw: "Muundo wa Ripoti",
+  },
+  "report.includeData": {
+    en: "Reports will include data from the selected date range.",
+    sw: "Ripoti zitajumuisha data kutoka kipindi cha tarehe kilichochaguliwa.",
+  },
+  "report.selectFilters": {
+    en: "Make sure to select the appropriate filters for the most relevant results.",
+    sw: "Hakikisha umechagua vichujio sahihi kwa matokeo muhimu zaidi.",
+  },
+  "report.generateReport": {
+    en: "Generate Report",
+    sw: "Tengeneza Ripoti",
+  },  "report.infant": {
+    en: "Infant (0-2 years)",
+    sw: "Mtoto mchanga (miaka 0-2)",
+  },
+  "report.toddler": {
+    en: "Toddler (3-5 years)",
+    sw: "Mtoto mdogo (miaka 3-5)",
+  },
+  "report.child": {
+    en: "Child (6-12 years)",
+    sw: "Mtoto (miaka 6-12)",
+  },
+  "report.teenager": {
+    en: "Teenager (13-17 years)",
+    sw: "Kijana (miaka 13-17)",
+  },  "report.active": {
+    en: "Active",
+    sw: "Hai",
+  },
+  "report.inactive": {
+    en: "Inactive",
+    sw: "Wasiohai",
+  },
+  "report.adopted": {
+    en: "Adopted",
+    sw: "Asiliwa",
+  },
+  "report.age.0-2": {
+    en: "0-2 years",
+    sw: "miaka 0-2",
+  },
+  "report.age.3-5": {
+    en: "3-5 years",
+    sw: "miaka 3-5",
+  }, 
+  "report.age.6-12": {
+    en: "6-12 years",
+    sw: "miaka 6-12",
+  },
+  "report.age.13-17": {
+    en: "13-17 years",
+    sw: "miaka 13-17",
+  },
+  "report.gender.male": {
+    en: "Male",
+    sw: "Kiume",
+  },
+  "report.gender.female": {
+    en: "Female",
+    sw: "Kike",
+  },
+  "report.category": {
+    en: "Category",
+    sw: "Kategoria",
+  },
+  "report.allCategories": {
+    en: "All Categories",
+    sw: "Kategoria Zote",
+  },
+  "report.food": {
+    en: "Food",
+    sw: "Chakula",
+  },
+  "report.clothing": {
+    en: "Clothing",
+    sw: "Mavazi",
+  },
+  "report.medicine": {
+    en: "Medicine",
+    sw: "Dawa",
+  },
+  "report.schoolSupplies": {
+    en: "School Supplies",
+    sw: "Vifaa vya Shule",
+  },
+  "report.other": {
+    en: "Other",
+    sw: "Nyingine",
+  },
+  "report.inStock": {
+    en: "In Stock",
+    sw: "Zinapatikana",
+  },
+  "report.lowStock": {
+    en: "Low Stock",
+    sw: "Zinaisha",
+  },
+  "report.outOfStock": {
+    en: "Out of Stock",
+    sw: "Zimeisha",
+  },
+  "report.pending": {
+    en: "Pending",
+    sw: "Inasubiri",
+  },
+  "report.approved": {
+    en: "Approved",
+    sw: "Imeidhinishwa",
+  },
+  "report.rejected": {
+    en: "Rejected",
+    sw: "Imekataliwa",
+  },
+  "report.completed": {
+    en: "Completed",
+    sw: "Imekamilika",
+  },
+  "report.orphanSpecific": {
+    en: "Orphan-specific report",
+    sw: "Ripoti mahususi ya yatima",
+  },
+  "report.generatingDetailed": {
+    en: "Generating detailed report for",
+    sw: "Kutengeneza ripoti ya kina kwa",
+  },
+  "report.personalInfo": {
+    en: "including personal information, medical records, and academic history",
+    sw: "ikijumuisha taarifa binafsi, rekodi za matibabu, na historia ya kielimu",
+  },
+  "report.selectBranch": {
+    en: "Select branch",
+    sw: "Chagua tawi",
+  },  "report.systemReport": {
+    en: "System Report",
+    sw: "Ripoti ya Mfumo",
+  },
+  "report.statistics": {
+    en: "Statistics",
+    sw: "Takwimu",
+  },
+  "report.orphans.demographics": {
+    en: "Demographics",
+    sw: "Demografia",
+  },
+  "report.orphans.ageDistribution": {
+    en: "Age Distribution",
+    sw: "Mgawanyo wa Umri",
+  },  "report.orphans.status": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "report.branches.orphans": {
+    en: "Orphans",
+    sw: "Watoto Yatima",
+  },
+  "report.count": {
+    en: "Count",
+    sw: "Idadi",
+  },  "report.orphansCount": {
+    en: "orphans",
+    sw: "watoto yatima",
+  },
+  // Inventory translations
+  "report.inventory.categories": {
+    en: "Categories",
+    sw: "Makundi",
+  },
+  "report.inventory.stockStatus": {
+    en: "Stock Status",
+    sw: "Hali ya Hifadhi",
+  },
+  "report.inventory.transactions": {
+    en: "Transactions",
+    sw: "Miamala",
+  },
+  "report.inventory.items": {
+    en: "items",
+    sw: "bidhaa",
+  },  // Volunteers translations
+  "report.volunteers.status": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "report.volunteers.activities": {
+    en: "Activities",
+    sw: "Shughuli",
+  },
+  "report.volunteers.volunteerHours": {
+    en: "Volunteer Hours",
+    sw: "Masaa ya Kujitolea",
+  },
+  "report.volunteers.count": {
+    en: "volunteers",
+    sw: "wajitolea",
+  },  // Fundraising translations
+  "report.fundraising.amounts": {
+    en: "Amounts",
+    sw: "Kiasi",
+  },
+  "report.fundraising.status": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "report.fundraising.timeline": {
+    en: "Timeline",
+    sw: "Muda",
+  },
+  "report.fundraising.amount": {
+    en: "Amount",
+    sw: "Kiasi",
+  },
+  "report.fundraising.campaigns": {
+    en: "campaigns",
+    sw: "kampeni",
+  },  // Staff translations
+  "report.staff.departments": {
+    en: "Departments",
+    sw: "Idara",
+  },
+  "report.staff.status": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "report.staff.roles": {
+    en: "Roles",
+    sw: "Majukumu",
+  },  // Branch translations
+  "report.branches.distribution": {
+    en: "Distribution",
+    sw: "Mgawanyo",
+  },
+  "report.branches.resources": {
+    en: "Resources",
+    sw: "Rasilimali",
+  },
+  // Education categories
+  "report.education": {
+    en: "Education",
+    sw: "Elimu",
+  },
+  "report.healthcare": {
+    en: "Healthcare",
+    sw: "Afya",
+  },
+  "report.facilities": {
+    en: "Facilities",
+    sw: "Vifaa",
+  },
+  "report.events": {
+    en: "Events",
+    sw: "Matukio",
+  },
+  "report.activities": {
+    en: "Activities",
+    sw: "Shughuli",
+      
+  },
+  "report.administration": {
+    en: "Administration",
+    sw: "Utawala",
+  },
+
+  // Profile
+  "profile.title": {
+    en: "My Profile",
+    sw: "Wasifu Wangu"
+  },
+  "profile.tab.info": {
+    en: "Profile Information",
+    sw: "Taarifa za Wasifu"
+  },
+  "profile.tab.password": {
+    en: "Change Password",
+    sw: "Badilisha Nenosiri"
+  },
+  "profile.view.title": {
+    en: "Profile Details",
+    sw: "Maelezo ya Wasifu"
+  },
+  "profile.view.description": {
+    en: "View and manage your personal information",
+    sw: "Angalia na simamia taarifa zako za kibinafsi"
+  },
+  "profile.button.edit": {
+    en: "Edit Profile",
+    sw: "Hariri Wasifu"
+  },
+  "profile.label.fullName": {
+    en: "Full Name",
+    sw: "Jina Kamili"
+  },
+  "profile.label.username": {
+    en: "Username",
+    sw: "Jina la Mtumiaji"
+  },
+  "profile.label.email": {
+    en: "Email Address",
+    sw: "Anwani ya Barua Pepe"
+  },
+  "profile.label.phone": {
+    en: "Phone Number",
+    sw: "Namba ya Simu"
+  },
+  "profile.label.gender": {
+   
+   
+   
+   
+    en: "Gender",
+    sw: "Jinsia"
+  },
+  "profile.notSpecified": {
+    en: "Not specified",
+    sw: "Haijabainishwa"
+  },
+  "profile.label.role": {
+    en: "Role",
+    sw: "Wajibu"
+  },
+  "profile.gender.male": {
+    en: "Male",
+    sw: "Mwanaume"
+  },
+  "profile.gender.female": {
+    en: "Female",
+    sw: "Mwanamke"
+  },
+  "profile.gender.other": {
+    en: "Other",
+    sw: "Nyingine"
+  },
+  "profile.gender.preferNot": {
+    en: "Prefer not to say",
+    sw: "Napendelea kutosema"
+  },
+  "profile.loading": {
+    en: "Loading profile...",
+    sw: "Inapakia wasifu..."
+  },
+  "profile.success.update": {
+    en: "Profile updated successfully",
+    sw: "Wasifu umesasishwa kwa mafanikio"
+  },
+  "profile.password.title": {
+    en: "Change Password",
+    sw: "Badilisha Nenosiri"
+  },
+  "profile.password.description": {
+    en: "Update your account password",
+    sw: "Sasisha nenosiri la akaunti yako"
+  },
+  "profile.password.label.current": {
+    en: "Current Password",
+    sw: "Nenosiri la Sasa"
+  },
+  "profile.password.placeholder.current": {
+    en: "Enter your current password",
+    sw: "Ingiza nenosiri lako la sasa"
+  },
+  "profile.password.label.new": {
+    en: "New Password",
+    sw: "Nenosiri Jipya"
+  },
+  "profile.password.placeholder.new": {
+    en: "Enter new password",
+    sw: "Ingiza nenosiri jipya"
+  },
+  "profile.password.label.confirm": {
+    en: "Confirm Password",
+    sw: "Thibitisha Nenosiri"
+  },
+  "profile.password.placeholder.confirm": {
+    en: "Confirm your new password",
+    sw: "Thibitisha nenosiri jipya"
+  },
+  "profile.password.success": {
+    en: "Password updated successfully",
+    sw: "Nenosiri limesasishwa kwa mafanikio"
+  },
+  "profile.password.error.current": {
+    en: "Current password is required",
+    sw: "Nenosiri la sasa linahitajika"
+  },
+  "profile.password.error.new": {
+    en: "New password is required",
+    sw: "Nenosiri jipya linahitajika"
+  },
+  "profile.password.error.match": {
+    en: "Passwords do not match",
+    sw: "Manenosiri hayalingani"
+  },
+  "profile.password.error.length": {
+    en: "Password must be at least 8 characters long",
+    sw: "Nenosiri lazima liwe na angalau herufi 8"
+  },
+  "profile.password.error.update": {
+    en: "Failed to update password. Please check your current password and try again.",
+    sw: "Imeshindwa kusasisha nenosiri. Tafadhali angalia nenosiri lako la sasa na ujaribu tena."
+  },
+  "profile.button.cancel": {
+    en: "Cancel",
+    sw: "Ghairi"
+  },
+  "profile.button.save": {
+    en: "Save Changes",
+    sw: "Hifadhi Mabadiliko"
+  },
+  "profile.button.updating": {
+    en: "Updating...",
+    sw: "Inasasisha..."
   },
 }
 
@@ -591,7 +2243,14 @@ export function useLanguage() {
 }
 
 // Translation component for easy usage in JSX
-export function T({ k }: { k: string }) {
-  const { t } = useLanguage()
-  return <>{t(k)}</>
+export const T = ({ k }: { k: string }) => {
+  const { language } = useLanguage()
+  
+  // Make sure the key exists in translations
+  if (translations[k] && translations[k][language]) {
+    return <>{translations[k][language]}</>
+  }
+  
+  console.log(`Missing translation: ${k}`)
+  return <>{k}</>
 }

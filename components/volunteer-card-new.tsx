@@ -2,19 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, XCircle, Trash2, Phone, Calendar, Briefcase, Mail, Clock } from "lucide-react"
+import { CheckCircle, XCircle, Phone, Calendar, Briefcase, Mail, Clock } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 
 // Define types for our data
 interface Volunteer {
@@ -28,20 +17,24 @@ interface Volunteer {
   branchName?: string
   status: string
   createdAt?: string
+  reason?: string  // For rejection reason
+  inactiveReason?: string  // Alternative field name for rejection reason
 }
 
 interface VolunteerCardProps {
   volunteer: Volunteer
   onApprove?: (id: string) => void
-  onReject?: (id: string) => void
+  onReject?: (id: string) => void  // This will now initiate the rejection flow
   onDelete?: (id: string) => void
+  readOnly?: boolean
 }
 
 export default function VolunteerCardNew({ 
   volunteer, 
   onApprove, 
   onReject, 
-  onDelete 
+  onDelete,
+  readOnly = false
 }: Readonly<VolunteerCardProps>) {
   // Format date
   const formatDate = (dateString: string) => {
@@ -70,27 +63,32 @@ export default function VolunteerCardNew({
     <Card className="w-full hover:shadow-md transition-shadow">
       <CardHeader>
         <div className="flex justify-between items-start">
-          <div>
-            <div className="flex items-center gap-2">
+          <div>        <div className="flex items-center gap-2">
               <CardTitle>{volunteer.name}</CardTitle>
               {getStatusBadge(volunteer.status)}
             </div>
             <CardDescription>{volunteer.branchName ?? `Branch ID: ${volunteer.branchPublicId}`}</CardDescription>
           </div>
           <div className="flex space-x-2">
-            {volunteer.status.toUpperCase() === "PENDING" && onApprove && (
+            {!readOnly && volunteer.status.toUpperCase() === "PENDING" && onApprove && (
               <Button variant="outline" size="sm" className="bg-green-50 text-green-600 border-green-200 hover:bg-green-100" onClick={() => onApprove(volunteer.publicId)}>
                 <CheckCircle className="h-4 w-4 mr-1" /> Approve
               </Button>
-            )}
-            {volunteer.status.toUpperCase() === "PENDING" && onReject && (
+            )}            {!readOnly && volunteer.status.toUpperCase() === "PENDING" && onReject && (
               <Button variant="outline" size="sm" className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100" onClick={() => onReject(volunteer.publicId)}>
                 <XCircle className="h-4 w-4 mr-1" /> Reject
               </Button>
             )}
           </div>
         </div>
-      </CardHeader>      <CardContent className="space-y-4">
+      </CardHeader>      <CardContent className="space-y-4">        {/* Rejection reason shown for rejected volunteers */}
+        {volunteer.status === "REJECTED" && (volunteer.reason || volunteer.inactiveReason) && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-sm font-medium text-red-700">Rejection Reason:</p>
+            <p className="text-sm text-red-600">{volunteer.reason || volunteer.inactiveReason}</p>
+          </div>
+        )}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
             <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
@@ -127,39 +125,8 @@ export default function VolunteerCardNew({
               <p className="text-sm">{volunteer.createdAt ? formatDate(volunteer.createdAt) : "Unknown"}</p>
             </div>
           </div>
-        </div>
-      </CardContent><CardFooter className="flex justify-end">
-        {onDelete && (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="text-red-600 hover:bg-red-50"
-              >
-                <Trash2 className="h-4 w-4 mr-1" /> Remove
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent className="bg-white">
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action will permanently delete the volunteer &quot;{volunteer.name}&quot;. 
-                  This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction 
-                  onClick={() => onDelete(volunteer.publicId)}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        )}
+        </div></CardContent><CardFooter className="flex justify-end">
+        {/* Delete button removed as requested */}
       </CardFooter>
     </Card>
   )

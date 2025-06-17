@@ -1,13 +1,13 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle2, Home } from "lucide-react"
+import { CheckCircle2, Home, Loader2 } from "lucide-react"
 import Link from "next/link"
 
-export default function ThankYouPage() {
+function ThankYouContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   
@@ -61,10 +61,41 @@ export default function ThankYouPage() {
         </div>
       </Card>
     </div>
+<<<<<<< HEAD
   
             </div>
 
         </div>
   
+=======
+        </div>
+      </div>
+>>>>>>> 3bd5df8450015409a88196d753754203ee09ad69
   )
+}
+
+// Add a loading component for the Suspense boundary
+function ThankYouLoading() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-16 flex items-center justify-center">
+      <Card className="border-blue-100 shadow-xl w-full max-w-md p-8">
+        <div className="flex flex-col items-center">
+          <Loader2 className="h-12 w-12 text-blue-600 animate-spin mb-4" />
+          <CardTitle className="text-center mb-2">Loading...</CardTitle>
+          <CardDescription className="text-center">
+            Please wait while we prepare your thank you message.
+          </CardDescription>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+// Export default component with Suspense boundary
+export default function ThankYouPage() {
+  return (
+    <Suspense fallback={<ThankYouLoading />}>
+      <ThankYouContent />
+    </Suspense>
+  );
 }

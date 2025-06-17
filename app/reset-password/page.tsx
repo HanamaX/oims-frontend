@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import AuthService from "@/lib/auth-service"
 
 export default function ResetPasswordPage() {
   const router = useRouter()
@@ -20,13 +21,26 @@ export default function ResetPasswordPage() {
     setIsSubmitting(true)
     setMessage("")
 
-    // Simulate API call to backend for password reset
     try {
-      // In a real app, this would be an API call to your backend
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      setMessage("Password reset link has been sent to your email.")
-    } catch (error) {
-      setMessage("An error occurred. Please try again.")
+      // Call the actual forgot password API endpoint
+      await AuthService.forgotPassword(email)
+      setMessage("Password reset link has been sent to your email. Please check your inbox.")
+      
+      // Optionally, we could redirect after a short delay
+      // setTimeout(() => {
+      //   router.push("/login")
+      // }, 3000)
+    } catch (error: any) {
+      console.error("Forgot password error:", error)
+      
+      // Show more detailed error message based on the API response
+      if (error.response?.status === 404) {
+        setMessage("Email address not found. Please check your email and try again.")
+      } else if (error.response?.status === 429) {
+        setMessage("Too many requests. Please wait a few minutes before trying again.")
+      } else {
+        setMessage(error.response?.data?.message || "An error occurred. Please try again.")
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -43,7 +57,11 @@ export default function ResetPasswordPage() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="reset-password-content">
-            {message && <div className="reset-password-message">{message}</div>}
+            {message && (
+              <div className={`reset-password-message ${message.includes("sent") ? "success" : "error"}`}>
+                {message}
+              </div>
+            )}
             <div className="reset-password-input-group">
               <Label htmlFor="email" className="reset-password-label">
                 Email
@@ -63,10 +81,10 @@ export default function ResetPasswordPage() {
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.push("/dashboard/admin")}
+              onClick={() => router.push("/login")}
               className="reset-password-button-secondary"
             >
-              Skip for now
+              Back to Login
             </Button>
             <Button type="submit" disabled={isSubmitting} className="reset-password-button-primary">
               {isSubmitting ? "Sending..." : "Send Reset Link"}
@@ -117,10 +135,21 @@ export default function ResetPasswordPage() {
         
         .reset-password-message {
           padding: 0.75rem;
-          background-color: #dbeafe;
-          color: #1e40af;
           border-radius: 0.375rem;
           font-size: 0.875rem;
+          text-align: center;
+        }
+        
+        .reset-password-message.success {
+          background-color: #dcfce7;
+          color: #166534;
+          border: 1px solid #86efac;
+        }
+        
+        .reset-password-message.error {
+          background-color: #fee2e2;
+          color: #b91c1c;
+          border: 1px solid #fecaca;
         }
         
         .reset-password-input-group {

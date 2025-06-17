@@ -8,36 +8,90 @@ import { Button } from "@/components/ui/button"
 import { Check, ArrowLeft } from "lucide-react"
 import FundraiserService from "@/lib/fundraiser-service"
 
-export default function NewFundraiserPage() {
-  const router = useRouter()
+export default function NewFundraiserPage() {  const router = useRouter()
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
   const [successMessage, setSuccessMessage] = useState("")
-
-  const handleSubmit = async (data: any) => {
+    const handleSubmit = async (data: any) => {
     setIsSubmitting(true)
     setError("")
     setSuccessMessage("")
-
+    
+    // Capture the file reference early to prevent it from being garbage collected
+    const posterFile = data.posterFile;
+    
+    console.log("Form submission started with data:", {
+      event: data.eventName,
+      purpose: data.purpose,
+      goal: data.goal,
+      fileProvided: !!posterFile,
+      fileDetails: posterFile ? {
+        name: posterFile.name,
+        type: posterFile.type,
+        size: posterFile.size,
+        lastModified: new Date(posterFile.lastModified).toISOString()
+      } : 'No file provided'
+    });
+    
     try {
-      // Extract the file for separate upload
-      const { posterFile, ...fundraiserData } = data;
+      // Remove the poster file from the data object to prepare for API call
+      // Use rest operator to get everything except posterFile
+      const { posterFile: _, ...fundraiserData } = data;
       
       // Create fundraiser first
+      console.log("Creating fundraiser with data:", fundraiserData);
       const createdFundraiser = await FundraiserService.createFundraiser(fundraiserData);
+      console.log("Created fundraiser:", createdFundraiser);
       
-      // If we have a poster file, upload it
-      if (posterFile && createdFundraiser.publicId) {
+      // Verify that we have a fundraiser ID and a valid file
+      const fundraiserId = createdFundraiser?.publicId;
+      
+      if (!fundraiserId) {
+        console.error("Created fundraiser is missing publicId");
+        setError("Created fundraiser is missing an ID. Please try again.");
+        return;
+      }
+      
+      // Explicitly check if posterFile is a valid File object
+      if (posterFile && posterFile instanceof File && posterFile.size > 0) {
         try {
-          await FundraiserService.uploadFundraiserImage(createdFundraiser.publicId, posterFile);
+          console.log(`Preparing to upload image for fundraiser ID: ${fundraiserId}`);
+          console.log(`Poster file details:`, {
+            name: posterFile.name,
+            type: posterFile.type,
+            size: `${posterFile.size} bytes (${(posterFile.size / 1024).toFixed(2)} KB)`,
+            lastModified: new Date(posterFile.lastModified).toISOString()
+          });
+          
+          // Add a small delay to ensure the fundraiser is fully created on backend
+          console.log("Waiting for fundraiser creation to complete...");
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          
+          // Create a fresh File object to avoid any potential issues with the original reference
+          const fileBlob = await posterFile.slice(0, posterFile.size, posterFile.type);
+          const freshFile = new File([fileBlob], posterFile.name, { 
+            type: posterFile.type,
+            lastModified: posterFile.lastModified
+          });
+          
+          console.log("Uploading fresh file copy to avoid reference issues");
+          
+          // Wait for image upload with enhanced retry capability
+          await FundraiserService.uploadFundraiserImage(fundraiserId, freshFile);
           setSuccessMessage("Fundraiser created successfully with image.");
         } catch (imageError) {
           console.error("Error uploading image:", imageError);
           setSuccessMessage("Fundraiser created, but there was an issue uploading the image.");
         }
       } else {
-        setSuccessMessage("Fundraiser created successfully.");
+        console.log("No valid poster file to upload", { 
+          posterFileExists: !!posterFile,
+          isFileInstance: posterFile instanceof File,
+          fileSize: posterFile ? posterFile.size : 0,
+          fundraiserId: fundraiserId
+        });
+        setSuccessMessage("Fundraiser created successfully without image.");
       }
       
       setSubmitted(true);

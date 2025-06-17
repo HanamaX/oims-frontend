@@ -39,10 +39,9 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Content wrapper */}
-      <div className="flex flex-col min-h-screen">
-      {/* Navigation */}
+      <div className="flex flex-col min-h-screen">      {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container flex h-16 items-center justify-between">
+        <div className="w-full px-4 md:px-8 flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/" className="font-bold text-xl text-blue-700">
               <T k="app.name" />
@@ -52,12 +51,17 @@ export default function HomePage() {
                 <T k="nav.about" />
               </Link>
             </nav>
-          </div>
-          <div className="flex items-center gap-4">
+          </div><div className="flex items-center gap-4">
             <LanguageSwitcher />
             <Link href="/login">
               <Button variant="outline">
                 <T k="nav.login" />
+              </Button>
+            </Link>
+            {/* Always display superuser button */}
+            <Link href="/superuser/dashboard">
+              <Button variant="default" className="bg-green-600 hover:bg-green-700 !important">
+                <T k="nav.superuser" />
               </Button>
             </Link>
             <Button
@@ -70,18 +74,22 @@ export default function HomePage() {
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
-        </div>
-
-        {/* Mobile menu */}
+        </div>        {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t">
-            <div className="container py-4 space-y-2">
-              <Link
+          <div className="md:hidden bg-white border-t w-full">
+            <div className="w-full px-4 md:px-8 py-4 space-y-2">              <Link
                 href="/about-us"
                 className="block px-3 py-2 text-sm font-medium rounded-md hover:bg-blue-50"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <T k="nav.about" />
+              </Link>{/* Always show superuser link in mobile menu */}
+              <Link
+                href="/superuser/dashboard"
+                className="block px-3 py-2 text-sm font-medium rounded-md bg-green-100 text-green-800 hover:bg-green-200 !important"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <T k="nav.superuser" />
               </Link>
               <div className="flex items-center gap-2 pt-2">
                 <div className="text-sm font-medium">
@@ -111,8 +119,7 @@ export default function HomePage() {
         ></div>
         {/* Gradient overlay for text readability */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-900/70 to-blue-900/30"></div>
-        
-        <div className="container mx-auto px-4 md:px-6 z-20">
+          <div className="w-full px-4 md:px-8 z-20">
           <div 
             className="max-w-2xl text-white space-y-8 p-8 backdrop-blur-sm bg-blue-900/10 rounded-lg shadow-xl relative overflow-hidden"
           >
@@ -122,26 +129,9 @@ export default function HomePage() {
             <p className="text-xl md:text-2xl text-white/90 drop-shadow">
               <T k="home.hero.description" />
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Button
-                size="lg"
-                className="bg-white text-blue-700 hover:bg-blue-50 transition-all transform hover:scale-105 shadow-lg"
-                onClick={handleVolunteerRegistration}
-              >
-                <T k="home.volunteer.register" />
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white text-white hover:bg-white/20 transition-all shadow-lg"
-              >
-                <T k="home.learn.more" />
-              </Button>
-            </div>
           </div>
         </div>
       </section>
-
       {/* Rest of the content with background */}
       <div className="flex-grow bg-gradient-animate" 
          style={{ 
@@ -158,10 +148,9 @@ export default function HomePage() {
         
         {/* Content wrapper */}
         <div className="relative z-10">
-      
-      {/* Mission Stats with improved styling and performance optimized animation */}
+        {/* Mission Stats with improved styling and performance optimized animation */}
       <section className="py-16 bg-white/90 backdrop-blur-md mt-10 rounded-t-3xl">
-        <div className="container px-4 md:px-6">
+        <div className="w-full px-4 md:px-8">
           <ScrollAnimation className="text-center mb-12" animationClass="animate-fade-in">
             <h2 className="text-3xl font-bold text-blue-800 mb-4 relative inline-block">
               <T k="home.mission.title" />
@@ -171,15 +160,14 @@ export default function HomePage() {
               <T k="home.mission.description" />
             </p>
           </ScrollAnimation>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <ScrollAnimation className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all" animationClass="animate-fade-in" delay={100}>
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">            <ScrollAnimation className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all" animationClass="animate-fade-in" delay={100}>
               <div className="text-5xl font-bold text-blue-700 mb-2">100+</div>
               <p className="text-lg text-gray-600">
                 <T k="home.mission.children" />
               </p>
             </ScrollAnimation>
             <ScrollAnimation className="text-center bg-white p-8 rounded-xl shadow-lg transform hover:scale-105 transition-all" animationClass="animate-fade-in" delay={200}>
-              <div className="text-5xl font-bold text-blue-700 mb-2">$50K+</div>
+              <div className="text-5xl font-bold text-blue-700 mb-2">Tshs 50K+</div>
               <p className="text-lg text-gray-600">
                 <T k="home.mission.funds" />
               </p>
@@ -267,13 +255,12 @@ export default function HomePage() {
 
       {/* Impact and Involvement Cards Section with performance optimized animation */}
       <section className="py-16 bg-white/90 backdrop-blur-sm">
-        <div className="container px-4 md:px-6">
-          <ScrollAnimation className="text-center mb-12" animationClass="animate-fade-in">
+        <div className="container px-4 md:px-6">          <ScrollAnimation className="text-center mb-12" animationClass="animate-fade-in">
             <h2 className="text-3xl font-bold text-blue-800 mb-4 drop-shadow-md">
-              Making a Difference Together
+              <T k="home.impact.title" />
             </h2>
             <p className="text-blue-700 mt-2 max-w-2xl mx-auto">
-              Discover how our orphanage is transforming lives and how you can be part of this journey
+              <T k="home.impact.subtitle" />
             </p>
           </ScrollAnimation>
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -293,28 +280,25 @@ export default function HomePage() {
                   <div className="p-3 bg-blue-100 rounded-full">
                     <UserPlus className="h-6 w-6 text-blue-600" />
                   </div>
-                  <div>
-                    <CardTitle className="text-blue-800">
-                      Start Volunteer With Us
+                  <div>                    <CardTitle className="text-blue-800">
+                      <T k="home.volunteer.card.title" />
                     </CardTitle>
                     <CardDescription>
-                      Join our team to support children in need
+                      <T k="home.volunteer.card.description" />
                     </CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="pt-6 bg-white">
                 <p className="text-gray-600">
-                  Become a volunteer and make a direct impact on children's lives. Your time and 
-                  skills can help create a brighter future for those who need it most.
+                  <T k="home.volunteer.card.content" />
                 </p>
-              </CardContent>
-              <CardFooter className="bg-white border-t border-blue-50">
+              </CardContent>              <CardFooter className="bg-white border-t border-blue-50">
                 <Button
                   className="w-full bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
                   onClick={handleVolunteerInfo}
                 >
-                  Volunteer With Us
+                  <T k="home.volunteer.card.button" />
                 </Button>
               </CardFooter>
             </Card>
@@ -336,28 +320,24 @@ export default function HomePage() {
                   <div className="p-3 bg-blue-100 rounded-full">
                     <Newspaper className="h-6 w-6 text-blue-600" />
                   </div>
-                  <div>
-                    <CardTitle className="text-blue-800">
-                      Ongoing News
+                  <div>                    <CardTitle className="text-blue-800">
+                      <T k="home.news.card.title" />
                     </CardTitle>
                     <CardDescription>
-                      Stay updated with the latest news and events
+                      <T k="home.news.card.description" />
                     </CardDescription>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent className="pt-6 bg-white">
+              </CardHeader>              <CardContent className="pt-6 bg-white">
                 <p className="text-gray-600">
-                  Get the latest updates on our campaigns, success stories, and upcoming events. 
-                  Stay connected with our community and see the impact of our collective efforts.
+                  <T k="home.news.card.content" />
                 </p>
-              </CardContent>
-              <CardFooter className="bg-white border-t border-blue-50">
+              </CardContent>              <CardFooter className="bg-white border-t border-blue-50">
                 <Button
                   className="w-full bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
                   onClick={handleNewsExplore}
                 >
-                  Explore News
+                  <T k="home.news.card.button" />
                 </Button>
               </CardFooter>
             </Card>
@@ -379,29 +359,24 @@ export default function HomePage() {
                   <div className="p-3 bg-blue-100 rounded-full">
                     <Gift className="h-6 w-6 text-blue-600" />
                   </div>
-                  <div>
-                    <CardTitle className="text-blue-800">
-                      Join a Campaign
+                  <div>                    <CardTitle className="text-blue-800">
+                      <T k="home.campaign.card.title" />
                     </CardTitle>
                     <CardDescription>
-                      Participate in our ongoing initiatives
+                      <T k="home.campaign.card.description" />
                     </CardDescription>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent className="pt-6 bg-white">
+              </CardHeader>              <CardContent className="pt-6 bg-white">
                 <p className="text-gray-600">
-                  Join our campaigns to make a difference. Our campaigns, fundraising, and orphanage initiatives
-                  provide essential support, education, and healthcare to children in need. Your participation creates
-                  meaningful change in these children's lives.
+                  <T k="home.campaign.card.content" />
                 </p>
-              </CardContent>
-              <CardFooter className="bg-white border-t border-blue-50">
+              </CardContent>              <CardFooter className="bg-white border-t border-blue-50">
                 <Button
                   className="w-full bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
                   onClick={handleCampaignLearnMore}
                 >
-                  Learn More
+                  <T k="home.campaign.card.button" />
                 </Button>
               </CardFooter>
             </Card>
@@ -413,59 +388,63 @@ export default function HomePage() {
       {/* Footer with improved styling */}
       <footer className="py-12 bg-blue-900/85 backdrop-blur-md text-white mt-10">
         <div className="container px-4 md:px-6">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-blue-200">About</h3>
+          <div className="grid md:grid-cols-4 gap-8 mb-8">            <div>
+              <h3 className="text-lg font-semibold mb-4 text-blue-200">
+                <T k="footer.about.title" />
+              </h3>
               <ul className="space-y-3">
                 <li>
                   <a href="#" className="text-blue-100 hover:text-white transition-colors">
-                    About Us
+                    <T k="footer.about.aboutUs" />
                   </a>
                 </li>
                 <li>
                   <a href="#" className="text-blue-100 hover:text-white transition-colors">
-                    Why HopeFoundation
+                    <T k="footer.about.why" />
                   </a>
                 </li>
                 <li>
                   <a href="#" className="text-blue-100 hover:text-white transition-colors">
-                    Our Impact
+                    <T k="footer.about.impact" />
                   </a>
                 </li>
               </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-blue-200">Resources</h3>
+            </div>            <div>
+              <h3 className="text-lg font-semibold mb-4 text-blue-200">
+                <T k="footer.resources.title" />
+              </h3>
               <ul className="space-y-3">
                 <li>
                   <a href="#" className="text-blue-100 hover:text-white transition-colors">
-                    FAQ
+                    <T k="footer.resources.faq" />
                   </a>
                 </li>
                 <li>
                   <a href="#" className="text-blue-100 hover:text-white transition-colors">
-                    Discover Campaigns
+                    <T k="footer.resources.campaigns" />
                   </a>
                 </li>
               </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-blue-200">Legal</h3>
+            </div>            <div>
+              <h3 className="text-lg font-semibold mb-4 text-blue-200">
+                <T k="footer.legal.title" />
+              </h3>
               <ul className="space-y-3">
                 <li>
                   <a href="#" className="text-blue-100 hover:text-white transition-colors">
-                    Terms of Service
+                    <T k="footer.legal.terms" />
                   </a>
                 </li>
                 <li>
                   <a href="#" className="text-blue-100 hover:text-white transition-colors">
-                    Privacy Policy
+                    <T k="footer.legal.privacy" />
                   </a>
                 </li>
               </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4 text-blue-200">Connect</h3>
+            </div>            <div>
+              <h3 className="text-lg font-semibold mb-4 text-blue-200">
+                <T k="footer.connect.title" />
+              </h3>
               <div className="flex gap-4 mb-4">
                 <a href="#" className="bg-blue-800 p-2 rounded-full hover:bg-blue-700 transition-colors">
                   <Facebook className="h-5 w-5" />
@@ -477,7 +456,9 @@ export default function HomePage() {
                   <Instagram className="h-5 w-5" />
                 </a>
               </div>
-              <p className="text-sm text-blue-200">Sign up for our newsletter to stay updated</p>
+              <p className="text-sm text-blue-200">
+                <T k="footer.newsletter" />
+              </p>
             </div>
           </div>
           <div className="border-t border-blue-800 pt-8 text-center">

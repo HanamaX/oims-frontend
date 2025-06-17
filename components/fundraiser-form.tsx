@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,6 +16,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { isValidEmail } from "@/lib/validation"
+import { Branch } from "@/lib/volunteer-service"
+import VolunteerService from "@/lib/volunteer-service"
 
 // Update the component to include onSubmit prop
 export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmitting }: { onSubmit?: (data: any) => void, isSubmitting?: boolean }) {
@@ -31,41 +33,104 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
     goal: "",
     amountPayedPerIndividual: "100", // Default value
     orphanageAmountPerIndividual: "80", // Default value
-    branchPublicId: "default" // Typically would come from context or props
+    branchPublicId: "" // Will be populated from branch selection
   })
   const [startDate, setStartDate] = useState<Date>()
   const [endDate, setEndDate] = useState<Date>()
   const [posterFile, setPosterFile] = useState<File | null>(null)
   const [posterPreview, setPosterPreview] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [branches, setBranches] = useState<Branch[]>([])
+  const [isBranchesLoading, setIsBranchesLoading] = useState(true)
   const [errors, setErrors] = useState({
     coordinatorEmail: "",
     phoneNumber: "",
-    goal: ""
+    goal: "",
+    branchPublicId: ""
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
-
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
-
+  
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
+      
+      // Validate the file
+      if (file.size === 0) {
+        console.error("File has zero size")
+        alert("Error: Selected file has zero size")
+        return
+      }
+      
+      if (!file.type.startsWith('image/')) {
+        console.error("File is not an image:", file.type)
+        alert(`Error: File must be an image, got ${file.type}`)
+        return
+      }
+      
+      if (file.size > 5 * 1024 * 1024) {
+        console.error("File is too large:", file.size)
+        alert(`Error: File is too large (${(file.size/1024/1024).toFixed(2)} MB). Maximum size is 5 MB.`)
+        return
+      }
+      
+      // Store the file in state
       setPosterFile(file)
-
+      
+      console.log("File selected successfully:", {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        lastModified: new Date(file.lastModified).toISOString()
+      })
+      
+      // Visual notification
+      const notificationMessage = `File "${file.name}" (${(file.size/1024).toFixed(1)} KB) selected successfully!`;
+      console.log(notificationMessage);
+      
       // Create a preview URL
       const reader = new FileReader()
       reader.onloadend = () => {
         setPosterPreview(reader.result as string)
       }
       reader.readAsDataURL(file)
+    } else {
+      console.log("No file selected in file input")
     }
   }
+
+  // Fetch branches when component mounts
+  useEffect(() => {
+    const fetchBranches = async () => {
+      try {
+        setIsBranchesLoading(true)
+        const branchData = await VolunteerService.getBranches()
+        console.log("Branches loaded:", branchData)
+        
+        if (Array.isArray(branchData) && branchData.length > 0) {
+          setBranches(branchData)
+          // Set the first branch as default if none selected
+          if (!formData.branchPublicId) {
+            setFormData(prev => ({ ...prev, branchPublicId: branchData[0].publicId }))
+          }
+        } else {
+          console.error("Branches data is not an array or is empty:", branchData)
+        }
+      } catch (error) {
+        console.error("Error loading branches:", error)
+      } finally {
+        setIsBranchesLoading(false)
+      }
+    }
+
+    fetchBranches()
+  }, [])
 
   // Update the handleSubmit function
   const handleSubmit = (e: React.FormEvent) => {
@@ -75,7 +140,8 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
     setErrors({
       coordinatorEmail: "",
       phoneNumber: "",
-      goal: ""
+      goal: "",
+      branchPublicId: ""
     })
 
     // Validate fields
@@ -90,14 +156,17 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
       setErrors((prev) => ({ ...prev, phoneNumber: "Phone number is required" }))
       hasErrors = true
     }
-    
-    if (!formData.goal || isNaN(Number(formData.goal)) || Number(formData.goal) <= 0) {
+      if (!formData.goal || isNaN(Number(formData.goal)) || Number(formData.goal) <= 0) {
       setErrors((prev) => ({ ...prev, goal: "Please enter a valid fundraising goal amount" }))
       hasErrors = true
     }
-
-    if (!startDate || !endDate) {
+    
+    if (!formData.branchPublicId) {
+      setErrors((prev) => ({ ...prev, branchPublicId: "Please select a branch" }))
       hasErrors = true
+    }
+    
+    if (!startDate || !endDate) {
       alert("Please select both start and end dates")
       return
     }
@@ -123,9 +192,9 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
       coordinatorEmail: formData.coordinatorEmail,
       phoneNumber: formData.phoneNumber,
       branchPublicId: formData.branchPublicId
-    }
-
-    console.log("Form data formatted for API:", fundraiserData)
+    }    
+    console.log("Form data formatted for API:" + fundraiserData)
+    console.log("Poster file to be uploaded:", posterFile ? `${posterFile.name} (${posterFile.size} bytes)` : "No file")
     
     if (onSubmit) {
       // Include the posterFile separately as it needs to be uploaded in a separate request
@@ -229,9 +298,8 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="goal">Target Amount ($)</Label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">            <div className="space-y-2">
+              <Label htmlFor="goal">Target Amount (Tshs)</Label>
               <Input
                 id="goal"
                 name="goal"
@@ -243,9 +311,8 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
                 required
               />
               {errors.goal && <p className="text-sm text-red-500">{errors.goal}</p>}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="amountPayedPerIndividual">Amount Per Individual ($)</Label>
+            </div>            <div className="space-y-2">
+              <Label htmlFor="amountPayedPerIndividual">Amount Per Individual (Tshs)</Label>
               <Input
                 id="amountPayedPerIndividual"
                 name="amountPayedPerIndividual"
@@ -256,9 +323,8 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
                 required
               />
               <p className="text-xs text-gray-500">Suggested contribution per individual</p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="orphanageAmountPerIndividual">Orphanage Amount ($)</Label>
+            </div>            <div className="space-y-2">
+              <Label htmlFor="orphanageAmountPerIndividual">Orphanage Amount (Tshs)</Label>
               <Input
                 id="orphanageAmountPerIndividual"
                 name="orphanageAmountPerIndividual"
@@ -273,11 +339,10 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="budgetBreakdown">Budget Breakdown</Label>
-            <Textarea
+            <Label htmlFor="budgetBreakdown">Budget Breakdown</Label>            <Textarea
               id="budgetBreakdown"
               name="budgetBreakdown"
-              placeholder="Provide a breakdown of how the funds will be used (e.g., Books: $2000, Stationery: $1500, Uniforms: $1500)"
+              placeholder="Provide a breakdown of how the funds will be used (e.g., Books: Tshs 2000, Stationery: Tshs 1500, Uniforms: Tshs 1500)"
               value={formData.budgetBreakdown}
               onChange={handleInputChange}
               required
@@ -296,9 +361,8 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {startDate ? format(startDate, "PPP") : "Select date"}
                   </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar mode="single" selected={startDate} onSelect={setStartDate} initialFocus />
+                </PopoverTrigger>                <PopoverContent className="w-auto p-0 bg-white">
+                  <Calendar mode="single" selected={startDate} disabled={(date) => date < new Date()} onSelect={setStartDate} initialFocus className="bg-white" />
                 </PopoverContent>
               </Popover>
               <p className="text-xs text-gray-500">Event start date (format: YYYY-MM-DD)</p>
@@ -314,20 +378,46 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {endDate ? format(endDate, "PPP") : "Select date"}
                   </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar mode="single" selected={endDate} onSelect={setEndDate} initialFocus />
+                </PopoverTrigger>                <PopoverContent className="w-auto p-0 bg-white">
+                  <Calendar mode="single" selected={endDate} onSelect={setEndDate} disabled={(date) => date < new Date()} initialFocus className="bg-white" />
                 </PopoverContent>
               </Popover>
               <p className="text-xs text-gray-500">Event end date (format: YYYY-MM-DD)</p>
             </div>
+          </div>          <div className="space-y-2">
+            <Label htmlFor="branchPublicId">Branch</Label>
+            <Select 
+              onValueChange={(value) => handleSelectChange("branchPublicId", value)} 
+              value={formData.branchPublicId}
+              disabled={isBranchesLoading}
+            >
+              <SelectTrigger className={errors.branchPublicId ? "border-red-500" : ""}>
+                <SelectValue placeholder={isBranchesLoading ? "Loading branches..." : "Select a branch"} />
+              </SelectTrigger>
+              <SelectContent className="bg-white">
+                {Array.isArray(branches) && branches.length > 0 ? (
+                  branches.map((branch) => (
+                    <SelectItem key={branch.publicId} value={branch.publicId} className="bg-white">
+                      {branch.name}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value="no-branches" disabled className="bg-white">
+                    No branches available
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
+            {isBranchesLoading && <p className="text-sm text-muted-foreground mt-1">Loading branches...</p>}
+            {errors.branchPublicId && <p className="text-sm text-red-500">{errors.branchPublicId}</p>}
+            {!isBranchesLoading && (!Array.isArray(branches) || branches.length === 0) && (
+              <p className="text-sm text-red-500 mt-1">No branches available. Please contact support.</p>
+            )}
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="posterUpload">Campaign Poster</Label>
             <div className="flex items-center gap-4">
-              <div className="border rounded-md p-4 w-full">
-                <label htmlFor="posterUpload" className="flex flex-col items-center gap-2 cursor-pointer">
+              <div className="border rounded-md p-4 w-full">                <label htmlFor="posterUpload" className="flex flex-col items-center gap-2 cursor-pointer">
                   <Upload className="h-8 w-8 text-blue-500" />
                   <span className="text-sm text-muted-foreground">Click to upload or drag and drop</span>
                   <span className="text-xs text-muted-foreground">PNG, JPG or JPEG (max. 5MB)</span>
@@ -337,6 +427,11 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
                     accept="image/png, image/jpeg, image/jpg"
                     className="hidden"
                     onChange={handleFileChange}
+                    onClick={(e) => {
+                      // Reset the file input value to ensure onChange fires even if selecting the same file again
+                      const target = e.target as HTMLInputElement;
+                      if (target) target.value = '';
+                    }}
                   />
                 </label>
               </div>
@@ -352,16 +447,16 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
             </div>
             <p className="text-xs text-amber-600">Note: The image will be uploaded after the fundraiser is created.</p>
           </div>
-          
-          {/* Hidden branch ID field - typically would come from context or user selection */}
-          <Input
-            type="hidden"
-            name="branchPublicId"
-            value={formData.branchPublicId}
-          />
         </CardContent>
-        <CardFooter className="flex justify-between border-t bg-blue-200
-        border-blue-100 p-6">
+        <CardFooter className="flex justify-between border-t bg-blue-200 border-blue-100 p-6">
+          {posterFile && (
+            <div className="mr-auto">
+              <p className="text-sm font-medium text-green-700">
+                <span className="inline-block mr-1">✓</span> 
+                Image ready to upload: {posterFile.name} ({Math.round(posterFile.size/1024)} KB)
+              </p>
+            </div>
+          )}
           <Button variant="outline" type="button" onClick={() => router.push("/")}>
             Go Back Home
           </Button>

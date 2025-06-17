@@ -68,50 +68,30 @@ export default function FundraiserCardNew({ fundraiser, onEdit, onDelete, onAppr
         {/* Content section */}
         <div className="md:col-span-2 p-6">
           <div className="flex justify-between items-start">
-            <div>
-              <div className="flex flex-wrap items-center gap-2 mb-2">
+            <div>              <div className="flex flex-wrap items-center gap-2 mb-2">
                 <CardTitle className="text-xl">{fundraiser.eventName}</CardTitle>
                 <Badge className={getStatusColor(fundraiser.status)}>
                   {fundraiser.status.charAt(0) + fundraiser.status.slice(1).toLowerCase()}
                 </Badge>
               </div>
-              <CardDescription className="flex items-center gap-1">
+              
+              {/* Show rejection reason if status is REJECTED */}
+              {fundraiser.status === 'REJECTED' && (fundraiser.reason || fundraiser.inactiveReason) && (
+                <div className="mt-2 mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-sm font-medium text-red-700">Rejection Reason:</p>
+                  <p className="text-sm text-red-600">{fundraiser.reason || fundraiser.inactiveReason}</p>
+                </div>
+              )}              <CardDescription className="flex items-center gap-1">
                 <span className="font-medium">Coordinator:</span> {fundraiser.coordinatorName}
               </CardDescription>
-            </div>
+            </div>            
             <div className="flex space-x-2">
               {onEdit && (
                 <Button variant="outline" size="icon" onClick={() => onEdit(fundraiser.publicId)}>
                   <Edit className="h-4 w-4" />
                 </Button>
               )}
-              {onDelete && (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="outline" size="icon">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action will permanently delete the fundraiser &quot;{fundraiser.eventName}&quot;. 
-                        This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction 
-                        onClick={() => onDelete(fundraiser.publicId)}
-                        className="bg-red-600 hover:bg-red-700 text-white"
-                      >
-                        Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              )}
+              {/* Delete button removed as requested */}
             </div>
           </div>
 
@@ -154,12 +134,11 @@ export default function FundraiserCardNew({ fundraiser, onEdit, onDelete, onAppr
                   <p className="text-sm">{fundraiser.phoneNumber}</p>
                 </div>
               </div>
-              
-              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 <div>
                   <p className="text-xs text-muted-foreground">Fundraising Goal</p>
-                  <p className="text-sm">${fundraiser.goal.toLocaleString()}</p>
+                  <p className="text-sm">Tshs {fundraiser.goal.toLocaleString()}</p>
                 </div>
               </div>
               
@@ -172,19 +151,12 @@ export default function FundraiserCardNew({ fundraiser, onEdit, onDelete, onAppr
               </div>
             </div>
           </div>
-          
-          <div className="mt-5">
+            <div className="mt-5">
             <p className="text-sm font-medium">Budget Breakdown</p>
             <p className="text-sm text-muted-foreground">{fundraiser.budgetBreakdown}</p>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button 
-              onClick={() => window.location.href = `/dashboard/admin/fundraisers/${fundraiser.publicId}`}
-            >
-              View Details
-            </Button>
-            
             {fundraiser.status === "PENDING" && onApprove && onReject && (
               <>
                 <Button 

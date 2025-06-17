@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { useAuth } from "@/components/auth-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,25 +10,25 @@ import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { AlertCircle, Check, User, Upload } from "lucide-react"
+import { AlertCircle, Check, User, Upload, Eye, EyeOff } from "lucide-react"
 import AuthService, { type UpdatePasswordRequest, type UpdateProfileRequest } from "@/lib/auth-service"
 import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import API from "@/lib/api-service"
-import axios from "axios"
+import Image from "next/image"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 export default function ProfilePage() {
   const { user, isAuthenticated, isLoading } = useAuth()
-  const router = useRouter()  
+  const router = useRouter()
+  const { t } = useLanguage()  
   // Profile state
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("");
-  const [profileImage, setProfileImage] = useState<string>("")
-  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [imageError, setImageError] = useState(false)
+  const [phone, setPhone] = useState("");  const [profileImage, setProfileImage] = useState<string>("")
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);  const [imageError, setImageError] = useState(false)
+  const [profileImageError, setProfileImageError] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [imageBlob, setImageBlob] = useState<string | null>(null)
   const [gender, setGender] = useState("")
   const [username, setUsername] = useState("")
   const [role, setRole] = useState("")
@@ -38,7 +38,6 @@ export default function ProfilePage() {
   const [profileSuccess, setProfileSuccess] = useState(false)
   const [isProfileUpdating, setIsProfileUpdating] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
-
   // Password state
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
@@ -47,53 +46,48 @@ export default function ProfilePage() {
   const [passwordSuccess, setPasswordSuccess] = useState(false)
   const [isPasswordUpdating, setIsPasswordUpdating] = useState(false)
   
-  // Helper functions for formatting display values
+  // Password visibility state
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  
+  // Helper function to get image URL
+  const getImageUrl = useCallback((imageUrl: string | null | undefined): string => {
+    if (!imageUrl || imageUrl.trim() === "") return ""
+    return imageUrl.startsWith('http') ? imageUrl : `${API.defaults.baseURL}${imageUrl}`
+  }, [])
+
+  // Memoized image URL to prevent unnecessary recalculations
+  const profileImageUrl = useMemo(() => getImageUrl(profileImage), [profileImage, getImageUrl])
+
+  // Handle profile image error
+  const handleProfileImageError = useCallback(() => {
+    setProfileImageError(true)
+  }, [])
+
+    // Helper functions for formatting display values
   const formatGenderDisplay = (genderValue: string): string => {
-    if (!genderValue) return "Not Specified";
+    if (!genderValue) return t("profile.notSpecified");
     
     switch (genderValue) {
-      case "MALE": return "Male";
-      case "FEMALE": return "Female";
-      case "OTHER": return "Other";
-      case "PREFER_NOT_TO_SAY": return "Prefer not to say";
+      case "MALE": return t("profile.gender.male");
+      case "FEMALE": return t("profile.gender.female");
+      case "OTHER": return t("profile.gender.other");
+      case "PREFER_NOT_TO_SAY": return t("profile.gender.preferNot");
       default: return genderValue;
     }
   };
-  
-  const formatRoleDisplay = (roleValue: string): string => {
-    if (!roleValue) return "Not Specified";
-    if (roleValue === "superadmin") return "Super Admin";
-    return roleValue.charAt(0).toUpperCase() + roleValue.slice(1);
+    const formatRoleDisplay = (roleValue: string): string => {
+    if (!roleValue) return t("profile.notSpecified");
+    if (roleValue === "orphanage_admin") return t("profile.role.orphanageAdmin");
+    
+    switch (roleValue) {
+      case "supervisor": return t("profile.role.supervisor");
+      case "volunteer": return t("profile.role.volunteer");
+      case "donor": return t("profile.role.donor");
+      default: return roleValue.charAt(0).toUpperCase() + roleValue.slice(1);    }
   };
 
-  // This function loads the profile image as a blob with proper authorization
-  const fetchProfileImage = async (imagePath: string) => {
-    if (!imagePath) return;
-    
-    try {
-      const token = localStorage.getItem("jwt_token");
-      if (!token) {
-        setImageError(true);
-        return;
-      }
-        // Check if the image path is already a complete URL (starts with http:// or https://)
-      const imageUrl = imagePath.startsWith('http') ? imagePath : `${API.defaults.baseURL}${imagePath}`;
-      console.log("Fetching image from:", imageUrl);
-      
-      const response = await axios.get(imageUrl, {
-        responseType: 'blob',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-        const blobUrl = URL.createObjectURL(response.data);
-      console.log("Successfully loaded profile image as blob");
-      setImageBlob(blobUrl);
-      setImageError(false);
-    } catch (error) {
-      console.error("Failed to load profile image:", error);
-      setImageError(true);
-    }  }
     // Load user data
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -121,11 +115,13 @@ export default function ProfilePage() {
           console.log("Loading profile image from localStorage:", imageUrl)
           setProfileImage(imageUrl)
           
-          // If we have an image path, fetch the image as blob
-          if (imageUrl) {
-            fetchProfileImage(imageUrl)
-          } else {
+          // Reset image error states based on whether we have a valid image URL
+          if (!imageUrl) {
             setImageError(true)
+            setProfileImageError(true)
+          } else {
+            setImageError(false)
+            setProfileImageError(false)
           }
           
           setGender(userData.sex ?? userData.gender ?? "")
@@ -152,7 +148,8 @@ export default function ProfilePage() {
     if (file) {
       setProfileImageFile(file)
       setImageError(false)
-
+      setProfileImageError(false)
+      
       // Create a preview URL
       const reader = new FileReader()
       reader.onloadend = () => {
@@ -165,15 +162,19 @@ export default function ProfilePage() {
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
     setProfileError("")
-    setProfileSuccess(false)
-
-    if (!fullName) {
-      setProfileError("Name is required")
+    setProfileSuccess(false);
+      if (!fullName) {
+      setProfileError(t("profile.error.name"))
+      return
+    }
+    
+    if (!email) {
+      setProfileError(t("profile.error.email"))
       return
     }
 
-    if (!email) {
-      setProfileError("Email is required")
+    if (!gender) {
+      setProfileError(t("profile.error.gender"))
       return
     }
 
@@ -186,49 +187,58 @@ export default function ProfilePage() {
         // Check file size (4MB limit)
         const fileSizeInMB = profileImageFile.size / (1024 * 1024);
         if (fileSizeInMB > 4) {
-          setProfileError("Image file size must be less than 4MB")
+          setProfileError(t("profile.image.error.size"))
           setIsProfileUpdating(false)
           return
         }
         
-      try {
-          const response = await AuthService.uploadProfileImage(profileImageFile)
+      try {          const response = await AuthService.uploadProfileImage(profileImageFile)
           imageUrl = response.imageUrl
           console.log("Successfully uploaded image, received URL:", imageUrl)
           // Reset image error state since we have a new image
           setImageError(false)
-          
-          // Fetch the newly uploaded image
-          if (imageUrl) {
-            fetchProfileImage(imageUrl)
-          }
+          setProfileImageError(false)
         } catch (err) {
           console.error("Profile image upload error:", err)
-          setProfileError("Failed to upload profile image. Please try again.")
+          setProfileError(t("profile.image.error.upload"))
           setIsProfileUpdating(false)
           return
         }
-      }
-      
-      const profileData: UpdateProfileRequest = {
+      }        const profileData: UpdateProfileRequest = {
         fullName,
+        username,
         email,
         phone: phone ?? undefined,
+        phoneNumber: phone ?? undefined, // Send both variants in case backend expects phoneNumber
         imageUrl: imageUrl ?? undefined,
         gender: gender ?? undefined,
         sex: gender ?? undefined, // Send the same value to both fields for compatibility
       }
+      
+      // Remove any undefined fields to ensure they're not sent as null
+      Object.keys(profileData).forEach(key => {
+        if (profileData[key as keyof UpdateProfileRequest] === undefined) {
+          delete profileData[key as keyof UpdateProfileRequest];
+        }
+      });
+      
+      console.log("ProfileUpdate - form values:", {
+        fullName,
+        username,
+        email,
+        phone,
+        gender
+      });
 
       await AuthService.updateProfile(profileData)
-      console.log("Profile updated with image URL:", imageUrl)
-
-      // Update local storage with new profile data
+      console.log("Profile updated with image URL:", imageUrl)      // Update local storage with new profile data
       const storedUser = localStorage.getItem("user")
       if (storedUser) {
         const userData = JSON.parse(storedUser)
         const nameParts = fullName.split(" ")
         userData.firstName = nameParts[0]
         userData.lastName = nameParts.slice(1).join(" ")
+        userData.username = username
         userData.email = email
         userData.phoneNumber = phone
         userData.phone = phone // Store both ways for compatibility
@@ -263,25 +273,25 @@ export default function ProfilePage() {
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
     setPasswordError("")
-    setPasswordSuccess(false)
-
+    setPasswordSuccess(false);
+    
     if (!currentPassword) {
-      setPasswordError("Current password is required")
+      setPasswordError(t("profile.password.error.current"))
       return
     }
 
     if (!newPassword) {
-      setPasswordError("New password is required")
+      setPasswordError(t("profile.password.error.new"))
       return
     }
 
     if (newPassword !== confirmPassword) {
-      setPasswordError("New passwords do not match")
+      setPasswordError(t("profile.password.error.match"))
       return
     }
 
     if (newPassword.length < 8) {
-      setPasswordError("Password must be at least 8 characters long")
+      setPasswordError(t("profile.password.error.length"))
       return
     }
 
@@ -307,58 +317,44 @@ export default function ProfilePage() {
         setPasswordSuccess(false)
       }, 3000)
     } catch (err) {
-      console.error("Password update error:", err)
-      setPasswordError("Failed to update password. Please ensure your current password is correct.")
+      console.error("Password update error:", err);          setPasswordError(t("profile.password.error.update"))
     } finally {
       setIsPasswordUpdating(false)
-    }
-  }
-  // Clean up blob URLs when component unmounts
-  useEffect(() => {
-    return () => {
-      if (imageBlob) {
-        URL.revokeObjectURL(imageBlob);
-      }
-    };
-  }, [imageBlob]);
-
+    }  }
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[80vh]">
-        <p>Loading...</p>
+        <p><T k="profile.loading" /></p>
       </div>
     )
-  }
-  return (
+  }  return (
     <div>
-      <h1 className="text-3xl font-bold mb-8">My Profile</h1>
+      <h1 className="text-3xl font-bold mb-8"><T k="profile.title" /></h1>
 
       <Tabs defaultValue="profile">
         <TabsList className="mb-6">
-          <TabsTrigger value="profile">Profile Information</TabsTrigger>
-          <TabsTrigger value="password">Change Password</TabsTrigger>
+          <TabsTrigger value="profile"><T k="profile.tab.info" /></TabsTrigger>
+          <TabsTrigger value="password"><T k="profile.tab.password" /></TabsTrigger>
         </TabsList>
-        <TabsContent value="profile">
-          <Card>
+        <TabsContent value="profile">          <Card>
             <CardHeader className="flex justify-between items-start">
               <div>
-                <CardTitle>Profile Information</CardTitle>
-                <CardDescription>View and update your personal information</CardDescription>
+                <CardTitle><T k="profile.view.title" /></CardTitle>
+                <CardDescription><T k="profile.view.description" /></CardDescription>
               </div>
-              {!isEditing && (
-                <Button 
+              {!isEditing && (                <Button 
                   onClick={() => {
                     setIsEditing(true);
                     setImageError(false); // Reset image error when entering edit mode
+                    setProfileImageError(false); // Reset profile image error when entering edit mode
                   }} 
                   variant="outline"
                 >
-                  Edit Profile
+                  <T k="profile.button.edit" />
                 </Button>
               )}
             </CardHeader>
-            <CardContent>
-              {profileError && (
+            <CardContent>              {profileError && (
                 <Alert variant="destructive" className="mb-4">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>{profileError}</AlertDescription>
@@ -368,20 +364,23 @@ export default function ProfilePage() {
               {profileSuccess && (
                 <Alert className="mb-4 bg-green-50 border-green-200">
                   <Check className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-green-600">Profile updated successfully!</AlertDescription>
+                  <AlertDescription className="text-green-600"><T k="profile.success.update" /></AlertDescription>
                 </Alert>
               )}
 
               {/* Profile View Mode */}
-              {!isEditing ? (
-                <div className="space-y-6">                  <div className="flex justify-center mb-6">
-                    <Avatar className="h-32 w-32 border-2 border-gray-200">
-                      {imageBlob ? (
-                        <img
-                          src={imageBlob}
-                          alt={fullName || "User"}
-                          className="h-full w-full object-cover rounded-full"
-                          onError={() => setImageError(true)}
+              {!isEditing ? (                <div className="space-y-6">                  <div className="flex justify-center mb-6">
+                    <Avatar className="h-32 w-32 border-2 border-gray-200 relative">
+                      {profileImageUrl && !profileImageError ? (
+                        <Image 
+                          src={profileImageUrl}
+                          alt={`${fullName || "Admin"} Profile`}
+                          fill
+                          style={{ objectFit: "cover" }}
+                          className="rounded-full"
+                          onError={handleProfileImageError}
+                          unoptimized
+                          priority
                         />
                       ) : (
                         <AvatarFallback className="text-blue-500 bg-gray-100">
@@ -391,45 +390,40 @@ export default function ProfilePage() {
                     </Avatar>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium text-muted-foreground">Full Name</p>
-                      <p className="font-medium">{fullName || "Not Specified"}</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.fullName" /></p>
+                      <p className="font-medium">{fullName || t("profile.notSpecified")}</p>
                     </div>
                     
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-muted-foreground">Username</p>
-                      <p className="font-medium">{username || "Not Specified"}</p>
+                      <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.username" /></p>
+                      <p className="font-medium">{username || t("profile.notSpecified")}</p>
+                    </div>
+                      <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.email" /></p>
+                      <p className="font-medium">{email || t("profile.notSpecified")}</p>
                     </div>
                     
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-muted-foreground">Email</p>
-                      <p className="font-medium">{email || "Not Specified"}</p>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium text-muted-foreground">Phone</p>
-                      <p className="font-medium">{phone || "Not Specified"}</p>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium text-muted-foreground">Gender</p>
+                      <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.phone" /></p>
+                      <p className="font-medium">{phone || t("profile.notSpecified")}</p>
+                    </div>                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.gender" /></p>
                       <p className="font-medium">{formatGenderDisplay(gender)}</p>
                     </div>
-                    
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium text-muted-foreground">Role</p>
+                      <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.role" /></p>
                       <p className="font-medium">{formatRoleDisplay(role)}</p>
                     </div>
-                    {role === "admin" && branch && (
+                    {role === "supervisor" && branch && (
                       <div className="space-y-2">
-                        <p className="text-sm font-medium text-muted-foreground">Branch</p>
+                        <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.branch" /></p>
                         <p className="font-medium">{branch}</p>
                       </div>
                     )}
-                    
-                    {accountCreated && (
+                      {accountCreated && (
                       <div className="space-y-2">
-                        <p className="text-sm font-medium text-muted-foreground">Account Created</p>
+                        <p className="text-sm font-medium text-muted-foreground"><T k="profile.label.created" /></p>
                         <p className="font-medium">{accountCreated}</p>
                       </div>
                     )}
@@ -438,71 +432,80 @@ export default function ProfilePage() {
               ) : (
                 /* Profile Edit Mode */
                 <form onSubmit={handleProfileUpdate} className="bg-white">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="fullName">Full Name</Label>
+                  <div className="space-y-4">                    <div className="space-y-2">
+                      <Label htmlFor="fullName"><T k="profile.label.fullName" /></Label>
                       <Input
                         id="fullName"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        placeholder="Your full name"
+                        placeholder={t("profile.label.fullName")}
+                        className="bg-white"
+                      />
+                    </div>
+                    
+                    {/* Username field for editing */}                    <div className="space-y-2">
+                      <Label htmlFor="username"><T k="profile.label.username" /></Label>
+                      <Input
+                        id="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder={t("profile.label.username")}
                         className="bg-white"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email"><T k="profile.label.email" /></Label>
                       <Input
                         id="email"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Your email address"
+                        placeholder={t("profile.label.email")}
                         className="bg-white"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Phone (optional)</Label>
+                      <Label htmlFor="phone"><T k="profile.label.phoneOptional" /></Label>
                       <Input
                         id="phone"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        placeholder="Your phone number"
+                        placeholder={t("profile.label.phone")}
                         className="bg-white"
                       />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="gender">Gender (optional)</Label>
+                    </div>                    <div className="space-y-2">
+                      <Label htmlFor="gender"><T k="profile.label.gender" /></Label>
                       <Select
                         value={gender}
-                        onValueChange={(value) => setGender(value)}
-                      >
+                        onValueChange={setGender}
+                        defaultValue=""                      >
                         <SelectTrigger className="bg-white">
-                          <SelectValue placeholder="Select Gender" />
+                          <SelectValue placeholder={t("profile.label.gender")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="MALE">Male</SelectItem>
-                          <SelectItem value="FEMALE">Female</SelectItem>
-                          <SelectItem value="OTHER">Other</SelectItem>
-                          <SelectItem value="PREFER_NOT_TO_SAY">Prefer not to say</SelectItem>
+                          <SelectItem value="MALE">{t("profile.gender.male")}</SelectItem>
+                          <SelectItem value="FEMALE">{t("profile.gender.female")}</SelectItem>
+                          <SelectItem value="OTHER">{t("profile.gender.other")}</SelectItem>
+                          <SelectItem value="PREFER_NOT_TO_SAY">{t("profile.gender.preferNot")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="role">Role</Label>                      <Input
+                      <Label htmlFor="role"><T k="profile.label.role" /></Label>
+                      <Input
                         id="role"
                         value={formatRoleDisplay(role)}
                         readOnly
                         disabled
                         className="bg-gray-50"
-                      />
-                    </div>
+                      />                    </div>
 
-                    {role === "admin" && branch && (
+                    {role === "supervisor" && branch && (
                       <div className="space-y-2">
-                        <Label htmlFor="branch">Branch</Label>
+                        <Label htmlFor="branch"><T k="profile.label.branch" /></Label>
                         <Input
                           id="branch"
                           value={branch}
@@ -512,14 +515,49 @@ export default function ProfilePage() {
                         />
                       </div>
                     )}
+
+                    {/* Cancel and Save buttons */}
+                    <div className="flex gap-3 pt-2">                      <Button 
+                        type="button" 
+                        onClick={() => {
+                          setIsEditing(false);
+                          setImagePreview(null);
+                          setProfileImageFile(null);
+                          setImageError(false);
+                          setProfileImageError(false);
+                        }} 
+                        variant="outline" 
+                        className="flex-1"
+                      >
+                        <T k="profile.button.cancel" />
+                      </Button>
+                      <Button 
+                        type="submit" 
+                        className="flex-1" 
+                        disabled={isProfileUpdating}
+                      >
+                        {isProfileUpdating ? <T k="profile.button.updating" /> : <T k="profile.button.save" />}
+                      </Button>
+                    </div>
+
+                    {/* Profile Image Upload Section */}
                     <div className="space-y-2">
-                      <Label htmlFor="profileImage">Profile Image</Label>
-                      <div className="flex gap-4 items-start">
+                      <Label htmlFor="profileImage"><T k="profile.label.profileImage" /></Label>                      <div className="flex gap-4 items-start">
                         <div className="flex-1 border rounded-md p-4 bg-white">
                           <label htmlFor="profileImage" className="flex flex-col items-center gap-2 cursor-pointer">
-                            <Upload className="h-8 w-8 text-blue-500" />
-                            <span className="text-sm text-muted-foreground">Click to upload profile image</span>
-                            <span className="text-xs text-muted-foreground">PNG, JPG or JPEG (max. 4MB)</span>
+                            {imagePreview ? (
+                              <div className="relative w-32 h-32 mx-auto mb-2">
+                                <img 
+                                  src={imagePreview} 
+                                  alt="Profile Preview" 
+                                  className="w-full h-full object-cover rounded-full"
+                                />
+                              </div>
+                            ) : (
+                              <Upload className="h-8 w-8 text-blue-500" />
+                            )}
+                            <span className="text-sm text-muted-foreground"><T k="profile.image.upload.click" /></span>
+                            <span className="text-xs text-muted-foreground"><T k="profile.image.upload.formats" /></span>
                             <Input
                               id="profileImage"
                               type="file"
@@ -530,52 +568,11 @@ export default function ProfilePage() {
                           </label>
                           {imageError && (
                             <p className="text-xs text-red-500 mt-1 text-center">
-                              Image is invalid or too large. Maximum size is 4MB.
+                              <T k="profile.image.error.invalid" />
                             </p>
                           )}
-                        </div>                        <Avatar className="h-20 w-20 border-2 border-gray-200 flex-shrink-0">
-                          {imagePreview ? (
-                            <img
-                              src={imagePreview}
-                              alt="Profile Preview"
-                              className="h-full w-full object-cover rounded-full"
-                            />
-                          ) : imageBlob ? (
-                            <img
-                              src={imageBlob}
-                              alt="Current Profile"
-                              className="h-full w-full object-cover rounded-full"
-                            />
-                          ) : (
-                            <AvatarFallback className="text-blue-500 bg-gray-100">
-                              <User className="h-8 w-8" />
-                            </AvatarFallback>
-                          )}
-                        </Avatar>
+                        </div>
                       </div>
-                    </div>
-
-                    <div className="flex gap-3 pt-2">
-                      <Button 
-                        type="button" 
-                        onClick={() => {
-                          setIsEditing(false);
-                          setImagePreview(null);
-                          setProfileImageFile(null);
-                          setImageError(false); // Reset image error when canceling edit
-                        }} 
-                        variant="outline" 
-                        className="flex-1"
-                      >
-                        Cancel
-                      </Button>
-                      <Button 
-                        type="submit" 
-                        className="flex-1" 
-                        disabled={isProfileUpdating}
-                      >
-                        {isProfileUpdating ? "Updating..." : "Save Changes"}
-                      </Button>
                     </div>
                   </div>
                 </form>
@@ -583,15 +580,12 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </TabsContent>
-
-        <TabsContent value="password">
-          <Card>
+        <TabsContent value="password">          <Card>
             <CardHeader>
-              <CardTitle>Change Password</CardTitle>
-              <CardDescription>Update your account password</CardDescription>
+              <CardTitle><T k="profile.password.title" /></CardTitle>
+              <CardDescription><T k="profile.password.description" /></CardDescription>
             </CardHeader>
-            <CardContent>
-              {passwordError && (
+            <CardContent>              {passwordError && (
                 <Alert variant="destructive" className="mb-4">
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>{passwordError}</AlertDescription>
@@ -601,50 +595,80 @@ export default function ProfilePage() {
               {passwordSuccess && (
                 <Alert className="mb-4 bg-green-50 border-green-200">
                   <Check className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-green-600">Password updated successfully!</AlertDescription>
+                  <AlertDescription className="text-green-600"><T k="profile.password.success" /></AlertDescription>
                 </Alert>
               )}
 
-              <form onSubmit={handlePasswordUpdate}>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="currentPassword">Current Password</Label>
-                    <Input
-                      id="currentPassword"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      placeholder="Your current password"
-                      className="bg-white"
-                    />
-                  </div>
+              <form onSubmit={handlePasswordUpdate} className="space-y-4">                <div className="space-y-2">
+                  <Label htmlFor="currentPassword"><T k="profile.password.label.current" /></Label>
+                  <Input
+                    id="currentPassword"
+                    type={showCurrentPassword ? "text" : "password"}
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder={t("profile.password.placeholder.current")}
+                    className="bg-white"
+                  />
+                  <Button
+                    variant="link"
+                    onClick={() => setShowCurrentPassword(prev => !prev)}
+                    className="absolute right-3 top-10"
+                  >
+                    {showCurrentPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </Button>
+                </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="newPassword">New Password</Label>
-                    <Input
-                      id="newPassword"
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      placeholder="Your new password"
-                      className="bg-white"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="newPassword"><T k="profile.password.label.new" /></Label>
+                  <Input
+                    id="newPassword"
+                    type={showNewPassword ? "text" : "password"}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder={t("profile.password.placeholder.new")}
+                    className="bg-white"
+                  />
+                  <Button
+                    variant="link"
+                    onClick={() => setShowNewPassword(prev => !prev)}
+                    className="absolute right-3 top-10"
+                  >
+                    {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </Button>
+                </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="Confirm your new password"
-                      className="bg-white"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword"><T k="profile.password.label.confirm" /></Label>
+                  <Input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder={t("profile.password.placeholder.confirm")}
+                    className="bg-white"
+                  />
+                  <Button
+                    variant="link"
+                    onClick={() => setShowConfirmPassword(prev => !prev)}
+                    className="absolute right-3 top-10"
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </Button>
+                </div>
 
-                  <Button type="submit" className="w-full" disabled={isPasswordUpdating}>
-                    {isPasswordUpdating ? "Updating..." : "Change Password"}
+                <div className="flex justify-end gap-4">
+                  <Button 
+                    onClick={() => router.back()} 
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    <T k="profile.button.cancel" />
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    className="flex-1"                    disabled={isPasswordUpdating}
+                  >
+                    {isPasswordUpdating ? <T k="profile.button.updating" /> : <T k="profile.button.save" />}
                   </Button>
                 </div>
               </form>

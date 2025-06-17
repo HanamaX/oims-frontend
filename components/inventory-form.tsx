@@ -106,9 +106,8 @@ export default function InventoryForm({ open, onOpenChange, onSubmit }: Inventor
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="itemPrice" className="text-blue-800">
-                  Price ($)
+              <div className="space-y-2">                <Label htmlFor="itemPrice" className="text-blue-800">
+                  Price (Tshs)
                 </Label>
                 <Input
                   id="itemPrice"

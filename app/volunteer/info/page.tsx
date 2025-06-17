@@ -130,7 +130,7 @@ export default function VolunteerInfoPage() {
           {/* Confirmation Dialog */}
           {showConfirmation && (
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in">
-              <Card className="w-full max-w-md border-blue-100 animate-scale-in">
+              <Card className="w-full max-w-md border-blue-100 animate-scale-in bg-white">
                 <CardHeader>
                   <CardTitle className="text-center text-blue-800">Volunteer Registration</CardTitle>
                   <CardDescription className="text-center">

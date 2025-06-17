@@ -77,14 +77,13 @@ export default function InventoryCard({ item, transactions = [], onEdit, onDelet
                 <p className="text-sm font-medium">Quantity</p>
                 <p className="text-sm text-muted-foreground">{item.itemQuantity}</p>
               </div>
-              <div>
-                <p className="text-sm font-medium">Price</p>
-                <p className="text-sm text-muted-foreground">${item.itemPrice}</p>
+              <div>                <p className="text-sm font-medium">Price</p>
+                <p className="text-sm text-muted-foreground">Tshs {item.itemPrice}</p>
               </div>
               <div>
                 <p className="text-sm font-medium">Total Value</p>
                 <p className="text-sm text-muted-foreground">
-                  ${(Number.parseFloat(item.itemPrice) * Number.parseInt(item.itemQuantity)).toFixed(2)}
+                  Tshs {(Number.parseFloat(item.itemPrice) * Number.parseInt(item.itemQuantity)).toFixed(2)}
                 </p>
               </div>
               <div>

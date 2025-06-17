@@ -3,6 +3,7 @@ import axios from "axios"
 // Create an axios instance with default config
 const API = axios.create({
   baseURL: "https://oims-4510ba404e0e.herokuapp.com",
+  // baseURL: "http://localhost:8080", // Use localhost for local development
   timeout: 15000, // 15 seconds timeout
   headers: {
     "Content-Type": "application/json",
@@ -16,14 +17,21 @@ API.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
       
-      // Don't override content-type if it's multipart/form-data (for file uploads)
-      if (config.headers['Content-Type'] !== 'multipart/form-data') {
+      // CRITICAL FIX: Special handling for FormData/file uploads
+      const isFormData = config.data instanceof FormData;
+      if (isFormData) {
+        // For FormData, DON'T set Content-Type so browser can set it with boundary
+        delete config.headers['Content-Type'];
+        console.log(`FormData detected - removed Content-Type to let browser handle it`);
+      } else if (config.headers['Content-Type'] !== 'multipart/form-data') {
+        // For JSON data, set content type explicitly
         config.headers['Content-Type'] = 'application/json'
       }
       
-      // Debug to check token is being sent
+      // Debug info
       console.debug(`API Request to ${config.url} with auth token: ${token.substring(0, 15)}...`)
-      console.debug(`Request content type: ${config.headers['Content-Type']}`)
+      console.debug(`Request content type: ${config.headers['Content-Type'] ? String(config.headers['Content-Type']) : 'auto (FormData)'}`)
+      console.debug(`Request body type: ${isFormData ? 'FormData' : typeof config.data}`)
     } else {
       console.warn(`API Request to ${config.url} without auth token!`)
     }
@@ -74,8 +82,7 @@ API.interceptors.response.use(
       console.error("Request timed out. Server might be overloaded or unreachable.");
       error.friendlyMessage = "Request timed out. Please try again later.";
     }
-    
-    // Handle authorization errors (401)
+      // Handle authorization errors (401)
     if (error.response?.status === 401) {
       console.error("Authentication error (401). Token might be invalid or expired.");
       error.friendlyMessage = "Your session has expired. Please log in again.";
@@ -84,8 +91,10 @@ API.interceptors.response.use(
       localStorage.removeItem("jwt_token");
       localStorage.removeItem("user");
       
-      // Only redirect if we're in a browser environment and not already on login page
-      if (typeof window !== "undefined" && !window.location.pathname.includes("/login")) {
+      // Only redirect if we're in a browser environment, not already on login page, and not a superuser route
+      if (typeof window !== "undefined" && 
+          !window.location.pathname.includes("/login") && 
+          !window.location.pathname.includes("/superuser")) {
         // Use a timeout to ensure the error is properly returned before redirect
         setTimeout(() => {
           window.location.href = "/login?expired=true";

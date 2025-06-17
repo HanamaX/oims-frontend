@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting to Superuser Dashboard</title>
+  <meta http-equiv="refresh" content="0; url=/superuser/dashboard">
+  <script>
+    window.location.href = "/superuser/dashboard";
+  </script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f9fafb;
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      background-color: white;
+    }
+    .button {
+      display: inline-block;
+      background-color: #ef4444;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Redirecting to Superuser Dashboard</h1>
+    <p>If you are not redirected automatically, click the button below:</p>
+    <a class="button" href="/superuser/dashboard">Go to Superuser Dashboard</a>
+  </div>
+</body>
+</html>
