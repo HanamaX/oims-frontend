@@ -61,11 +61,10 @@ export default function ThankYouPage() {
         </div>
       </Card>
     </div>
-          </CardFooter>
+  
             </div>
-          </Card>
+
         </div>
-      </div>
-    </div>
+  
   )
 }
