@@ -93,6 +93,4 @@ export default function SupervisorReportsPage() {
       </Tabs>
     </div>
   )
-    </div>
-  )
 }

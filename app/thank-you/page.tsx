@@ -60,17 +60,9 @@ function ThankYouContent() {
           </CardFooter>
         </div>
       </Card>
-    </div>
-<<<<<<< HEAD
-  
-            </div>
-
-        </div>
-  
-=======
         </div>
       </div>
->>>>>>> 3bd5df8450015409a88196d753754203ee09ad69
+    </div>
   )
 }
 
