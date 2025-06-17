@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Loader2 } from "lucide-react"
 import API from "@/lib/api-service"
 import { useToast } from "@/components/ui/use-toast"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 import {
   Dialog,
   DialogContent,
@@ -85,6 +86,7 @@ export default function CenterManagementPage() {
   const [deleteCenterDialogOpen, setDeleteCenterDialogOpen] = useState(false)
 
   const { toast } = useToast()
+  const { t } = useLanguage()
 
   // Fetch center data on component mount
   useEffect(() => {
@@ -223,13 +225,12 @@ export default function CenterManagementPage() {
     setBranchStaff([])
     setShowBranchDetails(false)
   }
-
   // Handle center delete
   const handleDeleteCenter = () => {
     if (!centre.publicId) {
       toast({
-        title: "Error",
-        description: "Cannot delete center: Missing center ID",
+        title: t("common.error"),
+        description: t("centerManagement.deleteDialog.deleteError"),
         variant: "destructive",
       })
       return
@@ -271,17 +272,16 @@ export default function CenterManagementPage() {
       } catch (storageErr) {
         console.error("Failed to update local storage:", storageErr)
       }
-      
-      toast({
-        title: "Success",
-        description: "Center has been deleted successfully",
+        toast({
+        title: t("common.success"),
+        description: t("centerOverview.success.deleted"),
       })
     } catch (err: any) {
       console.error("Error deleting center:", err)
       setError(err.response?.data?.message ?? "Failed to delete center. Please try again.")
       toast({
-        title: "Error",
-        description: "Failed to delete center",
+        title: t("common.error"),
+        description: t("centerOverview.error.delete"),
         variant: "destructive",
       })
     } finally {
@@ -289,23 +289,21 @@ export default function CenterManagementPage() {
       setDeleteCenterDialogOpen(false)
     }
   }
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
         <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-        <span className="ml-2">Loading center information...</span>
+        <span className="ml-2"><T k="centerManagement.loading" /></span>
       </div>
     )
   }
 
-  return (
-    <div className="space-y-6">
+  return (    <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Center Management</h1>
+          <h1 className="text-3xl font-bold tracking-tight"><T k="centerManagement.title" /></h1>
           <p className="text-muted-foreground">
-            {centerExists ? "Manage your orphanage center and branches" : "Create your main orphanage center"}
+            {centerExists ? <T k="centerManagement.description.exists" /> : <T k="centerManagement.description.create" />}
           </p>
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
@@ -327,13 +325,12 @@ export default function CenterManagementPage() {
           branchStaff={branchStaff}
           onBackClick={handleCloseBranchDetails}
         />
-      ) : (
-        // Center and Branches View
+      ) : (        // Center and Branches View
         <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="overview">Center Overview</TabsTrigger>
-            <TabsTrigger value="branches">Branches</TabsTrigger>
-            <TabsTrigger value="staff">Staff</TabsTrigger>
+            <TabsTrigger value="overview"><T k="centerManagement.tabs.overview" /></TabsTrigger>
+            <TabsTrigger value="branches"><T k="centerManagement.tabs.branches" /></TabsTrigger>
+            <TabsTrigger value="staff"><T k="centerManagement.tabs.staff" /></TabsTrigger>
           </TabsList>
           
           {/* Center Overview Tab */}
@@ -372,24 +369,22 @@ export default function CenterManagementPage() {
           </TabsContent>
         </Tabs>
       )}
-      
-      {/* Delete Center Confirmation Dialog */}
+        {/* Delete Center Confirmation Dialog */}
       <Dialog open={deleteCenterDialogOpen} onOpenChange={setDeleteCenterDialogOpen}>
         <DialogContent className="bg-white">
           <DialogHeader>
-            <DialogTitle>Confirm Orphanage Center Deletion</DialogTitle>
+            <DialogTitle><T k="centerManagement.deleteDialog.title" /></DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the orphanage center <strong>{centre.name}</strong>?
+              <T k="centerManagement.deleteDialog.description" /> <strong>{centre.name}</strong>?
               <br /><br />
-              This action cannot be undone. All data associated with this center including all branches, 
-              orphans, staff records, inventory, donations, and other information will be permanently deleted.
+              <T k="centerManagement.deleteDialog.warning" />
               <br /><br />
-              <span className="text-red-600 font-medium">This is a critical action that will remove ALL data from your system.</span>
+              <span className="text-red-600 font-medium"><T k="centerManagement.deleteDialog.criticalWarning" /></span>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteCenterDialogOpen(false)}>
-              Cancel
+              <T k="common.cancel" />
             </Button>
             <Button 
               variant="destructive" 
@@ -399,10 +394,10 @@ export default function CenterManagementPage() {
               {submitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  <T k="centerManagement.deleteDialog.deleting" />
                 </>
               ) : (
-                "Delete Orphanage Center"
+                <T k="centerManagement.deleteDialog.deleteButton" />
               )}
             </Button>
           </DialogFooter>

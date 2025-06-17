@@ -11,8 +11,8 @@ export default function AboutUsPage() {
       <header className="sticky top-0 z-50 w-full border-b bg-white">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
-            <Link href="/" className="font-bold text-xl text-blue-700">
-              <T k="app.name" />
+            <Link href="/" className="font-bold text-3xl text-blue-700">
+              OIMS 
             </Link>
           </div>
           <div className="flex items-center gap-4">
@@ -227,3 +227,4 @@ export default function AboutUsPage() {
     </div>
   )
 }
+

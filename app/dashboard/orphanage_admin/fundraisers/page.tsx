@@ -8,9 +8,11 @@ import { Search, AlertTriangle } from "lucide-react"
 import FundraiserCard from "@/components/fundraiser-card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import API from "@/lib/api-service"
-import FundraiserService, { Fundraiser } from "@/lib/fundraiser-service"
+import { Fundraiser } from "@/lib/fundraiser-service"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 export default function SuperAdminFundraisersPage() {
+  const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [branchFilter, setBranchFilter] = useState<string>("all")
@@ -48,25 +50,28 @@ export default function SuperAdminFundraisersPage() {
         setIsLoading(true)
         // For superadmin, fetch all fundraisers across branches
         const response = await API.get("/app/oims/events/fundraisers/centre")
-        if (response.data?.data) {
-          // Process the data - ensure imageUrl is properly formatted if it exists
-          const processedFundraisers = response.data.data.map((fundraiser: any) => ({
-            ...fundraiser,
-            imageUrl: fundraiser.imageUrl 
-              ? fundraiser.imageUrl.startsWith('http')
+        if (response.data?.data) {          // Process the data - ensure imageUrl is properly formatted if it exists
+          const processedFundraisers = response.data.data.map((fundraiser: any) => {
+            let formattedImageUrl = null
+            if (fundraiser.imageUrl) {
+              formattedImageUrl = fundraiser.imageUrl.startsWith('http')
                 ? fundraiser.imageUrl 
                 : `https://oims-4510ba404e0e.herokuapp.com${fundraiser.imageUrl}`
-              : null
-          }))
+            }
+            
+            return {
+              ...fundraiser,
+              imageUrl: formattedImageUrl
+            }
+          })
           
           setFundraisers(processedFundraisers)
-          setError(null)
-        } else {
-          throw new Error("No data returned from API")
+          setError(null)        } else {
+          throw new Error(t("fundraisers.noDataFound"))
         }
       } catch (err) {
         console.error("Error fetching fundraisers:", err)
-        setError("Failed to load fundraisers. Please try again later.")
+        setError(t("fundraisers.failedToLoad"))
         setFundraisers([])
       } finally {
         setIsLoading(false)
@@ -92,18 +97,16 @@ export default function SuperAdminFundraisersPage() {
 
     return matchesSearch && matchesStatus && matchesBranch
   })
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="spinner h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading fundraisers...</p>
+          <p className="text-muted-foreground"><T k="fundraisers.loadingFundraisers" /></p>
         </div>
       </div>
     )
   }
-
   if (error) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -115,53 +118,47 @@ export default function SuperAdminFundraisersPage() {
             className="mt-4"
             variant="outline"
           >
-            Try Again
+            <T k="common.tryAgain" />
           </Button>
         </div>
       </div>
     )
   }
 
-  return (
-    <div className="space-y-6">
+  return (    <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Fundraiser Management</h1>
-        <p className="text-muted-foreground mt-2">View fundraisers across all branches</p>
+        <h1 className="text-3xl font-bold tracking-tight"><T k="fundraisers.management" /></h1>
+        <p className="text-muted-foreground mt-2"><T k="fundraisers.viewAllBranches" /></p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-        <div className="flex items-center space-x-2 flex-1">
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">        <div className="flex items-center space-x-2 flex-1">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search fundraisers..."
+            placeholder={t("fundraisers.searchFundraisers")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
           />
-        </div>
-
-        <div className="w-full md:w-[180px]">
+        </div>        <div className="w-full md:w-[180px]">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by status" />
+              <SelectValue placeholder={t("fundraisers.filterByStatus")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="rejected">Rejected</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="all"><T k="fundraisers.allStatuses" /></SelectItem>
+              <SelectItem value="pending"><T k="fundraisers.pending" /></SelectItem>
+              <SelectItem value="approved"><T k="fundraisers.approved" /></SelectItem>
+              <SelectItem value="rejected"><T k="fundraisers.rejected" /></SelectItem>
+              <SelectItem value="completed"><T k="fundraisers.completed" /></SelectItem>
             </SelectContent>
           </Select>
-        </div>
-
-        <div className="w-full md:w-[180px]">
+        </div>        <div className="w-full md:w-[180px]">
           <Select value={branchFilter} onValueChange={setBranchFilter}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by branch" />
+              <SelectValue placeholder={t("fundraisers.filterByBranch")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Branches</SelectItem>
+              <SelectItem value="all"><T k="fundraisers.allBranches" /></SelectItem>
               {branches.map(branch => (
                 <SelectItem key={branch.publicId} value={branch.publicId}>{branch.name}</SelectItem>
               ))}
@@ -177,11 +174,9 @@ export default function SuperAdminFundraisersPage() {
             fundraiser={fundraiser}
             readOnly={true}  
           />
-        ))}
-
-        {filteredFundraisers.length === 0 && (
+        ))}        {filteredFundraisers.length === 0 && (
           <Card className="p-8 text-center">
-            <p className="text-muted-foreground">No fundraisers found matching your criteria.</p>
+            <p className="text-muted-foreground"><T k="fundraisers.noFundraisersFound" /></p>
           </Card>
         )}
       </div>

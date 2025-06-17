@@ -53,12 +53,10 @@ const formatDateOfBirth = (dateInput: any): string => {
 
 // We're using the Orphan interface from orphan-types.ts
 
-export default function SupervisorOrphansPage() {
-  const router = useRouter()
+export default function SupervisorOrphansPage() {  const router = useRouter()
   const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState("")
-  const [branchFilter, setBranchFilter] = useState<string>("all")
-  // Add status filter with default to "active"
+  // Status filter with default to "active"
   const [statusFilter, setStatusFilter] = useState<string>("active")
   const [orphans, setOrphans] = useState<Orphan[]>([])
   const [isFormOpen, setIsFormOpen] = useState(false)
@@ -117,21 +115,18 @@ export default function SupervisorOrphansPage() {
   useEffect(() => {
     fetchOrphans();
   }, []);
-    // Filter orphans based on search term, branch filter, and status filter
+  // Filter orphans based on search term and status filter
   const filteredOrphans = orphans.filter((orphan) => {
     const matchesSearch =
       orphan.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       orphan.branchName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       orphan.educationLevel.toLowerCase().includes(searchTerm.toLowerCase());
-
-    // Apply branch filter if selected
-    const matchesBranch = branchFilter === "all" || orphan.branchName === branchFilter;
     
     // Apply status filter
     const orphanStatus = orphan.status?.toLowerCase() || "active";
     const matchesStatus = statusFilter === "all" || orphanStatus === statusFilter.toLowerCase();
 
-    return matchesSearch && matchesBranch && matchesStatus;
+    return matchesSearch && matchesStatus;
   })
   
   // Update displayed orphans when filters change or page changes
@@ -208,8 +203,8 @@ export default function SupervisorOrphansPage() {
   return (
     <div className="space-y-6">      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight"><T k="orphans.management" /></h1>
-          <p className="text-muted-foreground mt-2"><T k="orphans.description" /></p>
+          <h1 className="text-3xl font-bold tracking-tight"><T k="supervisor.orphans.management" /></h1>
+          <p className="text-muted-foreground mt-2"><T k="supervisor.orphans.description" /></p>
         </div>
         <Button onClick={() => setIsFormOpen(true)}>
           <Plus className="mr-2 h-4 w-4" /> <T k="orphans.add" />
@@ -222,32 +217,7 @@ export default function SupervisorOrphansPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
           />
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="w-full md:w-[180px]">
-            <Select 
-              defaultValue="all"
-              value={branchFilter} 
-              onValueChange={(value) => {
-                if (value !== branchFilter) {
-                  setCurrentPage(1); // Reset to first page when filter changes
-                  setBranchFilter(value);
-                }
-              }}
-            >              <SelectTrigger>
-                <SelectValue placeholder={t("orphans.filter.branch")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t("branch.all")}</SelectItem>
-                {/* Dynamically generate branch options from available data */}
-                {Array.from(new Set(orphans.map(o => o.branchName))).map(branch => (
-                  <SelectItem key={branch} value={branch}>{branch}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
+        </div>        <div className="flex flex-col sm:flex-row gap-4">
           <div className="w-full md:w-[180px]">
             <Select 
               defaultValue="active"
@@ -340,8 +310,8 @@ export default function SupervisorOrphansPage() {
         {filteredOrphans.length > orphansPerPage && (
           <div className="mt-6">
             <div className="flex items-center justify-between">              <p className="text-sm text-muted-foreground">
-                {t("ui.pagination.showing")} {displayedOrphans.length > 0 ? (currentPage - 1) * orphansPerPage + 1 : 0} 
-                - {Math.min(currentPage * orphansPerPage, filteredOrphans.length)} {t("ui.pagination.of")} {filteredOrphans.length} {t("ui.pagination.orphans")}
+                {t("common.showing")} {displayedOrphans.length > 0 ? (currentPage - 1) * orphansPerPage + 1 : 0} 
+                - {Math.min(currentPage * orphansPerPage, filteredOrphans.length)} {t("common.of")} {filteredOrphans.length} {t("orphans.orphans")}
               </p>
               
               <Pagination>
@@ -402,3 +372,4 @@ export default function SupervisorOrphansPage() {
     </div>
   )
 }
+

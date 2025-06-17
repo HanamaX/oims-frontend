@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts"
 import { useLanguage } from "@/contexts/LanguageContext"
+import { useAnalyticsTranslations } from "@/hooks/use-analytics-translations"
 
 interface ReportStatsProps {
   data: any
@@ -13,94 +14,114 @@ interface ReportStatsProps {
 export default function ReportStats({ data, type }: ReportStatsProps) {
   // Use language context for translations
   const { t } = useLanguage()
+  // Use analytics-specific translations
+  const { t: ta } = useAnalyticsTranslations()
   
   // Green theme color palette for charts - inspired by Spotify
   const colors = ["#10b981", "#059669", "#047857", "#065f46", "#064e3b", "#22c55e", "#15803d"]
-  // Format currency values
-  const formatCurrency = (value: number) => {
-    return `Tshs ${new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value)}`
+  
+  // Make sure data exists to prevent errors
+  if (!data) {
+    data = {}; // Initialize with empty object if data is undefined
   }
-    // Translate chart labels based on their type
+    // Initialize all possible chart data arrays to prevent errors
+  data.demographics = data.demographics || [];
+  data.ageGroups = data.ageGroups || [];
+  data.statusDistribution = data.statusDistribution || [];
+  data.categories = data.categories || [];
+  data.stockStatus = data.stockStatus || [];
+  data.transactions = data.transactions || [];
+  data.departments = data.departments || [];
+  data.status = data.status || [];
+  data.roles = data.roles || [];
+  data.amounts = data.amounts || [];
+  data.timeline = data.timeline || [];
+  data.skills = data.skills || [];
+  data.hoursByMonth = data.hoursByMonth || [];  // Format currency values
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat(ta("analytics.locale") === "sw" ? 'sw-TZ' : 'en-US', {
+      style: 'currency',
+      currency: 'TZS',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value)
+  }
+  // Translate chart labels based on their type
   const getTranslatedData = (rawData: any) => {
     if (!rawData) return [];
     
     return rawData.map((item: any) => {
       const newItem = { ...item };
-      
-      // Translate age groups
+        // Translate age groups
       if (item.name === "0-2 years") {
-        newItem.name = t("report.age.0-2");
+        newItem.name = ta("analytics.age.0-2");
       } else if (item.name === "3-5 years") {
-        newItem.name = t("report.age.3-5");
+        newItem.name = ta("analytics.age.3-5");
       } else if (item.name === "6-12 years") {
-        newItem.name = t("report.age.6-12");
+        newItem.name = ta("analytics.age.6-12");
       } else if (item.name === "13-17 years") {
-        newItem.name = t("report.age.13-17");
+        newItem.name = ta("analytics.age.13-17");
       }
       
       // Translate gender
       else if (item.name === "Male") {
-        newItem.name = t("report.gender.male");
+        newItem.name = ta("analytics.male");
       } else if (item.name === "Female") {
-        newItem.name = t("report.gender.female");
+        newItem.name = ta("analytics.female");
       }
       
       // Translate status
       else if (item.name === "Active") {
-        newItem.name = t("report.active");
+        newItem.name = ta("analytics.active");
       } else if (item.name === "Inactive") {
-        newItem.name = t("report.inactive");
+        newItem.name = ta("analytics.inactive");
       } else if (item.name === "Adopted") {
-        newItem.name = t("report.adopted");
+        newItem.name = ta("analytics.adopted");
       }
       
       // Translate inventory categories
       else if (item.name === "Food") {
-        newItem.name = t("report.food");
+        newItem.name = ta("analytics.food");
       } else if (item.name === "Clothing") {
-        newItem.name = t("report.clothing");
+        newItem.name = ta("analytics.clothing");
       } else if (item.name === "Medicine") {
-        newItem.name = t("report.medicine");
+        newItem.name = ta("analytics.medicine");
       } else if (item.name === "School") {
-        newItem.name = t("report.schoolSupplies");
+        newItem.name = ta("analytics.schoolSupplies");
       } else if (item.name === "Other") {
-        newItem.name = t("report.other");
+        newItem.name = ta("analytics.other");
       }
         // Translate stock status
       else if (item.name === "In Stock") {
-        newItem.name = t("report.inStock");
+        newItem.name = ta("analytics.inStock");
       } else if (item.name === "Low Stock") {
-        newItem.name = t("report.lowStock");
+        newItem.name = ta("analytics.lowStock");
       } else if (item.name === "Out of Stock") {
-        newItem.name = t("report.outOfStock");
-      }
-        // Translate fundraising status
+        newItem.name = ta("analytics.outOfStock");
+      }        // Translate fundraising status
       else if (item.name === "Pending") {
-        newItem.name = t("report.pending");
+        newItem.name = ta("analytics.pending");
       } else if (item.name === "Approved") {
-        newItem.name = t("report.approved");
+        newItem.name = ta("analytics.approved");
       } else if (item.name === "Completed") {
-        newItem.name = t("report.completed");
+        newItem.name = ta("analytics.completed");
       } else if (item.name === "Rejected") {
-        newItem.name = t("report.rejected");
+        newItem.name = ta("analytics.rejected");
       }
       
       // Translate activities and categories
       else if (item.name === "Education") {
-        newItem.name = t("report.education");
+        newItem.name = ta("analytics.education");
       } else if (item.name === "Healthcare") {
-        newItem.name = t("report.healthcare");
+        newItem.name = ta("analytics.healthcare");
       } else if (item.name === "Facilities") {
-        newItem.name = t("report.facilities");
+        newItem.name = ta("analytics.facilities");
       } else if (item.name === "Events") {
-        newItem.name = t("report.events");
+        newItem.name = ta("analytics.events");
       } else if (item.name === "Activities") {
-        newItem.name = t("report.activities");
+        newItem.name = ta("analytics.activities");
       } else if (item.name === "Administration") {
-        newItem.name = t("report.administration");
+        newItem.name = ta("analytics.administration");
       }
       
       return newItem;
@@ -118,19 +139,19 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 value="demographics"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.orphans.demographics")}
+                {ta("analytics.orphans.demographics")}
               </TabsTrigger>
               <TabsTrigger 
                 value="age"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.orphans.ageDistribution")}
+                {ta("analytics.orphans.ageDistribution")}
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.orphans.status")}
+                {ta("analytics.orphans.status")}
               </TabsTrigger>
             </TabsList>            <TabsContent value="demographics" className="pt-4">
               <ResponsiveContainer width="100%" height={300}>
@@ -195,19 +216,19 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 value="categories"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.inventory.categories")}
+                {ta("analytics.inventory.categories")}
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.inventory.stockStatus")}
+                {ta("analytics.inventory.stockStatus")}
               </TabsTrigger>
               <TabsTrigger 
                 value="transactions"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.inventory.transactions")}
+                {ta("analytics.inventory.transactions")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="categories" className="pt-4">
@@ -275,19 +296,19 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 value="amount"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.fundraising.amounts")}
+                {ta("analytics.fundraising.amounts")}
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.fundraising.status")}
+                {ta("analytics.fundraising.status")}
               </TabsTrigger>
               <TabsTrigger 
                 value="timeline"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.fundraising.timeline")}
+                {ta("analytics.fundraising.timeline")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="amount" className="pt-4">
@@ -356,19 +377,19 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 value="status"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.volunteers.status")}
+                {ta("analytics.volunteers.status")}
               </TabsTrigger>
               <TabsTrigger 
-                value="activities"
+                value="skills"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.volunteers.activities")}
+                {ta("analytics.volunteers.skills")}
               </TabsTrigger>
               <TabsTrigger 
                 value="hours"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.volunteers.volunteerHours")}
+                {ta("analytics.volunteers.volunteerHours")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="status" className="pt-4">
@@ -390,9 +411,9 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   </Pie>                  <Tooltip formatter={(value) => [`${value} ${t("report.volunteers.count")}`, t("report.count")]} />
                 </PieChart>
               </ResponsiveContainer>
-            </TabsContent>            <TabsContent value="activities" className="pt-4">
+            </TabsContent>            <TabsContent value="skills" className="pt-4">
               <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={getTranslatedData(data.activities)}>
+                <BarChart data={getTranslatedData(data.skills)}>
                   <XAxis dataKey="name" />
                   <YAxis />                  <Tooltip formatter={(value) => [`${value} ${t("report.volunteers.count")}`, t("report.count")]} />
                   <Bar 
@@ -407,8 +428,8 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
             </TabsContent>
             <TabsContent value="hours" className="pt-4">
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={getTranslatedData(data.hours)}>
-                  <XAxis dataKey="date" />
+                <LineChart data={getTranslatedData(data.hoursByMonth)}>
+                  <XAxis dataKey="name" />
                   <YAxis />                  <Tooltip formatter={(value) => [`${value} ${t("report.volunteers.volunteerHours")}`, t("report.count")]} />
                   <Line 
                     type="monotone" 
@@ -425,21 +446,25 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
             </TabsContent>
           </Tabs>
         )
-      
-      case "staff":
+        case "staff":
+        // Make sure all the required data properties exist to avoid TypeErrors
+        if (!data.departments) data.departments = [];
+        if (!data.status) data.status = [];
+        if (!data.roles) data.roles = [];
+        
         return (          <Tabs defaultValue="departments">
             <TabsList className="grid w-full grid-cols-3 bg-green-100">
               <TabsTrigger 
                 value="departments"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.staff.departments")}
+                {ta("analytics.staff.departments")}
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
               >
-                {t("report.staff.status")}
+                {ta("analytics.staff.status")}
               </TabsTrigger>
               <TabsTrigger 
                 value="roles"
@@ -460,16 +485,14 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                     outerRadius={100}
                     label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                     animationBegin={200}
-                    animationDuration={1500}
-                  >
-                    {data.departments.map((_: any, index: number) => (
+                    animationDuration={1500}                  >
+                    {data.departments && data.departments.map((_: any, index: number) => (
                       <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                     ))}
-                  </Pie>                  <Tooltip formatter={(value) => [`${value} ${t("dashboard.staff")}`, t("report.count")]} />
+                  </Pie><Tooltip formatter={(value) => [`${value} ${t("dashboard.staff")}`, t("report.count")]} />
                 </PieChart>
               </ResponsiveContainer>
-            </TabsContent>
-            <TabsContent value="status" className="pt-4">
+            </TabsContent>            <TabsContent value="status" className="pt-4">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getTranslatedData(data.status)}>
                   <XAxis dataKey="name" />
@@ -587,3 +610,4 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
     </Card>
   )
 }
+

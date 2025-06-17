@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
-import { Search, Eye, Loader2 } from "lucide-react"
+import { Search, Eye, Loader2, Plus } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 import API from "@/lib/api-service"
 import { Orphan } from "@/lib/orphan-types"
 import { 
@@ -33,10 +34,11 @@ const calculateAge = (dateOfBirth: string): number => {
   return age;
 };
 
-export default function OrphanageAdminOrphansPage() {
-  const router = useRouter()
+export default function OrphanageAdminOrphansPage() {  const router = useRouter()
+  const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState("")
   const [branchFilter, setBranchFilter] = useState<string>("all")
+  const [statusFilter, setStatusFilter] = useState<string>("all")
   const [orphans, setOrphans] = useState<Orphan[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [orphansPerPage] = useState(10) // Show 10 orphans per page
@@ -104,8 +106,7 @@ export default function OrphanageAdminOrphansPage() {
   useEffect(() => {
     fetchOrphans();
   }, []);
-  
-  // Filter orphans based on search term and branch filter
+    // Filter orphans based on search term, branch filter, and status filter
   const filteredOrphans = orphans.filter((orphan) => {
     const matchesSearch =
       orphan.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -114,8 +115,12 @@ export default function OrphanageAdminOrphansPage() {
 
     // Apply branch filter if selected
     const matchesBranch = branchFilter === "all" || orphan.branchName === branchFilter || orphan.branchPublicId === branchFilter;
+    
+    // Apply status filter
+    const orphanStatus = orphan.status?.toLowerCase() ?? "active";
+    const matchesStatus = statusFilter === "all" || orphanStatus === statusFilter.toLowerCase();
 
-    return matchesSearch && matchesBranch;
+    return matchesSearch && matchesBranch && matchesStatus;
   })
   
   // Update displayed orphans when filters change or page changes
@@ -146,67 +151,83 @@ export default function OrphanageAdminOrphansPage() {
   }, [filteredOrphans.length, orphansPerPage, currentPage]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6">      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Orphan Management</h1>
-          <p className="text-muted-foreground mt-2">View all orphans across all branches</p>
+          <h1 className="text-3xl font-bold tracking-tight"><T k="orphans.management" /></h1>
+          <p className="text-muted-foreground mt-2"><T k="orphans.description" /></p>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-        <div className="flex items-center space-x-2 flex-1">
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">        <div className="flex items-center space-x-2 flex-1">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search orphans..."
+            placeholder={t("orphans.search")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
           />
+        </div>        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="w-full md:w-[200px]">
+            <Select 
+              defaultValue="all"
+              value={branchFilter} 
+              onValueChange={(value) => {
+                if (value !== branchFilter) {
+                  setCurrentPage(1); // Reset to first page when filter changes
+                  setBranchFilter(value);
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t("orphans.filter.branch")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all"><T k="branch.all" /></SelectItem>
+                {branches.map(branch => (
+                  <SelectItem key={branch.publicId} value={branch.publicId}>{branch.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="w-full md:w-[180px]">
+            <Select 
+              defaultValue="all"
+              value={statusFilter} 
+              onValueChange={(value) => {
+                if (value !== statusFilter) {
+                  setCurrentPage(1); // Reset to first page when filter changes
+                  setStatusFilter(value);
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t("orphans.filter.status")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all"><T k="orphans.filter.all" /></SelectItem>
+                <SelectItem value="active"><T k="status.active" /></SelectItem>
+                <SelectItem value="inactive"><T k="status.inactive" /></SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-
-        <div className="w-full md:w-[200px]">
-          <Select 
-            defaultValue="all"
-            value={branchFilter} 
-            onValueChange={(value) => {
-              if (value !== branchFilter) {
-                setCurrentPage(1); // Reset to first page when filter changes
-                setBranchFilter(value);
-              }
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Filter by branch" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Branches</SelectItem>
-              {branches.map(branch => (
-                <SelectItem key={branch.publicId} value={branch.publicId}>{branch.name}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Loading state */}
+      </div>      {/* Loading state */}
       {loading && (
         <div className="flex justify-center items-center h-64">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <span className="ml-2">Loading orphans data...</span>
+          <span className="ml-2"><T k="orphans.loading" /></span>
         </div>
-      )}
-
-      {/* Error state */}
+      )}      {/* Error state */}
       {error && !loading && (
         <div className="bg-red-50 border border-red-200 rounded-md p-4 text-center">
-          <p className="text-red-600">Error: {error}</p>
+          <p className="text-red-600">{t("common.error")}: {error}</p>
           <Button 
             variant="outline" 
             className="mt-2" 
             onClick={() => window.location.reload()}
           >
-            Retry
+            <T k="orphans.tryAgain" />
           </Button>
         </div>
       )}
@@ -217,52 +238,54 @@ export default function OrphanageAdminOrphansPage() {
           return (
             <Card key={orphan.publicId} className="overflow-hidden bg-white hover:shadow-md transition-shadow">
               <CardContent className="p-6">
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">                  <div className="space-y-1">                    <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-lg">{orphan.fullName}</h3>
-                      <Badge className="bg-gray-100 text-gray-800">{orphan.age} years old</Badge>
+                      <Badge className="bg-gray-100 text-gray-800">{orphan.age} <T k="orphan.yearsOld" /></Badge>
+                      {orphan.status && (
+                        <Badge 
+                          className={`${orphan.status?.toLowerCase() === 'active' 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-orange-100 text-orange-800'}`}
+                        >
+                          {t(orphan.status?.toLowerCase() === 'active' ? 'status.active' : 'status.inactive')}
+                        </Badge>
+                      )}
                     </div>
-                    <p className="text-sm text-muted-foreground">Branch: {orphan.branchName || 'N/A'}</p>
+                    <p className="text-sm text-muted-foreground"><T k="branch.label" />: {orphan.branchName || t("common.notAvailable")}</p>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-1 text-sm mt-1">
-                      <span>Education: {orphan.educationLevel || 'N/A'}</span>
-                      <span>Date of Birth: {
+                      <span><T k="orphan.education" />: {orphan.educationLevel || t("common.notAvailable")}</span>
+                      <span><T k="orphan.dateOfBirth" />: {
                         orphan.createdAt && !orphan.createdAt.includes("No date") 
                           ? new Date(orphan.createdAt).toLocaleDateString() 
-                          : "Not available"
+                          : t("common.notAvailable")
                       }</span>
                     </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mt-2 lg:mt-0">
+                  </div>                  <div className="flex flex-wrap gap-2 mt-2 lg:mt-0">
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={() => router.push(`/dashboard/orphanage_admin/orphans/${orphan.publicId}`)}
                     >
                       <Eye className="mr-2 h-4 w-4" />
-                      View Details
+                      <T k="orphans.details" />
                     </Button>
                   </div>
                 </div>
               </CardContent>
             </Card>
           )
-        })}
-
-        {filteredOrphans.length === 0 && !loading && !error && (
+        })}        {filteredOrphans.length === 0 && !loading && !error && (
           <div className="text-center py-10 bg-white rounded-lg shadow">
-            <p className="text-muted-foreground">No orphans found matching your criteria.</p>
+            <p className="text-muted-foreground"><T k="orphans.noData" /></p>
           </div>
         )}
         
         {/* Pagination */}
         {filteredOrphans.length > orphansPerPage && (
-          <div className="mt-6">
-            <div className="flex items-center justify-between">
+          <div className="mt-6">            <div className="flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
-                Showing {displayedOrphans.length > 0 ? (currentPage - 1) * orphansPerPage + 1 : 0} 
-                - {Math.min(currentPage * orphansPerPage, filteredOrphans.length)} of {filteredOrphans.length} orphans
+                {t("common.showing")} {displayedOrphans.length > 0 ? (currentPage - 1) * orphansPerPage + 1 : 0} 
+                - {Math.min(currentPage * orphansPerPage, filteredOrphans.length)} {t("common.of")} {filteredOrphans.length} {t("orphans.orphans")}
               </p>
               
               <Pagination>

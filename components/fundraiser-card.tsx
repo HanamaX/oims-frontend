@@ -17,6 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 // Define types for our data
 import { Fundraiser } from "@/lib/fundraiser-service"
@@ -42,6 +43,7 @@ export default function FundraiserCard({
   onCancel,
   readOnly = false 
 }: Readonly<FundraiserCardProps>) {
+  const { t, language } = useLanguage()
   const [imageError, setImageError] = useState(false)
 
   // Helper function to construct image URLs consistently
@@ -63,15 +65,21 @@ export default function FundraiserCard({
   const handleImageError = useCallback(() => {
     setImageError(true)
   }, [])
-
   // Format date
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+  const formatDate = useCallback((dateString: string) => {
+    // Using Intl.DateTimeFormat for proper localization
+    const date = new Date(dateString);
+    
+    // Set locale based on current language
+    const locale = language === 'sw' ? 'sw-TZ' : 'en-US';
+    
+    return new Intl.DateTimeFormat(locale, {
       year: "numeric",
       month: "short",
       day: "numeric",
-    })
-  }
+    }).format(date);
+  }, [language])
+  
   // Get status color
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -85,6 +93,22 @@ export default function FundraiserCard({
         return "bg-red-100 text-red-800 border-red-200"
       default:
         return "bg-gray-100 text-gray-800 border-gray-200"
+    }
+  }
+  
+  // Get translated status
+  const getTranslatedStatus = (status: string) => {
+    switch (status) {
+      case "APPROVED":
+        return t("fundraiser.status.approved")
+      case "COMPLETED":
+        return t("fundraiser.status.completed")
+      case "PENDING":
+        return t("fundraiser.status.pending")
+      case "REJECTED":
+        return t("fundraiser.status.rejected")
+      default:
+        return status.charAt(0) + status.slice(1).toLowerCase()
     }
   }
 
@@ -106,11 +130,10 @@ export default function FundraiserCard({
                   priority
                 />
               </div>
-            ) : (
-              <div className="w-full h-full bg-gray-100 rounded-l flex items-center justify-center">
+            ) : (              <div className="w-full h-full bg-gray-100 rounded-l flex items-center justify-center">
                 <div className="text-center text-gray-500">
                   <div className="text-3xl mb-2">🖼️</div>
-                  <p className="text-xs">Fundraiser Image</p>
+                  <p className="text-xs">{t("fundraiser.image.placeholder")}</p>
                 </div>
               </div>
             )}
@@ -121,20 +144,17 @@ export default function FundraiserCard({
         <div className="md:col-span-2 p-6">
           <div className="flex justify-between items-start">
             <div>
-              <div className="flex flex-wrap items-center gap-2 mb-2">
-                <CardTitle className="text-xl">{fundraiser.eventName}</CardTitle>
+              <div className="flex flex-wrap items-center gap-2 mb-2">                <CardTitle className="text-xl">{fundraiser.eventName}</CardTitle>
                 <Badge className={getStatusColor(fundraiser.status)}>
-                  {fundraiser.status.charAt(0) + fundraiser.status.slice(1).toLowerCase()}
+                  {getTranslatedStatus(fundraiser.status)}
                 </Badge>
               </div>              {/* Show rejection reason if status is REJECTED */}
-              {fundraiser.status === 'REJECTED' && (fundraiser.reason ?? fundraiser.inactiveReason) && (
-                <div className="mt-2 mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-                  <p className="text-sm font-medium text-red-700">Rejection Reason:</p>
+              {fundraiser.status === 'REJECTED' && (fundraiser.reason ?? fundraiser.inactiveReason) && (                <div className="mt-2 mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-sm font-medium text-red-700">{t("fundraiser.card.rejectionReason")}:</p>
                   <p className="text-sm text-red-600">{fundraiser.reason ?? fundraiser.inactiveReason}</p>
                 </div>
-              )}
-              <CardDescription className="flex items-center gap-1">
-                <span className="font-medium">Coordinator:</span> {fundraiser.coordinatorName}
+              )}              <CardDescription className="flex items-center gap-1">
+                <span className="font-medium">{t("fundraiser.card.coordinator")}:</span> {fundraiser.coordinatorName}
               </CardDescription>
             </div>            <div className="flex space-x-2">
               {!readOnly && onEdit && (
@@ -146,21 +166,20 @@ export default function FundraiserCard({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-            <div className="space-y-4">
-              <div>
-                <p className="text-sm font-medium">Purpose</p>
+            <div className="space-y-4">              <div>
+                <p className="text-sm font-medium">{t("fundraiser.card.purpose")}</p>
                 <p className="text-sm text-muted-foreground">{fundraiser.purpose}</p>
               </div>
               
               <div>
-                <p className="text-sm font-medium">Fundraising Reason</p>
+                <p className="text-sm font-medium">{t("fundraiser.card.fundraisingReason")}</p>
                 <p className="text-sm text-muted-foreground">{fundraiser.fundraisingReason}</p>
               </div>
               
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Timeline</p>
+                  <p className="text-xs text-muted-foreground">{t("fundraiser.card.timeline")}</p>
                   <p className="text-sm">
                     {formatDate(fundraiser.eventStartDate)} - {formatDate(fundraiser.eventEndDate)}
                   </p>
@@ -168,84 +187,78 @@ export default function FundraiserCard({
               </div>
             </div>
             
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
+            <div className="space-y-4">              <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 <div className="overflow-hidden">
-                  <p className="text-xs text-muted-foreground">Contact Email</p>
+                  <p className="text-xs text-muted-foreground">{t("fundraiser.card.contactEmail")}</p>
                   <p className="text-sm truncate">{fundraiser.coordinatorEmail}</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                <div>
-                  <p className="text-xs text-muted-foreground">Contact Phone</p>
+                <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />                <div>
+                  <p className="text-xs text-muted-foreground">{t("fundraiser.card.contactPhone")}</p>
                   <p className="text-sm">{fundraiser.phoneNumber}</p>
                 </div>
               </div>
                 <div className="flex items-center gap-2">
                 <DollarSign className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 <div>
-                  <p className="text-xs text-muted-foreground">Fundraising Goal</p>
-                  <p className="text-sm">Tshs {fundraiser.goal.toLocaleString()}</p>
+                  <p className="text-xs text-muted-foreground">{t("fundraiser.card.fundraisingGoal")}</p>
+                  <p className="text-sm">{t("fundraiser.currency")} {fundraiser.goal.toLocaleString(language === 'sw' ? 'sw-TZ' : 'en-US')}</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-2">
                 <ClipboardList className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                 <div className="overflow-hidden">
-                  <p className="text-xs text-muted-foreground">Branch</p>
+                  <p className="text-xs text-muted-foreground">{t("fundraiser.card.branch")}</p>
                   <p className="text-sm truncate">{fundraiser.branchName}</p>
                 </div>
               </div>
             </div>
-          </div>
-            <div className="mt-5">
-            <p className="text-sm font-medium">Budget Breakdown</p>
+          </div>            <div className="mt-5">
+            <p className="text-sm font-medium">{t("fundraiser.card.budgetBreakdown")}</p>
             <p className="text-sm text-muted-foreground">{fundraiser.budgetBreakdown}</p>
-          </div>          <div className="mt-6 flex flex-wrap gap-3">
+          </div><div className="mt-6 flex flex-wrap gap-3">
             {!readOnly && fundraiser.status === "PENDING" && onApprove && onReject && (
-              <>
-                <Button 
+              <>                <Button 
                   variant="outline" 
                   className="bg-green-100 text-green-800 hover:bg-green-200 border-green-200"
                   onClick={() => onApprove(fundraiser.publicId)}
-                >
-                  Approve
-                </Button>                <AlertDialog>
+                >                  {t("fundraiser.card.approve")}
+                </Button><AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button 
                       variant="outline" 
                       className="bg-red-100 text-red-800 hover:bg-red-200 border-red-200"
                     >
-                      Reject
+                      {t("fundraiser.card.reject")}
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Reject Fundraiser</AlertDialogTitle>
+                      <AlertDialogTitle>{t("fundraiser.card.rejectFundraiser")}</AlertDialogTitle>
                       <AlertDialogDescription>
-                        Please provide a reason for rejecting this fundraiser. This will be visible to the organizer.
+                        {t("fundraiser.card.rejectReason")}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <div className="my-4">
-                      <input
+                    <div className="my-4">                      <input
                         id="rejectReason"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                        placeholder="Enter reason for rejection"
-                        defaultValue="Rejected by supervisor"
+                        placeholder={t("fundraiser.card.enterRejectReason")}
+                        defaultValue={t("fundraiser.card.rejectedBy")}
                       />
                     </div>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel>{t("form.cancel")}</AlertDialogCancel>
                       <AlertDialogAction 
                         onClick={() => {
                           const reasonInput = document.getElementById('rejectReason') as HTMLInputElement;
-                          onReject(fundraiser.publicId, reasonInput?.value || "Rejected by supervisor")
+                          onReject(fundraiser.publicId, reasonInput?.value || t("fundraiser.card.rejectedBy"))
                         }}
                       >
-                        Confirm Rejection
+                        {t("fundraiser.card.confirmRejection")}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
@@ -262,7 +275,7 @@ export default function FundraiserCard({
                       }
                     }}
                   >
-                    View Campaign
+                    {t("fundraiser.card.viewCampaign")}
                   </Button>
                   
                   {/* Mark as Completed Button
@@ -276,41 +289,40 @@ export default function FundraiserCard({
                     </Button>
                   )} */}
                   
-                  {/* Cancel Button */}
-                  {onCancel && (
+                  {/* Cancel Button */}                  {onCancel && (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button 
                           variant="outline" 
                           className="bg-red-100 text-red-800 hover:bg-red-200 border-red-200"
                         >
-                          Cancel Fundraiser
+                          {t("fundraiser.card.cancelFundraiserButton")}
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Cancel Fundraiser</AlertDialogTitle>
+                          <AlertDialogTitle>{t("fundraiser.card.cancelFundraiser")}</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Please provide a reason for cancelling this fundraiser. This will be visible to the organizer.
+                            {t("fundraiser.card.cancelReason")}
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <div className="my-4">
                           <input
                             id="cancelReason"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                            placeholder="Enter reason for cancellation"
-                            defaultValue="Cancelled by supervisor"
+                            placeholder={t("fundraiser.card.enterCancelReason")}
+                            defaultValue={t("fundraiser.card.cancelledBy")}
                           />
                         </div>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Go Back</AlertDialogCancel>
+                          <AlertDialogCancel>{t("fundraiser.card.goBack")}</AlertDialogCancel>
                           <AlertDialogAction 
                             onClick={() => {
                               const reasonInput = document.getElementById('cancelReason') as HTMLInputElement;
-                              onCancel(fundraiser.publicId, reasonInput?.value || "Cancelled by supervisor")
+                              onCancel(fundraiser.publicId, reasonInput?.value || t("fundraiser.card.cancelledBy"))
                             }}
                           >
-                            Confirm Cancellation
+                            {t("fundraiser.card.confirmCancellation")}
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>                    </AlertDialog>
@@ -318,15 +330,14 @@ export default function FundraiserCard({
                 </>
               )
             }            {/* View Details button for read-only mode (orphanage admin view) */}
-            {readOnly && fundraiser.status === "APPROVED" && (
-              <Button 
+            {readOnly && fundraiser.status === "APPROVED" && (              <Button 
                 variant="outline" 
                 className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-blue-200"
                 onClick={() => {
                   window.location.href = `/dashboard/shared/campaign/${fundraiser.publicId}`;
                 }}
               >
-                View Details
+                {t("fundraiser.card.viewDetails")}
               </Button>
             )}
           </div>

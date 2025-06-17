@@ -10,6 +10,7 @@ import MedicalRecordDetails from "@/components/medical-record-details"
 import { MedicalRecord, MedicalRecordDetail } from "@/lib/orphan-types"
 import Image from "next/image"
 import API from "@/lib/api-service"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 interface MedicalTabProps {
   readonly orphanId: string
@@ -30,6 +31,8 @@ export default function OrphanMedicalTab({
   fetchRecords,
   readOnly = false
 }: Readonly<MedicalTabProps>) {
+  const { t } = useLanguage()
+  
   // UI state
   const [showForm, setShowForm] = useState(false)
   const [selectedRecordId, setSelectedRecordId] = useState<string | null>(null)
@@ -96,7 +99,7 @@ export default function OrphanMedicalTab({
     return (
       <div className="flex flex-col items-center justify-center h-[30vh]">
         <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-        <p>Loading medical records...</p>
+        <p>{t('orphan.medical.loadingRecords')}</p>
       </div>
     )
   }
@@ -111,7 +114,7 @@ export default function OrphanMedicalTab({
           size="sm" 
           onClick={onRetry}
         >
-          Try Again
+          {t('orphan.medical.tryAgain')}
         </Button>
       </div>
     )
@@ -122,7 +125,7 @@ export default function OrphanMedicalTab({
     return (
       <div className="flex flex-col items-center justify-center h-[30vh]">
         <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-        <p>Loading medical record details...</p>
+        <p>{t('orphan.medical.loadingDetails')}</p>
       </div>
     )
   }
@@ -144,11 +147,11 @@ export default function OrphanMedicalTab({
     return (
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-12">
-          <p className="text-muted-foreground mb-4">No medical records found for this orphan</p>
+          <p className="text-muted-foreground mb-4">{t('orphan.medical.noRecords')}</p>
           {!readOnly && (
             <Button variant="outline" onClick={() => setShowForm(true)}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Medical Record
+              {t('orphan.medical.addRecord')}
             </Button>
           )}
         </CardContent>
@@ -173,7 +176,7 @@ export default function OrphanMedicalTab({
         <div className="flex justify-end mb-6">
           <Button onClick={() => setShowForm(true)}>
             <Plus className="mr-2 h-4 w-4" />
-            Add New Record
+            {t('orphan.medical.addNewRecord')}
           </Button>
         </div>
       )}
@@ -202,7 +205,7 @@ export default function OrphanMedicalTab({
                     {record.createdAt ? new Date(record.createdAt.replace(" ", "T")).toLocaleDateString() : "No date"}
                   </Badge>
                 </div>
-                <CardDescription>Hospital: {record.hospitalName}</CardDescription>
+                <CardDescription>{t('orphan.medical.hospital')}: {record.hospitalName}</CardDescription>
               </CardHeader>
               
               <CardContent className="pb-4">
@@ -223,21 +226,21 @@ export default function OrphanMedicalTab({
                   <div className="flex-1 space-y-3">
                     {record.treatment && (
                       <div>
-                        <h3 className="text-sm font-medium text-muted-foreground mb-1">Treatment</h3>
+                        <h3 className="text-sm font-medium text-muted-foreground mb-1">{t('orphan.medical.treatment')}</h3>
                         <p>{record.treatment}</p>
                       </div>
                     )}
                     
                     {record.notes && (
                       <div>
-                        <h3 className="text-sm font-medium text-muted-foreground mb-1">Notes</h3>
+                        <h3 className="text-sm font-medium text-muted-foreground mb-1">{t('orphan.medical.notes')}</h3>
                         <p>{record.notes}</p>
                       </div>
                     )}
                     
                     {record.followUpDate && (
                       <div>
-                        <h3 className="text-sm font-medium text-muted-foreground mb-1">Follow-up Date</h3>
+                        <h3 className="text-sm font-medium text-muted-foreground mb-1">{t('orphan.medical.followUpDate')}</h3>
                         <p>{new Date(record.followUpDate).toLocaleDateString()}</p>
                       </div>
                     )}
@@ -250,7 +253,7 @@ export default function OrphanMedicalTab({
                       onClick={() => setSelectedRecordId(record.publicId)}
                     >
                       <Eye className="mr-2 h-4 w-4" />
-                      View Details
+                      {t('orphan.medical.viewDetails')}
                     </Button>
                   </div>
                 </div>

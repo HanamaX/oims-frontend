@@ -15,6 +15,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 import { ScrollArea } from "@/components/ui/scroll-area"
 import StaffEditForm from "@/components/staff-edit-form"
+import { useLanguage, T } from "@/contexts/LanguageContext"
 
 // Define types for our data
 interface OrphanageCentre {
@@ -54,6 +55,8 @@ interface Staff {
 }
 
 export default function CenterManagementPage() {
+  const { language } = useLanguage()
+  
   // Center state
   const [centre, setCentre] = useState<OrphanageCentre>({
         name: "",
@@ -271,23 +274,21 @@ export default function CenterManagementPage() {
     setSelectedStaff(null)
   }
 
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
         <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-        <span className="ml-2">Loading center information...</span>
+        <span className="ml-2"><T k="centerManagement.loadingMessage" /></span>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6">      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Center Management</h1>
+          <h1 className="text-3xl font-bold tracking-tight"><T k="centerManagement.title" /></h1>
           <p className="text-muted-foreground">
-            {centerExists ? "Manage your orphanage center and branches" : "Create your main orphanage center"}
+            {centerExists ? <T k="centerManagement.description" /> : <T k="centerManagement.createDescription" />}
           </p>
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
@@ -296,27 +297,26 @@ export default function CenterManagementPage() {
       {!centerExists ? (
         // Create Center Form
         <Card>
-          <form onSubmit={handleCenterSubmit}>
-            <CardHeader>
-              <CardTitle>Create Orphanage Center</CardTitle>
-              <CardDescription>Enter the details for your main orphanage center</CardDescription>
+          <form onSubmit={handleCenterSubmit}>            <CardHeader>
+              <CardTitle><T k="centerOverview.createCenter" /></CardTitle>
+              <CardDescription><T k="centerOverview.createCenterDescription" /></CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Center Name</Label>
+                  <Label htmlFor="name"><T k="centerOverview.centerName" /></Label>
                   <Input id="name" name="name" value={centre.name} onChange={handleCenterChange} required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
+                  <Label htmlFor="location"><T k="centerOverview.location" /></Label>
                   <Input id="location" name="location" value={centre.location} onChange={handleCenterChange} required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="address">Address</Label>
+                  <Label htmlFor="address"><T k="centerOverview.address" /></Label>
                   <Input id="address" name="address" value={centre.address} onChange={handleCenterChange} required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phoneNumber">Phone Number</Label>
+                  <Label htmlFor="phoneNumber"><T k="centerOverview.phoneNumber" /></Label>
                   <Input
                     id="phoneNumber"
                     name="phoneNumber"
@@ -324,14 +324,13 @@ export default function CenterManagementPage() {
                     onChange={handleCenterChange}
                     required
                   />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                </div>                <div className="space-y-2">
+                  <Label htmlFor="email"><T k="centerOverview.email" /></Label>
                   <Input id="email" name="email" type="email" value={centre.email} onChange={handleCenterChange} required />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description"><T k="centerOverview.description" /></Label>
                 <Textarea
                   id="description"
                   name="description"
@@ -345,10 +344,9 @@ export default function CenterManagementPage() {
                 {false ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating...
-                  </>
-                ) : (
-                  <>Create Center</>
+                    <T k="common.creating" />
+                  </>                ) : (
+                  <T k="centerOverview.createCenter" />
                 )}
               </Button>
             </CardFooter>
@@ -364,23 +362,22 @@ export default function CenterManagementPage() {
           
           {isEditingBranchInDetailView ? (
             <Card>
-              <form onSubmit={handleBranchSubmit}>
-                <CardHeader>
-                  <CardTitle>Edit Branch</CardTitle>
-                  <CardDescription>Update the details for the branch</CardDescription>
+              <form onSubmit={handleBranchSubmit}>                <CardHeader>
+                  <CardTitle><T k="branch.editBranch" /></CardTitle>
+                  <CardDescription><T k="branch.editBranchDescription" /></CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Branch Name</Label>
+                      <Label htmlFor="name"><T k="branch.branchName" /></Label>
                       <Input id="name" name="name" value={branch.name} onChange={handleBranchChange} required />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="location">Location</Label>
+                      <Label htmlFor="location"><T k="centerOverview.location" /></Label>
                       <Input id="location" name="location" value={branch.location} onChange={handleBranchChange} required />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="phoneNumber">Phone Number</Label>
+                      <Label htmlFor="phoneNumber"><T k="centerOverview.phoneNumber" /></Label>
                       <Input
                         id="phoneNumber"
                         name="phoneNumber"
@@ -396,7 +393,7 @@ export default function CenterManagementPage() {
                         checked={branch.isHQ || false}
                         onCheckedChange={(checked) => setBranch((prev) => ({ ...prev, isHQ: checked === true }))}
                       />
-                      <Label htmlFor="isHQ">Is Headquarters</Label>
+                      <Label htmlFor="isHQ"><T k="branch.isHeadquarters" /></Label>
                     </div>
                   </div>
                 </CardContent>
@@ -427,10 +424,9 @@ export default function CenterManagementPage() {
                 <Building2 className="h-8 w-8 text-blue-500" />
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <CardTitle>{selectedBranch?.name}</CardTitle>
-                    {selectedBranch?.isHQ && (
+                    <CardTitle>{selectedBranch?.name}</CardTitle>                    {selectedBranch?.isHQ && (
                       <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                        Headquarters
+                        <T k="branch.headquarters" />
                       </span>
                     )}
                   </div>
@@ -438,15 +434,14 @@ export default function CenterManagementPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-6">                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm font-medium">Phone Number</p>
+                      <p className="text-sm font-medium"><T k="centerOverview.phoneNumber" /></p>
                       <p className="text-sm text-muted-foreground">{selectedBranch?.phoneNumber}</p>
                     </div>
                     {selectedBranch?.createdDate && (
                       <div>
-                        <p className="text-sm font-medium">Created Date</p>
+                        <p className="text-sm font-medium"><T k="common.createdDate" /></p>
                         <p className="text-sm text-muted-foreground">
                           {new Date(selectedBranch.createdDate.replace(' ', 'T')).toLocaleDateString('en-US', {
                             year: 'numeric',
@@ -456,17 +451,16 @@ export default function CenterManagementPage() {
                         </p>
                       </div>
                     )}                    <div>
-                      <p className="text-sm font-medium">Orphans</p>
-                      <p className="text-sm text-muted-foreground">{selectedBranch?.orphanCount ?? 0} orphans in this branch</p>
+                      <p className="text-sm font-medium"><T k="dashboard.orphans" /></p>
+                      <p className="text-sm text-muted-foreground">{selectedBranch?.orphanCount ?? 0} <T k="branch.orphansInBranch" /></p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Staff</p>
-                      <p className="text-sm text-muted-foreground">{selectedBranch?.staffCount ?? 0} staff members</p>
+                      <p className="text-sm font-medium"><T k="staff.staff" /></p>
+                      <p className="text-sm text-muted-foreground">{selectedBranch?.staffCount ?? 0} <T k="staff.staffMembers" /></p>
                     </div>
                   </div>
-                    {/* Branch Staff Section */}
-                  <div className="mt-6">
-                    <h3 className="text-lg font-medium mb-4">Branch Staff</h3>
+                    {/* Branch Staff Section */}                  <div className="mt-6">
+                    <h3 className="text-lg font-medium mb-4"><T k="staff.branchStaff" /></h3>
                     {branchStaff.length > 0 ? (
                       <div className="space-y-4">                        {branchStaff.map((staff) => (
                           <Card 
@@ -493,21 +487,20 @@ export default function CenterManagementPage() {
                                     </div>
                                   </div>
                                 </div>
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <span className={`px-2 py-1 rounded text-xs ${
+                                <div className="flex items-center gap-2 flex-wrap">                                  <span className={`px-2 py-1 rounded text-xs ${
                                     staff.role === 'ROLE_SUPER_ADMIN' 
                                       ? 'bg-blue-100 text-blue-800' 
                                       : 'bg-green-100 text-green-800'
                                   }`}>
-                                    {staff.role === 'ROLE_SUPER_ADMIN' ? 'Super Admin' : 'Admin'}
+                                    {staff.role === 'ROLE_SUPER_ADMIN' ? <T k="staff.superAdmin" /> : <T k="staff.admin" />}
                                   </span>
                                   {staff.suspended ? (
                                     <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">
-                                      Suspended
+                                      <T k="staff.suspended" />
                                     </span>
                                   ) : (
                                     <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
-                                      Active
+                                      <T k="staff.active" />
                                     </span>
                                   )}
                                 </div>
@@ -515,9 +508,8 @@ export default function CenterManagementPage() {
                             </CardContent>
                           </Card>
                         ))}
-                      </div>
-                    ) : (
-                      <p className="text-muted-foreground">No staff members assigned to this branch.</p>
+                      </div>                    ) : (
+                      <p className="text-muted-foreground"><T k="staff.noStaffAssigned" /></p>
                     )}
                   </div>
                 </div>              </CardContent>
@@ -533,38 +525,36 @@ export default function CenterManagementPage() {
         </div>
       ) : (
         // Center and Branches View
-        <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="overview">Center Overview</TabsTrigger>
-            <TabsTrigger value="branches">Branches</TabsTrigger>
-            <TabsTrigger value="staff">Staff</TabsTrigger>
+        <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="overview"><T k="centerOverview.centerOverview" /></TabsTrigger>
+            <TabsTrigger value="branches"><T k="branch.branches" /></TabsTrigger>
+            <TabsTrigger value="staff"><T k="staff.staff" /></TabsTrigger>
           </TabsList>
           
           {/* Center Overview Tab */}
           <TabsContent value="overview" className="space-y-4">
             {isEditingCenter ? (
               <Card>
-                <form onSubmit={handleCenterSubmit}>
-                  <CardHeader>
-                    <CardTitle>Edit Orphanage Center</CardTitle>
-                    <CardDescription>Update the details for your orphanage center</CardDescription>
+                <form onSubmit={handleCenterSubmit}>                  <CardHeader>
+                    <CardTitle><T k="centerOverview.editCenter" /></CardTitle>
+                    <CardDescription><T k="centerOverview.editCenterDescription" /></CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="name">Center Name</Label>
+                        <Label htmlFor="name"><T k="centerOverview.centerName" /></Label>
                         <Input id="name" name="name" value={centre.name} onChange={handleCenterChange} required />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="location">Location</Label>
+                        <Label htmlFor="location"><T k="centerOverview.location" /></Label>
                         <Input id="location" name="location" value={centre.location} onChange={handleCenterChange} required />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="address">Address</Label>
+                        <Label htmlFor="address"><T k="centerOverview.address" /></Label>
                         <Input id="address" name="address" value={centre.address} onChange={handleCenterChange} required />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="phoneNumber">Phone Number</Label>
+                        <Label htmlFor="phoneNumber"><T k="centerOverview.phoneNumber" /></Label>
                         <Input
                           id="phoneNumber"
                           name="phoneNumber"
@@ -574,12 +564,12 @@ export default function CenterManagementPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email"><T k="centerOverview.email" /></Label>
                         <Input id="email" name="email" type="email" value={centre.email} onChange={handleCenterChange} required />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="description">Description</Label>
+                      <Label htmlFor="description"><T k="centerOverview.description" /></Label>
                       <Textarea
                         id="description"
                         name="description"
@@ -590,16 +580,15 @@ export default function CenterManagementPage() {
                     </div>
                   </CardContent>                  <CardFooter className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setIsEditingCenter(false)} disabled={false}>
-                      Cancel
+                      <T k="common.cancel" />
                     </Button>
                     <Button type="submit" disabled={false}>
                       {false ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Updating...
-                        </>
-                      ) : (
-                        <>Update Center</>
+                          <T k="common.updating" />
+                        </>                      ) : (
+                        <T k="centerOverview.updateCenter" />
                       )}
                     </Button>
                   </CardFooter>
@@ -615,51 +604,48 @@ export default function CenterManagementPage() {
                   </div>
                 </CardHeader>
 
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <CardContent className="space-y-4">                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm font-medium">Address</p>
+                      <p className="text-sm font-medium"><T k="centerOverview.address" /></p>
                       <p className="text-sm text-muted-foreground">{centre.address}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Phone Number</p>
+                      <p className="text-sm font-medium"><T k="centerOverview.phoneNumber" /></p>
                       <p className="text-sm text-muted-foreground">{centre.phoneNumber}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Email</p>
+                      <p className="text-sm font-medium"><T k="centerOverview.email" /></p>
                       <p className="text-sm text-muted-foreground">{centre.email}</p>
                     </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Description</p>
+                  </div>                  <div>
+                    <p className="text-sm font-medium"><T k="centerOverview.description" /></p>
                     <p className="text-sm text-muted-foreground">{centre.description}</p>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                     <Card>
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Branches</CardTitle>
+                        <CardTitle className="text-sm font-medium"><T k="branch.totalBranches" /></CardTitle>
                         <Building2 className="h-4 w-4 text-muted-foreground" />
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">{branches.length}</div>
-                        <p className="text-xs text-muted-foreground">Active branches</p>
+                        <p className="text-xs text-muted-foreground"><T k="branch.activeBranches" /></p>
                       </CardContent>
                     </Card>
                     <Card>
                       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Total Staff</CardTitle>
+                        <CardTitle className="text-sm font-medium"><T k="staff.totalStaff" /></CardTitle>
                         <Users className="h-4 w-4 text-muted-foreground" />
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold">{staffMembers.length}</div>
-                        <p className="text-xs text-muted-foreground">Active staff members</p>
+                        <p className="text-xs text-muted-foreground"><T k="staff.activeStaffMembers" /></p>
                       </CardContent>
                     </Card>
-                  </div>                </CardContent>
-                <CardFooter>
-                  <div className="w-full p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  </div></CardContent>
+                <CardFooter>                  <div className="w-full p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <p className="text-sm text-blue-800 font-medium">
-                      🔒 Read-Only Mode: Center information can only be viewed, not modified.
+                      🔒 <T k="centerManagement.readOnlyMode" />
                     </p>
                   </div>
                 </CardFooter>
@@ -667,20 +653,19 @@ export default function CenterManagementPage() {
             )}
           </TabsContent>
             {/* Branches Tab */}          <TabsContent value="branches" className="space-y-4">            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">Branch Management</h2>
+              <h2 className="text-xl font-bold"><T k="branch.branchManagement" /></h2>
               <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
                 <p className="text-sm text-blue-800 font-medium">
-                  🔒 Read-Only Mode: Branches can only be viewed
+                  🔒 <T k="branch.readOnlyMode" />
                 </p>
               </div>
             </div>
             
             {showBranchForm && (
               <Card>
-                <form onSubmit={handleBranchSubmit}>
-                  <CardHeader>
-                    <CardTitle>{branch.publicId ? "Edit Branch" : "Add New Branch"}</CardTitle>
-                    <CardDescription>Enter the details for the branch</CardDescription>
+                <form onSubmit={handleBranchSubmit}>                  <CardHeader>
+                    <CardTitle>{branch.publicId ? <T k="branch.editBranch" /> : <T k="branch.addNewBranch" />}</CardTitle>
+                    <CardDescription><T k="branch.enterBranchDetails" /></CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -724,19 +709,18 @@ export default function CenterManagementPage() {
                           location: "",
                           phoneNumber: "",
                           isHQ: false,
-                        })                      }}
-                      disabled={false}
+                        })                      }}                      disabled={false}
                     >
-                      Cancel
+                      <T k="common.cancel" />
                     </Button>
                     <Button type="submit" disabled={false}>
                       {false ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          {branch.publicId ? "Updating..." : "Adding..."}
+                          {branch.publicId ? <T k="common.updating" /> : <T k="common.adding" />}
                         </>
                       ) : (
-                        <>{branch.publicId ? "Update Branch" : "Add Branch"}</>
+                        <>{branch.publicId ? <T k="branch.updateBranch" /> : <T k="branch.addBranch" />}</>
                       )}
                     </Button>
                   </CardFooter>
@@ -745,12 +729,11 @@ export default function CenterManagementPage() {
             )}
             
             {!showBranchForm && (
-              <>
-                {branches.length === 0 ? (
+              <>                {branches.length === 0 ? (
                   <div className="text-center py-8">
                     <Building2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium">No Branches</h3>
-                    <p className="text-muted-foreground">Create your first branch to get started</p>
+                    <h3 className="text-lg font-medium"><T k="branch.noBranches" /></h3>
+                    <p className="text-muted-foreground"><T k="branch.createFirstBranch" /></p>
                   </div>
                 ) : (
                   <ScrollArea className="h-[600px] pr-4">
@@ -813,25 +796,24 @@ export default function CenterManagementPage() {
               <div className="text-center py-8">
                 <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium">No Staff Members</h3>
-                <p className="text-muted-foreground">Go to staff management to add staff members</p>
+                <p className="text-muted-foreground"><T k="staff.goToStaffManagement" /></p>
               </div>
             ) : (
               <div className="space-y-6">
                 {/* Orphanage Administrators Section */}
                 {staffMembers.filter(staff => !staff.branchPublicId).length > 0 && (
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <div>                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                       <Users className="h-5 w-5 text-purple-600" />
-                      Orphanage Administrators
+                      <T k="staff.orphanageAdministrators" />
                       <span className="text-sm font-normal text-muted-foreground">
                         ({staffMembers.filter(staff => !staff.branchPublicId).length})
                       </span>
-                    </h3>                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    </h3><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {staffMembers
                         .filter(staff => !staff.branchPublicId)
                         .map(staff => (                          <Card 
                             key={staff.publicId} 
-                            className="overflow-hidden hover:shadow-md transition-all duration-200 cursor-pointer border-purple-200 hover:border-purple-300 h-[110px] -mt-3"
+                            className="overflow-hidden hover:shadow-md transition-all duration-200 cursor-pointer border-purple-200 hover:border-purple-300  max-h-[130px] -mt-3"
                             onClick={() => handleStaffClick(staff)}
                           >
                             <CardContent className="p-4">
@@ -843,21 +825,20 @@ export default function CenterManagementPage() {
                                   <div className="flex flex-wrap items-center gap-2 mb-2">                                    <h4 className="font-semibold text-base text-gray-900">
                                       {staff.fullName ?? 'No Name'}
                                     </h4>
-                                    <div className="flex flex-wrap gap-2">
-                                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    <div className="flex flex-wrap gap-2">                                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                         staff.role === 'ROLE_SUPER_ADMIN' 
                                           ? 'bg-purple-100 text-purple-800' 
                                           : 'bg-blue-100 text-blue-800'
                                       }`}>
-                                        {staff.role === 'ROLE_SUPER_ADMIN' ? 'Super Admin' : 'Admin'}
+                                        {staff.role === 'ROLE_SUPER_ADMIN' ? <T k="staff.superAdmin" /> : <T k="staff.admin" />}
                                       </span>
                                       {staff.suspended ? (
                                         <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
-                                          Suspended
+                                          <T k="staff.suspended" />
                                         </span>
                                       ) : (
                                         <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
-                                          Active
+                                          <T k="staff.active" />
                                         </span>
                                       )}
                                     </div>
@@ -887,23 +868,21 @@ export default function CenterManagementPage() {
                   </div>
                 )}                {/* Branch Staff Section */}
                 {branches.length > 0 && (
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <div>                    <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                       <Building2 className="h-5 w-5 text-blue-600" />
-                      Branch Staff
+                      <T k="staff.branchStaff" />
                       <span className="text-sm font-normal text-muted-foreground">
                         ({staffMembers.filter(staff => staff.branchPublicId).length})
                       </span>
-                    </h3>                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </h3><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {branches.map(branch => (
                         <Card key={branch.publicId} className="flex flex-col h-[350px] -mt-3">
                           <CardHeader className="flex-shrink-0">
                             <CardTitle className="flex items-center gap-2 text-base">
                               <Building2 className="h-4 w-4" />
                               {branch.name}
-                            </CardTitle>
-                            <CardDescription>
-                              {staffMembers.filter(s => s.branchPublicId === branch.publicId).length} staff members
+                            </CardTitle>                            <CardDescription>
+                              {staffMembers.filter(s => s.branchPublicId === branch.publicId).length} <T k="staff.staffMembers" />
                             </CardDescription>
                           </CardHeader>
                           <CardContent className="flex-1 overflow-hidden">

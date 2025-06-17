@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import OrphanFormEdit from "./orphan-form-edit"
 import Image from "next/image"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 interface OrphanDetailsPersonalProps {
   readonly orphan: OrphanDetails | null
@@ -31,6 +32,7 @@ interface OrphanDetailsPersonalProps {
 
 export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Readonly<OrphanDetailsPersonalProps>) {
   const { toast } = useToast()
+  const { t, language } = useLanguage()
   const [isGuardianFormOpen, setIsGuardianFormOpen] = useState(false)
   const [isDeleteGuardianDialogOpen, setIsDeleteGuardianDialogOpen] = useState(false)
   const [isDeleteOrphanDialogOpen, setIsDeleteOrphanDialogOpen] = useState(false)
@@ -45,6 +47,18 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
   // Image error states
   const [orphanImageError, setOrphanImageError] = useState(false)
   const [guardianImageError, setGuardianImageError] = useState(false)
+
+  // Format date with localization
+  const formatDate = useCallback((dateString: string) => {
+    const date = new Date(dateString);
+    const locale = language === 'sw' ? 'sw-TZ' : 'en-US';
+    
+    return new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(date);
+  }, [language])
 
   // Memoize image URLs to prevent recalculation on every render
   const orphanImageUrl = useMemo(() => {
@@ -91,21 +105,19 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       
       // Save guardian via API - correct endpoint based on backend.json
       await API.post(`/app/oims/orphans/guardians`, enrichedData)
-      
-      // Show success message
+        // Show success message
       toast({
-        title: "Guardian Added",
-        description: "Guardian information has been successfully added."
+        title: t("orphan.details.guardianAdded"),
+        description: t("orphan.details.guardianAddedDesc")
       })
       
       // Close form and refresh page
       setIsGuardianFormOpen(false)
       window.location.reload()
-    } catch (error: any) {
-      console.error("Failed to add guardian:", error)
+    } catch (error: any) {      console.error("Failed to add guardian:", error);
       toast({
-        title: "Failed to Add Guardian",
-        description: error.response?.data?.message || "An error occurred. Please try again.",
+        title: t("orphan.details.guardianAddFailed"),
+        description: error.response?.data?.message ?? t("orphan.details.errorOccurred"),
         variant: "destructive"
       })
     } finally {
@@ -126,21 +138,19 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       
       // Update guardian via API - use PATCH to correct endpoint
       const response = await API.patch(`/app/oims/orphans/guardians`, enrichedData)
-      
-      // Show success message
+        // Show success message
       toast({
-        title: "Guardian Updated",
-        description: "Guardian information has been successfully updated."
+        title: t("orphan.details.guardianUpdated"),
+        description: t("orphan.details.guardianUpdatedDesc")
       })
       
       // Close form and refresh page
       setIsGuardianFormOpen(false)
       window.location.reload()
-    } catch (error: any) {
-      console.error("Failed to update guardian:", error)
+    } catch (error: any) {      console.error("Failed to update guardian:", error);
       toast({
-        title: "Failed to Update Guardian",
-        description: error.response?.data?.message || "An error occurred. Please try again.",
+        title: t("orphan.details.guardianUpdateFailed"),
+        description: error.response?.data?.message ?? t("orphan.details.errorOccurred"),
         variant: "destructive"
       })
     } finally {
@@ -156,21 +166,19 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     try {
       // Delete guardian via API - use correct endpoint with guardian's publicId
       await API.delete(`/app/oims/orphans/guardians/${orphan.guardian.publicId}`)
-      
-      // Show success message
+        // Show success message
       toast({
-        title: "Guardian Deleted",
-        description: "Guardian information has been successfully deleted."
+        title: t("orphan.details.guardianDeleted"),
+        description: t("orphan.details.guardianDeletedDesc")
       })
       
       // Close dialog and refresh page
       setIsDeleteGuardianDialogOpen(false)
       window.location.reload()
-    } catch (error: any) {
-      console.error("Failed to delete guardian:", error)
+    } catch (error: any) {      console.error("Failed to delete guardian:", error);
       toast({
-        title: "Failed to Delete Guardian",
-        description: error.response?.data?.message || "An error occurred. Please try again.",
+        title: t("orphan.details.guardianDeleteFailed"),
+        description: error.response?.data?.message ?? t("orphan.details.errorOccurred"),
         variant: "destructive"
       })
     } finally {
@@ -183,21 +191,19 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     try {
       // Update orphan via API
       await OrphanService.updateOrphan(orphanData)
-      
-      // Show success message
+        // Show success message
       toast({
-        title: "Orphan Updated",
-        description: "Orphan information has been successfully updated."
+        title: t("orphan.details.orphanUpdated"),
+        description: t("orphan.details.orphanUpdatedDesc")
       })
       
       // Close form and refresh page
       setIsEditOrphanOpen(false)
       window.location.reload()
-    } catch (error: any) {
-      console.error("Failed to update orphan:", error)
+    } catch (error: any) {      console.error("Failed to update orphan:", error);
       toast({
-        title: "Failed to Update Orphan",
-        description: error.response?.data?.message || "An error occurred. Please try again.",
+        title: t("orphan.details.orphanUpdateFailed"),
+        description: error.response?.data?.message ?? t("orphan.details.errorOccurred"),
         variant: "destructive"
       })
     } finally {
@@ -213,19 +219,17 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     try {
       // Delete orphan via API
       await OrphanService.deleteOrphan(orphan.publicId)
-      
-      // Show success message
+        // Show success message
       toast({
-        title: "Orphan Deleted",
-        description: "Orphan has been successfully deleted."
+        title: t("orphan.details.orphanDeleted"),
+        description: t("orphan.details.orphanDeletedDesc")
       })
         // Redirect to orphans list page
       window.location.href = '/dashboard/supervisor/orphans'
-    } catch (error: any) {
-      console.error("Failed to delete orphan:", error)
+    } catch (error: any) {      console.error("Failed to delete orphan:", error);
       toast({
-        title: "Failed to Delete Orphan",
-        description: error.response?.data?.message || "An error occurred. Please try again.",
+        title: t("orphan.details.orphanDeleteFailed"),
+        description: error.response?.data?.message ?? t("orphan.details.errorOccurred"),
         variant: "destructive"
       })
     } finally {
@@ -241,20 +245,18 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     setIsSubmitting(true);
     try {
       await OrphanService.activateOrphan(orphan.publicId, statusChangeReason);
-      
-      toast({
-        title: "Orphan Activated",
-        description: "The orphan has been successfully activated."
+        toast({
+        title: t("orphan.details.orphanActivated"),
+        description: t("orphan.details.orphanActivatedDesc")
       });
       
       setIsActivateDialogOpen(false);
       setStatusChangeReason("");
       window.location.reload();
     } catch (error: any) {
-      console.error("Failed to activate orphan:", error);
-      toast({
-        title: "Activation Failed",
-        description: error.friendlyMessage || "An error occurred. Please try again.",
+      console.error("Failed to activate orphan:", error);      toast({
+        title: t("orphan.details.activationFailed"),
+        description: error.friendlyMessage ?? t("orphan.details.errorOccurred"),
         variant: "destructive"
       });
     } finally {
@@ -268,20 +270,18 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     setIsSubmitting(true);
     try {
       await OrphanService.inactivateOrphan(orphan.publicId, statusChangeReason);
-      
-      toast({
-        title: "Orphan Inactivated",
-        description: "The orphan has been successfully inactivated."
+        toast({
+        title: t("orphan.details.orphanInactivated"),
+        description: t("orphan.details.orphanInactivatedDesc")
       });
       
       setIsInactivateDialogOpen(false);
       setStatusChangeReason("");
       window.location.reload();
     } catch (error: any) {
-      console.error("Failed to inactivate orphan:", error);
-      toast({
-        title: "Inactivation Failed",
-        description: error.friendlyMessage || "An error occurred. Please try again.",
+      console.error("Failed to inactivate orphan:", error);      toast({
+        title: t("orphan.details.inactivationFailed"),
+        description: error.friendlyMessage ?? t("orphan.details.errorOccurred"),
         variant: "destructive"
       });
     } finally {
@@ -291,13 +291,12 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
       {/* Orphan Image */}
-      <Card className="md:col-span-1">
-        <CardHeader>
+      <Card className="md:col-span-1">        <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            Profile Image
+            {t("orphan.details.profileImage")}
           </CardTitle>
-        </CardHeader>        
+        </CardHeader>
         <CardContent className="flex flex-col items-center">
           {orphanImageUrl ? (
             <div className="w-64 h-64 overflow-hidden relative rounded-full border">
@@ -323,12 +322,12 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       </Card>
 
       {/* Main Details */}
-      <Card className="md:col-span-2"><CardHeader className="flex flex-row items-center justify-between">
+      <Card className="md:col-span-2">        <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center space-x-2">
-            <CardTitle>Personal Information</CardTitle>
+            <CardTitle>{t("orphan.details.personalInformation")}</CardTitle>
             {orphan.status && (
               <Badge className={`${orphan.status?.toLowerCase() === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                {orphan.status || 'Active'}
+                {orphan.status === 'ACTIVE' ? t("orphan.details.active") : t("orphan.details.inactive")}
               </Badge>
             )}
           </div>
@@ -340,7 +339,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                 onClick={() => setIsEditOrphanOpen(true)}
               >
                 <Edit className="h-4 w-4 mr-1" />
-                Edit Details
+                {t("orphan.details.editDetails")}
               </Button>
               {orphan.status?.toLowerCase() !== 'active' && (
                 <Button
@@ -349,7 +348,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                   className="bg-green-50 text-green-700 hover:bg-green-100"
                   onClick={() => setIsActivateDialogOpen(true)}
                 >
-                  Activate
+                  {t("orphan.details.activate")}
                 </Button>
               )}
               {orphan.status?.toLowerCase() === 'active' && (
@@ -359,71 +358,68 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                   className="bg-orange-50 text-orange-700 hover:bg-orange-100"
                   onClick={() => setIsInactivateDialogOpen(true)}
                 >
-                  Inactivate
+                  {t("orphan.details.inactivate")}
                 </Button>
               )}
             </div>
           )}
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        <CardContent className="space-y-4">          <div className="grid grid-cols-2 gap-4">
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Full Name</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.fullName")}</h3>
               <p className="text-base font-medium">{orphan.fullName}</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Age</h3>
-              <p className="text-base font-medium">{orphan.age} years</p>
+              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.age")}</h3>
+              <p className="text-base font-medium">{orphan.age} {t("orphan.details.years")}</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Date of Birth</h3>
-              <p className="text-base font-medium">{new Date(orphan.dateOfBirth ?? '').toLocaleDateString()}</p>
+              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.dateOfBirth")}</h3>
+              <p className="text-base font-medium">{formatDate(orphan.dateOfBirth ?? '')}</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Gender</h3>
-              <p className="text-base font-medium">{orphan.gender}</p>
+              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.gender")}</h3>
+              <p className="text-base font-medium">{orphan.gender === 'M' ? t("orphan.details.male") : t("orphan.details.female")}</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Origin</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.origin")}</h3>
               <p className="text-base font-medium">{orphan.origin}</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Religion</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.religion")}</h3>
               <p className="text-base font-medium">{orphan.religion}</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Blood Group</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.bloodGroup")}</h3>
               <p className="text-base font-medium">{orphan.bloodGroup}</p>
             </div>
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground">Branch</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.branch")}</h3>
               <p className="text-base font-medium">{orphan.branchName}</p>
             </div>
           </div>
 
-          <Separator />
-
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Reason for Adoption</h3>
+          <Separator />          <div>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">{t("orphan.details.adoptionReason")}</h3>
             <p className="text-base">{orphan.adoptionReason}</p>
           </div>
 
           <Separator />
 
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Education</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">{t("orphan.details.education")}</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <h4 className="text-xs text-muted-foreground">Current Level</h4>
+                <h4 className="text-xs text-muted-foreground">{t("orphan.details.currentLevel")}</h4>
                 <p className="text-sm">{orphan.educationLevel}</p>
               </div>
               <div>
-                <h4 className="text-xs text-muted-foreground">Current School</h4>
-                <p className="text-sm">{orphan.currentSchoolName ?? "Not enrolled"}</p>
+                <h4 className="text-xs text-muted-foreground">{t("orphan.details.currentSchool")}</h4>
+                <p className="text-sm">{orphan.currentSchoolName ?? t("orphan.details.notEnrolled")}</p>
               </div>
               <div>
-                <h4 className="text-xs text-muted-foreground">Previous School</h4>
-                <p className="text-sm">{orphan.previousSchoolName ?? "None"}</p>
+                <h4 className="text-xs text-muted-foreground">{t("orphan.details.previousSchool")}</h4>
+                <p className="text-sm">{orphan.previousSchoolName ?? t("orphan.details.none")}</p>
               </div>
             </div>
           </div>
@@ -431,17 +427,17 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
           <Separator />
 
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Special Needs</h3>
-            <p className="text-base">{orphan.specialNeeds ?? "None"}</p>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">{t("orphan.details.specialNeeds")}</h3>
+            <p className="text-base">{orphan.specialNeeds ?? t("orphan.details.none")}</p>
           </div>
 
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Hobbies</h3>
-            <p className="text-base">{orphan.hobbies ?? "None"}</p>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">{t("orphan.details.hobbies")}</h3>
+            <p className="text-base">{orphan.hobbies ?? t("orphan.details.none")}</p>
           </div>
 
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Allergies</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">{t("orphan.details.allergies")}</h3>
             {orphan.allergies && orphan.allergies.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 {orphan.allergies.map((allergy) => (
@@ -449,30 +445,28 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                 ))}
               </div>
             ) : (
-              <p className="text-base">No known allergies</p>
+              <p className="text-base">{t("orphan.details.noKnownAllergies")}</p>
             )}
           </div>
         </CardContent>
       </Card>
       
       {/* Orphan Activation Dialog */}
-      <AlertDialog open={isActivateDialogOpen} onOpenChange={setIsActivateDialogOpen}>
-        <AlertDialogContent>
+      <AlertDialog open={isActivateDialogOpen} onOpenChange={setIsActivateDialogOpen}>        <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Activate Orphan</AlertDialogTitle>
+            <AlertDialogTitle>{t("orphan.details.activateOrphan")}</AlertDialogTitle>
             <AlertDialogDescription>
-              You are about to change the status of this orphan to active. 
-              Please provide a reason for this change.
+              {t("orphan.details.activateOrphanDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="mt-2">
             <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-1">
-              Reason for activation <span className="text-red-500">*</span>
+              {t("orphan.details.reasonForActivation")} <span className="text-red-500">*</span>
             </label>
             <textarea
               id="reason"
               className="w-full min-h-[100px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Explain why you're activating this orphan..."
+              placeholder={t("orphan.details.activationPlaceholder")}
               value={statusChangeReason}
               onChange={(e) => setStatusChangeReason(e.target.value)}
             ></textarea>
@@ -485,7 +479,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
               }}
               disabled={isSubmitting}
             >
-              Cancel
+              {t("orphan.details.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleActivateOrphan}
@@ -495,10 +489,10 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing...
+                  {t("orphan.details.processing")}
                 </>
               ) : (
-                "Activate"
+                t("orphan.details.activate")
               )}
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -506,24 +500,21 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       </AlertDialog>
       
       {/* Orphan Inactivation Dialog */}
-      <AlertDialog open={isInactivateDialogOpen} onOpenChange={setIsInactivateDialogOpen}>
-        <AlertDialogContent>
+      <AlertDialog open={isInactivateDialogOpen} onOpenChange={setIsInactivateDialogOpen}>        <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Inactivate Orphan</AlertDialogTitle>
+            <AlertDialogTitle>{t("orphan.details.inactivateOrphan")}</AlertDialogTitle>
             <AlertDialogDescription>
-              You are about to change the status of this orphan to inactive. 
-              This will remove them from active lists but preserve their records.
-              Please provide a reason for this change.
+              {t("orphan.details.inactivateOrphanDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="mt-2">
             <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-1">
-              Reason for inactivation <span className="text-red-500">*</span>
+              {t("orphan.details.reasonForInactivation")} <span className="text-red-500">*</span>
             </label>
             <textarea
               id="reason"
               className="w-full min-h-[100px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Explain why you're inactivating this orphan..."
+              placeholder={t("orphan.details.inactivationPlaceholder")}
               value={statusChangeReason}
               onChange={(e) => setStatusChangeReason(e.target.value)}
             ></textarea>
@@ -536,7 +527,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
               }}
               disabled={isSubmitting}
             >
-              Cancel
+              {t("orphan.details.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleInactivateOrphan}
@@ -546,10 +537,10 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing...
+                  {t("orphan.details.processing")}
                 </>
               ) : (
-                "Inactivate"
+                t("orphan.details.inactivate")
               )}
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -557,11 +548,10 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       </AlertDialog>
       
       {/* Guardian Information */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+      <Card>        <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Guardian Information</CardTitle>
-            <CardDescription>Information about the primary guardian</CardDescription>
+            <CardTitle>{t("orphan.details.guardianInformation")}</CardTitle>
+            <CardDescription>{t("orphan.details.guardianInformationDesc")}</CardDescription>
           </div>
           {!readOnly && (
             orphan.guardian ? (              
@@ -572,7 +562,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                   onClick={() => setIsGuardianFormOpen(true)}
                 >
                   <Edit className="h-4 w-4 mr-1" />
-                  Edit
+                  {t("orphan.details.edit")}
                 </Button>
                 {/* Delete button removed as requested */}
               </div>
@@ -583,11 +573,11 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                 onClick={() => setIsGuardianFormOpen(true)}
               >
                 <Plus className="h-4 w-4 mr-1" />
-                Add Guardian
+                {t("orphan.details.addGuardian")}
               </Button>
             )
           )}
-        </CardHeader>        <CardContent>
+        </CardHeader><CardContent>
           {orphan.guardian ? (
             <div className="space-y-4">              {/* Guardian Image - centered at top */}
               <div className="flex flex-col items-center">
@@ -612,37 +602,36 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                   </div>
                 )}
               </div>
-              
-              {/* Guardian Details */}
+                {/* Guardian Details */}
               <div className="space-y-3">
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Name</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.name")}</h3>
                   <p className="text-base font-medium">{orphan.guardian.name}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Relationship</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.relationship")}</h3>
                   <p className="text-base">{orphan.guardian.relationship}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Phone Number</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.phoneNumber")}</h3>
                   <p className="text-base">{orphan.guardian.contactNumber || "-"}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Email</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.email")}</h3>
                   <p className="text-base">{orphan.guardian.email || "-"}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Address</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.address")}</h3>
                   <p className="text-base">{orphan.guardian.address || "-"}</p>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">Occupation</h3>
+                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.occupation")}</h3>
                   <p className="text-base">{orphan.guardian.occupation || "-"}</p>
                 </div>
               </div>
             </div>
           ) : (
-            <p className="text-muted-foreground italic">No guardian information available</p>
+            <p className="text-muted-foreground italic">{t("orphan.details.noGuardianInfo")}</p>
           )}
         </CardContent>
       </Card>

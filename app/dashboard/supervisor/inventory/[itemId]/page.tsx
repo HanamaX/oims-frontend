@@ -17,6 +17,7 @@ import {
   Trash2
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -41,6 +42,7 @@ export default function InventoryItemDetailsPage() {
   const params = useParams()
   const router = useRouter()
   const { toast } = useToast()
+  const { t } = useLanguage()
   
   // State variables
   const [itemDetails, setItemDetails] = useState<InventoryItemDetailsResponse | null>(null)
@@ -60,28 +62,28 @@ export default function InventoryItemDetailsPage() {
 
   // Get the item ID from the URL
   const itemId = params.itemId as string
-
   // Fetch item details with transactions
   const fetchItemDetails = async () => {
-    if (!itemId) return
+    if (!itemId) {
+      return;
+    }
     
     try {
-      setIsLoading(true)
-      const data = await InventoryService.getInventoryItemDetails(itemId)
-      setItemDetails(data)
-      setError(null)
+      setIsLoading(true);
+      const data = await InventoryService.getInventoryItemDetails(itemId);
+      setItemDetails(data);
+      setError(null);
     } catch (err) {
-      console.error("Error fetching inventory item details:", err)
-      setError("Failed to load inventory item details. Please try again later.")
+      console.error("Error fetching inventory item details:", err);
+      setError(t("inventoryDetails.failedToLoad"));
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   useEffect(() => {
     fetchItemDetails()
-  }, [itemId])
-  // Handle updating inventory item
+  }, [itemId])  // Handle updating inventory item
   const handleUpdateItem = async (data: any) => {
     try {
       setIsSubmitting(true)
@@ -95,8 +97,8 @@ export default function InventoryItemDetailsPage() {
       })
       
       toast({
-        title: "Item Updated",
-        description: "The inventory item has been successfully updated.",
+        title: t("inventory.itemUpdated"),
+        description: t("inventory.itemUpdatedDescription"),
         variant: "default"
       })
       
@@ -104,24 +106,23 @@ export default function InventoryItemDetailsPage() {
     } catch (err) {
       console.error("Error updating inventory item:", err)
       toast({
-        title: "Update Failed",
-        description: "There was a problem updating the inventory item.",
+        title: t("inventory.updateFailed"),
+        description: t("inventory.updateFailedDescription"),
         variant: "destructive"
       })
     } finally {
       setIsSubmitting(false)
     }
   }
-  
-  // Handle deleting inventory item
+    // Handle deleting inventory item
   const handleDeleteItem = async () => {
     try {
       setIsSubmitting(true)
       await InventoryService.deleteInventoryItem(itemId)
       
       toast({
-        title: "Item Deleted",
-        description: "The inventory item has been successfully deleted.",
+        title: t("inventory.itemDeleted"),
+        description: t("inventory.itemDeletedDescription"),
         variant: "default"
       })
         // Navigate back to inventory list
@@ -129,14 +130,13 @@ export default function InventoryItemDetailsPage() {
     } catch (err) {
       console.error("Error deleting inventory item:", err)
       toast({
-        title: "Delete Failed",
-        description: "There was a problem deleting the inventory item.",
+        title: t("inventory.deleteFailed"),
+        description: t("inventory.deleteFailedDescription"),
         variant: "destructive"
       })
       setIsSubmitting(false)
     }
-  }
-    // Handle adding inventory transaction
+  }    // Handle adding inventory transaction
   const handleAddTransaction = async (data: any) => {
     try {
       setIsSubmitting(true)
@@ -150,8 +150,8 @@ export default function InventoryItemDetailsPage() {
       await InventoryService.addInventoryTransaction(apiData)
       
       toast({
-        title: "Transaction Added",
-        description: "The inventory transaction has been successfully recorded.",
+        title: t("inventory.transactionAdded"),
+        description: t("inventory.transactionAddedDescription"),
         variant: "default"
       })
       
@@ -159,8 +159,8 @@ export default function InventoryItemDetailsPage() {
     } catch (err) {
       console.error("Error adding inventory transaction:", err)
       toast({
-        title: "Transaction Failed",
-        description: "There was a problem recording the inventory transaction.",
+        title: t("inventory.transactionFailed"),
+        description: t("inventory.transactionFailedDescription"),
         variant: "destructive"
       })
     } finally {
@@ -181,8 +181,8 @@ export default function InventoryItemDetailsPage() {
       await InventoryService.updateInventoryTransaction(apiData)
       
       toast({
-        title: "Transaction Updated",
-        description: "The inventory transaction has been successfully updated.",
+        title: t("inventory.transactionUpdated"),
+        description: t("inventory.transactionUpdatedDescription"),
         variant: "default"
       })
       
@@ -190,24 +190,23 @@ export default function InventoryItemDetailsPage() {
     } catch (err) {
       console.error("Error updating inventory transaction:", err)
       toast({
-        title: "Update Failed",
-        description: "There was a problem updating the inventory transaction.",
+        title: t("inventory.updateFailed"),
+        description: t("inventory.transactionUpdateFailedDescription"),
         variant: "destructive"
       })
     } finally {
       setIsSubmitting(false)
     }
   }
-  
-  // Handle deleting inventory transaction
+    // Handle deleting inventory transaction
   const handleDeleteTransaction = async (transactionId: string) => {
     try {
       setIsSubmitting(true)
       await InventoryService.deleteInventoryTransaction(transactionId)
       
       toast({
-        title: "Transaction Deleted",
-        description: "The inventory transaction has been successfully deleted.",
+        title: t("inventory.transactionDeleted"),
+        description: t("inventory.transactionDeletedDescription"),
         variant: "default"
       })
       
@@ -215,8 +214,8 @@ export default function InventoryItemDetailsPage() {
     } catch (err) {
       console.error("Error deleting inventory transaction:", err)
       toast({
-        title: "Delete Failed",
-        description: "There was a problem deleting the inventory transaction.",
+        title: t("inventory.deleteFailed"),
+        description: t("inventory.transactionDeleteFailedDescription"),
         variant: "destructive"
       })
     } finally {
@@ -282,52 +281,43 @@ export default function InventoryItemDetailsPage() {
       day: 'numeric'
     })
   }
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin text-blue-500 mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading item details...</p>
+          <p className="text-muted-foreground"><T k="inventoryDetails.loadingDetails" /></p>
         </div>
       </div>
     )
   }
-
   if (error || !itemDetails) {
     return (
       <div className="space-y-6">
         <Button 
-          variant="outline" 
+          variant="ghost" 
           onClick={() => router.back()}
-          className="mb-6"
+          className="mb-4"
         >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Inventory
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          <T k="inventoryDetails.backToInventory" />
         </Button>
         
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <p className="text-red-500 font-medium">{error ?? "Item not found"}</p>
-            <Button 
-              onClick={() => window.location.reload()} 
-              className="mt-4"
-              variant="outline"
-            >
-              Try Again
-            </Button>
-          </div>
+        <div className="bg-red-50 border border-red-200 rounded-md p-8 text-center">
+          <p className="text-red-600 mb-4"><T k="common.error" />: {error ?? <T k="inventoryDetails.noDataFound" />}</p>
+          <Button variant="outline" onClick={() => window.location.reload()}><T k="ui.tryAgain" /></Button>
         </div>
       </div>
     )
-  }
-  return (
+  }  return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-2">
         <Button 
-          variant="outline" 
+          variant="ghost" 
           onClick={() => router.back()}
         >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Inventory
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          <T k="inventoryDetails.backToInventory" />
         </Button>
         
         <div className="flex gap-2">
@@ -337,14 +327,16 @@ export default function InventoryItemDetailsPage() {
             className="text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700"
             disabled={isSubmitting}
           >
-            <PlusCircle className="mr-2 h-4 w-4" /> Add Transaction
+            <PlusCircle className="mr-2 h-4 w-4" />
+            <T k="inventory.addTransaction" />
           </Button>
           <Button 
             onClick={() => setIsEditItemOpen(true)}
             variant="outline"
             disabled={isSubmitting}
           >
-            <Edit className="mr-2 h-4 w-4" /> Edit Item
+            <Edit className="mr-2 h-4 w-4" />
+            <T k="inventory.editItem" />
           </Button>
           <Button 
             onClick={() => setIsDeleteItemDialogOpen(true)}
@@ -352,7 +344,8 @@ export default function InventoryItemDetailsPage() {
             className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
             disabled={isSubmitting}
           >
-            <Trash2 className="mr-2 h-4 w-4" /> Delete Item
+            <Trash2 className="mr-2 h-4 w-4" />
+            <T k="inventory.deleteItem" />
           </Button>
         </div>
       </div>
@@ -363,12 +356,11 @@ export default function InventoryItemDetailsPage() {
             <Package className="h-6 w-6 text-blue-500" />
             {itemDetails.itemName}
           </h1>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <Badge className={getCategoryColor(itemDetails.itemCategory)}>
+          <div className="mt-2 flex flex-wrap items-center gap-2">            <Badge className={getCategoryColor(itemDetails.itemCategory)}>
               {itemDetails.itemCategory}
             </Badge>
             <span className="text-sm text-muted-foreground">
-              Branch: {itemDetails.branchName}
+              <T k="inventory.branch" />: {itemDetails.branchName}
             </span>
           </div>
         </div>
@@ -406,19 +398,17 @@ export default function InventoryItemDetailsPage() {
           isEdit={true}
         />
       )}
-      
-      {/* Delete Item Confirmation Dialog */}
+        {/* Delete Item Confirmation Dialog */}
       <AlertDialog open={isDeleteItemDialogOpen} onOpenChange={setIsDeleteItemDialogOpen}>
         <AlertDialogContent className="bg-white">
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle><T k="alerts.areYouSure" /></AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this inventory item
-              and all associated transaction history.
+              <T k="inventory.deleteItemWarning" />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isSubmitting}><T k="ui.cancel" /></AlertDialogCancel>
             <AlertDialogAction
               onClick={(e) => {
                 e.preventDefault()
@@ -430,10 +420,10 @@ export default function InventoryItemDetailsPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  <T k="ui.deleting" />
                 </>
               ) : (
-                "Delete Item"
+                <T k="inventory.deleteItem" />
               )}
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -444,14 +434,15 @@ export default function InventoryItemDetailsPage() {
       <AlertDialog open={isDeleteTransactionDialogOpen} onOpenChange={setIsDeleteTransactionDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this transaction?</AlertDialogTitle>
+            <AlertDialogTitle><T k="inventory.deleteTransactionConfirm" /></AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this transaction record.
+              <T k="inventory.deleteTransactionWarning" />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isSubmitting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction              onClick={(e) => {
+            <AlertDialogCancel disabled={isSubmitting}><T k="ui.cancel" /></AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
                 e.preventDefault()
                 if (selectedTransaction) {
                   // Make sure we're using the correct publicId field
@@ -464,32 +455,31 @@ export default function InventoryItemDetailsPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  <T k="ui.deleting" />
                 </>
               ) : (
-                "Delete Transaction"
+                <T k="inventory.deleteTransaction" />
               )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>
-
-      {/* Item Details Card */}
+      </AlertDialog>{/* Item Details Card */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle>Item Details</CardTitle>
+          <CardTitle><T k="inventoryDetails.itemDetails" /></CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-muted-foreground mb-1">Current Quantity</span>
+              <span className="text-sm font-medium text-muted-foreground mb-1"><T k="inventoryDetails.currentQuantity" /></span>
               <span className="text-2xl font-bold">{itemDetails.itemQuantity}</span>
             </div>
-            <div className="flex flex-col">              <span className="text-sm font-medium text-muted-foreground mb-1">Unit Price</span>
+            <div className="flex flex-col">
+              <span className="text-sm font-medium text-muted-foreground mb-1"><T k="inventoryDetails.unitPrice" /></span>
               <span className="text-2xl font-bold">Tshs {itemDetails.itemPrice}</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-muted-foreground mb-1">Total Value</span>
+              <span className="text-sm font-medium text-muted-foreground mb-1"><T k="inventoryDetails.totalValue" /></span>
               <span className="text-2xl font-bold">
                 Tshs {(parseFloat(itemDetails.itemPrice) * parseFloat(itemDetails.itemQuantity)).toFixed(2)}
               </span>
@@ -502,8 +492,8 @@ export default function InventoryItemDetailsPage() {
                 <ArrowDownCircle className="h-6 w-6 text-green-600" />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total In</p>
-                <p className="text-xl font-bold text-green-600">{totalIn} units</p>
+                <p className="text-sm font-medium text-muted-foreground"><T k="inventoryDetails.totalIn" /></p>
+                <p className="text-xl font-bold text-green-600">{totalIn} <T k="inventoryDetails.units" /></p>
               </div>
             </div>
             <div className="flex items-center p-4 rounded-lg bg-red-50">
@@ -511,8 +501,8 @@ export default function InventoryItemDetailsPage() {
                 <ArrowUpCircle className="h-6 w-6 text-red-600" />
               </div>
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Out</p>
-                <p className="text-xl font-bold text-red-600">{totalOut} units</p>
+                <p className="text-sm font-medium text-muted-foreground"><T k="inventoryDetails.totalOut" /></p>
+                <p className="text-xl font-bold text-red-600">{totalOut} <T k="inventoryDetails.units" /></p>
               </div>
             </div>
           </div>
@@ -520,7 +510,7 @@ export default function InventoryItemDetailsPage() {
       </Card>      {/* Transactions Table */}
       <Card>
         <CardHeader className="pb-3 flex flex-row items-center justify-between">
-          <CardTitle>Transaction History</CardTitle>
+          <CardTitle><T k="inventoryDetails.transactionHistory" /></CardTitle>
         </CardHeader>
         <CardContent>
           {itemDetails.inventoryTransactions && itemDetails.inventoryTransactions.length > 0 ? (
@@ -541,13 +531,12 @@ export default function InventoryItemDetailsPage() {
                       ) : (
                         <ArrowUpCircle className="h-6 w-6 text-red-600 mt-1 flex-shrink-0" />
                       )}
-                      <div>
-                        <div className="font-medium">
-                          {transaction.transactionType === "IN" ? "Received" : "Distributed"}{" "}
-                          <span className="font-bold">{transaction.transactionQuantity}</span> units
+                      <div>                        <div className="font-medium">
+                          {transaction.transactionType === "IN" ? <T k="inventoryDetails.received" /> : <T k="inventoryDetails.distributed" />}{" "}
+                          <span className="font-bold">{transaction.transactionQuantity}</span> <T k="inventoryDetails.units" />
                         </div>
                         <p className="text-sm text-muted-foreground mt-1">
-                          {transaction.transactionDescription}
+                          {transaction.transactionDescription || <T k="inventoryDetails.noDescription" />}
                         </p>
                         <div className="flex items-center text-xs text-muted-foreground mt-2">
                           <CalendarIcon className="h-3 w-3 mr-1" />
@@ -565,7 +554,7 @@ export default function InventoryItemDetailsPage() {
                         disabled={isSubmitting}
                       >
                         <Edit className="h-4 w-4" />
-                        <span className="sr-only">Edit</span>
+                        <span className="sr-only"><T k="ui.edit" /></span>
                       </Button>
                       <Button
                         variant="ghost"
@@ -575,7 +564,7 @@ export default function InventoryItemDetailsPage() {
                         disabled={isSubmitting}
                       >
                         <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">Delete</span>
+                        <span className="sr-only"><T k="ui.delete" /></span>
                       </Button>
                     </div>
                   </div>
@@ -585,14 +574,14 @@ export default function InventoryItemDetailsPage() {
           ) : (
             <div className="text-center py-10">
               <ClipboardList className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-muted-foreground">No transaction history available for this item.</p>
+              <p className="text-muted-foreground"><T k="inventoryDetails.noTransactions" /></p>
               <Button 
                 variant="outline" 
                 onClick={() => setIsAddTransactionOpen(true)} 
                 className="mt-4"
               >
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Record First Transaction
+                <T k="inventory.recordFirstTransaction" />
               </Button>
             </div>
           )}

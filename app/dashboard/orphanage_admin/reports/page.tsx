@@ -1,15 +1,19 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useAuth } from "@/components/auth-provider"
-import { useLanguage } from "@/contexts/LanguageContext"
+import { useLanguage, T } from "@/contexts/LanguageContext"
+import { useOrphanReportData } from "@/hooks/use-orphan-report-data"
+import { useInventoryReportData } from "@/hooks/use-inventory-report-data"
+import { useAdminReportData } from "@/hooks/use-admin-report-data"
 import ReportComponent from "@/components/report-generator-new"
 import ReportStats from "@/components/report-stats-new"
+import SystemAnalytics from "@/components/system-analytics"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { BarChart3, FileType, Building, AlertCircle, Download } from "lucide-react"
+import { BarChart3, FileType, Building, AlertCircle, Download, Loader2 } from "lucide-react"
 import { ReportType } from "@/lib/report-service"
 
 // Sample data for charts (this would come from your API in a real app)
@@ -143,13 +147,79 @@ const sampleData = {
   },
 }
 
+// Component to display orphan stats using real data
+function OrphanReportStats() {
+  const { orphanData, loading } = useOrphanReportData({})
+  const { t } = useLanguage()
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
+        <span className="ml-2 text-green-600">{t("report.loadingData")}</span>
+      </div>
+    )
+  }
+  
+  return (
+    <ReportStats 
+      data={orphanData} 
+      type="orphans"
+    />
+  )
+}
+
+// Component to display inventory stats using real data
+function InventoryReportStats() {
+  const { inventoryData, loading } = useInventoryReportData({})
+  const { t } = useLanguage()
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
+        <span className="ml-2 text-green-600">{t("report.loadingData")}</span>
+      </div>
+    )
+  }
+  
+  return (
+    <ReportStats 
+      data={inventoryData} 
+      type="inventory"
+    />
+  )
+}
+
+// Component to display admin/staff stats using real data
+function AdminReportStats() {
+  const { adminData, loading } = useAdminReportData({})
+  const { t } = useLanguage()
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
+        <span className="ml-2 text-green-600">{t("report.loadingData")}</span>
+      </div>
+    )
+  }
+  
+  return (
+    <ReportStats 
+      data={adminData} 
+      type="staff"
+    />
+  )
+}
+
 export default function SuperAdminReportsPage() {
   const { user } = useAuth()
   const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState<ReportType>("orphans")
-  
-  if (!user) {
-    return <div>Loading...</div>
+  const [selectedBranchId, setSelectedBranchId] = useState<string | undefined>(undefined)
+    if (!user) {
+    return <div><T k="common.loading" /></div>
   }
 
   return (
@@ -161,11 +231,12 @@ export default function SuperAdminReportsPage() {
             {t("report.comprehensive")}
           </p>
         </div>        <Badge variant="outline" className="px-3 py-1 text-base bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md">
-          Super Admin
+          <T k="roles.superAdmin" />
         </Badge>
       </div>
 
-      <div className="grid gap-6">        <Alert className="bg-green-50 border-green-200">
+      <div className="grid gap-6">        
+        <Alert className="bg-green-50 border-green-200">
           <AlertCircle className="h-4 w-4 text-green-600" />
           <AlertTitle>{t("report.fullAccess")}</AlertTitle>
           <AlertDescription>
@@ -191,6 +262,7 @@ export default function SuperAdminReportsPage() {
           <TabsContent value="generator" className="space-y-6">
             <ReportComponent 
               userRole="superadmin"
+              onBranchChange={setSelectedBranchId}
             />
           </TabsContent>
           
@@ -232,12 +304,13 @@ export default function SuperAdminReportsPage() {
                   {t("report.branches")}
                 </TabsTrigger>
               </TabsList>
-              
-              <TabsContent value={activeTab}>
+                <TabsContent value={activeTab}>
                 <div className="mb-6">
-                  <ReportStats 
-                  data={sampleData[activeTab]} 
-                  type={activeTab}
+                  {/* Use SystemAnalytics component for all report types, passing the sample data as fallback */}
+                  <SystemAnalytics 
+                    reportType={activeTab}
+                    branchId={selectedBranchId}
+                    sampleData={sampleData[activeTab]}
                   />
                 </div>
                 
@@ -248,19 +321,19 @@ export default function SuperAdminReportsPage() {
                     </CardHeader>
                     <CardContent className="space-y-4 pt-4">                      <div className="flex justify-between">
                         <span className="text-green-700">{t("report.totalBranches")}</span>
-                        <span className="font-medium text-green-800">{user.dashboardStats?.totalBranches || 0}</span>
+                        <span className="font-medium text-green-800">{user.dashboardStats?.totalBranches ?? 0}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-green-700">{t("report.totalOrphans")}</span>
-                        <span className="font-medium text-green-800">{user.dashboardStats?.totalOrphans || 0}</span>
+                        <span className="font-medium text-green-800">{user.dashboardStats?.totalOrphans ?? 0}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-green-700">{t("report.totalVolunteers")}</span>
-                        <span className="font-medium text-green-800">{user.dashboardStats?.totalVolunteers || 0}</span>
+                        <span className="font-medium text-green-800">{user.dashboardStats?.totalVolunteers ?? 0}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-green-700">{t("report.totalFundraisers")}</span>
-                        <span className="font-medium text-green-800">{user.dashboardStats?.totalFundraising || 0}</span>
+                        <span className="font-medium text-green-800">{user.dashboardStats?.totalFundraising ?? 0}</span>
                       </div>
                     </CardContent>
                   </Card>

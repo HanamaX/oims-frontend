@@ -232,9 +232,9 @@ function DashboardLayoutContent({
       
       <nav className={`dashboard-sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="dashboard-header">
-          <h2 className="dashboard-title">
-            <T k="app.name" />
-          </h2>
+          <Link href="/" className="font-bold text-3xl text-blue-700">
+              OIMS 
+            </Link>
           <p className="dashboard-subtitle">
             <T k="dashboard.title" />
           </p>        </div>
@@ -275,3 +275,4 @@ export default function DashboardLayout({
     </AuthProvider>
   )
 }
+

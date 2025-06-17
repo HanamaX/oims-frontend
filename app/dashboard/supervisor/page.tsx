@@ -44,13 +44,14 @@ export default function SupervisorDashboard() {
   const [markingAsRead, setMarkingAsRead] = useState<string | null>(null)
   const { user, isAuthenticated } = useAuth()
   const { t } = useLanguage()
-    // Define mock events with proper IDs
+  
+  // Define mock events with proper IDs
   const events: Event[] = [
-    { id: 'event-1', title: t("admin.dashboard.medicalCamp"), date: "May 15, 2025" },
-    { id: 'event-2', title: t("admin.dashboard.educationWorkshop"), date: "May 22, 2025" },
-    { id: 'event-3', title: t("admin.dashboard.volunteerOrientation"), date: "May 25, 2025" },
-    { id: 'event-4', title: t("admin.dashboard.fundraisingGala"), date: "June 5, 2025" },
-    { id: 'event-5', title: t("admin.dashboard.sportsDay"), date: "June 12, 2025" },
+    { id: 'event-1', title: t("orphanageAdmin.dashboard.activity.newBranch"), date: t("orphanageAdmin.dashboard.time.twoDaysAgo") },
+    { id: 'event-2', title: t("orphanageAdmin.dashboard.activity.adminCreated"), date: t("orphanageAdmin.dashboard.time.threeDaysAgo") },
+    { id: 'event-3', title: t("orphanageAdmin.dashboard.activity.systemUpdate"), date: t("orphanageAdmin.dashboard.time.fiveDaysAgo") },
+    { id: 'event-4', title: t("orphanageAdmin.dashboard.activity.fundraiserApproved"), date: t("orphanageAdmin.dashboard.time.oneWeekAgo") },
+    { id: 'event-5', title: t("orphanageAdmin.dashboard.activity.inventoryAudit"), date: t("orphanageAdmin.dashboard.time.oneWeekAgo") }
   ];
 
   // Function to mark a notification as read
@@ -259,19 +260,15 @@ export default function SupervisorDashboard() {
       </div>
     )
   }
-
   return (    
-  <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight"><T k="admin.dashboard.title" /></h1>
+  <div className="space-y-6">      <div>
+        <h1 className="text-3xl font-bold tracking-tight"><T k="supervisor.dashboard.title" /></h1>
         <p className="text-muted-foreground">
           <T k="admin.dashboard.welcome" />, {user?.username ?? "Admin"}! {user?.branchName ? 
             <><T k="admin.dashboard.overview" /> {user.branchName}.</> : 
             <><T k="admin.dashboard.overview" /> <T k="admin.dashboard.yourBranch" />.</>}
         </p>
-      </div>      
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+      </div> <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium"><T k="admin.dashboard.totalOrphans" /></CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
@@ -292,9 +289,9 @@ export default function SupervisorDashboard() {
             <div className="text-2xl font-bold animate-in fade-in-50 duration-700 delay-100">Tshs {stats.totalFundraising ?? 0}</div>
             <p className="text-xs text-muted-foreground"><T k="admin.dashboard.fundsRaised" /></p>
           </CardContent>
-        </Card>        <Card>
+        </Card><Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium"><T k="admin.dashboard.branchName" /></CardTitle>
+            <CardTitle className="text-sm font-medium"><T k="supervisor.dashboard.branchInfo" /></CardTitle>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
               <path d="M3 6h18"/>
               <path d="M7 12h10"/>
@@ -303,7 +300,7 @@ export default function SupervisorDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold animate-in fade-in-50 duration-700 delay-200 truncate">{user?.branchName ?? t("admin.dashboard.activeBranch")}</div>
-            <p className="text-xs text-muted-foreground"><T k="admin.dashboard.currentLocation" /></p>
+            <p className="text-xs text-muted-foreground"><T k="supervisor.dashboard.currentBranch" /></p>
           </CardContent>
         </Card>        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -321,8 +318,7 @@ export default function SupervisorDashboard() {
         <Card className="col-span-1">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center">
+              <div>                <CardTitle className="flex items-center">
                   <div className="relative">
                     <Bell className="mr-2 h-5 w-5" />
                     {allNotifications.filter(n => !n.isRead).length > 0 && (
@@ -331,10 +327,9 @@ export default function SupervisorDashboard() {
                       </span>
                     )}
                   </div>                  
-                  <T k="admin.dashboard.recentActivities" />
-                </CardTitle>
-                <CardDescription>
-                  <T k="admin.dashboard.unreadNotifications" /> {user?.unreadNotificationsCount ?? 0} <T k="admin.dashboard.unreadNotificationsIn" /> {user?.branchName || <T k="admin.dashboard.yourBranch" />}
+                  <T k="supervisor.dashboard.notifications" />
+                </CardTitle>                <CardDescription>
+                  <T k="supervisor.dashboard.recentNotifications" /> {user?.unreadNotificationsCount ?? 0} <T k="admin.dashboard.unreadNotificationsIn" /> {user?.branchName ?? <T k="admin.dashboard.yourBranch" />}
                 </CardDescription>
               </div>
               <div className="flex items-center gap-3">
@@ -371,7 +366,7 @@ export default function SupervisorDashboard() {
           </CardHeader>
           <CardContent className="overflow-y-auto max-h-[340px]">            {notifications.length === 0 ? (
               <p className="text-sm text-muted-foreground py-4 text-center"><T k="admin.dashboard.noNotifications" /></p>
-            ) : (
+            ): (
               <>
                 <div className="space-y-4">
                   {notifications.map((notification: Notification, index) => (
@@ -385,8 +380,7 @@ export default function SupervisorDashboard() {
                         <div className={`min-w-1 h-full w-1 rounded-full ${notification.isRead ? 'bg-gray-300' : 'bg-blue-500'}`}></div>
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium whitespace-pre-line">{notification.message}</p>
-                          <div className="flex justify-between items-center mt-1">
-                            <p className="text-xs text-muted-foreground">
+                          <div className="flex justify-between items-center mt-1">                            <p className="text-xs text-muted-foreground">
                               {notification.createdDate ? new Date(notification.createdDate.replace(' ', 'T')).toLocaleString() : t("admin.dashboard.dateUnavailable")}                            </p>
                             {!notification.isRead && markingAsRead !== notification.publicId && (
                               <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full"><T k="admin.dashboard.new" /></span>
@@ -459,19 +453,19 @@ export default function SupervisorDashboard() {
               </>
             )}
           </CardContent>
-        </Card>        <Card className="col-span-1">
-          <CardHeader>
-            <CardTitle><T k="admin.dashboard.upcomingEvents" /></CardTitle>
-            <CardDescription><T k="admin.dashboard.eventsScheduled" /></CardDescription>
-          </CardHeader>
-          <CardContent>
+        </Card>        <Card className="col-span-1">          <CardHeader>
+            <CardTitle><T k="supervisor.dashboard.activities" /></CardTitle>
+            <CardDescription><T k="supervisor.dashboard.recentActivities" /></CardDescription>
+          </CardHeader><CardContent>
             <div className="space-y-4">
               {events.map((event) => (
                 <div key={event.id} className="flex items-center">
-                  <div className="w-2 h-2 rounded-full bg-green-500 mr-3"></div>
+                  <div className="w-2 h-2 rounded-full bg-blue-500 mr-3"></div>
                   <div className="flex-1">
                     <p className="text-sm font-medium">{event.title}</p>
-                    <p className="text-xs text-muted-foreground">{event.date}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {event.id === 'event-3' ? t("orphanageAdmin.dashboard.allBranches") : user?.branchName ?? t("admin.dashboard.activeBranch")} • {event.date}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -482,3 +476,4 @@ export default function SupervisorDashboard() {
     </div>
   )
 }
+

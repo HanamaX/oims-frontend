@@ -1,16 +1,20 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { useAuth } from "@/components/auth-provider"
-import { useLanguage } from "@/contexts/LanguageContext"
 import ReportComponent from "@/components/report-generator-new"
 import ReportStats from "@/components/report-stats-new"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { BarChart3, FileType, AlertCircle, Download } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { T, useLanguage } from "@/contexts/LanguageContext"
+import { useFundraiserReportData } from "@/hooks/use-fundraiser-report-data"
+import { useInventoryReportData } from "@/hooks/use-inventory-report-data"
+import { useOrphanReportData } from "@/hooks/use-orphan-report-data"
+import { useVolunteerReportData } from "@/hooks/use-volunteer-report-data"
 import { ReportType } from "@/lib/report-service"
+import { AlertCircle, BarChart3, Download, FileType, Loader2 } from "lucide-react"
+import { useEffect, useState } from "react"
 
 // Sample data for charts (this would come from your API in a real app)
 const sampleData = {
@@ -100,13 +104,110 @@ const sampleData = {
   },
 }
 
-export default function AdminReportsPage() {
+// Component to display orphan stats using real data
+function OrphanReportStats() {
+  const { orphanData, loading } = useOrphanReportData({})
+  const { t } = useLanguage()
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
+        <span className="ml-2 text-green-600">{t("report.loadingData")}</span>
+      </div>
+    )
+  }
+  
+  return (
+    <ReportStats 
+      data={orphanData} 
+      type="orphans"
+    />
+  )
+}
+
+// Component to display inventory stats using real data
+function InventoryReportStats() {
+  const { inventoryData, loading } = useInventoryReportData({})
+  const { t } = useLanguage()
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
+        <span className="ml-2 text-green-600">{t("report.loadingData")}</span>
+      </div>
+    )
+  }
+  
+  return (
+    <ReportStats 
+      data={inventoryData} 
+      type="inventory"
+    />
+  )
+}
+
+// Component to display fundraiser stats using real data
+function FundraiserReportStats() {
+  const { fundraiserData, loading } = useFundraiserReportData({})
+  const { t } = useLanguage()
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
+        <span className="ml-2 text-green-600">{t("report.loadingData")}</span>
+      </div>
+    )
+  }
+  
+  return (
+    <ReportStats 
+      data={fundraiserData} 
+      type="fundraising"
+    />
+  )
+}
+
+// Component to display volunteer stats using real data
+function VolunteerReportStats() {
+  const { chartData, loading, error } = useVolunteerReportData({})
+  const { t } = useLanguage()
+  
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
+        <span className="ml-2 text-green-600">{t("report.loadingData")}</span>
+      </div>
+    )
+  }
+  
+  if (error || !chartData) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-center">
+        <AlertCircle className="h-8 w-8 text-red-500 mb-2" />
+        <h3 className="text-lg font-medium">{t("report.errorLoading")}</h3>
+        <p className="text-sm text-muted-foreground">{error ?? t("report.noDataAvailable")}</p>
+      </div>
+    )  }
+  
+  return (
+    <ReportStats 
+      data={chartData} 
+      type="volunteers"
+    />
+  )
+}
+
+export default function SupervisorReportsPage() {
   const { user } = useAuth()
   const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState<ReportType>("orphans")
   
   if (!user) {
-    return <div>Loading...</div>
+    return <div><T k="common.loading" /></div>
   }
 
   return (
@@ -117,20 +218,22 @@ export default function AdminReportsPage() {
           <p className="text-muted-foreground">
             {t("report.generate")}
           </p>
-        </div>
-        <Badge variant="outline" className="px-3 py-1 text-base">
-          {user.branchName || t("branch.label")}
+        </div>        <Badge variant="outline" className="px-3 py-1 text-base bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md">
+          {user.branchName ?? <T k="branch.label" />}
         </Badge>
       </div>
 
-      <div className="grid gap-6">        <Alert className="bg-green-50 border-green-200">
+      <div className="grid gap-6">          
+        <Alert className="bg-green-50 border-green-200">
           <AlertCircle className="h-4 w-4 text-green-600" />
           <AlertTitle>{t("report.restricted")}</AlertTitle>
           <AlertDescription>
             {t("report.restriction.description")}
           </AlertDescription>
-        </Alert><Tabs defaultValue="generator" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 bg-green-100">
+        </Alert>
+
+        <Tabs defaultValue="generator" className="space-y-6">          
+          <TabsList className="grid w-full grid-cols-2 bg-green-100">            
             <TabsTrigger 
               value="generator"
               className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
@@ -147,16 +250,16 @@ export default function AdminReportsPage() {
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="generator" className="space-y-6">
-            <ReportComponent 
-              userRole="admin" 
-              branchId={user.publicId || ""} 
-              branchName={user.branchName || ""}
+          <TabsContent value="generator" className="space-y-6">            <ReportComponent 
+              userRole="supervisor" 
+              branchId={user.publicId ?? ""} 
+              branchName={user.branchName ?? ""}
             />
           </TabsContent>
           
-          <TabsContent value="analytics" className="space-y-6">            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ReportType)}>
-              <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 bg-green-100">                <TabsTrigger 
+          <TabsContent value="analytics" className="space-y-6">            
+            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ReportType)}>              <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 bg-green-100">                
+                <TabsTrigger 
                   value="orphans"
                   className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
                 >
@@ -181,65 +284,67 @@ export default function AdminReportsPage() {
                   {t("report.volunteers")}
                 </TabsTrigger>
               </TabsList>
-              
-              <div className="mb-6">
-                <ReportStats 
-                  data={
-                    activeTab === "orphans" 
-                      ? sampleData.orphans 
-                      : activeTab === "inventory" 
-                        ? sampleData.inventory 
-                        : activeTab === "fundraising" 
-                          ? sampleData.fundraising 
-                          : sampleData.volunteers
-                  } 
-                  type={activeTab}
-                />
+                <div className="mb-6">
+                {activeTab === "orphans" && (
+                  <OrphanReportStats />
+                )}
+                {activeTab === "inventory" && (
+                  <InventoryReportStats />
+                )}
+                {activeTab === "fundraising" && (
+                  <FundraiserReportStats />
+                )}
+                {activeTab === "volunteers" && (
+                  <VolunteerReportStats />
+                )}
               </div>
-                <div className="grid gap-6 md:grid-cols-2">                <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
+
+              <div className="grid gap-6 md:grid-cols-2">                  
+                <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
                     <CardTitle className="text-base text-green-800">{t("report.summary")}</CardTitle>
                     <CardDescription>{t("report.branchOverview")}</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4 pt-4">
-                    <div className="flex justify-between">
+                  <CardContent className="space-y-4 pt-4">                    <div className="flex justify-between">
                       <span className="text-green-700">{t("report.totalOrphans")}</span>
-                      <span className="font-medium text-green-800">{user.dashboardStats?.totalOrphans || 0}</span>
+                      <span className="font-medium text-green-800">{user.dashboardStats?.totalOrphans ?? 0}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-green-700">{t("report.activeVolunteers")}</span>
-                      <span className="font-medium text-green-800">{user.dashboardStats?.totalVolunteers || 0}</span>
+                      <span className="font-medium text-green-800">{user.dashboardStats?.totalVolunteers ?? 0}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-green-700">{t("report.fundraisingCampaigns")}</span>
-                      <span className="font-medium text-green-800">{user.dashboardStats?.totalFundraising || 0}</span>
+                      <span className="font-medium text-green-800">{user.dashboardStats?.totalFundraising ?? 0}</span>
                     </div>
                   </CardContent>
-                </Card>                  <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">                  <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
+                </Card>                  
+                  <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">                  
+                  <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
                     <CardTitle className="text-base text-green-800">{t("report.recentReports")}</CardTitle>
                     <CardDescription>{t("report.previouslyGenerated")}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-4">
+                  </CardHeader>                  <CardContent className="pt-4">
                     <ul className="space-y-3">
-                      <li className="flex items-center justify-between text-sm">
+                      <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
                         <span className="text-green-700">{t("report.monthlyOrphan")}</span>
                         <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
                       </li>
-                      <li className="flex items-center justify-between text-sm">
+                      <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
                         <span className="text-green-700">{t("report.inventoryStatus")}</span>
                         <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
                       </li>
-                      <li className="flex items-center justify-between text-sm">
+                      <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
                         <span className="text-green-700">{t("report.volunteerHours")}</span>
                         <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
                       </li>
-                      <li className="flex items-center justify-between text-sm">
+                      <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
                         <span className="text-green-700">{t("report.fundraisingSummary")}</span>
                         <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
                       </li>
                     </ul>
                   </CardContent>
-                </Card>              </div>
+                </Card>              
+              </div>
             </Tabs>
           </TabsContent>
         </Tabs>
@@ -247,3 +352,4 @@ export default function AdminReportsPage() {
     </div>
   )
 }
+

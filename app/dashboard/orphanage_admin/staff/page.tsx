@@ -23,6 +23,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 
 // Define types for our data
@@ -55,6 +56,8 @@ interface OrphanageCentre {
 }
 
 export default function StaffManagementPage() {
+  const { t } = useLanguage()
+  
   // State for form
   const [showForm, setShowForm] = useState(false)
   const [staffMember, setStaffMember] = useState<StaffMember>({
@@ -198,15 +201,14 @@ export default function StaffManagementPage() {
       [name]: value,
     }))
   }
-
   // Handle form submission (only for adding new staff)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!center?.publicId) {
       toast({
-        title: "Error",
-        description: "You need to create a center first",
+        title: t("common.error"),
+        description: t("staff.createCenterFirst"),
         variant: "destructive",
       })
       return
@@ -214,8 +216,8 @@ export default function StaffManagementPage() {
 
     if (!staffMember.branchPublicId) {
       toast({
-        title: "Error",
-        description: "Please select a branch",
+        title: t("common.error"),
+        description: t("staff.selectBranch"),
         variant: "destructive",
       })
       return
@@ -242,11 +244,9 @@ export default function StaffManagementPage() {
           publicId: response.data.data.publicId,
         }
         setStaffMembers([...staffMembers, newStaff])
-      }
-
-      toast({
-        title: "Success",
-        description: "Admin created successfully",
+      }      toast({
+        title: t("common.success"),
+        description: t("staff.adminCreatedSuccessfully"),
       })
 
       // Reset form
@@ -261,23 +261,22 @@ export default function StaffManagementPage() {
       setShowForm(false)
     } catch (err: any) {
       console.error("Error saving admin:", err)
-      setError(err.response?.data?.message || "Failed to save admin. Please try again.")
+      setError(err.response?.data?.message || t("staff.failedToSaveAdmin"))
       toast({
-        title: "Error",
-        description: "Failed to save admin information",
+        title: t("common.error"),
+        description: t("staff.failedToSaveAdminInfo"),
         variant: "destructive",
       })
     } finally {
       setSubmitting(false)
     }
   }
-
   // Redirect to profile view (editing removed as per requirements)
   const viewProfile = (staffId: string) => {
     // This would navigate to a profile view page if implemented
     toast({
-      title: "Profile View",
-      description: "Staff members can only edit their own profiles from their account page.",
+      title: t("staff.profileView"),
+      description: t("staff.staffEditOwnProfile"),
     })
   }
 
@@ -286,7 +285,6 @@ export default function StaffManagementPage() {
     setStaffToDelete(staffId)
     setDeleteDialogOpen(true)
   }
-
   // Confirm delete
   const confirmDelete = async () => {
     if (!staffToDelete) return
@@ -295,14 +293,14 @@ export default function StaffManagementPage() {
       await API.delete(`/app/oims/admins/del/${staffToDelete}`)
       setStaffMembers(staffMembers.filter((staff) => staff.publicId !== staffToDelete))
       toast({
-        title: "Success",
-        description: "Admin deleted successfully",
+        title: t("common.success"),
+        description: t("staff.adminDeletedSuccessfully"),
       })
     } catch (err) {
       console.error("Error deleting admin:", err)
       toast({
-        title: "Error",
-        description: "Failed to delete admin",
+        title: t("common.error"),
+        description: t("staff.failedToDeleteAdmin"),
         variant: "destructive",
       })
     } finally {
@@ -355,17 +353,15 @@ export default function StaffManagementPage() {
 
         // Update staff members list
         setStaffMembers(staffMembers.map((s) => (s.publicId === staffToUpdate.publicId ? updatedStaff : s)))
-      }
-
-      toast({
-        title: "Success",
-        description: "Admin status updated successfully",
+      }      toast({
+        title: t("common.success"),
+        description: t("staff.adminStatusUpdatedSuccessfully"),
       })
     } catch (err) {
       console.error("Error updating admin status:", err)
       toast({
-        title: "Error",
-        description: "Failed to update admin status",
+        title: t("common.error"),
+        description: t("staff.failedToUpdateAdminStatus"),
         variant: "destructive",
       })
     } finally {
@@ -373,43 +369,39 @@ export default function StaffManagementPage() {
       setStaffToUpdate(null)
     }
   }
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
         <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-        <span className="ml-2">Loading staff information...</span>
+        <span className="ml-2"><T k="staff.loadingStaffInfo" /></span>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6">      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Staff Management</h1>
-          <p className="text-muted-foreground">Manage staff members across all branches</p>
+          <h1 className="text-3xl font-bold tracking-tight"><T k="staff.management" /></h1>
+          <p className="text-muted-foreground"><T k="staff.description" /></p>
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
         {center && branches.length > 0 ? (
           <Button onClick={() => setShowForm(true)}>
-            <Plus className="mr-2 h-4 w-4" /> Add Staff
+            <Plus className="mr-2 h-4 w-4" /> <T k="staff.add" />
           </Button>
         ) : null}
-      </div>
-
-      {!center && (
+      </div>      {!center && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>No Center Found</AlertTitle>
+          <AlertTitle><T k="staff.noCenterFound" /></AlertTitle>
           <AlertDescription>
-            You need to create an orphanage center before you can manage staff.{" "}
+            <T k="staff.createCenterBeforeStaff" />{" "}
             <Button
               variant="link"
               className="p-0 h-auto text-red-700 hover:text-red-900"
               onClick={() => router.push("/dashboard/orphanage_admin/center")}
             >
-              Create Center
+              <T k="staff.createCenter" />
             </Button>
           </AlertDescription>
         </Alert>
@@ -418,29 +410,27 @@ export default function StaffManagementPage() {
       {center && branches.length === 0 && (
         <Alert>
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>No Branches Found</AlertTitle>
+          <AlertTitle><T k="staff.noBranchesFound" /></AlertTitle>
           <AlertDescription>
-            You need to create at least one branch before you can manage staff.{" "}
+            <T k="staff.createBranchBeforeStaff" />{" "}
             <Button variant="link" className="p-0 h-auto" onClick={() => router.push("/dashboard/orphanage_admin/branches")}>
-              Create Branch
+              <T k="staff.createBranch" />
             </Button>
           </AlertDescription>
         </Alert>
-      )}
-
-      {/* Staff Form Modal */}
+      )}      {/* Staff Form Modal */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Add New Staff Member</DialogTitle>
+            <DialogTitle><T k="staff.addNew" /></DialogTitle>
             <DialogDescription>
-              Enter the details of the staff member
+              <T k="staff.enterStaffDetails" />
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email"><T k="staff.email" /></Label>
                 <Input
                   id="email"
                   name="email"
@@ -451,14 +441,14 @@ export default function StaffManagementPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="branchPublicId">Branch</Label>
+                <Label htmlFor="branchPublicId"><T k="staff.branch" /></Label>
                 <Select
                   value={staffMember.branchPublicId}
                   onValueChange={(value) => handleSelectChange("branchPublicId", value)}
                   required
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select Branch" />
+                    <SelectValue placeholder={t("staff.selectBranch")} />
                   </SelectTrigger>
                   <SelectContent>
                     {branches.map((branch) => (
@@ -471,24 +461,23 @@ export default function StaffManagementPage() {
               </div>
               {!staffMember.publicId && (
                 <div className="space-y-2">
-                  <Label htmlFor="role">Role</Label>
+                  <Label htmlFor="role"><T k="staff.role" /></Label>
                   <Select
                     value={staffMember.role}
                     onValueChange={(value) => handleSelectChange("role", value)}
                     required
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select Role" />
+                      <SelectValue placeholder={t("staff.selectRole")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="ROLE_SUPERVISOR">Supervisor</SelectItem>
-                      <SelectItem value="ROLE_ORPHANAGE_ADMIN">Orphanage Admin</SelectItem>
+                      <SelectItem value="ROLE_SUPERVISOR"><T k="staff.supervisor" /></SelectItem>
+                      <SelectItem value="ROLE_ORPHANAGE_ADMIN"><T k="staff.orphanageAdmin" /></SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               )}
-            </div>
-            <DialogFooter>
+            </div>            <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
@@ -505,63 +494,60 @@ export default function StaffManagementPage() {
                 }}
                 disabled={submitting}
               >
-                Cancel
+                <T k="common.cancel" />
               </Button>
               <Button type="submit" disabled={submitting}>
                 {submitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Adding...
+                    <T k="staff.adding" />
                   </>
                 ) : (
-                  <>Add Staff</>
+                  <><T k="staff.addStaff" /></>
                 )}
               </Button>
             </DialogFooter>
           </form>
         </DialogContent>
-      </Dialog>
-
-      <div className="grid gap-6 xs:grid-cols-1 md:grid-cols-2">
+      </Dialog>      <div className="grid gap-6 xs:grid-cols-1 md:grid-cols-2">
         {staffMembers.length === 0 && !loading ? (
           <div className="col-span-1 md:col-span-2 text-center py-10">
-            <p className="text-muted-foreground">No staff members found. Add your first staff member to get started.</p>
+            <p className="text-muted-foreground"><T k="staff.noStaffMembersFound" /></p>
           </div>
         ) : (
           staffMembers.map((staff) => (
             <Card key={staff.publicId} className={`${staff.suspended ? "opacity-70" : ""} overflow-hidden`}>
               <CardHeader className="flex flex-col sm:flex-row items-center gap-4">
-                <div className="flex-1 min-w-0">
-                  <CardTitle className="flex flex-wrap items-center gap-2">
-                    <span className="truncate">{staff.fullName || "Not Assigned"}</span>
+                <div className="flex-1 min-w-0">                  <CardTitle className="flex flex-wrap items-center gap-2">
+                    <span className="truncate">{staff.fullName || t("staff.notAssigned")}</span>
                     {staff.username && <span className="text-sm font-normal text-gray-500">@{staff.username}</span>}
                   </CardTitle>
                   <CardDescription className="mt-2 flex flex-wrap gap-2">
                     {staff.role === "ROLE_ORPHANAGE_ADMIN" ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        Orphanage Admin
+                        <T k="staff.orphanageAdmin" />
                       </span>
                     ) : (
                       <>
                         <span key="branch-name" className="inline-block max-w-full truncate">
-                          {branches.find((b) => b.publicId === staff.branchPublicId)?.branchName || "No Branch Assigned"}
+                          {branches.find((b) => b.publicId === staff.branchPublicId)?.branchName || t("staff.noBranchAssigned")}
                         </span>
                         <span key="role-badge" className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          Supervisor
+                          <T k="staff.supervisor" />
                         </span>
                       </>
                     )}
                     {staff.suspended ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                        Suspended
+                        <T k="staff.suspended" />
                       </span>
                     ) : staff.isActive ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        Active
+                        <T k="staff.active" />
                       </span>
                     ) : (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                        Inactive
+                        <T k="staff.inactive" />
                       </span>
                     )}
                   </CardDescription>
@@ -583,92 +569,86 @@ export default function StaffManagementPage() {
                     </div>
                   )}
                 </div>
-              </CardHeader>
-              <CardContent>
+              </CardHeader>              <CardContent>
                 <div className="grid grid-cols-1 xs:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium">Email</p>
-                    <p className="text-sm text-muted-foreground break-words">{staff.email || "Not Assigned"}</p>
+                    <p className="text-sm font-medium"><T k="staff.email" /></p>
+                    <p className="text-sm text-muted-foreground break-words">{staff.email || t("staff.notAssigned")}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Phone</p>
-                    <p className="text-sm text-muted-foreground break-words">{staff.phoneNumber || "Not Assigned"}</p>
+                    <p className="text-sm font-medium"><T k="staff.phone" /></p>
+                    <p className="text-sm text-muted-foreground break-words">{staff.phoneNumber || t("staff.notAssigned")}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Gender</p>
-                    <p className="text-sm text-muted-foreground">{staff.sex || "Not Specified"}</p>
+                    <p className="text-sm font-medium"><T k="staff.gender" /></p>
+                    <p className="text-sm text-muted-foreground">{staff.sex || t("staff.notSpecified")}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Account Status</p>
+                    <p className="text-sm font-medium"><T k="staff.accountStatus" /></p>
                     <p className="text-sm text-muted-foreground">
-                      {staff.suspended ? "Suspended" : (staff.isActive ? "Active" : "Inactive")}
+                      {staff.suspended ? t("staff.suspended") : (staff.isActive ? t("staff.active") : t("staff.inactive"))}
                     </p>
                   </div>
                   {staff.createdDate && (
                     <div className="col-span-1 xs:col-span-2">
-                      <p className="text-sm font-medium">Account Created</p>
+                      <p className="text-sm font-medium"><T k="staff.accountCreated" /></p>
                       <p className="text-sm text-muted-foreground">
                         {new Date(staff.createdDate.replace(' ', 'T')).toLocaleDateString()}
                       </p>
                     </div>
                   )}
                 </div>
-              </CardContent>
-              <CardFooter className="flex justify-end gap-2 flex-wrap">
-                <Button variant="outline" size="icon" onClick={() => handleAdminUpdate(staff)} title="Manage Status">
-                  <UserCheck className="h-4 w-4" aria-label="Manage Status" />
+              </CardContent>              <CardFooter className="flex justify-end gap-2 flex-wrap">
+                <Button variant="outline" size="icon" onClick={() => handleAdminUpdate(staff)} title={t("staff.manageStatus")}>
+                  <UserCheck className="h-4 w-4" aria-label={t("staff.manageStatus")} />
                 </Button>
-                <Button variant="outline" size="icon" onClick={() => handleDelete(staff.publicId!)} title="Delete">
-                  <Trash2 className="h-4 w-4" aria-label="Delete" />
+                <Button variant="outline" size="icon" onClick={() => handleDelete(staff.publicId!)} title={t("common.delete")}>
+                  <Trash2 className="h-4 w-4" aria-label={t("common.delete")} />
                 </Button>
               </CardFooter>
             </Card>
           ))
         )}
-      </div>
-
-      {/* Delete Confirmation Dialog */}
+      </div>      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Admin Deletion</DialogTitle>
+            <DialogTitle><T k="staff.confirmAdminDeletion" /></DialogTitle>
             <DialogDescription>
               {staffToDelete && (
                 <>
-                  Are you sure you want to delete staff member <strong>
+                  {t("staff.deleteConfirmationMessage")} <strong>
                     {staffMembers.find(s => s.publicId === staffToDelete)?.firstName} {staffMembers.find(s => s.publicId === staffToDelete)?.lastName}
                   </strong>? 
                   <br /><br />
-                  This action cannot be undone and will permanently remove their account and access to the system.
+                  <T k="staff.deleteWarningMessage" />
                 </>
               )}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
-              Cancel
+              <T k="common.cancel" />
             </Button>
             <Button variant="destructive" onClick={confirmDelete}>
-              Delete Admin
+              <T k="staff.deleteAdmin" />
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
-
-      {/* Admin Update Dialog */}
+      </Dialog>      {/* Admin Update Dialog */}
       <Dialog open={adminUpdateDialogOpen} onOpenChange={setAdminUpdateDialogOpen}>
         <DialogContent className="bg-white">
           <DialogHeader>
-            <DialogTitle>Update Admin Status</DialogTitle>
+            <DialogTitle><T k="staff.updateAdminStatus" /></DialogTitle>
             <DialogDescription>
-              Manage branch assignment and account status for {staffToUpdate?.fullName || `${staffToUpdate?.firstName} ${staffToUpdate?.lastName}` || "Admin"}
+              {t("staff.manageBranchAndStatus")} {staffToUpdate?.fullName || `${staffToUpdate?.firstName} ${staffToUpdate?.lastName}` || t("staff.admin")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-4">
               {staffToUpdate?.role !== "ROLE_ORPHANAGE_ADMIN" && (
                 <div className="space-y-2">
-                  <Label htmlFor="branch-update">Assigned Branch</Label>
+                  <Label htmlFor="branch-update"><T k="staff.assignedBranch" /></Label>
                   <Select
                     value={staffToUpdate?.branchPublicId}
                     onValueChange={(value) =>
@@ -676,7 +656,7 @@ export default function StaffManagementPage() {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select Branch" />
+                      <SelectValue placeholder={t("staff.selectBranch")} />
                     </SelectTrigger>
                     <SelectContent
                       className="bg-white">
@@ -691,7 +671,7 @@ export default function StaffManagementPage() {
               )}
               
               <div className="space-y-2 bg-white">
-                <Label htmlFor="account-status">Account Status</Label>
+                <Label htmlFor="account-status"><T k="staff.accountStatus" /></Label>
                 <Select
                   value={staffToUpdate?.suspended ? "suspended" : "active"}
                   onValueChange={(value) =>
@@ -699,32 +679,32 @@ export default function StaffManagementPage() {
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select Status" />
+                    <SelectValue placeholder={t("staff.selectStatus")} />
                   </SelectTrigger>
                   <SelectContent
                     className="bg-white">
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="suspended">Suspended</SelectItem>
+                    <SelectItem value="active"><T k="staff.active" /></SelectItem>
+                    <SelectItem value="suspended"><T k="staff.suspended" /></SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               
               <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-md text-sm text-yellow-800">
-                <p className="font-medium mb-1">Orphanage Admin Permissions</p>
+                <p className="font-medium mb-1"><T k="staff.orphanageAdminPermissions" /></p>
                 {staffToUpdate?.role === "ROLE_ORPHANAGE_ADMIN" ? (
-                  <p>Orphanage Admins don't need branch assignments as they have access to all branches. You can only modify the account status for Orphanage Admins.</p>
+                  <p><T k="staff.orphanageAdminNote" /></p>
                 ) : (
-                  <p>You can only modify the branch assignment and account status for this supervisor. To change other details, ask the supervisor to update their own profile.</p>
+                  <p><T k="staff.supervisorNote" /></p>
                 )}
-                <p className="mt-1">Note: Suspending a staff member will prevent them from logging in but preserve their account data.</p>
+                <p className="mt-1"><T k="staff.suspendNote" /></p>
               </div>
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setAdminUpdateDialogOpen(false)}>
-              Cancel
+              <T k="common.cancel" />
             </Button>
-            <Button onClick={confirmAdminUpdate}>Update Admin Status</Button>
+            <Button onClick={confirmAdminUpdate}><T k="staff.updateAdminStatus" /></Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

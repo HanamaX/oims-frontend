@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { OrphanCreateRequest } from '@/lib/orphan-service'
+import { useLanguage } from '@/contexts/LanguageContext'
 
 interface OrphanFormProps {
   open: boolean
@@ -14,6 +15,7 @@ interface OrphanFormProps {
 }
 
 export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<OrphanFormProps>) {
+  const { t } = useLanguage()
   const [origin, setOrigin] = useState('')
   const [fullName, setFullName] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
@@ -34,7 +36,7 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
     
     // Validate required fields
     if (!fullName || !dateOfBirth || !gender) {
-      alert('Please fill in all required fields')
+      alert(t('orphan.form.requiredFields'))
       return
     }
     
@@ -81,9 +83,9 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='sm:max-w-[800px] max-h-[85vh] overflow-y-auto'>
         <DialogHeader>
-          <DialogTitle>Add New Orphan</DialogTitle>
+          <DialogTitle>{t('orphan.form.addNewOrphan')}</DialogTitle>
           <DialogDescription>
-            Enter the orphan's details below. Required fields are marked with an asterisk (*).
+            {t('orphan.form.enterDetails')}
           </DialogDescription>
         </DialogHeader>
         
@@ -91,7 +93,7 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
           <div className='grid gap-4'>
             {/* Personal Information Section */}
             <div className="border-b pb-2 mb-2">
-              <h3 className="font-medium text-sm">Personal Information</h3>
+              <h3 className="font-medium text-sm">{t('orphan.form.personalInformation')}</h3>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -99,7 +101,7 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
               <div>
                 <div className='grid grid-cols-3 items-center gap-2 mb-3'>
                   <Label htmlFor='fullName' className='text-right'>
-                    Full Name *
+                    {t('orphan.form.fullName')} *
                   </Label>
                   <Input
                     id='fullName'
@@ -112,7 +114,7 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
                 
                 <div className='grid grid-cols-3 items-center gap-2 mb-3'>
                   <Label htmlFor='dateOfBirth' className='text-right'>
-                    Date of Birth *
+                    {t('orphan.form.dateOfBirth')} *
                   </Label>
                   <Input
                     id='dateOfBirth'
@@ -126,29 +128,29 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
                 
                 <div className='grid grid-cols-3 items-center gap-2 mb-3'>
                   <Label htmlFor='gender' className='text-right'>
-                    Gender *
+                    {t('orphan.form.gender')} *
                   </Label>
                   <Select value={gender} onValueChange={setGender} required>
                     <SelectTrigger className='col-span-2'>
-                      <SelectValue placeholder='Select gender' />
+                      <SelectValue placeholder={t('orphan.form.selectGender')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value='MALE'>Male</SelectItem>
-                      <SelectItem value='FEMALE'>Female</SelectItem>
-                      <SelectItem value='OTHER'>Other</SelectItem>
+                      <SelectItem value='MALE'>{t('orphan.form.male')}</SelectItem>
+                      <SelectItem value='FEMALE'>{t('orphan.form.female')}</SelectItem>
+                      <SelectItem value='OTHER'>{t('orphan.form.other')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 
                 <div className='grid grid-cols-3 items-center gap-2 mb-3'>
                   <Label htmlFor='origin' className='text-right'>
-                    Origin
+                    {t('orphan.form.origin')}
                   </Label>
                   <Input
                     id='origin'
                     value={origin}
                     onChange={(e) => setOrigin(e.target.value)}
-                    placeholder='City or region of origin'
+                    placeholder={t('orphan.form.originPlaceholder')}
                     className='col-span-2'
                   />
                 </div>
@@ -158,52 +160,52 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
               <div>
                 <div className='grid grid-cols-3 items-center gap-2 mb-3'>
                   <Label htmlFor='religion' className='text-right'>
-                    Religion
+                    {t('orphan.form.religion')}
                   </Label>
                   <Input
                     id='religion'
                     value={religion}
                     onChange={(e) => setReligion(e.target.value)}
-                    placeholder='Religion'
+                    placeholder={t('orphan.form.religionPlaceholder')}
                     className='col-span-2'
                   />
                 </div>
                 
                 <div className='grid grid-cols-3 items-center gap-2 mb-3'>
                   <Label htmlFor='bloodGroup' className='text-right'>
-                    Blood Group
+                    {t('orphan.form.bloodGroup')}
                   </Label>
                   <Input
                     id='bloodGroup'
                     value={bloodGroup}
                     onChange={(e) => setBloodGroup(e.target.value)}
-                    placeholder='E.g., O+, A-, etc.'
+                    placeholder={t('orphan.form.bloodGroupPlaceholder')}
                     className='col-span-2'
                   />
                 </div>
                 
                 <div className='grid grid-cols-3 items-center gap-2 mb-3'>
                   <Label htmlFor='hobbies' className='text-right'>
-                    Hobbies
+                    {t('orphan.form.hobbies')}
                   </Label>
                   <Input
                     id='hobbies'
                     value={hobbies}
                     onChange={(e) => setHobbies(e.target.value)}
-                    placeholder='Hobbies'
+                    placeholder={t('orphan.form.hobbiesPlaceholder')}
                     className='col-span-2'
                   />
                 </div>
                 
                 <div className='grid grid-cols-3 items-center gap-2 mb-3'>
                   <Label htmlFor='allergies' className='text-right'>
-                    Allergies
+                    {t('orphan.form.allergies')}
                   </Label>
                   <Input
                     id='allergies'
                     value={allergiesText}
                     onChange={(e) => setAllergiesText(e.target.value)}
-                    placeholder='Comma-separated list'
+                    placeholder={t('orphan.form.allergiesPlaceholder')}
                     className='col-span-2'
                   />
                 </div>
@@ -212,39 +214,39 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
             
             {/* Education Section */}
             <div className="border-b pb-2 mt-4 mb-2">
-              <h3 className="font-medium text-sm">Education</h3>
+              <h3 className="font-medium text-sm">{t('orphan.form.education')}</h3>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className='grid grid-cols-3 items-center gap-2'>
                 <Label htmlFor='educationLevel' className='text-right'>
-                  Education Level
+                  {t('orphan.form.educationLevel')}
                 </Label>
                 <Select value={educationLevel} onValueChange={setEducationLevel}>
                   <SelectTrigger className='col-span-2'>
-                    <SelectValue placeholder='Select education level' />
+                    <SelectValue placeholder={t('orphan.form.selectEducationLevel')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='KINDERGARTEN'>Kindergarten</SelectItem>
-                    <SelectItem value='PRIMARY'>Primary</SelectItem>
-                    <SelectItem value='SECONDARY'>Secondary</SelectItem>
-                    <SelectItem value='HIGH_SCHOOL'>High School</SelectItem>
-                    <SelectItem value='COLLEGE'>College</SelectItem>
-                    <SelectItem value='UNIVERSITY'>University</SelectItem>
-                    <SelectItem value='NONE'>None</SelectItem>
+                    <SelectItem value='KINDERGARTEN'>{t('orphan.form.kindergarten')}</SelectItem>
+                    <SelectItem value='PRIMARY'>{t('orphan.form.primary')}</SelectItem>
+                    <SelectItem value='SECONDARY'>{t('orphan.form.secondary')}</SelectItem>
+                    <SelectItem value='HIGH_SCHOOL'>{t('orphan.form.highSchool')}</SelectItem>
+                    <SelectItem value='COLLEGE'>{t('orphan.form.college')}</SelectItem>
+                    <SelectItem value='UNIVERSITY'>{t('orphan.form.university')}</SelectItem>
+                    <SelectItem value='NONE'>{t('orphan.form.none')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               
               <div className='grid grid-cols-3 items-center gap-2'>
                 <Label htmlFor='previousSchoolName' className='text-right'>
-                  Previous School
+                  {t('orphan.form.previousSchool')}
                 </Label>
                 <Input
                   id='previousSchoolName'
                   value={previousSchoolName}
                   onChange={(e) => setPreviousSchoolName(e.target.value)}
-                  placeholder='Previous school name'
+                  placeholder={t('orphan.form.previousSchoolPlaceholder')}
                   className='col-span-2'
                 />
               </div>
@@ -252,44 +254,44 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
             
             {/* Medical Information & Other Details */}
             <div className="border-b pb-2 mt-4 mb-2">
-              <h3 className="font-medium text-sm">Additional Information</h3>
+              <h3 className="font-medium text-sm">{t('orphan.form.additionalInformation')}</h3>
             </div>
             
             <div className='grid grid-cols-4 items-center gap-4'>
               <Label htmlFor='specialNeeds' className='text-right'>
-                Special Needs
+                {t('orphan.form.specialNeeds')}
               </Label>
               <Input
                 id='specialNeeds'
                 value={specialNeeds}
                 onChange={(e) => setSpecialNeeds(e.target.value)}
-                placeholder='Any special needs'
+                placeholder={t('orphan.form.specialNeedsPlaceholder')}
                 className='col-span-3'
               />
             </div>
             
             <div className='grid grid-cols-4 items-start gap-4'>
               <Label htmlFor='medicalHistory' className='text-right pt-2'>
-                Medical History
+                {t('orphan.form.medicalHistory')}
               </Label>
               <Textarea
                 id='medicalHistory'
                 value={medicalHistory}
                 onChange={(e) => setMedicalHistory(e.target.value)}
-                placeholder='Medical history'
+                placeholder={t('orphan.form.medicalHistoryPlaceholder')}
                 className='col-span-3 h-20'
               />
             </div>
             
             <div className='grid grid-cols-4 items-start gap-4'>
               <Label htmlFor='adoptionReason' className='text-right pt-2'>
-                Adoption Reason
+                {t('orphan.form.adoptionReason')}
               </Label>
               <Textarea
                 id='adoptionReason'
                 value={adoptionReason}
                 onChange={(e) => setAdoptionReason(e.target.value)}
-                placeholder='Reason for adoption'
+                placeholder={t('orphan.form.adoptionReasonPlaceholder')}
                 className='col-span-3 h-20'
               />
             </div>
@@ -297,9 +299,9 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
           
           <DialogFooter>
             <Button type='button' variant='outline' onClick={() => onOpenChange(false)}>
-              Cancel
+              {t('orphan.form.cancel')}
             </Button>
-            <Button type='submit'>Save Orphan</Button>
+            <Button type='submit'>{t('orphan.form.saveOrphan')}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

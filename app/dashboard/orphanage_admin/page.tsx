@@ -14,6 +14,7 @@ import {
   PaginationNext, 
   PaginationPrevious 
 } from "@/components/ui/pagination"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 interface DashboardStats {
   totalOrphans: number
@@ -32,6 +33,7 @@ interface Notification {
 
 export default function OrphanageAdminDashboard() {
   const { user, isAuthenticated } = useAuth()
+  const { t } = useLanguage()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<DashboardStats>({
@@ -113,7 +115,7 @@ export default function OrphanageAdminDashboard() {
     return (
       <div className="flex justify-center items-center h-64">
         <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
-        <span className="ml-2">Loading dashboard...</span>
+        <span className="ml-2"><T k="admin.dashboard.loading" /></span>
       </div>
     )
   }
@@ -121,13 +123,13 @@ export default function OrphanageAdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Orphanage Admin Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back, {user?.firstName ?? "Admin"}!</p>
+        <h1 className="text-3xl font-bold tracking-tight"><T k="orphanageAdmin.dashboard.title" /></h1>
+        <p className="text-muted-foreground"><T k="admin.dashboard.welcome" />, {user?.firstName ?? t("admin.dashboard.admin")}!</p>
         {error && (
           <div className="mt-4 p-4 bg-red-50 text-red-800 rounded-md">
-            <p className="font-medium">Error loading dashboard data</p>
+            <p className="font-medium"><T k="orphanageAdmin.dashboard.errorLoading" /></p>
             <p className="text-sm">{error}</p>
-            <p className="text-sm mt-2">Using cached data where available.</p>
+            <p className="text-sm mt-2"><T k="orphanageAdmin.dashboard.usingCachedData" /></p>
           </div>
         )}
       </div>
@@ -135,42 +137,42 @@ export default function OrphanageAdminDashboard() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orphans</CardTitle>
+            <CardTitle className="text-sm font-medium"><T k="admin.dashboard.totalOrphans" /></CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalOrphans}</div>
-            <p className="text-xs text-muted-foreground">Across all branches</p>
+            <p className="text-xs text-muted-foreground"><T k="orphanageAdmin.dashboard.acrossAllBranches" /></p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Branches</CardTitle>
+            <CardTitle className="text-sm font-medium"><T k="orphanageAdmin.dashboard.totalBranches" /></CardTitle>
             <Building className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalBranches}</div>
-            <p className="text-xs text-muted-foreground">Active branches</p>
+            <p className="text-xs text-muted-foreground"><T k="orphanageAdmin.dashboard.activeBranches" /></p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Fundraising</CardTitle>
+            <CardTitle className="text-sm font-medium"><T k="orphanageAdmin.dashboard.totalFundraising" /></CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">${stats.totalFundraising.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">Funds raised to date</p>
+            <p className="text-xs text-muted-foreground"><T k="orphanageAdmin.dashboard.fundsRaisedToDate" /></p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Volunteers</CardTitle>
+            <CardTitle className="text-sm font-medium"><T k="orphanageAdmin.dashboard.totalVolunteers" /></CardTitle>
             <UserPlus className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalVolunteers}</div>
-            <p className="text-xs text-muted-foreground">Active volunteers</p>
+            <p className="text-xs text-muted-foreground"><T k="orphanageAdmin.dashboard.activeVolunteers" /></p>
           </CardContent>
         </Card>
       </div>
@@ -179,13 +181,13 @@ export default function OrphanageAdminDashboard() {
         <Card className="col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center">
-              <Bell className="mr-2 h-5 w-5" /> Notifications
+              <Bell className="mr-2 h-5 w-5" /> <T k="orphanageAdmin.dashboard.notifications" />
             </CardTitle>
-            <CardDescription>Recent system notifications</CardDescription>
+            <CardDescription><T k="orphanageAdmin.dashboard.recentNotifications" /></CardDescription>
           </CardHeader>
           <CardContent>
             {notifications.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">No notifications at this time</p>
+              <p className="text-sm text-muted-foreground py-4 text-center"><T k="admin.dashboard.noNotifications" /></p>
             ) : (
               <>
                 <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
@@ -196,7 +198,7 @@ export default function OrphanageAdminDashboard() {
                         <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium whitespace-pre-line">{notification.message}</p>
                           <p className="text-xs text-muted-foreground mt-1">
-                            {notification.createdDate ? new Date(notification.createdDate.replace(' ', 'T')).toLocaleString() : 'Date unavailable'}
+                            {notification.createdDate ? new Date(notification.createdDate.replace(' ', 'T')).toLocaleString() : t("admin.dashboard.dateUnavailable")}
                           </p>
                         </div>
                       </div>
@@ -266,17 +268,17 @@ export default function OrphanageAdminDashboard() {
 
         <Card className="col-span-1">
           <CardHeader>
-            <CardTitle>Recent System Activities</CardTitle>
-            <CardDescription>Latest actions in the system</CardDescription>
+            <CardTitle><T k="orphanageAdmin.dashboard.recentSystemActivities" /></CardTitle>
+            <CardDescription><T k="orphanageAdmin.dashboard.latestActions" /></CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {[
-                { id: "new-branch", title: "New branch added", branch: "Hillside Branch", time: "2 days ago" },
-                { id: "admin-created", title: "Admin account created", branch: "Riverside Branch", time: "3 days ago" },
-                { id: "system-update", title: "System update completed", branch: "All branches", time: "5 days ago" },
-                { id: "fundraiser-approved", title: "Fundraiser campaign approved", branch: "Downtown Branch", time: "1 week ago" },
-                { id: "inventory-audit", title: "Inventory audit completed", branch: "Springfield Branch", time: "1 week ago" },
+                { id: "new-branch", title: t("orphanageAdmin.dashboard.activity.newBranch"), branch: "Hillside Branch", time: t("orphanageAdmin.dashboard.time.twoDaysAgo") },
+                { id: "admin-created", title: t("orphanageAdmin.dashboard.activity.adminCreated"), branch: "Riverside Branch", time: t("orphanageAdmin.dashboard.time.threeDaysAgo") },
+                { id: "system-update", title: t("orphanageAdmin.dashboard.activity.systemUpdate"), branch: t("orphanageAdmin.dashboard.allBranches"), time: t("orphanageAdmin.dashboard.time.fiveDaysAgo") },
+                { id: "fundraiser-approved", title: t("orphanageAdmin.dashboard.activity.fundraiserApproved"), branch: "Downtown Branch", time: t("orphanageAdmin.dashboard.time.oneWeekAgo") },
+                { id: "inventory-audit", title: t("orphanageAdmin.dashboard.activity.inventoryAudit"), branch: "Springfield Branch", time: t("orphanageAdmin.dashboard.time.oneWeekAgo") },
               ].map((activity) => (
                 <div key={activity.id} className="flex items-center">
                   <div className="w-2 h-2 rounded-full bg-blue-500 mr-3"></div>

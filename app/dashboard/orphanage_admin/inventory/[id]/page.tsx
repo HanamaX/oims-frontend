@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft, Loader2, Package, ArrowDown, ArrowUp, Calendar } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import API from "@/lib/api-service"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 // Types
 interface InventoryItem {
@@ -32,6 +33,7 @@ interface Transaction {
 }
 
 export default function SuperAdminInventoryDetailsPage() {
+  const { t } = useLanguage()
   const params = useParams()
   const router = useRouter()
   const itemId = params.id as string
@@ -74,14 +76,13 @@ export default function SuperAdminInventoryDetailsPage() {
             setTotalIn(inCount)
             setTotalOut(outCount)
           }
-          
-          setError(null)
+            setError(null)
         } else {
-          throw new Error("No item data found")
+          throw new Error(t("inventoryDetails.noDataFound"))
         }
       } catch (err) {
         console.error("Error fetching item details:", err)
-        setError("Failed to load item details. Please try again later.")
+        setError(t("inventoryDetails.failedToLoad"))
       } finally {
         setLoading(false)
       }
@@ -117,34 +118,31 @@ export default function SuperAdminInventoryDetailsPage() {
         return "bg-gray-100 text-gray-800 border-gray-200"
     }
   }
-
   // Show loading state
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center h-[50vh]">
         <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-        <p>Loading inventory item details...</p>
+        <p><T k="inventoryDetails.loadingDetails" /></p>
       </div>
     )
   }
-
   // Show error state
   if (error) {
     return (
       <div className="bg-red-50 border border-red-200 rounded-md p-8 text-center">
-        <p className="text-red-600 mb-4">Error: {error}</p>
-        <Button variant="outline" onClick={() => router.back()}>Go Back</Button>
+        <p className="text-red-600 mb-4"><T k="common.error" />: {error}</p>
+        <Button variant="outline" onClick={() => router.back()}><T k="ui.goBack" /></Button>
       </div>
     )
   }
 
   return (
-    <div className="space-y-8">
-      {/* Header with back button */}
+    <div className="space-y-8">      {/* Header with back button */}
       <div>
         <Button variant="ghost" onClick={() => router.push("/dashboard/orphanage_admin/inventory")} className="mb-4">
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Inventory
+          <T k="inventoryDetails.backToInventory" />
         </Button>
         
         <div className="flex items-center">
@@ -156,10 +154,9 @@ export default function SuperAdminInventoryDetailsPage() {
             </Badge>
           )}
         </div>
-        
-        {item?.branchName && (
+          {item?.branchName && (
           <div className="mt-2">
-            <span className="text-muted-foreground">Branch: </span>
+            <span className="text-muted-foreground"><T k="inventory.branch" />: </span>
             <span className="font-medium">{item.branchName}</span>
           </div>
         )}
@@ -167,20 +164,20 @@ export default function SuperAdminInventoryDetailsPage() {
 
       {/* Item Details */}
       <div>
-        <h2 className="text-xl font-bold mb-4">Item Details</h2>
+        <h2 className="text-xl font-bold mb-4"><T k="inventoryDetails.itemDetails" /></h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 bg-white p-6 rounded-lg shadow-sm">
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-1">Current Quantity</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-1"><T k="inventoryDetails.currentQuantity" /></h3>
             <p className="text-2xl font-bold">{item?.itemQuantity}</p>
           </div>
           
-          <div>            <h3 className="text-sm font-medium text-muted-foreground mb-1">Unit Price</h3>
+          <div>            <h3 className="text-sm font-medium text-muted-foreground mb-1"><T k="inventoryDetails.unitPrice" /></h3>
             <p className="text-2xl font-bold">Tshs {parseFloat(item?.itemPrice ?? "0").toFixed(2)}</p>
           </div>
           
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-1">Total Value</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-1"><T k="inventoryDetails.totalValue" /></h3>
             <p className="text-2xl font-bold">
               Tshs {(parseFloat(item?.itemPrice ?? "0") * parseInt(item?.itemQuantity ?? "0")).toFixed(2)}
             </p>
@@ -191,30 +188,30 @@ export default function SuperAdminInventoryDetailsPage() {
           <div className="bg-green-50 p-6 rounded-lg">
             <div className="flex items-center mb-2">
               <ArrowUp className="h-5 w-5 text-green-600 mr-2" />
-              <h3 className="text-lg font-medium">Total In</h3>
+              <h3 className="text-lg font-medium"><T k="inventoryDetails.totalIn" /></h3>
             </div>
-            <p className="text-2xl font-bold text-green-700">{totalIn} units</p>
+            <p className="text-2xl font-bold text-green-700">{totalIn} <T k="inventoryDetails.units" /></p>
           </div>
           
           <div className="bg-red-50 p-6 rounded-lg">
             <div className="flex items-center mb-2">
               <ArrowDown className="h-5 w-5 text-red-600 mr-2" />
-              <h3 className="text-lg font-medium">Total Out</h3>
+              <h3 className="text-lg font-medium"><T k="inventoryDetails.totalOut" /></h3>
             </div>
-            <p className="text-2xl font-bold text-red-700">{totalOut} units</p>
+            <p className="text-2xl font-bold text-red-700">{totalOut} <T k="inventoryDetails.units" /></p>
           </div>
         </div>
       </div>
       
       {/* Transaction History */}
       <div>
-        <h2 className="text-xl font-bold mb-4">Transaction History</h2>
+        <h2 className="text-xl font-bold mb-4"><T k="inventoryDetails.transactionHistory" /></h2>
         
         <div className="space-y-4">
           {transactions.length === 0 ? (
             <div className="text-center py-8 bg-white rounded-lg shadow-sm">
               <Calendar className="h-12 w-12 text-gray-300 mx-auto mb-2" />
-              <p className="text-muted-foreground">No transactions have been recorded for this item</p>
+              <p className="text-muted-foreground"><T k="inventoryDetails.noTransactions" /></p>
             </div>
           ) : (
             transactions.map(transaction => (
@@ -233,15 +230,13 @@ export default function SuperAdminInventoryDetailsPage() {
                         <ArrowUp className="h-5 w-5 text-green-600 mr-2" />
                       ) : (
                         <ArrowDown className="h-5 w-5 text-red-600 mr-2" />
-                      )}
-                      <h3 className="font-medium">
-                        {transaction.transactionType === "IN" ? "Received " : "Distributed "}
-                        {transaction.transactionQuantity} units
+                      )}                      <h3 className="font-medium">
+                        {transaction.transactionType === "IN" ? t("inventoryDetails.received") : t("inventoryDetails.distributed")}
+                        {transaction.transactionQuantity} {t("inventoryDetails.units")}
                       </h3>
                     </div>
-                    
-                    <p className="mt-1 text-sm">
-                      {transaction.transactionDescription || "No description provided"}
+                      <p className="mt-1 text-sm">
+                      {transaction.transactionDescription || t("inventoryDetails.noDescription")}
                     </p>
                   </div>
                   

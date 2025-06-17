@@ -5,9 +5,10 @@ import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowLeft, Search } from "lucide-react"
+import { ArrowLeft, Search, Package } from "lucide-react"
 import { useAuth } from "@/components/auth-provider"
 import InventoryCard from "@/components/inventory-card"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 // Sample data - same as in admin view
 const sampleInventoryItems = [
@@ -45,12 +46,13 @@ export default function BranchInventoryPage() {
   const params = useParams()
   const router = useRouter()
   const { user } = useAuth()
+  const { t } = useLanguage()
   const branchId = Number(params.branchId)
   const [searchTerm, setSearchTerm] = useState("")
 
   // Ensure superadmin access only
   useEffect(() => {
-    if (user?.role !== "superadmin") {
+    if (user?.role !== "super_admin") {
       router.push("/login")
     }
   }, [user, router])
@@ -66,21 +68,21 @@ export default function BranchInventoryPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Inventory Management - Read Only</h1>
+          <h1 className="text-3xl font-bold tracking-tight"><T k="branch.inventory.management" /></h1>
           <p className="text-muted-foreground">
-            View inventory details for this branch. Superadmins cannot edit this data.
+            <T k="branch.inventory.description" />
           </p>
         </div>
         <Button variant="outline" onClick={() => router.push(`/dashboard/branch/${branchId}`)}>
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Branch
+          <T k="branch.backToBranch" />
         </Button>
       </div>
 
       <div className="flex items-center space-x-2">
         <Search className="h-5 w-5 text-muted-foreground" />
         <Input
-          placeholder="Search inventory..."
+          placeholder={t("inventory.searchItems")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="max-w-sm"
@@ -104,7 +106,8 @@ export default function BranchInventoryPage() {
 
       {filteredItems.length === 0 && (
         <div className="text-center py-10">
-          <p className="text-muted-foreground">No inventory items found matching your search.</p>
+          <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <p className="text-muted-foreground"><T k="inventory.noItemsFound" /></p>
         </div>
       )}
     </div>

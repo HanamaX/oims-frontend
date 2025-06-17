@@ -16,6 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { AlertCircle, User, UserCheck, Trash2 } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 interface Staff {
   publicId?: string
@@ -70,6 +71,7 @@ export default function StaffEditForm({
   })
   const [loading, setLoading] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const { language } = useLanguage()
 
   // Update form data when staff changes
   useEffect(() => {
@@ -130,17 +132,15 @@ export default function StaffEditForm({
                   <User className="h-6 w-6 text-blue-500" />
                 </div>
               )}
-              <div>
-                <DialogTitle className="text-xl">
-                  {staff.fullName || `${staff.firstName || ''} ${staff.lastName || ''}`.trim() || 'Staff Member'}
-                </DialogTitle>                <DialogDescription className="flex items-center gap-2 mt-1">
+              <div>                <DialogTitle className="text-xl">
+                  {staff.fullName || `${staff.firstName || ''} ${staff.lastName || ''}`.trim() || <T k="staff.staffMember" />}
+                </DialogTitle><DialogDescription className="flex items-center gap-2 mt-1">
                   {staff.username && <span className="text-sm text-gray-500">@{staff.username}</span>}
-                  <span className="flex gap-1">
-                    <Badge variant={staff.role === "ROLE_SUPER_ADMIN" ? "default" : "secondary"}>
-                      {staff.role === "ROLE_SUPER_ADMIN" ? "Super Admin" : "Admin"}
+                  <span className="flex gap-1">                    <Badge variant={staff.role === "ROLE_SUPER_ADMIN" ? "default" : "secondary"}>
+                      {staff.role === "ROLE_SUPER_ADMIN" ? <T k="staff.superAdmin" /> : <T k="staff.admin" />}
                     </Badge>
                     <Badge variant={staff.suspended ? "destructive" : "outline"}>
-                      {staff.suspended ? "Suspended" : (staff.isActive ? "Active" : "Inactive")}
+                      {staff.suspended ? <T k="staff.suspended" /> : (staff.isActive ? <T k="staff.active" /> : <T k="staff.inactive" />)}
                     </Badge>
                   </span>
                 </DialogDescription>
@@ -150,24 +150,22 @@ export default function StaffEditForm({
 
           <div className="space-y-6">
             {/* Staff Information */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">Staff Information</h3>
+            <div className="space-y-4">              <h3 className="text-lg font-medium"><T k="staff.information" /></h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
                 <div>
-                  <p className="text-sm font-medium">Email</p>
-                  <p className="text-sm text-muted-foreground break-words">{staff.email || "Not Assigned"}</p>
+                  <p className="text-sm font-medium"><T k="common.email" /></p>
+                  <p className="text-sm text-muted-foreground break-words">{staff.email || <T k="staff.notAssigned" />}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Phone</p>
-                  <p className="text-sm text-muted-foreground break-words">{staff.phoneNumber || "Not Assigned"}</p>
+                  <p className="text-sm font-medium"><T k="common.phone" /></p>
+                  <p className="text-sm text-muted-foreground break-words">{staff.phoneNumber || <T k="staff.notAssigned" />}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Gender</p>
-                  <p className="text-sm text-muted-foreground">{staff.sex || "Not Specified"}</p>
-                </div>
-                {staff.createdDate && (
+                  <p className="text-sm font-medium"><T k="common.gender" /></p>
+                  <p className="text-sm text-muted-foreground">{staff.sex || <T k="staff.notSpecified" />}</p>
+                </div>                {staff.createdDate && (
                   <div>
-                    <p className="text-sm font-medium">Account Created</p>
+                    <p className="text-sm font-medium"><T k="staff.accountCreated" /></p>
                     <p className="text-sm text-muted-foreground">
                       {new Date(staff.createdDate.replace(' ', 'T')).toLocaleDateString()}
                     </p>
@@ -177,13 +175,12 @@ export default function StaffEditForm({
             </div>
 
             {/* Editable Settings */}
-            {!readOnly && (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <h3 className="text-lg font-medium">Staff Settings</h3>
+            {!readOnly && (              <form onSubmit={handleSubmit} className="space-y-4">
+                <h3 className="text-lg font-medium"><T k="staff.settings" /></h3>
                 <div className="space-y-4">
                   {staff.role !== "ROLE_SUPER_ADMIN" && (
                     <div className="space-y-2">
-                      <Label htmlFor="branch-assignment">Assigned Branch</Label>
+                      <Label htmlFor="branch-assignment"><T k="staff.assignedBranch" /></Label>
                       <Select
                         value={formData.branchPublicId}
                         onValueChange={(value) =>
@@ -191,7 +188,7 @@ export default function StaffEditForm({
                         }
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Branch" />
+                          <SelectValue placeholder={language === 'sw' ? 'Chagua Tawi' : 'Select Branch'} />
                         </SelectTrigger>
                         <SelectContent className="bg-white">
                           {branches.map((branch) => (
@@ -202,9 +199,8 @@ export default function StaffEditForm({
                         </SelectContent>
                       </Select>
                     </div>
-                  )}
-                    <div className="space-y-2">
-                    <Label htmlFor="account-status">Account Status</Label>
+                  )}                    <div className="space-y-2">
+                    <Label htmlFor="account-status"><T k="staff.accountStatus" /></Label>
                     <Select
                       value={formData.suspended ? "suspended" : "active"}
                       onValueChange={(value) =>
@@ -213,16 +209,16 @@ export default function StaffEditForm({
                       disabled={staff.publicId === currentUserPublicId}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Status" />
+                        <SelectValue placeholder={language === 'sw' ? 'Chagua Hali' : 'Select Status'} />
                       </SelectTrigger>
                       <SelectContent className="bg-white">
-                        <SelectItem value="active">Active</SelectItem>
-                        <SelectItem value="suspended">Suspended</SelectItem>
+                        <SelectItem value="active"><T k="staff.active" /></SelectItem>
+                        <SelectItem value="suspended"><T k="staff.suspended" /></SelectItem>
                       </SelectContent>
                     </Select>
                     {staff.publicId === currentUserPublicId && (
                       <p className="text-sm text-amber-600 mt-1">
-                        You cannot change your own account status
+                        <T k="staff.cannotChangeSelfStatus" />
                       </p>
                     )}
                   </div>
@@ -230,15 +226,15 @@ export default function StaffEditForm({
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
                     {staff.role === "ROLE_SUPER_ADMIN" ? (
-                      "Super Admins don't need branch assignments as they have access to all branches. You can only modify the account status for Super Admins."
+                      <T k="staff.superAdminNote" />
                     ) : (
-                      "You can only modify the branch assignment and account status for this admin. To change other details, ask the admin to update their own profile."
+                      <T k="staff.adminNote" />
                     )}
                     <br />
                     {staff.publicId === currentUserPublicId ? (
-                      <strong className="text-amber-600">Note: You cannot suspend or delete your own account for security reasons.</strong>
+                      <strong className="text-amber-600"><T k="staff.selfDeleteWarning" /></strong>
                     ) : (
-                      <strong>Note: Suspending an admin will prevent them from logging in but preserve their account data.</strong>
+                      <strong><T k="staff.suspendNote" /></strong>
                     )}
                   </AlertDescription>
                 </Alert><DialogFooter className="flex justify-between">
@@ -249,11 +245,10 @@ export default function StaffEditForm({
                         variant="outline"
                         className="text-red-600 hover:text-red-700"
                         onClick={() => setShowDeleteConfirm(true)}
-                        disabled={loading || staff.publicId === currentUserPublicId}
-                        title={staff.publicId === currentUserPublicId ? "You cannot delete your own account" : "Delete this staff member"}
+                        disabled={loading || staff.publicId === currentUserPublicId}                        title={staff.publicId === currentUserPublicId ? language === 'sw' ? 'Huwezi kufuta akaunti yako mwenyewe' : 'You cannot delete your own account' : language === 'sw' ? 'Futa mfanyakazi huyu' : 'Delete this staff member'}
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
-                        Delete
+                        <T k="common.delete" />
                       </Button>
                     )}
                   </div>
@@ -264,30 +259,28 @@ export default function StaffEditForm({
                       onClick={() => onOpenChange(false)}
                       disabled={loading}
                     >
-                      Cancel
+                      <T k="common.cancel" />
                     </Button>
                     <Button type="submit" disabled={loading}>
                       {loading ? (
                         <>
                           <UserCheck className="mr-2 h-4 w-4 animate-spin" />
-                          Updating...
+                          <T k="staff.updating" />
                         </>
                       ) : (
                         <>
                           <UserCheck className="mr-2 h-4 w-4" />
-                          Update Staff
+                          <T k="staff.updateStaff" />
                         </>
                       )}
                     </Button>
                   </div>
                 </DialogFooter>
               </form>
-            )}
-
-            {readOnly && (
+            )}            {readOnly && (
               <DialogFooter>
                 <Button variant="outline" onClick={() => onOpenChange(false)}>
-                  Close
+                  <T k="common.close" />
                 </Button>
               </DialogFooter>
             )}

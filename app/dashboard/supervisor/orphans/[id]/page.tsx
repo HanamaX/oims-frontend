@@ -12,14 +12,16 @@ import OrphanMedicalTab from "@/components/orphan-medical-tab"
 import OrphanFormEdit from "@/components/orphan-form-edit"
 import OrphanService from "@/lib/orphan-service"
 import { useToast } from "@/hooks/use-toast"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 export default function SupervisorOrphanDetailsPage() {
   const params = useParams()
   const router = useRouter()
+  const { t } = useLanguage()
   const orphanId = params.id as string
   const [activeTab, setActiveTab] = useState("details")
   const { toast } = useToast()
-    // State for edit UI
+  // State for edit UI
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   
   const {
@@ -41,7 +43,9 @@ export default function SupervisorOrphanDetailsPage() {
     } else if (value === "medical") {
       fetchMedicalRecords()
     }
-  }  // Handle orphan edit - this is now handled in the detailed component
+  }
+
+  // Handle orphan edit - this is now handled in the detailed component
   const handleEditOrphan = (data: any) => {
     if (!orphan) return
     
@@ -64,8 +68,8 @@ export default function SupervisorOrphanDetailsPage() {
     OrphanService.updateOrphan(updateData)
       .then(() => {
         toast({
-          title: "Orphan Updated",
-          description: "Orphan details have been successfully updated."
+          title: t("orphans.updateSuccess"),
+          description: t("orphans.updateSuccessDesc")
         })
         
         // Close modal and reload data
@@ -76,20 +80,19 @@ export default function SupervisorOrphanDetailsPage() {
       .catch(error => {
         console.error('Failed to update orphan:', error)
         toast({          
-          title: "Update Failed",
-          description: error.friendlyMessage ?? "Something went wrong. Please try again.",
+          title: t("orphans.updateFail"),
+          description: error.friendlyMessage ?? t("common.errorTryAgain"),
           variant: "destructive"
         })
       })
   }
-    // Orphan deletion is now handled in OrphanDetailsPersonal component
-
+    
   // Show loading state
   if (loading.details) {
     return (
       <div className="flex flex-col items-center justify-center h-[50vh]">
         <Loader2 className="h-8 w-8 animate-spin text-primary mb-4" />
-        <p>Loading orphan details...</p>
+        <p><T k="orphan.loadingDetails" /></p>
       </div>
     )
   }
@@ -98,18 +101,19 @@ export default function SupervisorOrphanDetailsPage() {
   if (error.details) {
     return (
       <div className="bg-red-50 border border-red-200 rounded-md p-8 text-center">
-        <p className="text-red-600 mb-4">Error: {error.details}</p>
-        <Button variant="outline" onClick={() => router.back()}>Go Back</Button>
+        <p className="text-red-600 mb-4"><T k="common.error" />: {error.details}</p>
+        <Button variant="outline" onClick={() => router.back()}><T k="ui.goBack" /></Button>
       </div>
     )
   }
 
   return (
-    <div className="space-y-6">      <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Button variant="ghost" onClick={() => router.back()} className="mr-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Orphans
+            <T k="supervisor.ui.backToOrphans" />
           </Button>
           <h1 className="text-3xl font-bold">{orphan?.fullName}</h1>
         </div>
@@ -117,9 +121,9 @@ export default function SupervisorOrphanDetailsPage() {
 
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="grid grid-cols-3 mb-8">
-          <TabsTrigger value="details">Orphan Details</TabsTrigger>
-          <TabsTrigger value="academic">Academic Records</TabsTrigger>
-          <TabsTrigger value="medical">Medical Records</TabsTrigger>
+          <TabsTrigger value="details"><T k="orphan.details" /></TabsTrigger>
+          <TabsTrigger value="academic"><T k="orphan.academic.records" /></TabsTrigger>
+          <TabsTrigger value="medical"><T k="orphan.medical.records" /></TabsTrigger>
         </TabsList>
 
         {/* Orphan Details Tab */}
@@ -151,12 +155,14 @@ export default function SupervisorOrphanDetailsPage() {
           />
         </TabsContent>
       </Tabs>
-        {/* Edit Orphan Modal */}
+
+      {/* Edit Orphan Modal */}
       <OrphanFormEdit
         open={isEditModalOpen}
         onOpenChange={setIsEditModalOpen}
         onSubmit={handleEditOrphan}
-        orphan={orphan}      />
+        orphan={orphan}
+      />
     </div>
   )
 }

@@ -16,7 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { isValidEmail } from "@/lib/validation"
-import { Branch } from "@/lib/volunteer-service"
+import { Branch, Centre } from "@/lib/volunteer-service"
 import VolunteerService from "@/lib/volunteer-service"
 
 // Update the component to include onSubmit prop
@@ -33,7 +33,8 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
     goal: "",
     amountPayedPerIndividual: "100", // Default value
     orphanageAmountPerIndividual: "80", // Default value
-    branchPublicId: "" // Will be populated from branch selection
+    branchPublicId: "", // Will be populated from branch selection
+    centrePublicId: "" // Will be populated from centre selection
   })
   const [startDate, setStartDate] = useState<Date>()
   const [endDate, setEndDate] = useState<Date>()
@@ -41,12 +42,15 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
   const [posterPreview, setPosterPreview] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [branches, setBranches] = useState<Branch[]>([])
+  const [centres, setCentres] = useState<Centre[]>([])
   const [isBranchesLoading, setIsBranchesLoading] = useState(true)
+  const [isCentresLoading, setIsCentresLoading] = useState(true)
   const [errors, setErrors] = useState({
     coordinatorEmail: "",
     phoneNumber: "",
     goal: "",
-    branchPublicId: ""
+    branchPublicId: "",
+    centrePublicId: ""
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -104,44 +108,77 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
       console.log("No file selected in file input")
     }
   }
+  // Fetch centres when component mounts
+  useEffect(() => {
+    const fetchCentres = async () => {
+      try {
+        setIsCentresLoading(true)
+        const centreData = await VolunteerService.getCentres()
+        console.log("Centres loaded:", centreData)
+        
+        if (Array.isArray(centreData) && centreData.length > 0) {
+          setCentres(centreData)
+        } else {
+          console.error("Centres data is not an array or is empty:", centreData)
+        }
+      } catch (error) {
+        console.error("Error loading centres:", error)
+      } finally {
+        setIsCentresLoading(false)
+      }
+    }
 
-  // Fetch branches when component mounts
+    fetchCentres()
+  }, [])
+
+  // Fetch branches when centre is selected
   useEffect(() => {
     const fetchBranches = async () => {
+      if (!formData.centrePublicId) {
+        setBranches([])
+        setFormData(prev => ({ ...prev, branchPublicId: "" }))
+        return
+      }
+
       try {
         setIsBranchesLoading(true)
-        const branchData = await VolunteerService.getBranches()
-        console.log("Branches loaded:", branchData)
+        const branchData = await VolunteerService.getBranchesByCentre(formData.centrePublicId)
+        console.log("Branches loaded for centre:", branchData)
         
         if (Array.isArray(branchData) && branchData.length > 0) {
           setBranches(branchData)
-          // Set the first branch as default if none selected
-          if (!formData.branchPublicId) {
-            setFormData(prev => ({ ...prev, branchPublicId: branchData[0].publicId }))
-          }
+          // Reset branch selection when centre changes
+          setFormData(prev => ({ ...prev, branchPublicId: "" }))
         } else {
           console.error("Branches data is not an array or is empty:", branchData)
+          setBranches([])
         }
       } catch (error) {
         console.error("Error loading branches:", error)
+        setBranches([])
       } finally {
         setIsBranchesLoading(false)
       }
     }
 
     fetchBranches()
-  }, [])
+  }, [formData.centrePublicId])
+
+  const getBranchPlaceholder = () => {
+    if (!formData.centrePublicId) return "Please select a centre first"
+    if (isBranchesLoading) return "Loading branches..."
+    return "Select a branch"
+  }
 
   // Update the handleSubmit function
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    // Reset errors
+    e.preventDefault()    // Reset errors
     setErrors({
       coordinatorEmail: "",
       phoneNumber: "",
       goal: "",
-      branchPublicId: ""
+      branchPublicId: "",
+      centrePublicId: ""
     })
 
     // Validate fields
@@ -158,6 +195,10 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
     }
       if (!formData.goal || isNaN(Number(formData.goal)) || Number(formData.goal) <= 0) {
       setErrors((prev) => ({ ...prev, goal: "Please enter a valid fundraising goal amount" }))
+      hasErrors = true
+    }
+      if (!formData.centrePublicId) {
+      setErrors((prev) => ({ ...prev, centrePublicId: "Please select a centre" }))
       hasErrors = true
     }
     
@@ -384,35 +425,69 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
               </Popover>
               <p className="text-xs text-gray-500">Event end date (format: YYYY-MM-DD)</p>
             </div>
-          </div>          <div className="space-y-2">
-            <Label htmlFor="branchPublicId">Branch</Label>
-            <Select 
-              onValueChange={(value) => handleSelectChange("branchPublicId", value)} 
-              value={formData.branchPublicId}
-              disabled={isBranchesLoading}
-            >
-              <SelectTrigger className={errors.branchPublicId ? "border-red-500" : ""}>
-                <SelectValue placeholder={isBranchesLoading ? "Loading branches..." : "Select a branch"} />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                {Array.isArray(branches) && branches.length > 0 ? (
-                  branches.map((branch) => (
-                    <SelectItem key={branch.publicId} value={branch.publicId} className="bg-white">
-                      {branch.name}
+          </div>          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="centrePublicId">Centre</Label>
+              <Select 
+                onValueChange={(value) => handleSelectChange("centrePublicId", value)} 
+                value={formData.centrePublicId}
+                disabled={isCentresLoading}
+              >
+                <SelectTrigger className={errors.centrePublicId ? "border-red-500" : ""}>
+                  <SelectValue placeholder={isCentresLoading ? "Loading centres..." : "Select a centre"} />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  {Array.isArray(centres) && centres.length > 0 ? (
+                    centres.map((centre) => (
+                      <SelectItem key={centre.publicId} value={centre.publicId} className="bg-white">
+                        {centre.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="no-centres" disabled className="bg-white">
+                      No centres available
                     </SelectItem>
-                  ))
-                ) : (
-                  <SelectItem value="no-branches" disabled className="bg-white">
-                    No branches available
-                  </SelectItem>
-                )}
-              </SelectContent>
-            </Select>
-            {isBranchesLoading && <p className="text-sm text-muted-foreground mt-1">Loading branches...</p>}
-            {errors.branchPublicId && <p className="text-sm text-red-500">{errors.branchPublicId}</p>}
-            {!isBranchesLoading && (!Array.isArray(branches) || branches.length === 0) && (
-              <p className="text-sm text-red-500 mt-1">No branches available. Please contact support.</p>
-            )}
+                  )}
+                </SelectContent>
+              </Select>
+              {isCentresLoading && <p className="text-sm text-muted-foreground mt-1">Loading centres...</p>}
+              {errors.centrePublicId && <p className="text-sm text-red-500">{errors.centrePublicId}</p>}
+              {!isCentresLoading && (!Array.isArray(centres) || centres.length === 0) && (
+                <p className="text-sm text-red-500 mt-1">No centres available. Please contact support.</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="branchPublicId">Branch</Label>
+              <Select 
+                onValueChange={(value) => handleSelectChange("branchPublicId", value)} 
+                value={formData.branchPublicId}
+                disabled={isBranchesLoading || !formData.centrePublicId}
+              >
+                <SelectTrigger className={errors.branchPublicId ? "border-red-500" : ""}>                  <SelectValue 
+                    placeholder={getBranchPlaceholder()} 
+                  />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  {Array.isArray(branches) && branches.length > 0 ? (
+                    branches.map((branch) => (
+                      <SelectItem key={branch.publicId} value={branch.publicId} className="bg-white">
+                        {branch.name}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="no-branches" disabled className="bg-white">
+                      {!formData.centrePublicId ? "Select a centre first" : "No branches available"}
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+              {isBranchesLoading && formData.centrePublicId && <p className="text-sm text-muted-foreground mt-1">Loading branches...</p>}
+              {errors.branchPublicId && <p className="text-sm text-red-500">{errors.branchPublicId}</p>}
+              {!isBranchesLoading && formData.centrePublicId && (!Array.isArray(branches) || branches.length === 0) && (
+                <p className="text-sm text-red-500 mt-1">No branches available for this centre.</p>
+              )}
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="posterUpload">Campaign Poster</Label>

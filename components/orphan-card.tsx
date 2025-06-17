@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Edit, Trash2, User, BookOpen, Stethoscope, Users } from "lucide-react"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 // Define types for our data
 interface Orphan {
@@ -80,6 +81,19 @@ export default function OrphanCard({
   readOnly = false,
 }: Readonly<OrphanCardProps>) {
   const [activeTab, setActiveTab] = useState("personal")
+  const { t, language } = useLanguage()
+
+  // Format date with localization
+  const formatDate = useCallback((dateString: string) => {
+    const date = new Date(dateString);
+    const locale = language === 'sw' ? 'sw-TZ' : 'en-US';
+    
+    return new Intl.DateTimeFormat(locale, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(date);
+  }, [language])
 
   // Calculate age from date of birth
   const calculateAge = (dateOfBirth: string) => {
@@ -100,8 +114,8 @@ export default function OrphanCard({
           <div>
             <CardTitle>{orphan.fullName}</CardTitle>
             <CardDescription>
-              ID: {orphan.orphanId} • Age: {calculateAge(orphan.dateOfBirth)} •{" "}
-              {orphan.gender === "M" ? "Male" : "Female"}
+              {t("orphan.card.id")}: {orphan.orphanId} • {t("orphan.card.age")}: {calculateAge(orphan.dateOfBirth)} •{" "}
+              {orphan.gender === "M" ? t("orphan.card.male") : t("orphan.card.female")}
             </CardDescription>
           </div>
           <div className="flex space-x-2">
@@ -119,43 +133,43 @@ export default function OrphanCard({
           <TabsList className="grid grid-cols-4 mb-4">
             <TabsTrigger value="personal" className="flex items-center gap-2">
               <User className="h-4 w-4" />
-              <span className="hidden sm:inline">Personal</span>
+              <span className="hidden sm:inline">{t("orphan.card.personal")}</span>
             </TabsTrigger>
             <TabsTrigger value="academic" className="flex items-center gap-2">
               <BookOpen className="h-4 w-4" />
-              <span className="hidden sm:inline">Academic</span>
+              <span className="hidden sm:inline">{t("orphan.card.academic")}</span>
             </TabsTrigger>
             <TabsTrigger value="medical" className="flex items-center gap-2">
               <Stethoscope className="h-4 w-4" />
-              <span className="hidden sm:inline">Medical</span>
+              <span className="hidden sm:inline">{t("orphan.card.medical")}</span>
             </TabsTrigger>
             <TabsTrigger value="guardian" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
-              <span className="hidden sm:inline">Guardian</span>
+              <span className="hidden sm:inline">{t("orphan.card.guardian")}</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="personal" className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm font-medium">Origin</p>
+                <p className="text-sm font-medium">{t("orphan.card.origin")}</p>
                 <p className="text-sm text-muted-foreground">{orphan.origin}</p>
               </div>
               <div>
-                <p className="text-sm font-medium">Date of Birth</p>
-                <p className="text-sm text-muted-foreground">{new Date(orphan.dateOfBirth).toLocaleDateString()}</p>
+                <p className="text-sm font-medium">{t("orphan.card.dateOfBirth")}</p>
+                <p className="text-sm text-muted-foreground">{formatDate(orphan.dateOfBirth)}</p>
               </div>
               <div>
-                <p className="text-sm font-medium">Religion</p>
+                <p className="text-sm font-medium">{t("orphan.card.religion")}</p>
                 <p className="text-sm text-muted-foreground">{orphan.religion}</p>
               </div>
               <div>
-                <p className="text-sm font-medium">Blood Group</p>
+                <p className="text-sm font-medium">{t("orphan.card.bloodGroup")}</p>
                 <p className="text-sm text-muted-foreground">{orphan.bloodGroup}</p>
               </div>
             </div>
             <div>
-              <p className="text-sm font-medium">Adoption Reason</p>
+              <p className="text-sm font-medium">{t("orphan.card.adoptionReason")}</p>
               <p className="text-sm text-muted-foreground">{orphan.adoptionReason}</p>
             </div>
           </TabsContent>
@@ -165,34 +179,34 @@ export default function OrphanCard({
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium">Semester</p>
+                    <p className="text-sm font-medium">{t("orphan.card.semester")}</p>
                     <p className="text-sm text-muted-foreground">{academicRecord.semester}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Grade Level</p>
+                    <p className="text-sm font-medium">{t("orphan.card.gradeLevel")}</p>
                     <p className="text-sm text-muted-foreground">{academicRecord.grade_level}</p>
                   </div>
                   <div className="col-span-2">
-                    <p className="text-sm font-medium">School Name</p>
+                    <p className="text-sm font-medium">{t("orphan.card.schoolName")}</p>
                     <p className="text-sm text-muted-foreground">{academicRecord.school_name}</p>
                   </div>
                 </div>
 
                 {academicSubjects.length > 0 && (
                   <div>
-                    <p className="text-sm font-medium mb-2">Subjects</p>
+                    <p className="text-sm font-medium mb-2">{t("orphan.card.subjects")}</p>
                     <div className="border rounded-md overflow-hidden">
                       <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50">
                           <tr>
                             <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              Subject
+                              {t("orphan.card.subject")}
                             </th>
                             <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              Code
+                              {t("orphan.card.code")}
                             </th>
                             <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              Grade
+                              {t("orphan.card.grade")}
                             </th>
                           </tr>
                         </thead>
@@ -211,7 +225,7 @@ export default function OrphanCard({
                 )}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No academic records available.</p>
+              <p className="text-sm text-muted-foreground">{t("orphan.card.noAcademicRecords")}</p>
             )}
           </TabsContent>
 
@@ -220,37 +234,37 @@ export default function OrphanCard({
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium">Diagnosis</p>
+                    <p className="text-sm font-medium">{t("orphan.card.diagnosis")}</p>
                     <p className="text-sm text-muted-foreground">{medicalRecord.diagnosis}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Treatment</p>
+                    <p className="text-sm font-medium">{t("orphan.card.treatment")}</p>
                     <p className="text-sm text-muted-foreground">{medicalRecord.treatment}</p>
                   </div>
                   <div className="col-span-2">
-                    <p className="text-sm font-medium">Description</p>
+                    <p className="text-sm font-medium">{t("orphan.card.description")}</p>
                     <p className="text-sm text-muted-foreground">{medicalRecord.description}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Doctor</p>
+                    <p className="text-sm font-medium">{t("orphan.card.doctor")}</p>
                     <p className="text-sm text-muted-foreground">{medicalRecord.doctorName}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Hospital</p>
+                    <p className="text-sm font-medium">{t("orphan.card.hospital")}</p>
                     <p className="text-sm text-muted-foreground">{medicalRecord.hospitalName}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Hospital Address</p>
+                    <p className="text-sm font-medium">{t("orphan.card.hospitalAddress")}</p>
                     <p className="text-sm text-muted-foreground">{medicalRecord.hospitalAddress}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Hospital Phone</p>
+                    <p className="text-sm font-medium">{t("orphan.card.hospitalPhone")}</p>
                     <p className="text-sm text-muted-foreground">{medicalRecord.hospitalPhoneNumber}</p>
                   </div>
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No medical records available.</p>
+              <p className="text-sm text-muted-foreground">{t("orphan.card.noMedicalRecords")}</p>
             )}
           </TabsContent>
 
@@ -258,32 +272,32 @@ export default function OrphanCard({
             {guardian ? (
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium">Name</p>
+                  <p className="text-sm font-medium">{t("orphan.card.name")}</p>
                   <p className="text-sm text-muted-foreground">{guardian.name}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Relationship</p>
+                  <p className="text-sm font-medium">{t("orphan.card.relationship")}</p>
                   <p className="text-sm text-muted-foreground">{guardian.relationship}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Contact Number</p>
+                  <p className="text-sm font-medium">{t("orphan.card.contactNumber")}</p>
                   <p className="text-sm text-muted-foreground">{guardian.contactNumber}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Email</p>
+                  <p className="text-sm font-medium">{t("orphan.card.email")}</p>
                   <p className="text-sm text-muted-foreground">{guardian.email}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Occupation</p>
+                  <p className="text-sm font-medium">{t("orphan.card.occupation")}</p>
                   <p className="text-sm text-muted-foreground">{guardian.occupation}</p>
                 </div>
                 <div className="col-span-2">
-                  <p className="text-sm font-medium">Address</p>
+                  <p className="text-sm font-medium">{t("orphan.card.address")}</p>
                   <p className="text-sm text-muted-foreground">{guardian.address}</p>
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No guardian information available.</p>
+              <p className="text-sm text-muted-foreground">{t("orphan.card.noGuardianInfo")}</p>
             )}
           </TabsContent>
         </Tabs>

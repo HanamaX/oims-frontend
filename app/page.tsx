@@ -44,8 +44,8 @@ export default function HomePage() {
       <header className="sticky top-0 z-50 w-full border-b bg-white">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
-            <Link href="/" className="font-bold text-xl text-blue-700">
-              <T k="app.name" />
+            <Link href="/" className="font-bold text-3xl text-blue-700">
+              OIMS 
             </Link>
             <nav className="hidden md:flex gap-6">
               <Link href="/about-us" className="text-sm font-medium hover:text-blue-700">
@@ -471,3 +471,4 @@ export default function HomePage() {
     </div>
   )
 }
+

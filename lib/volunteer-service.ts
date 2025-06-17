@@ -56,6 +56,12 @@ export interface VolunteerCreateRequest {
   branchPublicId: string
 }
 
+export interface Centre {
+  publicId: string
+  name: string
+  location?: string
+}
+
 export interface Branch {
   publicId: string
   name: string
@@ -70,6 +76,48 @@ const VolunteerService = {
     } catch (error) {
       console.error("Register volunteer error:", error)
       throw error
+    }
+  },
+
+  getCentres: async (): Promise<Centre[]> => {
+    try {
+      const response = await API.get("/app/oims/public/orphanage-centres")
+      console.log("Centres response:", response.data)
+      // Check if response.data is an array or if it has a data/content property containing the array
+      if (Array.isArray(response.data)) {
+        return response.data
+      } else if (Array.isArray(response.data?.data)) {
+        return response.data.data
+      } else if (Array.isArray(response.data?.content)) {
+        return response.data.content
+      } else {
+        console.error("Unexpected centres response format:", response.data)
+        return [] // Return empty array as fallback
+      }
+    } catch (error) {
+      console.error("Get centres error:", error)
+      return [] // Return empty array on error
+    }
+  },
+
+  getBranchesByCentre: async (centrePublicId: string): Promise<Branch[]> => {
+    try {
+      const response = await API.get(`/app/oims/public/orphanage-centres/${centrePublicId}/branches`)
+      console.log("Branches by centre response:", response.data)
+      // Check if response.data is an array or if it has a data/content property containing the array
+      if (Array.isArray(response.data)) {
+        return response.data
+      } else if (Array.isArray(response.data?.data)) {
+        return response.data.data
+      } else if (Array.isArray(response.data?.content)) {
+        return response.data.content
+      } else {
+        console.error("Unexpected branches by centre response format:", response.data)
+        return [] // Return empty array as fallback
+      }
+    } catch (error) {
+      console.error("Get branches by centre error:", error)
+      return [] // Return empty array on error
     }
   },
 

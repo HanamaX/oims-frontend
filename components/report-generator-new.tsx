@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { DateRangePicker } from "@/components/ui/date-range-picker"
@@ -16,18 +17,22 @@ import ReportService, { ReportType, ReportFilters } from "@/lib/report-service"
 import { format } from "date-fns"
 import { buttonVariants, ANIMATION_DURATION } from "./report-animations"
 import { useLanguage } from "@/contexts/LanguageContext"
+import { useAnalyticsTranslations } from "@/hooks/use-analytics-translations"
 
 interface ReportComponentProps {
-  userRole: "admin" | "superadmin"
+  userRole: "admin" | "superadmin" | "supervisor"
   branchId?: string
   branchName?: string
   orphanId?: string
   orphanName?: string
+  onBranchChange?: (branchId: string | undefined) => void
 }
 
-export default function ReportComponent({ userRole, branchId, branchName, orphanId, orphanName }: ReportComponentProps) {
+export default function ReportComponent({ userRole, branchId, branchName, orphanId, orphanName, onBranchChange }: ReportComponentProps) {
   const { toast } = useToast()
   const { t } = useLanguage()
+  const { t: ta } = useAnalyticsTranslations()
+  
   const [loading, setLoading] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [activeTab, setActiveTab] = useState<ReportType>("orphans")
@@ -37,6 +42,8 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1), // First day of current month
     to: new Date()
   })
+  
+  const [useDateRange, setUseDateRange] = useState(true)
   
   const [filters, setFilters] = useState<{
     category: string
@@ -48,29 +55,46 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
     status: "all",
     exportFormat: "pdf",
     orphanId: orphanId
-  })
-
-  // Load branches for superadmin
+  })  // Load branches for superadmin and orphanage admin only
   useEffect(() => {
     if (userRole === "superadmin") {
-      loadBranches()
-    } else if (branchId) {
-      setSelectedBranch(branchId)
+      // Super admin can view all branches
+      loadAllBranches()
+    } else if (userRole === "admin" && branchId) {
+      // Orphanage admin can only view branches in their center
+      loadBranchesForCentre(branchId)
     }
+    // Supervisors don't load branches - they only see their own branch data
   }, [userRole, branchId])
-  
-  // Set orphanId in filters when passed as prop
+    // Set orphanId in filters when passed as prop
   useEffect(() => {
     if (orphanId) {
       setFilters(prev => ({ ...prev, orphanId }))
     }
   }, [orphanId])
-
-  const loadBranches = async () => {
+  
+  const loadAllBranches = async () => {
     try {
       setLoading(true)
-      const branches = await ReportService.getBranches()
-      setAvailableBranches(branches)
+      const response = await ReportService.getBranches(undefined, userRole)
+      setAvailableBranches(response.data || [])
+      setLoading(false)
+    } catch (error) {
+      console.error("Failed to load branches", error)
+      toast({
+        title: "Error",
+        description: "Failed to load branches. Please try again.",
+        variant: "destructive"
+      })
+      setLoading(false)
+    }
+  }
+
+  const loadBranchesForCentre = async (centreId: string) => {
+    try {
+      setLoading(true)
+      const response = await ReportService.getBranches(centreId, userRole)
+      setAvailableBranches(response.data || [])
       setLoading(false)
     } catch (error) {
       console.error("Failed to load branches", error)
@@ -86,35 +110,38 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
     try {
       setLoading(true)
       setGenerating(true)
-      
-      // Show initial toast
+        // Show initial toast
       toast({
-        title: "Generating Report",
-        description: "Please wait while your report is being generated...",
-      })
-      
-      // Prepare filters
+        title: t("report.generatingReport"),
+        description: t("report.pleaseWait"),
+      })// Prepare filters
       const reportFilters: ReportFilters = {
-        startDate: format(dateRange.from, "yyyy-MM-dd"),
-        endDate: format(dateRange.to, "yyyy-MM-dd"),
         category: filters.category !== "all" ? filters.category : undefined,
         status: filters.status !== "all" ? filters.status : undefined,
         exportFormat: filters.exportFormat,
         orphanId: filters.orphanId
       }
       
-      // For superadmin, add branch filter if selected
+      // Only add date range if enabled
+      if (useDateRange) {
+        reportFilters.startDate = format(dateRange.from, "yyyy-MM-dd")
+        reportFilters.endDate = format(dateRange.to, "yyyy-MM-dd")
+      }      // For admin role, add centreId (their orphanage centre ID)
+      if (userRole === "admin" && branchId) {
+        reportFilters.centreId = branchId
+      }
+      
+      // Add branch filter if selected (for superadmin only)
       if (userRole === "superadmin" && selectedBranch && selectedBranch !== "all") {
         reportFilters.branchId = selectedBranch
       }
-      
-      // Generate the appropriate report based on role and content type
+        // Generate the appropriate report based on role and content type
       let result;
       
       if (filters.orphanId) {
         // Generate report for specific orphan
         result = await ReportService.generateOrphanReport(filters.orphanId, reportFilters)
-      } else if (userRole === "admin" || (userRole === "superadmin" && selectedBranch && selectedBranch !== "all")) {
+      } else if (userRole === "supervisor" || userRole === "admin" || (userRole === "superadmin" && selectedBranch && selectedBranch !== "all")) {
         result = await ReportService.generateBranchReport(activeTab, reportFilters)
       } else if (userRole === "superadmin") {
         result = await ReportService.generateSystemReport(activeTab, reportFilters)
@@ -122,22 +149,21 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
       
       const reportType = filters.orphanId 
         ? `Orphan report for ${orphanName || "selected orphan"}` 
-        : `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} report`;
-        // Success toast with appropriate styling
+        : `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} report`;      // Success toast with appropriate styling
       if (result?.success) {
         toast({
-          title: "Report Generated Successfully ✅",
-          description: `Your ${reportType} has been downloaded in ${filters.exportFormat.toUpperCase()} format.`,
+          title: t("report.generatedSuccessfully"),
+          description: `${t("report.yourReport")} ${reportType} ${t("report.hasBeenDownloaded")} ${filters.exportFormat.toUpperCase()} ${t("report.format")}.`,
           variant: "default"
         })
       } else {
-        throw new Error("Report generation failed")
+        throw new Error(t("report.generationFailed"))
       }
     } catch (error) {
       console.error("Failed to generate report", error)
       toast({
-        title: "Error Generating Report",
-        description: "Failed to generate report. Please try again later.",
+        title: t("report.errorGenerating"),
+        description: t("report.failedToGenerate"),
         variant: "destructive"
       })
     } finally {
@@ -370,18 +396,21 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                   </>
                 )}
               </TabsList>
-              
-              <div className="grid gap-4">
-                {userRole === "superadmin" && (
-                  <div className="flex flex-col space-y-2">                    <Label htmlFor="branch">{t("branch.label")}</Label>
-                    <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+                <div className="grid gap-4">                {userRole === "superadmin" && (
+                  <div className="flex flex-col space-y-2">                      <Label htmlFor="branch">{t("branch.label")}</Label>
+                    <Select value={selectedBranch} onValueChange={(value) => {
+                      setSelectedBranch(value);
+                      if (onBranchChange) {
+                        onBranchChange(value === "all" ? undefined : value);
+                      }
+                    }}>
                       <SelectTrigger className="border-green-200 focus:ring-green-500">
                         <SelectValue placeholder={t("report.selectBranch")} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">{t("branch.all")} ({t("report.systemReport")})</SelectItem>
                         {availableBranches.map((branch) => (
-                          <SelectItem key={branch.id} value={branch.id}>
+                          <SelectItem key={branch.publicId || branch.id} value={branch.publicId || branch.id}>
                             {branch.name}
                           </SelectItem>
                         ))}
@@ -389,9 +418,44 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                     </Select>
                   </div>
                 )}
-                  <div className="grid md:grid-cols-2 gap-6">
+                
+                {userRole === "admin" && availableBranches.length > 0 && (
+                  <div className="flex flex-col space-y-2">                      <Label htmlFor="branch">{t("branch.label")}</Label>
+                    <Select value={selectedBranch} onValueChange={(value) => {
+                      setSelectedBranch(value);
+                      if (onBranchChange) {
+                        onBranchChange(value === "all" ? undefined : value);
+                      }
+                    }}>
+                      <SelectTrigger className="border-green-200 focus:ring-green-500">
+                        <SelectValue placeholder={t("report.selectBranch")} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">{t("branch.all")} ({t("centre.yourCentre")})</SelectItem>
+                        {availableBranches.map((branch) => (
+                          <SelectItem key={branch.publicId || branch.id} value={branch.publicId || branch.id}>
+                            {branch.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}                  <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="use-date-range" 
+                        checked={useDateRange} 
+                        onCheckedChange={(checked) => setUseDateRange(checked as boolean)}
+                      />
+                      <label
+                        htmlFor="use-date-range"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {t("report.useDateRange")}
+                      </label>
+                    </div>
+                      <div className={useDateRange ? "" : "opacity-50 pointer-events-none"}>
                       <Label htmlFor="date-range">{t("report.dateRange")}</Label>
                       <div className="mt-2">
                         <DateRangePicker
@@ -400,6 +464,13 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                         />
                       </div>
                     </div>
+                    
+                    {!useDateRange && (
+                      <div className="text-sm text-muted-foreground mt-2 bg-green-50 p-2 rounded border border-green-200">
+                        <AlertCircle className="h-4 w-4 inline-block mr-1 text-green-600" />
+                        {t("report.allTimeData")}
+                      </div>
+                    )}
                     
                     <div>
                       <Label>{t("report.format")}</Label>
@@ -440,15 +511,37 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                   {t("report.generatingDetailed")} {orphanName || t("orphan.selected")} {t("report.personalInfo")}.
                 </AlertDescription>
               </Alert>
-              
-              <div className="grid md:grid-cols-2 gap-6">              <div>
-                  <Label htmlFor="date-range">{t("report.dateRange")}</Label>
-                  <div className="mt-2">
-                    <DateRangePicker
-                      date={{ from: dateRange.from, to: dateRange.to }}
-                      onDateChange={(range: DateRange) => setDateRange({ from: range.from || new Date(), to: range.to || new Date() })}
+                <div className="grid md:grid-cols-2 gap-6">              <div className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="use-date-range-orphan" 
+                      checked={useDateRange} 
+                      onCheckedChange={(checked) => setUseDateRange(checked as boolean)}
                     />
+                    <label
+                      htmlFor="use-date-range-orphan"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {t("report.useDateRange")}
+                    </label>
                   </div>
+                  
+                  <div className={useDateRange ? "" : "opacity-50 pointer-events-none"}>
+                    <Label htmlFor="date-range-orphan">{t("report.dateRange")}</Label>
+                    <div className="mt-2">
+                      <DateRangePicker
+                        date={{ from: dateRange.from, to: dateRange.to }}
+                        onDateChange={(range: DateRange) => setDateRange({ from: range.from || new Date(), to: range.to || new Date() })}
+                      />
+                    </div>
+                  </div>
+                  
+                  {!useDateRange && (
+                    <div className="text-sm text-muted-foreground mt-2 bg-green-50 p-2 rounded border border-green-200">
+                      <AlertCircle className="h-4 w-4 inline-block mr-1 text-green-600" />
+                      {t("report.allTimeData")}
+                    </div>
+                  )}
                 </div>
                 
                 <div>

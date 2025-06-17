@@ -30,15 +30,14 @@ export default function InventoryPage() {
 
   // Fetch inventory items
   useEffect(() => {
-    const fetchInventoryItems = async () => {
-      try {
+    const fetchInventoryItems = async () => {      try {
         setIsLoading(true)
         const data = await InventoryService.getCurrentBranchInventoryItems()
         setInventoryItems(data)
         setError(null)
       } catch (err) {
         console.error("Error fetching inventory items:", err)
-        setError("Failed to load inventory items. Please try again later.")
+        setError(t("inventory.failedToLoad"))
       } finally {
         setIsLoading(false)
       }
@@ -203,11 +202,10 @@ export default function InventoryPage() {
             </div>
           </div>
         </div>
-      )}
-        <div className="flex justify-between items-center">
+      )}        <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight"><T k="inventory.management" /></h1>
-          <p className="text-muted-foreground mt-2"><T k="inventory.viewManage" /></p>
+          <p className="text-muted-foreground mt-2"><T k="supervisor.inventory.viewManage" /></p>
         </div>
         <Button 
           onClick={() => setIsFormOpen(true)} 
@@ -230,11 +228,10 @@ export default function InventoryPage() {
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger>
               <SelectValue placeholder={t("inventory.filterByCategory")} />
-            </SelectTrigger>
-            <SelectContent>
+            </SelectTrigger>            <SelectContent>
               <SelectItem value="all"><T k="inventory.allCategories" /></SelectItem>
               {getUniqueCategories().map(category => (
-                <SelectItem key={category} value={category}>{t(`inventory.${category.toLowerCase()}`) || category}</SelectItem>
+                <SelectItem key={category} value={category}>{category}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -248,10 +245,10 @@ export default function InventoryPage() {
             <Card key={item.publicId} className="overflow-hidden bg-white hover:shadow-md transition-shadow">
               <CardContent className="p-6">
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-1">                    <div className="flex items-center gap-2">
                       <Package className="h-5 w-5 text-blue-500" />
-                      <h3 className="font-semibold text-lg">{item.itemName}</h3>                      <Badge className={getCategoryColor(item.itemCategory)}>{t(`inventory.${item.itemCategory.toLowerCase()}`) || item.itemCategory}</Badge>
+                      <h3 className="font-semibold text-lg">{item.itemName}</h3>
+                      <Badge className={getCategoryColor(item.itemCategory)}>{item.itemCategory}</Badge>
                       {item.lowStock && (
                         <Badge variant="outline" className="bg-red-50 text-red-800 border-red-200">
                           <T k="inventory.lowStock" />
@@ -283,7 +280,8 @@ export default function InventoryPage() {
           )
         })}        {filteredItems.length === 0 && (
           <div className="text-center py-10 bg-white rounded-lg shadow">
-            <p className="text-muted-foreground"><T k="inventory.noItems" /></p>
+            <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-muted-foreground"><T k="inventory.noItemsFound" /></p>
           </div>
         )}
       </div>
@@ -292,3 +290,4 @@ export default function InventoryPage() {
     </div>
   )
 }
+

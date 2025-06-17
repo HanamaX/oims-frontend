@@ -3,6 +3,7 @@
 import { ReactNode } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 interface RecordDetailsDialogProps {
   title: string
@@ -21,6 +22,8 @@ export default function RecordDetailsDialog({
   actions,
   className
 }: Readonly<RecordDetailsDialogProps>) {
+  const { t } = useLanguage()
+  
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className={`sm:max-w-[600px] bg-white ${className ?? ''}`}>
@@ -33,7 +36,7 @@ export default function RecordDetailsDialog({
             {actions}
           </div>
           <Button type="button" variant="outline" onClick={onClose}>
-            Close
+            {t('general.close')}
           </Button>
         </DialogFooter>
       </DialogContent>

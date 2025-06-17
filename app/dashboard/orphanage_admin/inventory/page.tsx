@@ -9,6 +9,7 @@ import { Search, AlertTriangle, Package, Eye } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import API from "@/lib/api-service"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 // Define types for inventory items
 interface InventoryItem {
@@ -26,6 +27,8 @@ interface InventoryItem {
 
 export default function OrphanageAdminInventoryPage() {
   const router = useRouter()
+  const { t } = useLanguage()
+  
   const [searchTerm, setSearchTerm] = useState("")
   const [categoryFilter, setCategoryFilter] = useState<string>("all")
   const [branchFilter, setBranchFilter] = useState<string>("all")
@@ -65,13 +68,12 @@ export default function OrphanageAdminInventoryPage() {
         const response = await API.get("/app/oims/inventory/items/centre")
         if (response.data?.data) {
           setInventoryItems(response.data.data)
-          setError(null)
-        } else {
-          throw new Error("No inventory data found")
+          setError(null)        } else {
+          throw new Error(t("inventory.noDataFound"))
         }
       } catch (err) {
         console.error("Error fetching inventory items:", err)
-        setError("Failed to load inventory items. Please try again later.")
+        setError(t("inventory.failedToLoad"))
       } finally {
         setIsLoading(false)
       }
@@ -120,18 +122,16 @@ export default function OrphanageAdminInventoryPage() {
         return "bg-gray-100 text-gray-800 border-gray-200"
     }
   }
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="spinner h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading inventory items...</p>
+          <p className="text-muted-foreground"><T k="inventory.loadingItems" /></p>
         </div>
       </div>
     )
   }
-
   if (error) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -143,25 +143,22 @@ export default function OrphanageAdminInventoryPage() {
             className="mt-4"
             variant="outline"
           >
-            Try Again
+            <T k="common.tryAgain" />
           </Button>
         </div>
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Inventory Management</h1>
-        <p className="text-muted-foreground mt-2">View inventory items across all branches</p>
-      </div>
-
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+        <h1 className="text-3xl font-bold tracking-tight"><T k="inventory.management" /></h1>
+        <p className="text-muted-foreground mt-2"><T k="inventory.viewItemsAllBranches" /></p>
+      </div>      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
         <div className="flex items-center space-x-2 flex-1">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search items..."
+            placeholder={t("inventory.searchItems")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
@@ -171,10 +168,10 @@ export default function OrphanageAdminInventoryPage() {
         <div className="w-full md:w-[180px]">
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by category" />
+              <SelectValue placeholder={t("inventory.filterByCategory")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all"><T k="inventory.allCategories" /></SelectItem>
               {getUniqueCategories().map(category => (
                 <SelectItem key={category} value={category}>{category}</SelectItem>
               ))}
@@ -185,10 +182,10 @@ export default function OrphanageAdminInventoryPage() {
         <div className="w-full md:w-[180px]">
           <Select value={branchFilter} onValueChange={setBranchFilter}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by branch" />
+              <SelectValue placeholder={t("inventory.filterByBranch")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Branches</SelectItem>
+              <SelectItem value="all"><T k="inventory.allBranches" /></SelectItem>
               {branches.map(branch => (
                 <SelectItem key={branch.publicId} value={branch.publicId}>{branch.name}</SelectItem>
               ))}
@@ -207,43 +204,40 @@ export default function OrphanageAdminInventoryPage() {
                   <div className="flex items-center gap-2">
                     <Package className="h-5 w-5 text-blue-500" />
                     <h3 className="font-semibold text-lg">{item.itemName}</h3>
-                    <Badge className={getCategoryColor(item.itemCategory)}>{item.itemCategory}</Badge>
-                    {item.lowStock || (parseInt(item.itemQuantity) < parseInt(item.minQuantity)) ? (
+                    <Badge className={getCategoryColor(item.itemCategory)}>{item.itemCategory}</Badge>                    {item.lowStock || (parseInt(item.itemQuantity) < parseInt(item.minQuantity)) ? (
                       <Badge variant="outline" className="bg-red-50 text-red-800 border-red-200">
-                        Low Stock
+                        <T k="inventory.lowStock" />
                       </Badge>
                     ) : null}
                   </div>
                   <div className="flex flex-col sm:flex-row sm:items-center gap-x-6 gap-y-1 text-sm mt-1">
                     <span>
-                      Quantity: <span className="font-medium">{item.itemQuantity}</span>
+                      <T k="inventory.quantity" />: <span className="font-medium">{item.itemQuantity}</span>
                     </span>                    <span>
-                      Price: <span className="font-medium">Tshs {parseFloat(item.itemPrice).toFixed(2)}</span>
+                      <T k="inventory.price" />: <span className="font-medium">Tshs {parseFloat(item.itemPrice).toFixed(2)}</span>
                     </span>
                     <span>
-                      Min Quantity: <span className="font-medium">{item.minQuantity}</span>
+                      <T k="inventory.minQuantity" />: <span className="font-medium">{item.minQuantity}</span>
                     </span>
                     {item.branchName && (
                       <span>
-                        Branch: <span className="font-medium">{item.branchName}</span>
+                        <T k="inventory.branch" />: <span className="font-medium">{item.branchName}</span>
                       </span>
                     )}
                     {item.createdDate && (
                       <span>
-                        Created: <span className="font-medium">{new Date(item.createdDate).toLocaleDateString()}</span>
+                        <T k="inventory.created" />: <span className="font-medium">{new Date(item.createdDate).toLocaleDateString()}</span>
                       </span>
                     )}
                   </div>
-                </div>
-
-                <div className="flex flex-wrap gap-2 mt-2 lg:mt-0">
+                </div>                <div className="flex flex-wrap gap-2 mt-2 lg:mt-0">
                   <Button 
                     variant="outline" 
                     size="sm"
                     onClick={() => router.push(`/dashboard/orphanage_admin/inventory/${item.publicId}`)}
                   >
                     <Eye className="mr-2 h-4 w-4" />
-                    View Details & Transactions
+                    <T k="inventory.viewDetailsTransactions" />
                   </Button>
                 </div>
               </div>
@@ -254,7 +248,7 @@ export default function OrphanageAdminInventoryPage() {
         {filteredItems.length === 0 && (
           <div className="text-center py-10 bg-white rounded-lg shadow col-span-full">
             <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-muted-foreground">No inventory items found matching your criteria.</p>
+            <p className="text-muted-foreground"><T k="inventory.noItemsFound" /></p>
           </div>
         )}
       </div>

@@ -19,7 +19,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 
-export default function VolunteersPage() {
+export default function SupervisorVolunteersPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [volunteers, setVolunteers] = useState<CurrentVolunteerResponse[]>([])
@@ -37,7 +37,6 @@ export default function VolunteersPage() {
   const [rejectReason, setRejectReason] = useState("")
   const [selectedVolunteerId, setSelectedVolunteerId] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-
   // Fetch volunteers
   useEffect(() => {
     const fetchVolunteers = async () => {
@@ -48,7 +47,7 @@ export default function VolunteersPage() {
         setError(null)
       } catch (err) {
         console.error("Error fetching volunteers:", err)
-        setError("Failed to load volunteers. Please try again later.")
+        setError(t("volunteer.error"))
       } finally {
         setIsLoading(false)
       }
@@ -383,3 +382,4 @@ export default function VolunteersPage() {
     </div>
   )
 }
+

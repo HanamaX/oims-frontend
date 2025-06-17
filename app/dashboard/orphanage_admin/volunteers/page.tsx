@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input"
 import { Search, AlertTriangle } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import VolunteerCardNew from "@/components/volunteer-card-new"
-import VolunteerService, { CurrentVolunteerResponse } from "@/lib/volunteer-service"
+import { CurrentVolunteerResponse } from "@/lib/volunteer-service"
 import API from "@/lib/api-service"
+import { useLanguage, T } from "@/contexts/LanguageContext"
 
 export default function SuperAdminVolunteersPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -17,6 +18,7 @@ export default function SuperAdminVolunteersPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [branches, setBranches] = useState<{name: string, publicId: string}[]>([])
+  const { t } = useLanguage()
   // Fetch branches to populate filter
   useEffect(() => {
     const fetchBranches = async () => {
@@ -48,13 +50,12 @@ export default function SuperAdminVolunteersPage() {
         const response = await API.get("/app/oims/events/volunteers/centre")
         if (response.data?.data) {
           setVolunteers(response.data.data)
-          setError(null)
-        } else {
+          setError(null)        } else {
           throw new Error("No data received from API")
         }
       } catch (err) {
         console.error("Error fetching volunteers:", err)
-        setError("Failed to load volunteers. Please try again later.")
+        setError(t("volunteer.error"))
         setVolunteers([])
       } finally {
         setIsLoading(false)
@@ -63,13 +64,12 @@ export default function SuperAdminVolunteersPage() {
 
     fetchVolunteers()
   }, [])
-
   // Filter volunteers based on search term, status and branch
   const filteredVolunteers = volunteers.filter((volunteer) => {
     const matchesSearch =
       volunteer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       volunteer.jobRole.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (volunteer.phoneNumber && volunteer.phoneNumber.includes(searchTerm))
+      volunteer.phoneNumber?.includes(searchTerm)
 
     const matchesStatus = statusFilter === "all" || volunteer.status === statusFilter
     
@@ -79,18 +79,16 @@ export default function SuperAdminVolunteersPage() {
 
     return matchesSearch && matchesStatus && matchesBranch
   })
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="spinner h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading volunteers...</p>
+          <p className="text-muted-foreground"><T k="volunteer.loading" /></p>
         </div>
       </div>
     )
   }
-
   if (error) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -102,52 +100,46 @@ export default function SuperAdminVolunteersPage() {
             className="mt-4"
             variant="outline"
           >
-            Try Again
+            <T k="volunteer.tryAgain" />
           </Button>
         </div>
       </div>
     )
   }
 
-  return (
-    <div className="space-y-6">      
+  return (    <div className="space-y-6">      
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Volunteer Management</h1>
-        <p className="text-muted-foreground mt-2">View volunteers across all branches</p>
+        <h1 className="text-3xl font-bold tracking-tight"><T k="volunteer.management" /></h1>
+        <p className="text-muted-foreground mt-2"><T k="volunteers.viewAcrossBranches" /></p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
-        <div className="flex items-center space-x-2 flex-1">
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">        <div className="flex items-center space-x-2 flex-1">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search volunteers..."
+            placeholder={t("volunteer.search")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
           />
-        </div>
-
-        <div className="w-full md:w-[180px]">
+        </div>        <div className="w-full md:w-[180px]">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by status" />
+              <SelectValue placeholder={t("volunteer.filter.status")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="PENDING">Pending</SelectItem>
-              <SelectItem value="APPROVED">Approved</SelectItem>
-              <SelectItem value="REJECTED">Rejected</SelectItem>
+              <SelectItem value="all"><T k="volunteer.filter.all" /></SelectItem>
+              <SelectItem value="PENDING"><T k="volunteers.status.pending" /></SelectItem>
+              <SelectItem value="APPROVED"><T k="volunteers.status.approved" /></SelectItem>
+              <SelectItem value="REJECTED"><T k="volunteers.status.rejected" /></SelectItem>
             </SelectContent>
           </Select>
-        </div>
-
-        <div className="w-full md:w-[180px]">
+        </div>        <div className="w-full md:w-[180px]">
           <Select value={branchFilter} onValueChange={setBranchFilter}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by branch" />
+              <SelectValue placeholder={t("volunteers.filter.branch")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Branches</SelectItem>
+              <SelectItem value="all"><T k="branch.all" /></SelectItem>
               {branches.map(branch => (
                 <SelectItem key={branch.publicId} value={branch.publicId}>{branch.name}</SelectItem>
               ))}
@@ -163,11 +155,9 @@ export default function SuperAdminVolunteersPage() {
             volunteer={volunteer}
             readOnly={true}
           />
-        ))}
-
-        {filteredVolunteers.length === 0 && (
+        ))}        {filteredVolunteers.length === 0 && (
           <div className="text-center py-10 bg-white rounded-lg shadow col-span-full">
-            <p className="text-muted-foreground">No volunteers found matching your criteria.</p>
+            <p className="text-muted-foreground"><T k="volunteer.noData" /></p>
           </div>
         )}
       </div>

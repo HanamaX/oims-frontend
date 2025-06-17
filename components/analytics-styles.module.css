@@ -1,0 +1,30 @@
+.barContainer {
+  width: 100%;
+  background-color: rgb(229, 231, 235);
+  border-radius: 9999px;
+  height: 0.625rem;
+  margin-right: 0.5rem;
+  position: relative;
+}
+
+.barFill {
+  background-color: rgb(22, 163, 74);
+  height: 0.625rem;
+  border-radius: 9999px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
+/* Percentage classes for different widths */
+.width10 { width: 10%; }
+.width20 { width: 20%; }
+.width30 { width: 30%; }
+.width40 { width: 40%; }
+.width50 { width: 50%; }
+.width60 { width: 60%; }
+.width70 { width: 70%; }
+.width80 { width: 80%; }
+.width90 { width: 90%; }
+.width100 { width: 100%; }

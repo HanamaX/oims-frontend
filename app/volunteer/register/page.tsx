@@ -15,7 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { isValidEmail, isValidPhone, isValidName, isValidJobRole, isNotEmpty } from "@/lib/validation"
-import VolunteerService, { Branch } from "@/lib/volunteer-service"
+import VolunteerService, { Branch, Centre } from "@/lib/volunteer-service"
 import { toast } from "@/hooks/use-toast"
 
 export default function VolunteerRegistrationPage() {
@@ -27,11 +27,14 @@ export default function VolunteerRegistrationPage() {
     phoneNumber: "",
     jobRole: "",
     branchPublicId: "",
+    centrePublicId: "",
   })
   const [scheduledDate, setScheduledDate] = useState<Date>()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [branches, setBranches] = useState<Branch[]>([])
-  const [isLoading, setIsLoading] = useState(true)  
+  const [centres, setCentres] = useState<Centre[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isBranchesLoading, setIsBranchesLoading] = useState(true)
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
@@ -39,17 +42,60 @@ export default function VolunteerRegistrationPage() {
     phoneNumber: "",
     jobRole: "",
     branchPublicId: "",
+    centrePublicId: "",
     scheduledDate: ""
-  })
-  // Fetch branches on component mount
+  })  // Fetch centres on component mount
+  useEffect(() => {
+    const loadCentres = async () => {
+      try {
+        const centreData = await VolunteerService.getCentres()
+        console.log("Centres loaded:", centreData)
+        // Make sure centreData is an array
+        if (Array.isArray(centreData)) {
+          setCentres(centreData)
+        } else {
+          console.error("Centres data is not an array:", centreData)
+          setCentres([])
+          toast({
+            title: "Warning",
+            description: "Centre data format is unexpected. Some features may not work correctly.",
+            variant: "destructive",
+          })
+        }
+      } catch (error) {
+        console.error("Error loading centres:", error)
+        setCentres([]) // Ensure it's always an array
+        toast({
+          title: "Error",
+          description: "Failed to load centres. Please try again later.",
+          variant: "destructive",
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadCentres()
+  }, [])
+
+  // Fetch branches when centre is selected
   useEffect(() => {
     const loadBranches = async () => {
+      if (!formData.centrePublicId) {
+        setBranches([])
+        setFormData(prev => ({ ...prev, branchPublicId: "" }))
+        return
+      }
+
       try {
-        const branchData = await VolunteerService.getBranches()
-        console.log("Branches loaded:", branchData)
+        setIsBranchesLoading(true)
+        const branchData = await VolunteerService.getBranchesByCentre(formData.centrePublicId)
+        console.log("Branches loaded for centre:", branchData)
         // Make sure branchData is an array
         if (Array.isArray(branchData)) {
           setBranches(branchData)
+          // Reset branch selection when centre changes
+          setFormData(prev => ({ ...prev, branchPublicId: "" }))
         } else {
           console.error("Branches data is not an array:", branchData)
           setBranches([])
@@ -68,12 +114,12 @@ export default function VolunteerRegistrationPage() {
           variant: "destructive",
         })
       } finally {
-        setIsLoading(false)
+        setIsBranchesLoading(false)
       }
     }
 
     loadBranches()
-  }, [])
+  }, [formData.centrePublicId])
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -109,9 +155,7 @@ export default function VolunteerRegistrationPage() {
     }
   }, [scheduledDate, errors.scheduledDate])
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    // Reset errors
+    e.preventDefault()    // Reset errors
     setErrors({
       firstName: "",
       lastName: "",
@@ -119,6 +163,7 @@ export default function VolunteerRegistrationPage() {
       phoneNumber: "",
       jobRole: "",
       branchPublicId: "",
+      centrePublicId: "",
       scheduledDate: ""
     })
 
@@ -163,6 +208,13 @@ export default function VolunteerRegistrationPage() {
       setErrors((prev) => ({
         ...prev,
         jobRole: "Role description should be between 3 and 100 characters",
+      }))
+      hasErrors = true
+    }    // Validate centre selection
+    if (!isNotEmpty(formData.centrePublicId)) {
+      setErrors((prev) => ({
+        ...prev,
+        centrePublicId: "Please select a centre",
       }))
       hasErrors = true
     }
@@ -346,17 +398,55 @@ export default function VolunteerRegistrationPage() {
                   />
                   {errors.jobRole && <p className="text-sm text-red-500">{errors.jobRole}</p>}
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">                <div className="space-y-2">
-                  <Label htmlFor="branchPublicId">Branch</Label>                  <Select 
-                    onValueChange={(value) => handleSelectChange("branchPublicId", value)} 
+              </div>              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="centrePublicId">Centre</Label>
+                  <Select 
+                    onValueChange={(value) => handleSelectChange("centrePublicId", value)} 
                     required
                     disabled={isLoading}
                   >
+                    <SelectTrigger className={errors.centrePublicId ? "border-red-500" : ""}>
+                      <SelectValue placeholder={isLoading ? "Loading centres..." : "Select a centre"} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white">
+                      {Array.isArray(centres) && centres.length > 0 ? (
+                        centres.map((centre) => (
+                          <SelectItem key={centre.publicId} value={centre.publicId} className="bg-white">
+                            {centre.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-centres" disabled className="bg-white">
+                          No centres available
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {isLoading && <p className="text-sm text-muted-foreground mt-1">Loading centres...</p>}
+                  {!isLoading && (!Array.isArray(centres) || centres.length === 0) && (
+                    <p className="text-sm text-red-500 mt-1">No centres available. Please contact support.</p>
+                  )}
+                  {errors.centrePublicId && <p className="text-sm text-red-500">{errors.centrePublicId}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="branchPublicId">Branch</Label>
+                  <Select 
+                    onValueChange={(value) => handleSelectChange("branchPublicId", value)} 
+                    required
+                    disabled={isBranchesLoading || !formData.centrePublicId}
+                  >
                     <SelectTrigger className={errors.branchPublicId ? "border-red-500" : ""}>
-                      <SelectValue placeholder={isLoading ? "Loading branches..." : "Select a branch"} />
-                    </SelectTrigger>                    <SelectContent className="bg-white">
+                      <SelectValue placeholder={
+                        !formData.centrePublicId 
+                          ? "Select a centre first" 
+                          : isBranchesLoading 
+                            ? "Loading branches..." 
+                            : "Select a branch"
+                      } />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white">
                       {Array.isArray(branches) && branches.length > 0 ? (
                         branches.map((branch) => (
                           <SelectItem key={branch.publicId} value={branch.publicId} className="bg-white">
@@ -365,14 +455,14 @@ export default function VolunteerRegistrationPage() {
                         ))
                       ) : (
                         <SelectItem value="no-branches" disabled className="bg-white">
-                          No branches available
+                          {!formData.centrePublicId ? "Select a centre first" : "No branches available"}
                         </SelectItem>
                       )}
                     </SelectContent>
                   </Select>
-                  {isLoading && <p className="text-sm text-muted-foreground mt-1">Loading branches...</p>}
-                  {!isLoading && (!Array.isArray(branches) || branches.length === 0) && (
-                    <p className="text-sm text-red-500 mt-1">No branches available. Please contact support.</p>
+                  {isBranchesLoading && formData.centrePublicId && <p className="text-sm text-muted-foreground mt-1">Loading branches...</p>}
+                  {!isBranchesLoading && formData.centrePublicId && (!Array.isArray(branches) || branches.length === 0) && (
+                    <p className="text-sm text-red-500 mt-1">No branches available for this centre. Please contact support.</p>
                   )}
                   {errors.branchPublicId && <p className="text-sm text-red-500">{errors.branchPublicId}</p>}
                 </div>

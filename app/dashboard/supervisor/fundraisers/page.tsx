@@ -37,9 +37,7 @@ export default function SupervisorFundraisersPage() {
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false)
   const [rejectReason, setRejectReason] = useState("")
   const [selectedFundraiserId, setSelectedFundraiserId] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  // Fetch fundraisers from API
+  const [isSubmitting, setIsSubmitting] = useState(false)  // Fetch fundraisers from API
   useEffect(() => {
     const fetchFundraisers = async () => {
       try {
@@ -49,7 +47,7 @@ export default function SupervisorFundraisersPage() {
         setError(null)
       } catch (err) {
         console.error("Error fetching fundraisers:", err)
-        setError("Failed to load fundraisers. Please try again later.")
+        setError(t("fundraisers.failedToLoad"))
       } finally {
         setIsLoading(false)
       }
@@ -70,7 +68,6 @@ export default function SupervisorFundraisersPage() {
 
     return matchesSearch && matchesStatus
   })
-
   // Handle approve and reject
   const handleApprove = async (id: string) => {
     try {
@@ -79,32 +76,29 @@ export default function SupervisorFundraisersPage() {
         fundraisers.map((fundraiser) =>
           fundraiser.publicId === id ? { ...fundraiser, status: EventStatus.APPROVED } : fundraiser,
         ),
-      )
-      
+      );
       setNotification({
-        message: "Fundraiser approved successfully",
+        message: t("fundraisers.approvedSuccess"),
         type: "success",
         visible: true
-      })
+      });
       
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     } catch (error) {
-      console.error("Failed to approve fundraiser:", error)
-      
+      console.error("Failed to approve fundraiser:", error);
       setNotification({
-        message: "Failed to approve fundraiser. Please try again.",
+        message: t("fundraisers.approveFailed"),
         type: "error",
         visible: true
-      })
+      });
       
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     }
   }
-
   // Initialize rejection process by opening the dialog
   const initiateReject = (id: string) => {
     setSelectedFundraiserId(id);
@@ -118,7 +112,7 @@ export default function SupervisorFundraisersPage() {
     
     setIsSubmitting(true);
     try {
-      await FundraiserService.rejectFundraiser(selectedFundraiserId, rejectReason)
+      await FundraiserService.rejectFundraiser(selectedFundraiserId, rejectReason);
       
       // Update local state
       setFundraisers(
@@ -131,14 +125,14 @@ export default function SupervisorFundraisersPage() {
               } 
             : fundraiser
         )
-      )
+      );
       
       // Show success notification
       setNotification({
-        message: "Fundraiser rejected successfully",
+        message: t("fundraisers.rejectedSuccess"),
         type: "success",
         visible: true
-      })
+      });
       
       // Close dialog and reset state
       setIsRejectDialogOpen(false);
@@ -147,131 +141,129 @@ export default function SupervisorFundraisersPage() {
       
       // Auto-hide notification after 5 seconds
       setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+        setNotification(null);
+      }, 5000);
     } catch (error) {
-      console.error("Failed to reject fundraiser:", error)
+      console.error("Failed to reject fundraiser:", error);
       
       // Show error notification
       setNotification({
-        message: "Failed to reject fundraiser. Please try again.",
+        message: t("fundraisers.rejectFailed"),
         type: "error",
         visible: true
-      })
+      });
       
       // Auto-hide notification after 5 seconds
       setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+        setNotification(null);
+      }, 5000);
     } finally {
       setIsSubmitting(false);
     }
   }
-
   // Handle delete
   const handleDelete = async (id: string) => {
     try {
-      await FundraiserService.deleteFundraiser(id)
-      setFundraisers(fundraisers.filter((fundraiser) => fundraiser.publicId !== id))
+      await FundraiserService.deleteFundraiser(id);
+      setFundraisers(fundraisers.filter((fundraiser) => fundraiser.publicId !== id));
       
       setNotification({
-        message: "Fundraiser deleted successfully",
+        message: t("fundraisers.deleteSuccess"),
         type: "success",
         visible: true
-      })
+      });
       
       setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+        setNotification(null);
+      }, 5000);
     } catch (error) {
-      console.error("Failed to delete fundraiser:", error)
+      console.error("Failed to delete fundraiser:", error);
       
       setNotification({
-        message: "Failed to delete fundraiser. Please try again.",
+        message: t("fundraisers.deleteFailed"),
         type: "error",
         visible: true
-      })
+      });
       
       setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+        setNotification(null);
+      }, 5000);
     }
   }
   
   // Handle complete (mark as completed)
   const handleComplete = async (id: string, reason?: string) => {
     try {
-      await FundraiserService.updateFundraiserStatus(id, EventStatus.COMPLETED, reason)
+      await FundraiserService.updateFundraiserStatus(id, EventStatus.COMPLETED, reason);
       setFundraisers(
         fundraisers.map((fundraiser) =>
           fundraiser.publicId === id ? { ...fundraiser, status: EventStatus.COMPLETED } : fundraiser,
         ),
-      )
+      );
       
       setNotification({
-        message: "Fundraiser marked as completed successfully",
+        message: t("fundraisers.completedSuccess"),
         type: "success",
         visible: true
-      })
+      });
       
       setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+        setNotification(null);
+      }, 5000);
     } catch (error) {
-      console.error("Failed to complete fundraiser:", error)
+      console.error("Failed to complete fundraiser:", error);
       
       setNotification({
-        message: "Failed to mark fundraiser as completed. Please try again.",
+        message: t("fundraisers.completeFailed"),
         type: "error",
         visible: true
-      })
+      });
       
       setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+        setNotification(null);
+      }, 5000);
     }
   }
   
   // Handle cancel
   const handleCancel = async (id: string, reason: string) => {
     try {
-      await FundraiserService.updateFundraiserStatus(id, EventStatus.CANCELLED, reason)
+      await FundraiserService.updateFundraiserStatus(id, EventStatus.CANCELLED, reason);
       setFundraisers(
         fundraisers.map((fundraiser) =>
           fundraiser.publicId === id ? { ...fundraiser, status: EventStatus.CANCELLED } : fundraiser,
         ),
-      )
+      );
       
       setNotification({
-        message: "Fundraiser cancelled successfully",
+        message: t("fundraisers.cancelSuccess"),
         type: "success",
         visible: true
-      })
+      });
       
       setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+        setNotification(null);
+      }, 5000);
     } catch (error) {
-      console.error("Failed to cancel fundraiser:", error)
+      console.error("Failed to cancel fundraiser:", error);
       
       setNotification({
-        message: "Failed to cancel fundraiser. Please try again.",
+        message: t("fundraisers.cancelFailed"),
         type: "error",
         visible: true
-      })
+      });
       
       setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-    }
+        setNotification(null);
+      }, 5000);    }
   }
-
+  
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="spinner h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading fundraisers...</p>
+          <p className="text-muted-foreground"><T k="fundraisers.loadingFundraisers" /></p>
         </div>
       </div>
     )
@@ -282,52 +274,48 @@ export default function SupervisorFundraisersPage() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <p className="text-red-500 font-medium">{error}</p>
-          <Button 
-            onClick={() => window.location.reload()} 
-            className="mt-4"
-            variant="outline"
-          >
-            Try Again
-          </Button>
+          <p className="text-red-500 font-medium">{error}</p>            <Button 
+              onClick={() => window.location.reload()} 
+              className="mt-4"
+              variant="outline"
+            >
+              <T k="ui.tryAgain" />
+            </Button>
         </div>
       </div>
     )
   }
-
   return (
     <div className="space-y-6">
       {/* Rejection Dialog */}
       <AlertDialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Reject Fundraiser</AlertDialogTitle>
+            <AlertDialogTitle><T k="fundraisers.rejectTitle" /></AlertDialogTitle>
             <AlertDialogDescription>
-              Please provide a reason for rejecting this fundraiser. 
-              This information will be stored and displayed in the fundraiser record.
+              <T k="fundraisers.rejectDescription" />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="mt-2">
             <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-1">
-              Reason for rejection <span className="text-red-500">*</span>
+              <T k="fundraisers.rejectReasonLabel" /> <span className="text-red-500">*</span>
             </label>
             <textarea
               id="reason"
               className="w-full min-h-[100px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Explain why you're rejecting this fundraiser..."
+              placeholder={t("fundraisers.rejectReasonPlaceholder")}
               value={rejectReason}
               onChange={(e) => setRejectReason(e.target.value)}
             ></textarea>
           </div>
-          <AlertDialogFooter>
-            <AlertDialogCancel 
+          <AlertDialogFooter>            <AlertDialogCancel 
               onClick={() => {
                 setRejectReason("");
                 setIsRejectDialogOpen(false);
               }}
               disabled={isSubmitting}
             >
-              Cancel
+              <T k="ui.cancel" />
             </AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleReject}
@@ -337,10 +325,10 @@ export default function SupervisorFundraisersPage() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing...
+                  <T k="ui.processing" />
                 </>
               ) : (
-                "Reject"
+                <T k="fundraisers.rejectButton" />
               )}
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -372,8 +360,7 @@ export default function SupervisorFundraisersPage() {
             <div className="ml-auto pl-3">
               <div className="-mx-1.5 -my-1.5">
                 <button
-                  type="button"
-                  onClick={() => setNotification(null)}
+                  type="button"                  onClick={() => setNotification(null)}
                   aria-label="Close notification"
                   title="Close"
                   className={`inline-flex rounded-md p-1.5 ${
@@ -391,22 +378,25 @@ export default function SupervisorFundraisersPage() {
           </div>
         </div>
       )}
-        <div className="flex justify-between items-center">
+      
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight"><T k="fundraiser.management" /></h1>
-          <p className="text-muted-foreground mt-2"><T k="fundraiser.description" /></p>
-        </div>        <Button 
+          <h1 className="text-3xl font-bold tracking-tight"><T k="fundraisers.management" /></h1>
+          <p className="text-muted-foreground mt-2"><T k="fundraisers.supervisorDescription" /></p>
+        </div>
+        
+        <Button 
           onClick={() => window.location.href = '/news/ongoing'}
           className="bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="mr-2 h-4 w-4" />
-          View Public Campaigns
+          <T k="fundraisers.viewPublicCampaigns" />
         </Button>
       </div>      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
         <div className="flex items-center space-x-2 flex-1">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder={t("fundraiser.search")}
+            placeholder={t("fundraisers.searchFundraisers")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
@@ -416,14 +406,15 @@ export default function SupervisorFundraisersPage() {
         <div className="w-full md:w-[200px]">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger>
-              <SelectValue placeholder={t("fundraiser.filter.status")} />
+              <SelectValue placeholder={t("fundraisers.filterByStatus")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all"><T k="fundraiser.filter.all" /></SelectItem>
-              <SelectItem value="PENDING"><T k="fundraiser.filter.pending" /></SelectItem>
-              <SelectItem value="APPROVED"><T k="fundraiser.filter.active" /></SelectItem>
-              <SelectItem value="COMPLETED"><T k="fundraiser.filter.completed" /></SelectItem>
-              <SelectItem value="REJECTED"><T k="fundraiser.filter.rejected" /></SelectItem>
+              <SelectItem value="all"><T k="fundraisers.allStatuses" /></SelectItem>
+              <SelectItem value="PENDING"><T k="fundraisers.pending" /></SelectItem>
+              <SelectItem value="APPROVED"><T k="fundraisers.approved" /></SelectItem>
+              <SelectItem value="COMPLETED"><T k="fundraisers.completed" /></SelectItem>
+              <SelectItem value="REJECTED"><T k="fundraisers.rejected" /></SelectItem>
+              <SelectItem value="CANCELLED"><T k="fundraisers.cancelled" /></SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -437,20 +428,21 @@ export default function SupervisorFundraisersPage() {
                 fundraiser={fundraiser} 
                 onDelete={handleDelete}
                 onApprove={handleApprove}
-                onReject={handleReject}
+                onReject={initiateReject}
                 onComplete={handleComplete}
                 onCancel={handleCancel}
               />
             </CardContent>
           </Card>
         ))}
-
+        
         {filteredFundraisers.length === 0 && (
-          <div className="text-center py-10 bg-white rounded-lg shadow">
-            <p className="text-muted-foreground">No fundraisers found matching your criteria.</p>
-          </div>
+          <Card className="p-8 text-center">
+            <p className="text-muted-foreground"><T k="fundraisers.noFundraisersFound" /></p>
+          </Card>
         )}
       </div>
     </div>
   )
 }
+

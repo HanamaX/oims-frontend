@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Building2, Loader2, Mail, Phone, Users } from "lucide-react"
+import { Building2, Mail, Phone, Users } from "lucide-react"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 // Define types for our data
 interface Branch {
@@ -43,16 +44,16 @@ export default function BranchDetails({
   branchStaff,
   onBackClick
 }: BranchDetailsProps) {
+  const { language } = useLanguage()
   
   if (!branch) {
     return null
   }
 
-  return (
-    <div className="space-y-4">
+  return (    <div className="space-y-4">
       <div className="flex justify-between items-center">
         <Button variant="outline" onClick={onBackClick}>
-          &larr; Back to Center
+          &larr; <T k="branch.backToBranches" />
         </Button>
       </div>
       
@@ -61,10 +62,9 @@ export default function BranchDetails({
           <Building2 className="h-8 w-8 text-blue-500" />
           <div className="flex-1">
             <div className="flex items-center justify-between">
-              <CardTitle>{branch.name}</CardTitle>
-              {branch.isHQ && (
+              <CardTitle>{branch.name}</CardTitle>              {branch.isHQ && (
                 <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                  Headquarters
+                  <T k="branch.headquarters" />
                 </span>
               )}
             </div>
@@ -72,15 +72,14 @@ export default function BranchDetails({
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-6">            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm font-medium">Phone Number</p>
+                <p className="text-sm font-medium"><T k="branch.phoneNumber" /></p>
                 <p className="text-sm text-muted-foreground">{branch.phoneNumber}</p>
               </div>
               {branch.createdDate && (
                 <div>
-                  <p className="text-sm font-medium">Created Date</p>
+                  <p className="text-sm font-medium"><T k="branch.createdDate" /></p>
                   <p className="text-sm text-muted-foreground">
                     {new Date(branch.createdDate.replace(' ', 'T')).toLocaleDateString('en-US', {
                       year: 'numeric',
@@ -91,18 +90,17 @@ export default function BranchDetails({
                 </div>
               )}
               <div>
-                <p className="text-sm font-medium">Orphans</p>
-                <p className="text-sm text-muted-foreground">{branch.orphanCount ?? 0} orphans in this branch</p>
+                <p className="text-sm font-medium"><T k="branch.orphans" /></p>
+                <p className="text-sm text-muted-foreground">{branch.orphanCount ?? 0} <T k="branch.orphansInBranch" /></p>
               </div>
               <div>
-                <p className="text-sm font-medium">Staff</p>
-                <p className="text-sm text-muted-foreground">{branch.staffCount ?? 0} staff members</p>
+                <p className="text-sm font-medium"><T k="staff.staff" /></p>
+                <p className="text-sm text-muted-foreground">{branch.staffCount ?? 0} <T k="staff.staffMembers" /></p>
               </div>
             </div>
             
             {/* Branch Staff Section */}
-            <div className="mt-6">
-              <h3 className="text-lg font-medium mb-4">Branch Staff</h3>
+            <div className="mt-6">              <h3 className="text-lg font-medium mb-4"><T k="staff.branchStaff" /></h3>
               {branchStaff.length > 0 ? (
                 <div className="space-y-4">
                   {branchStaff.map((staff) => (
@@ -117,7 +115,7 @@ export default function BranchDetails({
                               <Users className="h-6 w-6 text-blue-500" />
                             </div>
                             <div>
-                              <p className="font-medium text-base">{staff.fullName ?? 'No Name'}</p>
+                              <p className="font-medium text-base">{staff.fullName ?? <T k="staff.noName" />}</p>
                               <div className="flex flex-col sm:flex-row sm:items-center gap-x-4 gap-y-1 text-sm mt-1">
                                 <span className="flex items-center gap-1">
                                   <Mail className="h-3 w-3 text-gray-500" /> {staff.email}
@@ -136,15 +134,15 @@ export default function BranchDetails({
                                 ? 'bg-blue-100 text-blue-800' 
                                 : 'bg-green-100 text-green-800'
                             }`}>
-                              {staff.role === 'ROLE_SUPER_ADMIN' ? 'Super Admin' : 'Admin'}
+                              {staff.role === 'ROLE_SUPER_ADMIN' ? <T k="staff.superAdmin" /> : <T k="staff.admin" />}
                             </span>
                             {staff.suspended ? (
                               <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">
-                                Suspended
+                                <T k="staff.suspended" />
                               </span>
                             ) : (
                               <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
-                                Active
+                                <T k="staff.active" />
                               </span>
                             )}
                           </div>
@@ -154,7 +152,7 @@ export default function BranchDetails({
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground">No staff members assigned to this branch.</p>
+                <p className="text-muted-foreground"><T k="staff.noStaffAssigned" /></p>
               )}
             </div>
           </div>

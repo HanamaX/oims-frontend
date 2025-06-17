@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -21,6 +21,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import StaffEditForm from "@/components/staff-edit-form"
 import { useAuth } from "@/components/auth-provider"
+import { T, useLanguage } from "@/contexts/LanguageContext"
 
 // Define types for our data
 interface Branch {
@@ -81,6 +82,7 @@ export default function StaffManagement({
   
   const { user } = useAuth()
   const { toast } = useToast()
+  const { language } = useLanguage()
 
   // Handle image loading errors
   const handleImageError = (staffId: string) => {
@@ -96,21 +98,22 @@ export default function StaffManagement({
   const handleStaffUpdate = async (updatedStaff: Staff) => {
     try {
       setSubmitting(true)
-      
-      // Prevent self-suspension
+        // Prevent self-suspension
       if (updatedStaff.publicId === user?.publicId && updatedStaff.suspended) {
         toast({
-          title: "Error",
-          description: "You cannot suspend your own account",
+          title: language === 'sw' ? 'Hitilafu' : 'Error',
+          description: language === 'sw' ? 'Huwezi kusimamisha akaunti yako mwenyewe' : 'You cannot suspend your own account',
           variant: "destructive",
         })
         setSubmitting(false)
         return
       }
       
-      const response = await API.put(`/app/oims/staff/${updatedStaff.publicId}`, {
+      const response = await API.patch(`/app/oims/admins/supupdate`, {
         branchPublicId: updatedStaff.branchPublicId,
-        suspended: updatedStaff.suspended
+        suspended: updatedStaff.suspended,
+        adminPublicId: updatedStaff.publicId,
+        role: updatedStaff.role,
       })
 
       if (response.status === 200) {
@@ -120,22 +123,20 @@ export default function StaffManagement({
             ? { ...staff, ...updatedStaff }
             : staff
         )
-        
-        onStaffChange(updatedStaffMembers)
+          onStaffChange(updatedStaffMembers)
 
         toast({
-          title: "Success",
-          description: "Staff member updated successfully",
+          title: language === 'sw' ? 'Mafanikio' : 'Success',
+          description: language === 'sw' ? 'Mfanyakazi amebadilishwa kikamilifu' : 'Staff member updated successfully',
         })
         
         setShowStaffEditModal(false)
         setSelectedStaff(null)
       }
-    } catch (err: any) {
-      console.error("Error updating staff:", err)
+    } catch (err: any) {      console.error("Error updating staff:", err)
       toast({
-        title: "Error",
-        description: err.response?.data?.message ?? "Failed to update staff member",
+        title: language === 'sw' ? 'Hitilafu' : 'Error',
+        description: err.response?.data?.message ?? (language === 'sw' ? 'Imeshindwa kubadilisha mfanyakazi' : 'Failed to update staff member'),
         variant: "destructive",
       })
     } finally {
@@ -146,19 +147,18 @@ export default function StaffManagement({
   const handleStaffDelete = async (staffId: string) => {
     try {
       setSubmitting(true)
-      
-      // Prevent self-deletion
+        // Prevent self-deletion
       if (staffId === user?.publicId) {
         toast({
-          title: "Error",
-          description: "You cannot delete your own account",
+          title: language === 'sw' ? 'Hitilafu' : 'Error',
+          description: language === 'sw' ? 'Huwezi kufuta akaunti yako mwenyewe' : 'You cannot delete your own account',
           variant: "destructive",
         })
         setSubmitting(false)
         return
       }
       
-      const response = await API.delete(`/app/oims/staff/${staffId}`)
+      const response = await API.delete(`/app/oims/admins/del/${staffId}`)
 
       if (response.status === 200) {
         // Remove staff from local state
@@ -166,18 +166,17 @@ export default function StaffManagement({
         onStaffChange(updatedStaffMembers)
 
         toast({
-          title: "Success",
-          description: "Staff member deleted successfully",
+          title: language === 'sw' ? 'Mafanikio' : 'Success',
+          description: language === 'sw' ? 'Mfanyakazi amefutwa kikamilifu' : 'Staff member deleted successfully',
         })
         
         setShowStaffEditModal(false)
         setSelectedStaff(null)
       }
-    } catch (err: any) {
-      console.error("Error deleting staff:", err)
+    } catch (err: any) {      console.error("Error deleting staff:", err)
       toast({
-        title: "Error",
-        description: err.response?.data?.message ?? "Failed to delete staff member",
+        title: language === 'sw' ? 'Hitilafu' : 'Error',
+        description: err.response?.data?.message ?? (language === 'sw' ? 'Imeshindwa kufuta mfanyakazi' : 'Failed to delete staff member'),
         variant: "destructive",
       })
     } finally {
@@ -208,8 +207,8 @@ export default function StaffManagement({
 
     if (!centerPublicId) {
       toast({
-        title: "Error",
-        description: "You need to create a center first",
+        title: language === 'sw' ? 'Hitilafu' : 'Error',
+        description: language === 'sw' ? 'Unahitaji kuunda kituo kwanza' : 'You need to create a center first',
         variant: "destructive",
       })
       return
@@ -217,8 +216,8 @@ export default function StaffManagement({
 
     if (!newStaffMember.branchPublicId) {
       toast({
-        title: "Error",
-        description: "Please select a branch",
+        title: language === 'sw' ? 'Hitilafu' : 'Error',
+        description: language === 'sw' ? 'Tafadhali chagua tawi' : 'Please select a branch',
         variant: "destructive",
       })
       return
@@ -235,8 +234,8 @@ export default function StaffManagement({
 
       if (response.data?.data) {
         toast({
-          title: "Success",
-          description: "Staff member created successfully",
+          title: language === 'sw' ? 'Mafanikio' : 'Success',
+          description: language === 'sw' ? 'Mfanyakazi ameundwa kikamilifu' : 'Staff member created successfully',
         })
 
         // Reset form
@@ -250,14 +249,13 @@ export default function StaffManagement({
         // Refresh staff list
         await onFetchStaff()
       }
-    } catch (err: any) {
-      console.error("Error creating staff:", err)
+    } catch (err: any) {      console.error("Error creating staff:", err)
       const errorMessage = err.response?.data?.errorMessage ?? 
                           err.response?.data?.description ?? 
                           err.response?.data?.message ?? 
-                          "Failed to create staff member"
+                          (language === 'sw' ? 'Imeshindwa kuunda mfanyakazi' : 'Failed to create staff member')
       toast({
-        title: "Error",
+        title: language === 'sw' ? 'Hitilafu' : 'Error',
         description: errorMessage,
         variant: "destructive",
       })
@@ -277,11 +275,10 @@ export default function StaffManagement({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4">      <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-bold">Staff Overview</h2>
-          <p className="text-sm text-muted-foreground mt-1">Manage staff members across all branches</p>
+          <h2 className="text-xl font-bold"><T k="staffManagement.title" /></h2>
+          <p className="text-sm text-muted-foreground mt-1"><T k="staffManagement.description" /></p>
         </div>
         <div className="flex space-x-2">
           <Button
@@ -291,25 +288,23 @@ export default function StaffManagement({
             disabled={!centerPublicId || branches.length === 0}
           >
             <Plus className="h-4 w-4" />
-            Add Staff
+            <T k="staff.addStaff" />
           </Button>
         </div>
       </div>
-      
-      {staffMembers.length === 0 ? (
+        {staffMembers.length === 0 ? (
         <div className="text-center py-8">
           <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium">No Staff Members</h3>
-          <p className="text-muted-foreground">Add staff members to get started</p>
+          <h3 className="text-lg font-medium"><T k="staff.noStaffMembers" /></h3>
+          <p className="text-muted-foreground"><T k="staff.addStaffToGetStarted" /></p>
         </div>
       ) : (
         <div className="space-y-6">
           {/* Orphanage Administrators Section */}
           {staffMembers.filter(staff => !staff.branchPublicId).length > 0 && (
-            <div>
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <div>              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Users className="h-5 w-5 text-purple-600" />
-                Orphanage Administrators
+                <T k="staff.orphanageAdministrators" />
                 <span className="text-sm font-normal text-muted-foreground">
                   ({staffMembers.filter(staff => !staff.branchPublicId).length})
                 </span>
@@ -320,7 +315,7 @@ export default function StaffManagement({
                   .map(staff => (
                     <Card 
                       key={staff.publicId} 
-                      className="overflow-hidden hover:shadow-md transition-all duration-200 cursor-pointer border-purple-200 hover:border-purple-300 h-[110px] -mt-3"
+                      className="overflow-hidden hover:shadow-md transition-all duration-200 cursor-pointer border-purple-200 hover:border-purple-300 max-h-[160px]  -mt-3"
                       onClick={() => handleStaffClick(staff)}
                     >
                       <CardContent className="p-4">
@@ -342,23 +337,22 @@ export default function StaffManagement({
                           <div className="flex-1 min-w-0">
                             <div className="flex flex-wrap items-center gap-2 mb-2">
                               <h4 className="font-semibold text-base text-gray-900">
-                                {staff.fullName ?? 'No Name'}
+                                {staff.fullName ?? <T k="staff.noName" />}
                               </h4>
                               <div className="flex flex-wrap gap-2">
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                   staff.role === 'ROLE_SUPER_ADMIN' 
                                     ? 'bg-purple-100 text-purple-800' 
                                     : 'bg-blue-100 text-blue-800'
-                                }`}>
-                                  {staff.role === 'ROLE_SUPER_ADMIN' ? 'Super Admin' : 'Admin'}
+                                }`}>                                  {staff.role === 'ROLE_SUPER_ADMIN' ? <T k="staff.superAdmin" /> : <T k="staff.admin" />}
                                 </span>
                                 {staff.suspended ? (
                                   <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
-                                    Suspended
+                                    <T k="staff.suspended" />
                                   </span>
                                 ) : (
                                   <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
-                                    Active
+                                    <T k="staff.active" />
                                   </span>
                                 )}
                               </div>
@@ -373,10 +367,9 @@ export default function StaffManagement({
                                   <Phone className="h-4 w-4 text-purple-500" />
                                   <span>{staff.phoneNumber}</span>
                                 </div>
-                              )}
-                              <div className="flex items-center gap-2 text-sm text-purple-600 font-medium mt-2">
+                              )}                              <div className="flex items-center gap-2 text-sm text-purple-600 font-medium mt-2">
                                 <Building2 className="h-4 w-4" />
-                                <span>Organization Level</span>
+                                <span><T k="staff.organizationLevel" /></span>
                               </div>
                             </div>
                           </div>
@@ -390,10 +383,9 @@ export default function StaffManagement({
           
           {/* Branch Staff Section */}
           {branches.length > 0 && (
-            <div>
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <div>              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Building2 className="h-5 w-5 text-blue-600" />
-                Branch Staff
+                <T k="staff.branchStaff" />
                 <span className="text-sm font-normal text-muted-foreground">
                   ({staffMembers.filter(staff => staff.branchPublicId).length})
                 </span>
@@ -405,9 +397,8 @@ export default function StaffManagement({
                       <CardTitle className="flex items-center gap-2 text-base">
                         <Building2 className="h-4 w-4" />
                         {branch.name}
-                      </CardTitle>
-                      <CardDescription>
-                        {staffMembers.filter(s => s.branchPublicId === branch.publicId).length} staff members
+                      </CardTitle>                      <CardDescription>
+                        {staffMembers.filter(s => s.branchPublicId === branch.publicId).length} <T k="staff.staffMembers" />
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1 overflow-hidden">
@@ -438,22 +429,21 @@ export default function StaffManagement({
                                   </div>
                                   <div className="flex-1 min-w-0">
                                     <div className="flex flex-wrap items-center gap-2">
-                                      <p className="font-medium">{staff.fullName ?? 'No Name'}</p>
-                                      <div className="flex flex-wrap gap-2">
-                                        <span className={`px-2 py-0.5 rounded-full text-xs ${
+                                      <p className="font-medium">{staff.fullName ?? <T k="staff.noName" />}</p>
+                                      <div className="flex flex-wrap gap-2">                                        <span className={`px-2 py-0.5 rounded-full text-xs ${
                                           staff.role === 'ROLE_SUPER_ADMIN' 
                                             ? 'bg-blue-100 text-blue-800' 
                                             : 'bg-green-100 text-green-800'
                                         }`}>
-                                          {staff.role === 'ROLE_SUPER_ADMIN' ? 'Super Admin' : 'Admin'}
+                                          {staff.role === 'ROLE_SUPER_ADMIN' ? <T k="staff.superAdmin" /> : <T k="staff.admin" />}
                                         </span>
                                         {staff.suspended ? (
                                           <span className="bg-red-100 text-red-800 px-2 py-0.5 rounded-full text-xs">
-                                            Suspended
+                                            <T k="staff.suspended" />
                                           </span>
                                         ) : (
                                           <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs">
-                                            Active
+                                            <T k="staff.active" />
                                           </span>
                                         )}
                                       </div>
@@ -471,9 +461,8 @@ export default function StaffManagement({
                                   </div>
                                 </div>
                               </div>
-                            ))}
-                          {staffMembers.filter(s => s.branchPublicId === branch.publicId).length === 0 && (
-                            <p className="text-sm text-muted-foreground text-center py-2">No staff assigned</p>
+                            ))}                          {staffMembers.filter(s => s.branchPublicId === branch.publicId).length === 0 && (
+                            <p className="text-sm text-muted-foreground text-center py-2"><T k="staff.noStaffAssigned" /></p>
                           )}
                         </div>
                       </ScrollArea>
@@ -508,36 +497,34 @@ export default function StaffManagement({
 
       {/* Add Staff Modal */}
       <Dialog open={showStaffForm} onOpenChange={setShowStaffForm}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Add New Staff Member</DialogTitle>
+        <DialogContent className="sm:max-w-[425px]">          <DialogHeader>
+            <DialogTitle><T k="staff.addNewStaffMember" /></DialogTitle>
             <DialogDescription>
-              Enter the email and select branch and role for the new staff member
+              <T k="staff.enterEmailSelectBranchRole" />
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleStaffSubmit}>
-            <div className="grid gap-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+            <div className="grid gap-4 py-4">              <div className="space-y-2">
+                <Label htmlFor="email"><T k="common.email" /></Label>
                 <Input
                   id="email"
                   name="email"
                   type="email"
                   value={newStaffMember.email}
                   onChange={handleStaffChange}
-                  placeholder="Enter staff email"
+                  placeholder={language === 'sw' ? 'Ingiza barua pepe ya mfanyakazi' : 'Enter staff email'}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="branchPublicId">Branch</Label>
+                <Label htmlFor="branchPublicId"><T k="common.branch" /></Label>
                 <Select
                   value={newStaffMember.branchPublicId}
                   onValueChange={(value) => handleStaffSelectChange("branchPublicId", value)}
                   required
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select Branch" />
+                    <SelectValue placeholder={language === 'sw' ? 'Chagua Tawi' : 'Select Branch'} />
                   </SelectTrigger>
                   <SelectContent>
                     {branches.map((branch) => (
@@ -547,41 +534,39 @@ export default function StaffManagement({
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="role">Role</Label>
+              </div>              <div className="space-y-2">
+                <Label htmlFor="role"><T k="common.role" /></Label>
                 <Select
                   value={newStaffMember.role}
                   onValueChange={(value) => handleStaffSelectChange("role", value)}
                   required
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select Role" />
+                    <SelectValue placeholder={language === 'sw' ? 'Chagua Jukumu' : 'Select Role'} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ROLE_SUPERVISOR">Supervisor</SelectItem>
-                    <SelectItem value="ROLE_ORPHANAGE_ADMIN">Orphanage Admin</SelectItem>
+                    <SelectItem value="ROLE_SUPERVISOR"><T k="staff.supervisor" /></SelectItem>
+                    <SelectItem value="ROLE_ORPHANAGE_ADMIN"><T k="staff.orphanageAdmin" /></SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-            </div>
-            <DialogFooter className="flex justify-between sm:justify-between">
+            </div>            <DialogFooter className="flex justify-between sm:justify-between">
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleStaffCancel}
                 disabled={submitting}
               >
-                Cancel
+                <T k="common.cancel" />
               </Button>
               <Button type="submit" disabled={submitting}>
                 {submitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Adding...
+                    <T k="common.adding" />
                   </>
                 ) : (
-                  "Add Staff"
+                  <T k="staff.addStaff" />
                 )}
               </Button>
             </DialogFooter>

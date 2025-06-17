@@ -17,6 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { useLanguage, T } from "@/locales/client"
 
 // Define types for our data
 interface Branch {
@@ -52,14 +53,14 @@ export default function BranchManagement({
   const [branch, setBranch] = useState<Branch>({
     name: "",
     location: "",
-    phoneNumber: "",
-    isHQ: false,
+    phoneNumber: "",    isHQ: false,
   })
   const [branchToDelete, setBranchToDelete] = useState<string | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
   const { toast } = useToast()
+  const { language } = useLanguage()
 
   // Handle branch form change
   const handleBranchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,12 +73,11 @@ export default function BranchManagement({
 
   // Handle branch form submission
   const handleBranchSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
+    e.preventDefault()      
     if (!centerPublicId) {
       toast({
-        title: "Error",
-        description: "You need to create a center first",
+        title: language === "sw" ? "Hitilafu" : "Error",
+        description: language === "sw" ? "Unahitaji kuunda kituo kwanza" : "You need to create a center first",
         variant: "destructive",
       })
       return
@@ -101,12 +101,12 @@ export default function BranchManagement({
         // Update branches list
         const updatedBranches = branches.map((b) => 
           b.publicId === branch.publicId ? { ...branch } : b
-        )
+        )        
         onBranchesChange(updatedBranches)
 
         toast({
-          title: "Success",
-          description: "Branch updated successfully",
+          title: language === "sw" ? "Mafanikio" : "Success",
+          description: language === "sw" ? "Tawi limebadilishwa kikamilifu" : "Branch updated successfully",
         })
       } else {
         // Create new branch
@@ -124,12 +124,11 @@ export default function BranchManagement({
             ...branch,
             publicId: response.data.data.publicId,
           }
-          onBranchesChange([...branches, newBranch])
-        }
-
+          onBranchesChange([...branches, newBranch])        }
+        
         toast({
-          title: "Success",
-          description: "Branch created successfully",
+          title: language === "sw" ? "Mafanikio" : "Success",
+          description: language === "sw" ? "Tawi limeundwa kikamilifu" : "Branch created successfully",
         })
       }
       
@@ -156,10 +155,9 @@ export default function BranchManagement({
         }
       } else if (err.message) {
         errorMessage = err.message;
-      }
-      
+      }      
       toast({
-        title: "Error",
+        title: language === "sw" ? "Hitilafu" : "Error",
         description: errorMessage,
         variant: "destructive",
       })
@@ -192,15 +190,14 @@ export default function BranchManagement({
   // Confirm branch delete
   const confirmDeleteBranch = async () => {
     if (!branchToDelete) return
-    
-    try {
+      try {
       await API.delete(`/app/oims/orphanages/branches/${branchToDelete}`)
       const updatedBranches = branches.filter((branch) => branch.publicId !== branchToDelete)
       onBranchesChange(updatedBranches)
       
       toast({
-        title: "Success",
-        description: "Branch deleted successfully",
+        title: language === "sw" ? "Mafanikio" : "Success",
+        description: language === "sw" ? "Tawi limefutwa kikamilifu" : "Branch deleted successfully",
       })
     } catch (err) {
       console.error("Error deleting branch:", err)
