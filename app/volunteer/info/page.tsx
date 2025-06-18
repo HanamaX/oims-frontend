@@ -95,19 +95,19 @@ export default function VolunteerInfoPage() {
                 
                 <ul className="my-6 space-y-4">
                   <li className="flex items-start">
-                    <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                    <CheckCircle className="h-6 w-6 text-blue-500 mr-3 mt-1 flex-shrink-0" />
                     <span>Develop new skills and gain valuable experience</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                    <CheckCircle className="h-6 w-6 text-blue-500 mr-3 mt-1 flex-shrink-0" />
                     <span>Build meaningful relationships with staff and children</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                    <CheckCircle className="h-6 w-6 text-blue-500 mr-3 mt-1 flex-shrink-0" />
                     <span>Experience the joy of making a direct impact on children's lives</span>
                   </li>
                   <li className="flex items-start">
-                    <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                    <CheckCircle className="h-6 w-6 text-blue-500 mr-3 mt-1 flex-shrink-0" />
                     <span>Become part of a supportive and dedicated community</span>
                   </li>
                 </ul>

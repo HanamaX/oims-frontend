@@ -40,8 +40,8 @@ function ThankYouContent() {
               <div className="bg-blue-600 h-2"></div>
               <CardHeader className="text-center pt-12 pb-6">
             <div className="flex justify-center mb-6">
-              <div className="rounded-full bg-green-100 p-4 animate-scale-in">
-                <CheckCircle2 className="h-16 w-16 text-green-600" />
+              <div className="rounded-full bg-blue-100 p-4 animate-scale-in">
+                <CheckCircle2 className="h-16 w-16 text-blue-600" />
               </div>
             </div>
             <CardTitle className="text-center">{title}</CardTitle>

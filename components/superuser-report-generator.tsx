@@ -159,7 +159,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
             <div className="flex flex-col space-y-2">
               <Label htmlFor="category">{t("report.ageGroup")}</Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.ageGroup")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -174,7 +174,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
             <div className="flex flex-col space-y-2">
               <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -193,7 +193,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
             <div className="flex flex-col space-y-2">
               <Label htmlFor="category">{t("report.category")}</Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.category")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -210,7 +210,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
             <div className="flex flex-col space-y-2">
               <Label htmlFor="status">{t("report.stockStatus")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.stockStatus")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -229,7 +229,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
             <div className="flex flex-col space-y-2">
               <Label htmlFor="category">{t("report.campaign")}</Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.campaign")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -245,7 +245,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
             <div className="flex flex-col space-y-2">
               <Label htmlFor="status">{t("report.campaignStatus")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.campaignStatus")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -266,7 +266,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
           <div className="flex flex-col space-y-2">
             <Label htmlFor="status">{t("report.status")}</Label>
             <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-              <SelectTrigger className="border-green-200 focus:ring-green-500">
+              <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                 <SelectValue placeholder={t("report.status")} />
               </SelectTrigger>
               <SelectContent>
@@ -284,14 +284,14 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
 
   return (
     <div className="space-y-6">
-      <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
-        <CardHeader className="pb-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
+      <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
+        <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
           <div className="flex justify-between items-center">
             <div>
-              <CardTitle className="text-green-800">{t("report.generator")}</CardTitle>
-              <CardDescription className="text-green-600">{t("report.createSystemReports")}</CardDescription>
+              <CardTitle className="text-blue-800">{t("report.generator")}</CardTitle>
+              <CardDescription className="text-blue-600">{t("report.createSystemReports")}</CardDescription>
             </div>
-            <Badge variant="outline" className="text-green-700 border-green-200 bg-green-50">
+            <Badge variant="outline" className="text-blue-700 border-blue-200 bg-blue-50">
               Superuser
             </Badge>
           </div>
@@ -303,40 +303,40 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
               onValueChange={(value) => setActiveTab(value as ReportType)} 
               className="w-full"
             >
-              <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6 bg-green-100">
+              <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6 bg-blue-100">
                 <TabsTrigger 
                   value="orphans"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.orphans")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="inventory"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.inventory")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="fundraising"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.fundraising")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="volunteers"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.volunteers")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="staff"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.staff")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="branches"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.branches")}
                 </TabsTrigger>
@@ -357,7 +357,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
                 <div className="space-y-2">
                   <Label htmlFor="branch">{t("report.selectBranch")}</Label>
                   <Select value={selectedBranch} onValueChange={setSelectedBranch}>
-                    <SelectTrigger className="border-green-200 focus:ring-green-500">
+                    <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                       <SelectValue placeholder={t("report.selectBranch")} />
                     </SelectTrigger>                    <SelectContent>
                       <SelectItem value="all">{t("report.allBranches")}</SelectItem>
@@ -383,7 +383,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
                 <div className="space-y-2">
                   <Label htmlFor="format">{t("report.exportFormat")}</Label>
                   <Select value={filters.exportFormat} onValueChange={(value) => setFilters({ ...filters, exportFormat: value as 'pdf' | 'excel' })}>
-                    <SelectTrigger className="border-green-200 focus:ring-green-500">
+                    <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                       <SelectValue placeholder={t("report.exportFormat")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -394,10 +394,10 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
                 </div>
                 
                 <div className="flex items-center pt-6">
-                  <Alert className="bg-green-50 border-green-200">
-                    <AlertCircle className="h-4 w-4 text-green-600" />
+                  <Alert className="bg-blue-50 border-blue-200">
+                    <AlertCircle className="h-4 w-4 text-blue-600" />
                     <AlertTitle>{t("report.reportNote")}</AlertTitle>
-                    <AlertDescription className="text-green-700">
+                    <AlertDescription className="text-blue-700">
                       {t("report.reportDescription")}
                     </AlertDescription>
                   </Alert>
@@ -406,11 +406,11 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
             </div>
           </div>
         </CardContent>
-        <CardFooter className="bg-green-50 border-t border-green-100 justify-end flex">
+        <CardFooter className="bg-blue-50 border-t border-blue-100 justify-end flex">
           <Button
             onClick={handleGenerateReport}
             disabled={loading || generating}
-            className="bg-green-600 text-white hover:bg-green-700"
+            className="bg-blue-600 text-white hover:bg-blue-700"
           >
             {loading || generating ? (
               <>
@@ -427,30 +427,31 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
         </CardFooter>
       </Card>
 
-      <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
-        <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-          <CardTitle className="text-base text-green-800">{t("report.systemSummary")}</CardTitle>
+      <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
+        <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
+          <CardTitle className="text-base text-blue-800">{t("report.systemSummary")}</CardTitle>
           <CardDescription>{t("report.orgWide")}</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4 pt-4">          <div className="flex justify-between">
-            <span className="text-green-700">{t("report.totalOrphanageCenters")}</span>
-            <span className="font-medium text-green-800">{stats?.totalCenters ?? 0}</span>
+        <CardContent className="space-y-4 pt-4">
+          <div className="flex justify-between">
+            <span className="text-blue-700">{t("report.totalOrphanageCenters")}</span>
+            <span className="font-medium text-blue-800">{stats?.totalOrphanageCenters ?? 0}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-green-700">{t("report.totalBranches")}</span>
-            <span className="font-medium text-green-800">{stats?.totalBranches ?? 0}</span>
+            <span className="text-blue-700">{t("report.totalBranches")}</span>
+            <span className="font-medium text-blue-800">{stats?.totalBranches ?? 0}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-green-700">{t("report.totalOrphans")}</span>
-            <span className="font-medium text-green-800">{stats?.totalOrphans ?? 0}</span>
+            <span className="text-blue-700">{t("report.totalOrphans")}</span>
+            <span className="font-medium text-blue-800">{stats?.totalOrphans ?? 0}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-green-700">{t("report.totalAdmins")}</span>
-            <span className="font-medium text-green-800">{stats?.totalAdmins ?? 0}</span>
+            <span className="text-blue-700">{t("report.totalAdmins")}</span>
+            <span className="font-medium text-blue-800">{stats?.totalAdmins ?? 0}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-green-700">{t("report.totalDonations")}</span>
-            <span className="font-medium text-green-800">{stats?.totalDonations ?? 0}</span>
+            <span className="text-blue-700">{t("report.totalVolunteers")}</span>
+            <span className="font-medium text-blue-800">{stats?.totalVolunteers ?? 0}</span>
           </div>
         </CardContent>
       </Card>

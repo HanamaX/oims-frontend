@@ -525,129 +525,100 @@ export default function CenterManagementPage() {
         </div>
       ) : (
         // Center and Branches View
-        <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="overview"><T k="centerOverview.centerOverview" /></TabsTrigger>
-            <TabsTrigger value="branches"><T k="branch.branches" /></TabsTrigger>
-            <TabsTrigger value="staff"><T k="staff.staff" /></TabsTrigger>
+        <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-3 bg-blue-100 rounded-lg p-1 mb-6">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-blue-800 px-4 py-2 rounded transition-all"> <T k="centerOverview.centerOverview" /></TabsTrigger>
+            <TabsTrigger value="branches" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-blue-800 px-4 py-2 rounded transition-all"> <T k="branch.branches" /></TabsTrigger>
+            <TabsTrigger value="staff" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-blue-800 px-4 py-2 rounded transition-all"> <T k="staff.staff" /></TabsTrigger>
           </TabsList>
-          
           {/* Center Overview Tab */}
           <TabsContent value="overview" className="space-y-4">
             {isEditingCenter ? (
-              <Card>
-                <form onSubmit={handleCenterSubmit}>                  <CardHeader>
-                    <CardTitle><T k="centerOverview.editCenter" /></CardTitle>
-                    <CardDescription><T k="centerOverview.editCenterDescription" /></CardDescription>
+              <Card className="shadow-lg border-blue-200">
+                <form onSubmit={handleCenterSubmit}>                  <CardHeader className="bg-blue-100 rounded-t-lg">
+                    <CardTitle className="text-blue-800"><T k="centerOverview.editCenter" /></CardTitle>
+                    <CardDescription className="text-blue-700"><T k="centerOverview.editCenterDescription" /></CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="name"><T k="centerOverview.centerName" /></Label>
-                        <Input id="name" name="name" value={centre.name} onChange={handleCenterChange} required />
+                        <Label htmlFor="name" className="text-blue-900"><T k="centerOverview.centerName" /></Label>
+                        <Input id="name" name="name" value={centre.name} onChange={handleCenterChange} required className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="location"><T k="centerOverview.location" /></Label>
-                        <Input id="location" name="location" value={centre.location} onChange={handleCenterChange} required />
+                        <Label htmlFor="location" className="text-blue-900"><T k="centerOverview.location" /></Label>
+                        <Input id="location" name="location" value={centre.location} onChange={handleCenterChange} required className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="address"><T k="centerOverview.address" /></Label>
-                        <Input id="address" name="address" value={centre.address} onChange={handleCenterChange} required />
+                        <Label htmlFor="address" className="text-blue-900"><T k="centerOverview.address" /></Label>
+                        <Input id="address" name="address" value={centre.address} onChange={handleCenterChange} required className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="phoneNumber"><T k="centerOverview.phoneNumber" /></Label>
+                        <Label htmlFor="phoneNumber" className="text-blue-900"><T k="centerOverview.phoneNumber" /></Label>
                         <Input
                           id="phoneNumber"
                           name="phoneNumber"
                           value={centre.phoneNumber}
                           onChange={handleCenterChange}
                           required
+                          className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="email"><T k="centerOverview.email" /></Label>
-                        <Input id="email" name="email" type="email" value={centre.email} onChange={handleCenterChange} required />
+                        <Label htmlFor="email" className="text-blue-900"><T k="centerOverview.email" /></Label>
+                        <Input id="email" name="email" value={centre.email} onChange={handleCenterChange} required className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500" />
+                      </div>
+                      <div className="space-y-2 md:col-span-2">
+                        <Label htmlFor="description" className="text-blue-900"><T k="centerOverview.description" /></Label>
+                        <Textarea id="description" name="description" value={centre.description} onChange={handleCenterChange} className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500" />
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="description"><T k="centerOverview.description" /></Label>
-                      <Textarea
-                        id="description"
-                        name="description"
-                        value={centre.description}
-                        onChange={handleCenterChange}
-                        required
-                      />
-                    </div>
-                  </CardContent>                  <CardFooter className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setIsEditingCenter(false)} disabled={false}>
-                      <T k="common.cancel" />
-                    </Button>
-                    <Button type="submit" disabled={false}>
-                      {false ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          <T k="common.updating" />
-                        </>                      ) : (
-                        <T k="centerOverview.updateCenter" />
-                      )}
+                  </CardContent>
+                  <CardFooter className="flex justify-end bg-blue-50 rounded-b-lg">
+                    <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
+                      <T k="centerOverview.save" />
                     </Button>
                   </CardFooter>
                 </form>
               </Card>
             ) : (
-              <Card>
-                <CardHeader className="flex flex-row items-center gap-4">
-                  <Building className="h-8 w-8 text-blue-500" />
-                  <div>
-                    <CardTitle>{centre.name}</CardTitle>
-                    <CardDescription>{centre.location}</CardDescription>
-                  </div>
+              <Card className="shadow-lg border-blue-200 bg-blue-50">
+                <CardHeader className="bg-blue-100 rounded-t-lg">
+                  <CardTitle className="text-blue-800"><T k="centerOverview.centerOverview" /></CardTitle>
+                  <CardDescription className="text-blue-700"><T k="centerOverview.centerOverviewDescription" /></CardDescription>
                 </CardHeader>
-
-                <CardContent className="space-y-4">                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm font-medium"><T k="centerOverview.address" /></p>
-                      <p className="text-sm text-muted-foreground">{centre.address}</p>
+                      <p className="text-sm font-medium text-blue-900"><T k="centerOverview.centerName" /></p>
+                      <p className="text-lg font-bold text-blue-800">{centre.name}</p>
+                      <p className="text-sm text-blue-700">{centre.location}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium"><T k="centerOverview.phoneNumber" /></p>
-                      <p className="text-sm text-muted-foreground">{centre.phoneNumber}</p>
+                      <p className="text-sm font-medium text-blue-900"><T k="centerOverview.phoneNumber" /></p>
+                      <p className="text-blue-800">{centre.phoneNumber}</p>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium"><T k="centerOverview.email" /></p>
-                      <p className="text-sm text-muted-foreground">{centre.email}</p>
-                    </div>
-                  </div>                  <div>
-                    <p className="text-sm font-medium"><T k="centerOverview.description" /></p>
-                    <p className="text-sm text-muted-foreground">{centre.description}</p>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                    <Card>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium"><T k="branch.totalBranches" /></CardTitle>
-                        <Building2 className="h-4 w-4 text-muted-foreground" />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">{branches.length}</div>
-                        <p className="text-xs text-muted-foreground"><T k="branch.activeBranches" /></p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium"><T k="staff.totalStaff" /></CardTitle>
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-2xl font-bold">{staffMembers.length}</div>
-                        <p className="text-xs text-muted-foreground"><T k="staff.activeStaffMembers" /></p>
-                      </CardContent>
-                    </Card>
-                  </div></CardContent>
-                <CardFooter>                  <div className="w-full p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-sm text-blue-800 font-medium">
-                      🔒 <T k="centerManagement.readOnlyMode" />
-                    </p>
+                  <div className="mt-4">
+                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.address" /></p>
+                    <p className="text-blue-700">{centre.address}</p>
                   </div>
+                  <div className="mt-2">
+                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.email" /></p>
+                    <p className="text-blue-700">{centre.email}</p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.description" /></p>
+                    <p className="text-blue-700">{centre.description}</p>
+                  </div>
+                </CardContent>
+                <CardFooter className="bg-blue-50 rounded-b-lg flex justify-between items-center">
+                  <Button variant="outline" className="border-blue-600 text-blue-700 hover:bg-blue-100 hover:text-blue-900">
+                    <T k="centerOverview.edit" />
+                  </Button>
+                  <Button variant="outline" className="border-red-600 text-red-700 hover:bg-red-50 hover:text-red-900">
+                    <T k="centerOverview.delete" />
+                  </Button>
                 </CardFooter>
               </Card>
             )}

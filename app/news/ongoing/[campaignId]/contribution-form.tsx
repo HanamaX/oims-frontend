@@ -118,13 +118,13 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
     setAmount(value);
   };  if (submitted) {
     return (
-      <Card className="bg-green-50 p-6 text-center">
-        <h3 className="text-xl font-bold text-green-700 mb-4">Thank You for Your Contribution, {name}!</h3>
-        <p className="text-green-600 mb-4">
+      <Card className="bg-blue-50 p-6 text-center">
+        <h3 className="text-xl font-bold text-blue-700 mb-4">Thank You for Your Contribution, {name}!</h3>
+        <p className="text-blue-600 mb-4">
           Your contribution of Tshs {parseFloat(amount).toLocaleString()} has been received. 
           We appreciate your support in making this campaign a success.
         </p>
-        <p className="text-green-600 mb-6">
+        <p className="text-blue-600 mb-6">
           A confirmation email has been sent to {email}.
         </p>
         <Button className="bg-blue-600 hover:bg-blue-700" onClick={onCancel}>

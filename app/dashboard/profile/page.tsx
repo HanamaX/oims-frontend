@@ -328,19 +328,19 @@ export default function ProfilePage() {
       </div>
     )
   }  return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8"><T k="profile.title" /></h1>
+    <div className="bg-blue-50 min-h-screen py-8 px-2 md:px-0">
+      <h1 className="text-3xl font-bold mb-8 text-blue-800"><T k="profile.title" /></h1>
 
       <Tabs defaultValue="profile">
-        <TabsList className="mb-6">
-          <TabsTrigger value="profile"><T k="profile.tab.info" /></TabsTrigger>
-          <TabsTrigger value="password"><T k="profile.tab.password" /></TabsTrigger>
+        <TabsList className="mb-6 bg-blue-100 rounded-lg p-1">
+          <TabsTrigger value="profile" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-blue-800 px-4 py-2 rounded transition-all"> <T k="profile.tab.info" /></TabsTrigger>
+          <TabsTrigger value="password" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white text-blue-800 px-4 py-2 rounded transition-all"> <T k="profile.tab.password" /></TabsTrigger>
         </TabsList>
-        <TabsContent value="profile">          <Card>
-            <CardHeader className="flex justify-between items-start">
+        <TabsContent value="profile">          <Card className="shadow-lg border-blue-200">
+            <CardHeader className="flex justify-between items-start bg-blue-100 rounded-t-lg">
               <div>
-                <CardTitle><T k="profile.view.title" /></CardTitle>
-                <CardDescription><T k="profile.view.description" /></CardDescription>
+                <CardTitle className="text-blue-800"><T k="profile.view.title" /></CardTitle>
+                <CardDescription className="text-blue-700"><T k="profile.view.description" /></CardDescription>
               </div>
               {!isEditing && (                <Button 
                   onClick={() => {
@@ -349,6 +349,7 @@ export default function ProfilePage() {
                     setProfileImageError(false); // Reset profile image error when entering edit mode
                   }} 
                   variant="outline"
+                  className="border-blue-600 text-blue-700 hover:bg-blue-50 hover:text-blue-900"
                 >
                   <T k="profile.button.edit" />
                 </Button>
@@ -362,9 +363,9 @@ export default function ProfilePage() {
               )}
 
               {profileSuccess && (
-                <Alert className="mb-4 bg-green-50 border-green-200">
-                  <Check className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-green-600"><T k="profile.success.update" /></AlertDescription>
+                <Alert className="mb-4 bg-blue-50 border-blue-200">
+                  <Check className="h-4 w-4 text-blue-600" />
+                  <AlertDescription className="text-blue-600"><T k="profile.success.update" /></AlertDescription>
                 </Alert>
               )}
 
@@ -527,13 +528,13 @@ export default function ProfilePage() {
                           setProfileImageError(false);
                         }} 
                         variant="outline" 
-                        className="flex-1"
+                        className="flex-1 border-blue-600 text-blue-700 hover:bg-blue-50 hover:text-blue-900"
                       >
                         <T k="profile.button.cancel" />
                       </Button>
                       <Button 
                         type="submit" 
-                        className="flex-1" 
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
                         disabled={isProfileUpdating}
                       >
                         {isProfileUpdating ? <T k="profile.button.updating" /> : <T k="profile.button.save" />}
@@ -580,77 +581,78 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="password">          <Card>
-            <CardHeader>
-              <CardTitle><T k="profile.password.title" /></CardTitle>
-              <CardDescription><T k="profile.password.description" /></CardDescription>
+        <TabsContent value="password">          <Card className="shadow-lg border-blue-200">
+            <CardHeader className="bg-blue-100 rounded-t-lg">
+              <CardTitle className="text-blue-800"><T k="profile.password.title" /></CardTitle>
+              <CardDescription className="text-blue-700"><T k="profile.password.description" /></CardDescription>
             </CardHeader>
             <CardContent>              {passwordError && (
                 <Alert variant="destructive" className="mb-4">
                   <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{passwordError}</AlertDescription>
+                  <AlertDescription></AlertDescription>
                 </Alert>
               )}
 
               {passwordSuccess && (
-                <Alert className="mb-4 bg-green-50 border-green-200">
-                  <Check className="h-4 w-4 text-green-600" />
-                  <AlertDescription className="text-green-600"><T k="profile.password.success" /></AlertDescription>
+                <Alert className="mb-4 bg-blue-50 border-blue-200">
+                  <Check className="h-4 w-4 text-blue-600" />
+                  <AlertDescription className="text-blue-600"><T k="profile.password.success" /></AlertDescription>
                 </Alert>
               )}
 
-              <form onSubmit={handlePasswordUpdate} className="space-y-4">                <div className="space-y-2">
-                  <Label htmlFor="currentPassword"><T k="profile.password.label.current" /></Label>
+              <form onSubmit={handlePasswordUpdate} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="currentPassword" className="text-blue-900"><T k="profile.password.label.current" /></Label>
                   <Input
                     id="currentPassword"
                     type={showCurrentPassword ? "text" : "password"}
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     placeholder={t("profile.password.placeholder.current")}
-                    className="bg-white"
+                    className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                   />
                   <Button
                     variant="link"
                     onClick={() => setShowCurrentPassword(prev => !prev)}
-                    className="absolute right-3 top-10"
+                    className="absolute right-3 top-10 text-blue-600"
                   >
                     {showCurrentPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </Button>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="newPassword"><T k="profile.password.label.new" /></Label>
+                  <Label htmlFor="newPassword" className="text-blue-900"><T k="profile.password.label.new" /></Label>
                   <Input
                     id="newPassword"
                     type={showNewPassword ? "text" : "password"}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder={t("profile.password.placeholder.new")}
-                    className="bg-white"
+                    className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                   />
                   <Button
                     variant="link"
                     onClick={() => setShowNewPassword(prev => !prev)}
-                    className="absolute right-3 top-10"
+                    className="absolute right-3 top-10 text-blue-600"
                   >
                     {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </Button>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword"><T k="profile.password.label.confirm" /></Label>
+                  <Label htmlFor="confirmPassword" className="text-blue-900"><T k="profile.password.label.confirm" /></Label>
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder={t("profile.password.placeholder.confirm")}
-                    className="bg-white"
+                    className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500"
                   />
                   <Button
                     variant="link"
                     onClick={() => setShowConfirmPassword(prev => !prev)}
-                    className="absolute right-3 top-10"
+                    className="absolute right-3 top-10 text-blue-600"
                   >
                     {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </Button>
@@ -660,15 +662,16 @@ export default function ProfilePage() {
                   <Button 
                     onClick={() => router.back()} 
                     variant="outline"
-                    className="flex-1"
+                    className="flex-1 border-blue-600 text-blue-700 hover:bg-blue-50 hover:text-blue-900"
                   >
                     <T k="profile.button.cancel" />
                   </Button>
                   <Button 
                     type="submit" 
-                    className="flex-1"                    disabled={isPasswordUpdating}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                    disabled={isPasswordUpdating}
                   >
-                    {isPasswordUpdating ? <T k="profile.button.updating" /> : <T k="profile.button.save" />}
+                    <T k="profile.button.save" />
                   </Button>
                 </div>
               </form>

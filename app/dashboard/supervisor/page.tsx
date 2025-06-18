@@ -199,7 +199,7 @@ export default function SupervisorDashboardPage() {
   if (isLoading || loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
         <span className="ml-2">{t("loading")}</span>
       </div>
     )
@@ -259,163 +259,172 @@ export default function SupervisorDashboardPage() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>                <CardTitle className="flex items-center">
-                  <div className="relative">
-                    <Bell className="mr-2 h-5 w-5" />
-                    {allNotifications.filter(n => !n.isRead).length > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                        {allNotifications.filter(n => !n.isRead).length}
-                      </span>
-                    )}
-                  </div>                  
-                  <T k="supervisor.dashboard.notifications" />
-                </CardTitle>                <CardDescription>
-                  <T k="supervisor.dashboard.recentNotifications" /> {user?.unreadNotificationsCount ?? 0} <T k="admin.dashboard.unreadNotificationsIn" /> {user?.branchName ?? <T k="admin.dashboard.yourBranch" />}
-                </CardDescription>
-              </div>
-              <div className="flex items-center gap-3">
-                <button 
-                  className="text-xs text-gray-500 hover:text-gray-800"
-                  onClick={refreshNotifications}
-                  disabled={loading}                  title={t("admin.dashboard.refreshNotifications")}
-                >
-                  {loading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                      <path d="M3 3v5h5" />
-                      <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
-                      <path d="M16 21h5v-5" />
-                    </svg>
-                  )}
-                </button>
-                {allNotifications.length > 0 && allNotifications.some(n => !n.isRead) && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="md:col-span-2">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center">
+                    <div className="relative">
+                      <Bell className="mr-2 h-5 w-5" />
+                      {allNotifications.filter(n => !n.isRead).length > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
+                          {allNotifications.filter(n => !n.isRead).length}
+                        </span>
+                      )}
+                    </div>                  
+                    <T k="supervisor.dashboard.notifications" />
+                  </CardTitle>
+                  <CardDescription>
+                    <T k="supervisor.dashboard.recentNotifications" /> {user?.unreadNotificationsCount ?? 0} <T k="admin.dashboard.unreadNotificationsIn" /> {user?.branchName ?? <T k="admin.dashboard.yourBranch" />}
+                  </CardDescription>
+                </div>
+                <div className="flex items-center gap-3">
                   <button 
-                    className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleMarkAllAsRead();
-                    }}
-                    disabled={markingAsRead !== null || loading}
+                    className="text-xs text-gray-500 hover:text-gray-800"
+                    onClick={refreshNotifications}
+                    disabled={loading}                  title={t("admin.dashboard.refreshNotifications")}
                   >
-                    {markingAsRead === 'all' ? t("admin.dashboard.markingAll") : t("admin.dashboard.markAllAsRead")}
+                    {loading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                        <path d="M16 21h5v-5" />
+                      </svg>
+                    )}
                   </button>
-                )}
+                  {allNotifications.length > 0 && allNotifications.some(n => !n.isRead) && (
+                    <button 
+                      className="text-xs text-gray-600 hover:text-gray-800 hover:underline"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleMarkAllAsRead();
+                      }}
+                      disabled={markingAsRead !== null || loading}
+                    >
+                      {markingAsRead === 'all' ? t("admin.dashboard.markingAll") : t("admin.dashboard.markAllAsRead")}
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent className="overflow-y-auto max-h-[340px]">            {notifications.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center"><T k="admin.dashboard.noNotifications" /></p>
-            ): (
-              <>
-                <div className="space-y-4">                  {notifications.map((notification: Notification, index) => (
-                    <div key={notification.publicId}>
-                      <button 
-                        className={`w-full flex items-start space-x-4 mb-2 p-2 rounded hover:bg-gray-50 text-left border-none bg-transparent ${markingAsRead === notification.publicId ? 'opacity-60' : ''}`}
-                        onClick={() => handleMarkAsRead(notification)}
-                      >
-                        <div className={`min-w-1 h-full w-1 rounded-full ${notification.isRead ? 'bg-gray-300' : 'bg-blue-500'}`}></div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium whitespace-pre-line">{notification.message}</p>
-                          <div className="flex justify-between items-center mt-1">                            <p className="text-xs text-muted-foreground">
-                              {notification.createdDate ? new Date(notification.createdDate.replace(' ', 'T')).toLocaleString() : t("admin.dashboard.dateUnavailable")}                            </p>
-                            {!notification.isRead && markingAsRead !== notification.publicId && (
-                              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full"><T k="admin.dashboard.new" /></span>
-                            )}
-                            {markingAsRead === notification.publicId && (
-                              <span className="text-xs text-muted-foreground"><T k="admin.dashboard.markingAsRead" /></span>
-                            )}
+            </CardHeader>
+            <CardContent className="overflow-y-auto max-h-[340px]">
+              {notifications.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-4 text-center"><T k="admin.dashboard.noNotifications" /></p>
+              ): (
+                <>
+                  <div className="space-y-4">
+                    {notifications.map((notification: Notification, index) => (
+                      <div key={notification.publicId}>
+                        <button 
+                          className={`w-full flex items-start space-x-4 mb-2 p-2 rounded hover:bg-gray-50 text-left border-none bg-transparent ${markingAsRead === notification.publicId ? 'opacity-60' : ''}`}
+                          onClick={() => handleMarkAsRead(notification)}
+                        >
+                          <div className={`min-w-1 h-full w-1 rounded-full ${notification.isRead ? 'bg-gray-300' : 'bg-gray-500'}`}></div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-medium whitespace-pre-line">{notification.message}</p>
+                            <div className="flex justify-between items-center mt-1">
+                              <p className="text-xs text-muted-foreground">
+                                {notification.createdDate ? new Date(notification.createdDate.replace(' ', 'T')).toLocaleString() : t("admin.dashboard.dateUnavailable")}
+                              </p>
+                              {!notification.isRead && markingAsRead !== notification.publicId && (
+                                <span className="text-xs bg-gray-100 text-gray-800 px-2 py-0.5 rounded-full"><T k="admin.dashboard.new" /></span>
+                              )}
+                              {markingAsRead === notification.publicId && (
+                                <span className="text-xs text-muted-foreground"><T k="admin.dashboard.markingAsRead" /></span>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      </button>
-                      {index < notifications.length - 1 && <hr className="my-3 border-gray-100" />}
+                        </button>
+                        {index < notifications.length - 1 && <hr className="my-3 border-gray-100" />}
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {/* Pagination */}
+                  {allNotifications.length > notificationsPerPage && (
+                    <div className="mt-6">
+                      <Pagination>
+                        <PaginationContent>
+                          <PaginationItem>
+                            <PaginationPrevious 
+                              onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+                              className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"} 
+                            />
+                          </PaginationItem>
+                          
+                          {Array.from({ length: Math.min(5, Math.ceil(allNotifications.length / notificationsPerPage)) }, (_, i) => {
+                            // Show at most 5 page numbers
+                            let pageNum;
+                            const totalPages = Math.ceil(allNotifications.length / notificationsPerPage);
+                            
+                            if (totalPages <= 5) {
+                              // If 5 or fewer pages, show all page numbers
+                              pageNum = i + 1;
+                            } else if (currentPage <= 3) {
+                              // If on pages 1-3, show pages 1-5
+                              pageNum = i + 1;
+                            } else if (currentPage >= totalPages - 2) {
+                              // If on last 3 pages, show last 5 pages
+                              pageNum = totalPages - 4 + i;
+                            } else {
+                              // Otherwise show current page and 2 pages on each side
+                              pageNum = currentPage - 2 + i;
+                            }
+                            
+                            return (
+                              <PaginationItem key={i}>
+                                <PaginationLink 
+                                  isActive={currentPage === pageNum}
+                                  onClick={() => setCurrentPage(pageNum)}
+                                  className="cursor-pointer"
+                                >
+                                  {pageNum}
+                                </PaginationLink>
+                              </PaginationItem>
+                            );
+                          })}
+                          
+                          <PaginationItem>
+                            <PaginationNext 
+                              onClick={() => currentPage < Math.ceil(allNotifications.length / notificationsPerPage) && setCurrentPage(currentPage + 1)}
+                              className={currentPage >= Math.ceil(allNotifications.length / notificationsPerPage) ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                            />
+                          </PaginationItem>
+                        </PaginationContent>
+                      </Pagination>
                     </div>
-                  ))}
-                </div>
-                
-                {/* Pagination */}
-                {allNotifications.length > notificationsPerPage && (
-                  <div className="mt-6">
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious 
-                            onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
-                            className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"} 
-                          />
-                        </PaginationItem>
-                        
-                        {Array.from({ length: Math.min(5, Math.ceil(allNotifications.length / notificationsPerPage)) }, (_, i) => {
-                          // Show at most 5 page numbers
-                          let pageNum;
-                          const totalPages = Math.ceil(allNotifications.length / notificationsPerPage);
-                          
-                          if (totalPages <= 5) {
-                            // If 5 or fewer pages, show all page numbers
-                            pageNum = i + 1;
-                          } else if (currentPage <= 3) {
-                            // If on pages 1-3, show pages 1-5
-                            pageNum = i + 1;
-                          } else if (currentPage >= totalPages - 2) {
-                            // If on last 3 pages, show last 5 pages
-                            pageNum = totalPages - 4 + i;
-                          } else {
-                            // Otherwise show current page and 2 pages on each side
-                            pageNum = currentPage - 2 + i;
-                          }
-                          
-                          return (
-                            <PaginationItem key={i}>
-                              <PaginationLink 
-                                isActive={currentPage === pageNum}
-                                onClick={() => setCurrentPage(pageNum)}
-                                className="cursor-pointer"
-                              >
-                                {pageNum}
-                              </PaginationLink>
-                            </PaginationItem>
-                          );
-                        })}
-                        
-                        <PaginationItem>
-                          <PaginationNext 
-                            onClick={() => currentPage < Math.ceil(allNotifications.length / notificationsPerPage) && setCurrentPage(currentPage + 1)}
-                            className={currentPage >= Math.ceil(allNotifications.length / notificationsPerPage) ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
+                  )}
+                </>
+              )}
+            </CardContent>
+          </Card>
+          <Card className="col-span-1">
+            <CardHeader>
+              <CardTitle><T k="supervisor.dashboard.activities" /></CardTitle>
+              <CardDescription><T k="supervisor.dashboard.recentActivities" /></CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {events.map((event) => (
+                  <div key={event.id} className="flex items-center">
+                    <div className="w-2 h-2 rounded-full bg-gray-500 mr-3"></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{event.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {event.id === 'event-3' ? t("orphanageAdmin.dashboard.allBranches") : user?.branchName ?? t("admin.dashboard.activeBranch")} • {event.date}
+                      </p>
+                    </div>
                   </div>
-                )}
-              </>
-            )}
-          </CardContent>
-        </Card>        <Card className="col-span-1">          <CardHeader>
-            <CardTitle><T k="supervisor.dashboard.activities" /></CardTitle>
-            <CardDescription><T k="supervisor.dashboard.recentActivities" /></CardDescription>
-          </CardHeader><CardContent>
-            <div className="space-y-4">
-              {events.map((event) => (
-                <div key={event.id} className="flex items-center">
-                  <div className="w-2 h-2 rounded-full bg-blue-500 mr-3"></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium">{event.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {event.id === 'event-3' ? t("orphanageAdmin.dashboard.allBranches") : user?.branchName ?? t("admin.dashboard.activeBranch")} • {event.date}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
   )
 }
 
