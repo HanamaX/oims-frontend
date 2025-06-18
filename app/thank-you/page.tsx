@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, Suspense } from "react"
+import { useEffect, useState, Suspense, useRef } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -83,11 +83,123 @@ function ThankYouLoading() {
   );
 }
 
+function RegistrationInstructions() {
+  return (
+    <div className="mb-10">
+      <h2 className="text-2xl font-bold text-blue-800 mb-2">How to Register an Orphanage Center</h2>
+      <p className="mb-6 text-gray-700">Registering your orphanage center is a simple process. Please follow the steps below to ensure your application is complete and accurate. Your initiative can transform lives and bring hope to children in need.</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="border rounded-lg p-4 bg-blue-50">
+          <div className="flex items-center mb-2">
+            <span className="text-2xl font-bold text-blue-700 mr-2">1</span>
+            <span className="font-semibold text-blue-700">Fill in Personal Details</span>
+          </div>
+          <p className="text-gray-600">Provide your full name, email, phone number, and select your gender.</p>
+        </div>
+        <div className="border rounded-lg p-4 bg-blue-50">
+          <div className="flex items-center mb-2">
+            <span className="text-2xl font-bold text-blue-700 mr-2">2</span>
+            <span className="font-semibold text-blue-700">Enter Center Details</span>
+          </div>
+          <p className="text-gray-600">Specify the name of your center and the region where you wish to be placed.</p>
+        </div>
+        <div className="border rounded-lg p-4 bg-blue-50">
+          <div className="flex items-center mb-2">
+            <span className="text-2xl font-bold text-blue-700 mr-2">3</span>
+            <span className="font-semibold text-blue-700">Upload Certificate</span>
+          </div>
+          <p className="text-gray-600">Attach a valid certificate (PDF only) required for opening an orphanage center.</p>
+        </div>
+        <div className="border rounded-lg p-4 bg-blue-50">
+          <div className="flex items-center mb-2">
+            <span className="text-2xl font-bold text-blue-700 mr-2">4</span>
+            <span className="font-semibold text-blue-700">Submit Application</span>
+          </div>
+          <p className="text-gray-600">Review your details and submit the form. We will review your application and contact you soon.</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function OrphanageRegistrationForm() {
+  const fileInputRef = useRef(null);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Implement form submission logic
+    alert("Registration submitted! (Demo only)");
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type !== "application/pdf") {
+      alert("Only PDF files are allowed for the certificate upload.");
+      if (fileInputRef.current) (fileInputRef.current as HTMLInputElement).value = "";
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-8 max-w-2xl mx-auto mb-12" id="register-form">
+      <h3 className="text-xl font-semibold text-blue-700 mb-6">Orphanage Center Registration Form</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+        {/* Personal Details */}
+        <div>
+          <h4 className="text-lg font-bold text-blue-600 mb-4">Personal Details</h4>
+          <div className="mb-4">
+            <label className="block mb-1 font-medium text-gray-700">Full Name</label>
+            <input type="text" name="fullName" required className="w-full border rounded px-3 py-2" placeholder="Enter your full name" />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1 font-medium text-gray-700">Email</label>
+            <input type="email" name="email" required className="w-full border rounded px-3 py-2" placeholder="Enter your email" />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1 font-medium text-gray-700">Phone Number</label>
+            <input type="tel" name="phone" required className="w-full border rounded px-3 py-2" placeholder="e.g. +255712345678" />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1 font-medium text-gray-700">Gender</label>
+            <select name="gender" required className="w-full border rounded px-3 py-2">
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+        </div>
+        {/* Center Details */}
+        <div>
+          <h4 className="text-lg font-bold text-blue-600 mb-4">Center Details</h4>
+          <div className="mb-4">
+            <label className="block mb-1 font-medium text-gray-700">Center Name</label>
+            <input type="text" name="centerName" required className="w-full border rounded px-3 py-2" placeholder="Enter center name" />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1 font-medium text-gray-700">Region of Placement</label>
+            <input type="text" name="region" required className="w-full border rounded px-3 py-2" placeholder="Enter region" />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1 font-medium text-gray-700">Certificate (PDF only)</label>
+            <input type="file" name="certificate" accept="application/pdf" required ref={fileInputRef} onChange={handleFileChange} className="w-full" />
+          </div>
+        </div>
+      </div>
+      <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Submit Registration</button>
+    </form>
+  );
+}
+
 // Export default component with Suspense boundary
 export default function ThankYouPage() {
   return (
-    <Suspense fallback={<ThankYouLoading />}>
-      <ThankYouContent />
-    </Suspense>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-16">
+      <div className="container mx-auto px-4">
+        <RegistrationInstructions />
+        <OrphanageRegistrationForm />
+        <Suspense fallback={<ThankYouLoading />}>
+          <ThankYouContent />
+        </Suspense>
+      </div>
+    </div>
   );
 }

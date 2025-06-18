@@ -174,6 +174,14 @@ export default function LoginPage() {
                     )}
                   </Button>
                 </div>
+                <div className="flex justify-center mt-2">
+                  <span className="text-sm text-gray-500">Don't have an account?</span>
+                  <Link href="/thank-you#register-form" passHref legacyBehavior>
+                    <Button type="button" variant="outline" className="ml-2">
+                      Register
+                    </Button>
+                  </Link>
+                </div>
               </form>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4 border-t pt-5">              <div className="text-center text-sm text-gray-500">

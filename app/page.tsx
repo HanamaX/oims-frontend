@@ -58,6 +58,11 @@ export default function HomePage() {
                 <T k="nav.login" />
               </Button>
             </Link>
+            <Link href="/thank-you#register-form">
+              <Button variant="outline" className="ml-2">
+                Register
+              </Button>
+            </Link>
             {/* Always display superuser button */}
             <Link href="/superuser/dashboard">
               <Button variant="default" className="bg-green-600 hover:bg-green-700 !important">
@@ -475,5 +480,5 @@ export default function HomePage() {
       </div>
       </div>
     </div>
-  )
+  );
 }
