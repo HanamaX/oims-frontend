@@ -184,6 +184,7 @@
   padding: 20px;
   overflow: auto;
   transition: padding-left 0.3s ease;
+  width: 100%;
 }
 
 /* Media queries for responsive design */

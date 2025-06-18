@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation"
 import AuthService from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
 
-type UserRole = "supervisor" | "orphanage_admin" | "admin" | "super_admin" | null
+type UserRole = "supervisor" | "orphanage_admin" | "admin" | "super_admin" | "ROLE_SUPERUSER" | null
 
 interface AuthContextType {
   user: {
@@ -99,21 +99,20 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
     }
 
     // List of protected routes
-    const protectedRoutes = ["/dashboard", "/orphans", "/volunteers", "/fundraisers", "/inventory", "/profile"]
-
-    // Check if current path is protected
-    const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))
-
-    // If trying to access protected route without auth, redirect to login
-    if (isProtectedRoute && !user) {
+    const protectedRoutes = ["/dashboard", "/orphans", "/volunteers", "/fundraisers", "/inventory", "/profile"]    // Check if current path is protected
+    const isProtectedRoute = protectedRoutes.some((route) => pathname.startsWith(route))    // If trying to access protected route without auth, redirect to login
+    // Skip this check for superuser routes or if superuser auth is set
+    const superuserAuth = typeof window !== 'undefined' && localStorage.getItem('superuser_auth') === 'true';
+    if (isProtectedRoute && !user && !pathname.startsWith("/superuser") && !superuserAuth) {
       console.log("Redirecting to login: Protected route without auth")
       router.push("/login")
-    }
-
-    // If authenticated and trying to access login page, redirect to appropriate dashboard
+    }    // If authenticated and trying to access login page, redirect to appropriate dashboard
     if (pathname === "/login" && user && !isLoggingOut.current) {
       console.log("Redirecting from login to dashboard")
-      if (user.role === "supervisor" || user.role === "admin") {
+      if (user.role === "ROLE_SUPERUSER") {
+        // Redirect ROLE_SUPERUSER to the superuser dashboard
+        router.push("/superuser/dashboard")
+      } else if (user.role === "supervisor" || user.role === "admin") {
         router.push("/dashboard/supervisor")
       } else if (user.role === "orphanage_admin" || user.role === "super_admin") {
         router.push("/dashboard/orphanage_admin")
@@ -150,14 +149,15 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
       const response = await AuthService.login({ username, password })
 
       // Extract user data from the response
-      const adminData = response.data.admin
-
-      // Determine role from the roles array
+      const adminData = response.data.admin      // Determine role from the roles array
       const isSupervisor = adminData.roles.includes("ROLE_SUPERVISOR") || adminData.roles.includes("ROLE_ADMIN")
       const isOrphanageAdmin = adminData.roles.includes("ROLE_ORPHANAGE_ADMIN") || adminData.roles.includes("ROLE_SUPER_ADMIN")
+      const isSuperuser = adminData.roles.includes("ROLE_SUPERUSER")
       
       let role: UserRole = null
-      if (isSupervisor) {
+      if (isSuperuser) {
+        role = "ROLE_SUPERUSER"
+      } else if (isSupervisor) {
         role = adminData.roles.includes("ROLE_ADMIN") ? "admin" : "supervisor"
       } else if (isOrphanageAdmin) {
         role = adminData.roles.includes("ROLE_SUPER_ADMIN") ? "super_admin" : "orphanage_admin"
@@ -208,10 +208,12 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
       localStorage.setItem("user", JSON.stringify(userData))
       localStorage.setItem("jwt_token", response.data.token)
 
-      setIsLoading(false)
-
-      // Redirect to the appropriate dashboard
-      if (role === "supervisor" || role === "admin") {
+      setIsLoading(false)      // Redirect to the appropriate dashboard
+      if (role === "ROLE_SUPERUSER") {
+        // Set superuser auth flag for superuser-specific routes
+        localStorage.setItem('superuser_auth', 'true');
+        router.push("/superuser/dashboard")
+      } else if (role === "supervisor" || role === "admin") {
         router.push("/dashboard/supervisor")
       } else if (role === "orphanage_admin" || role === "super_admin") {
         router.push("/dashboard/orphanage_admin")

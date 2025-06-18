@@ -9,8 +9,13 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Use a different output format to avoid symlink issues on Windows
-  // output: 'standalone',
+  // Force all pages to be SSR/dynamic to avoid static optimization issues
+  output: 'standalone',
+  // Enable experimental missingSuspenseWithCSRBailout to mimic previous behavior
+  experimental: {
+    // Even though we've fixed the components, include this to match previous behavior
+    missingSuspenseWithCSRBailout: true
+  },
   webpack: (config, { isServer }) => {
     // Optimize for large files
     config.optimization.moduleIds = 'deterministic';
@@ -39,5 +44,3 @@ const nextConfig = {
     ]
   },
 }
-
-export default nextConfig

@@ -9,8 +9,13 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Use a different output format to avoid symlink issues on Windows
-  // output: 'standalone',
+  // Skip static generation entirely - use server-only mode
+  output: 'export',
+  distDir: '.next-export',
+  // Disable static optimization
+  experimental: {
+    // No experimental features needed
+  },
   webpack: (config, { isServer }) => {
     // Optimize for large files
     config.optimization.moduleIds = 'deterministic';
@@ -23,20 +28,6 @@ const nextConfig = {
     };
     
     return config;
-  },
-  async redirects() {
-    return [
-      {
-        source: '/superuser',
-        destination: '/superuser/dashboard',
-        permanent: true,
-      },
-      {
-        source: '/superuser/login',
-        destination: '/superuser/dashboard',
-        permanent: true,
-      },
-    ]
   },
 }
 

@@ -230,16 +230,16 @@ export default function SupervisorReportsPage() {
           <AlertDescription>
             {t("report.restriction.description")}
           </AlertDescription>
-        </Alert>
-
-        <Tabs defaultValue="generator" className="space-y-6">          
+        </Alert>        <Tabs defaultValue="generator" className="space-y-6">          
           <TabsList className="grid w-full grid-cols-2 bg-green-100">            
             <TabsTrigger 
               value="generator"
-              className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
             >
-              <FileType className="mr-2 h-4 w-4" />
-              {t("report.generator")}
+              <div className="flex items-center space-x-2">
+                <FileType className="mr-2 h-4 w-4" />
+                <span>{t("report.generator")}</span>
+              </div>
             </TabsTrigger>
             <TabsTrigger 
               value="analytics"
@@ -342,8 +342,7 @@ export default function SupervisorReportsPage() {
                         <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
                       </li>
                     </ul>
-                  </CardContent>
-                </Card>              
+                  </CardContent>                </Card>              
               </div>
             </Tabs>
           </TabsContent>

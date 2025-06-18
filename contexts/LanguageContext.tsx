@@ -273,6 +273,10 @@ const translations: Record<string, Record<Language, string>> = {
     en: "Log out",
     sw: "Toka",
   },
+  "nav.superuser": {
+    en: "Superuser",
+    sw: "Mtumiaji mkuu"
+  },
 
   // Dashboard
   "dashboard.title": {
@@ -3927,8 +3931,8 @@ const translations: Record<string, Record<Language, string>> = {
   },
   // Report generator form fields and labels
   "report.dateRange": {
-    en: "Date Range",
-    sw: "Kipindi cha Tarehe",
+    en: "Select Date Range",
+    sw: "Chagua Kipindi cha Tarehe",
   },
   "report.ageGroup": {
     en: "Age Group",
