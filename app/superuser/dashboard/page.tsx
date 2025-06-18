@@ -21,7 +21,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -54,14 +53,12 @@ interface OrphanageAdmin {
 }
 
 interface SystemStats {
-  totalOrphanageCenters: number
-  totalBranches: number
   totalOrphans: number
-  totalAdmins: number
-  totalDonations: number
-  activeFundraisers: number
-  totalInventoryItems: number
+  totalBranches: number
   totalVolunteers: number
+  totalFundraising: number
+  totalAdmins?: number
+  totalOrphanageCenters?: number
 }
 
 // Create a separate component for the dashboard content that uses useSearchParams
@@ -73,17 +70,15 @@ function SuperuserDashboardContent() {
     phoneNumber: "",
     fullName: "",
   })
-  
-  // System stats state
+    // System stats state
   const [stats, setStats] = useState<SystemStats>({
-    totalOrphanageCenters: 0,
-    totalBranches: 0,
     totalOrphans: 0,
+    totalBranches: 0,
+    totalVolunteers: 0,
+    totalFundraising: 0,
     totalAdmins: 0,
-    totalDonations: 0,
-    activeFundraisers: 0,
-    totalInventoryItems: 0,
-    totalVolunteers: 0,  })  // UI state
+    totalOrphanageCenters: 0
+  })// UI state
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -191,33 +186,28 @@ function SuperuserDashboardContent() {
         setError("Network error: Couldn't connect to the server. Please check your internet connection.")
       }
     }
-  }
-  // Function to fetch system statistics
+  }  // Function to fetch system statistics
   const fetchSystemStats = async () => {
     try {
       const statsData = await SuperuserAuthService.getSystemStats()
       setStats(statsData || {
-        totalOrphanageCenters: 0,
-        totalBranches: 0,
         totalOrphans: 0,
-        totalAdmins: 0,
-        totalDonations: 0,
-        activeFundraisers: 0,
-        totalInventoryItems: 0,
+        totalBranches: 0,
         totalVolunteers: 0,
+        totalFundraising: 0,
+        totalAdmins: 0,
+        totalOrphanageCenters: 0
       })
     } catch (err: any) {
       console.error("Error fetching system stats:", err)
       // Use default values instead of throwing to keep the UI working
       setStats({
-        totalOrphanageCenters: 0,
-        totalBranches: 0,
         totalOrphans: 0,
-        totalAdmins: 0,
-        totalDonations: 0,
-        activeFundraisers: 0,
-        totalInventoryItems: 0,
+        totalBranches: 0,
         totalVolunteers: 0,
+        totalFundraising: 0,
+        totalAdmins: 0,
+        totalOrphanageCenters: 0
       })
     }
   }
@@ -426,16 +416,7 @@ function SuperuserDashboardContent() {
         </TabsList>
         
         {/* Dashboard Overview Tab */}
-        <TabsContent value="dashboard" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Orphanage Centers</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.totalOrphanageCenters}</div>
-              </CardContent>
-            </Card>
+        <TabsContent value="dashboard" className="space-y-4">          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Total Branches</CardTitle>
@@ -454,44 +435,40 @@ function SuperuserDashboardContent() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Admins</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.totalAdmins}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Donations</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.totalDonations}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Active Fundraisers</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.activeFundraisers}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Inventory Items</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.totalInventoryItems}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Total Volunteers</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.totalVolunteers}</div>
               </CardContent>
             </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium">Total Fundraising</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.totalFundraising}</div>
+              </CardContent>
+            </Card>
+            {stats.totalAdmins !== undefined && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">Total Admins</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{stats.totalAdmins}</div>
+                </CardContent>
+              </Card>
+            )}
+            {stats.totalOrphanageCenters !== undefined && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium">Total Orphanage Centers</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{stats.totalOrphanageCenters}</div>
+                </CardContent>
+              </Card>
+            )}
           </div>
           
           <Card className="mt-6">
@@ -501,12 +478,11 @@ function SuperuserDashboardContent() {
                 Overview of the entire orphanage management system
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <p>
-                The system currently manages {stats.totalOrphanageCenters} orphanage centers with {stats.totalBranches} branches.
-                There are {stats.totalOrphans} orphans being cared for by {stats.totalAdmins} administrators.
-                The system has processed {stats.totalDonations} donations and has {stats.activeFundraisers} active fundraising campaigns.
-                The inventory system tracks {stats.totalInventoryItems} items, and {stats.totalVolunteers} volunteers are registered.
+            <CardContent>              <p>
+                The system currently manages {stats.totalBranches} branches with {stats.totalOrphans} orphans.
+                There are {stats.totalVolunteers} volunteers registered and {stats.totalFundraising} fundraising campaigns.
+                {stats.totalAdmins !== undefined && ` The system has ${stats.totalAdmins} administrators.`}
+                {stats.totalOrphanageCenters !== undefined && ` There are ${stats.totalOrphanageCenters} orphanage centers in the system.`}
               </p>
             </CardContent>
           </Card>
@@ -675,7 +651,13 @@ function SuperuserDashboardContent() {
             </TabsContent>
             
             <TabsContent value="analytics" className="space-y-6">
-              <SuperuserReportStats stats={stats} />
+              <SuperuserReportStats stats={{
+                ...stats,
+                // Add missing properties with default values
+                totalDonations: 0,
+                activeFundraisers: 0,
+                totalInventoryItems: 0
+              }} />
             </TabsContent>
           </Tabs>
         </TabsContent>
