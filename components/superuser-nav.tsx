@@ -80,9 +80,9 @@ function SuperuserNavContent() {
   if (!mounted) return null
 
   return (
-    <nav className="h-screen flex flex-col bg-green-50 border-r border-green-200 p-4">
+    <nav className="h-screen flex flex-col bg-blue-50 border-r border-blue-200 p-4">
       <div className="space-y-2">
-        <h2 className="text-xl font-bold text-green-900 px-2 mb-4">
+        <h2 className="text-xl font-bold text-blue-900 px-2 mb-4">
           Super Admin
         </h2>
         {navItems.map((item) => (
@@ -93,8 +93,8 @@ function SuperuserNavContent() {
             className={cn(
               "w-full justify-start py-2 text-sm font-medium rounded-md transition-colors",
               item.tab === activeTab
-                ? "bg-green-600 text-white hover:bg-green-700"
-                : "text-green-900 hover:bg-green-200"
+                ? "bg-blue-600 text-white hover:bg-blue-700"
+                : "text-blue-900 hover:bg-blue-200"
             )}
           >
             {item.icon}
@@ -105,7 +105,7 @@ function SuperuserNavContent() {
       <div className="mt-auto">
         <Button
           variant="ghost"
-          className="w-full flex items-center px-2 py-2 text-sm font-medium rounded-md text-green-900 hover:bg-green-200"
+          className="w-full flex items-center px-2 py-2 text-sm font-medium rounded-md text-blue-900 hover:bg-blue-200"
           onClick={handleLogout}
         >
           <LogOut className="mr-2 h-5 w-5" />
@@ -119,13 +119,13 @@ function SuperuserNavContent() {
 // Loading component for the Suspense boundary
 function SuperuserNavLoading() {
   return (
-    <nav className="h-screen flex flex-col bg-green-50 border-r border-green-200 p-4">
+    <nav className="h-screen flex flex-col bg-blue-50 border-r border-blue-200 p-4">
       <div className="space-y-2">
-        <h2 className="text-xl font-bold text-green-900 px-2 mb-4">
+        <h2 className="text-xl font-bold text-blue-900 px-2 mb-4">
           Super Admin
         </h2>
         <div className="flex justify-center py-4">
-          <Loader2 className="h-6 w-6 animate-spin text-green-600" />
+          <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
         </div>
       </div>
     </nav>
