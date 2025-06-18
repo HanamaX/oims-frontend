@@ -155,8 +155,8 @@ function OrphanReportStats() {
   if (loading) {
     return (
       <div className="flex justify-center items-center p-8">
-        <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
-        <span className="ml-2 text-green-600">{t("report.loadingData")}</span>
+        <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+        <span className="ml-2 text-blue-600">{t("report.loadingData")}</span>
       </div>
     )
   }
@@ -177,8 +177,8 @@ function InventoryReportStats() {
   if (loading) {
     return (
       <div className="flex justify-center items-center p-8">
-        <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
-        <span className="ml-2 text-green-600">{t("report.loadingData")}</span>
+        <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+        <span className="ml-2 text-blue-600">{t("report.loadingData")}</span>
       </div>
     )
   }
@@ -199,8 +199,8 @@ function AdminReportStats() {
   if (loading) {
     return (
       <div className="flex justify-center items-center p-8">
-        <Loader2 className="h-8 w-8 text-green-600 animate-spin" />
-        <span className="ml-2 text-green-600">{t("report.loadingData")}</span>
+        <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
+        <span className="ml-2 text-blue-600">{t("report.loadingData")}</span>
       </div>
     )
   }
@@ -230,29 +230,29 @@ export default function SuperAdminReportsPage() {
           <p className="text-muted-foreground">
             {t("report.comprehensive")}
           </p>
-        </div>        <Badge variant="outline" className="px-3 py-1 text-base bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md">
+        </div>        <Badge variant="outline" className="px-3 py-1 text-base bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md">
           <T k="roles.superAdmin" />
         </Badge>
       </div>
 
       <div className="grid gap-6">        
-        <Alert className="bg-green-50 border-green-200">
-          <AlertCircle className="h-4 w-4 text-green-600" />
+        <Alert className="bg-blue-50 border-blue-200">
+          <AlertCircle className="h-4 w-4 text-blue-600" />
           <AlertTitle>{t("report.fullAccess")}</AlertTitle>
           <AlertDescription>
             {t("report.fullAccess.description")}
           </AlertDescription>
         </Alert><Tabs defaultValue="generator" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 bg-green-100">            <TabsTrigger 
+          <TabsList className="grid w-full grid-cols-2 bg-blue-100">            <TabsTrigger 
               value="generator"
-              className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
             >
               <FileType className="mr-2 h-4 w-4" />
               {t("report.generator")}
             </TabsTrigger>
             <TabsTrigger 
               value="analytics"
-              className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
             >
               <BarChart3 className="mr-2 h-4 w-4" />
               {t("report.systemAnalytics")}
@@ -267,39 +267,39 @@ export default function SuperAdminReportsPage() {
           </TabsContent>
           
           <TabsContent value="analytics" className="space-y-6">            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ReportType)}>
-              <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6 bg-green-100">                <TabsTrigger 
+              <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6 bg-blue-100">                <TabsTrigger 
                   value="orphans"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.orphans")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="inventory"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.inventory")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="fundraising"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.fundraising")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="volunteers"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.volunteers")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="staff"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.staff")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="branches"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.branches")}
                 </TabsTrigger>
@@ -314,87 +314,87 @@ export default function SuperAdminReportsPage() {
                   />
                 </div>
                 
-                <div className="grid gap-6 md:grid-cols-3">                  <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">
-                    <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-                      <CardTitle className="text-base text-green-800">{t("report.systemSummary")}</CardTitle>
+                <div className="grid gap-6 md:grid-cols-3">                  <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
+                    <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
+                      <CardTitle className="text-base text-blue-800">{t("report.systemSummary")}</CardTitle>
                       <CardDescription>{t("report.orgWide")}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4 pt-4">                      <div className="flex justify-between">
-                        <span className="text-green-700">{t("report.totalBranches")}</span>
-                        <span className="font-medium text-green-800">{user.dashboardStats?.totalBranches ?? 0}</span>
+                        <span className="text-blue-700">{t("report.totalBranches")}</span>
+                        <span className="font-medium text-blue-800">{user.dashboardStats?.totalBranches ?? 0}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-green-700">{t("report.totalOrphans")}</span>
-                        <span className="font-medium text-green-800">{user.dashboardStats?.totalOrphans ?? 0}</span>
+                        <span className="text-blue-700">{t("report.totalOrphans")}</span>
+                        <span className="font-medium text-blue-800">{user.dashboardStats?.totalOrphans ?? 0}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-green-700">{t("report.totalVolunteers")}</span>
-                        <span className="font-medium text-green-800">{user.dashboardStats?.totalVolunteers ?? 0}</span>
+                        <span className="text-blue-700">{t("report.totalVolunteers")}</span>
+                        <span className="font-medium text-blue-800">{user.dashboardStats?.totalVolunteers ?? 0}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-green-700">{t("report.totalFundraisers")}</span>
-                        <span className="font-medium text-green-800">{user.dashboardStats?.totalFundraising ?? 0}</span>
+                        <span className="text-blue-700">{t("report.totalFundraisers")}</span>
+                        <span className="font-medium text-blue-800">{user.dashboardStats?.totalFundraising ?? 0}</span>
                       </div>
                     </CardContent>
                   </Card>
-                    <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">                    <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-                      <CardTitle className="text-base text-green-800">{t("report.branchComparison")}</CardTitle>
+                    <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">                    <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
+                      <CardTitle className="text-base text-blue-800">{t("report.branchComparison")}</CardTitle>
                       <CardDescription>{t("report.performanceMetrics")}</CardDescription>
                     </CardHeader>
                     <CardContent className="pt-4">
                       <ul className="space-y-3">
-                        <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
+                        <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
                           <div className="flex items-center gap-2">
-                            <Building className="h-4 w-4 text-green-600 group-hover:scale-110 transition-all" />
-                            <span className="text-green-700">{t("report.branchPrefix")} A</span>
+                            <Building className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all" />
+                            <span className="text-blue-700">{t("report.branchPrefix")} A</span>
                           </div>
-                          <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-300 hover:bg-green-200 transition-all">{t("report.topPerformer")}</Badge>
+                          <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-300 hover:bg-blue-200 transition-all">{t("report.topPerformer")}</Badge>
                         </li>
-                        <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
+                        <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
                           <div className="flex items-center gap-2">
-                            <Building className="h-4 w-4 text-green-600 group-hover:scale-110 transition-all" />
-                            <span className="text-green-700">{t("report.branchPrefix")} C</span>
+                            <Building className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all" />
+                            <span className="text-blue-700">{t("report.branchPrefix")} C</span>
                           </div>
-                          <Badge variant="outline" className="border-green-300 text-green-700 hover:bg-green-100 transition-all">{t("report.highGrowth")}</Badge>
+                          <Badge variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-100 transition-all">{t("report.highGrowth")}</Badge>
                         </li>
-                        <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
+                        <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
                           <div className="flex items-center gap-2">
-                            <Building className="h-4 w-4 text-green-600 group-hover:scale-110 transition-all" />
-                            <span className="text-green-700">{t("report.branchPrefix")} E</span>
+                            <Building className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all" />
+                            <span className="text-blue-700">{t("report.branchPrefix")} E</span>
                           </div>
-                          <Badge variant="outline" className="border-green-300 text-green-700 hover:bg-green-100 transition-all">{t("report.mostVolunteers")}</Badge>
+                          <Badge variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-100 transition-all">{t("report.mostVolunteers")}</Badge>
                         </li>
-                        <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
+                        <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
                           <div className="flex items-center gap-2">
-                            <Building className="h-4 w-4 text-green-600 group-hover:scale-110 transition-all" />
-                            <span className="text-green-700">{t("report.branchPrefix")} B</span>
+                            <Building className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all" />
+                            <span className="text-blue-700">{t("report.branchPrefix")} B</span>
                           </div>
-                          <Badge variant="outline" className="border-green-300 text-green-700 hover:bg-green-100 transition-all">{t("report.needsAttention")}</Badge>
+                          <Badge variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-100 transition-all">{t("report.needsAttention")}</Badge>
                         </li>
                       </ul>
                     </CardContent>
                   </Card>
-                    <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300">                    <CardHeader className="pb-2 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-                      <CardTitle className="text-base text-green-800">{t("report.recentSystemReports")}</CardTitle>
+                    <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">                    <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
+                      <CardTitle className="text-base text-blue-800">{t("report.recentSystemReports")}</CardTitle>
                       <CardDescription>{t("report.previouslyGenerated")}</CardDescription>
                     </CardHeader>
                     <CardContent className="pt-4">
                       <ul className="space-y-3">
-                        <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
-                          <span className="text-green-700">{t("report.quarterlySystemOverview")}</span>
-                          <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
+                        <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                          <span className="text-blue-700">{t("report.quarterlySystemOverview")}</span>
+                          <Download className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110" />
                         </li>
-                        <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
-                          <span className="text-green-700">{t("report.branchPerformanceAnalysis")}</span>
-                          <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
+                        <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                          <span className="text-blue-700">{t("report.branchPerformanceAnalysis")}</span>
+                          <Download className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110" />
                         </li>
-                        <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
-                          <span className="text-green-700">{t("report.staffEfficiencyReport")}</span>
-                          <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
+                        <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                          <span className="text-blue-700">{t("report.staffEfficiencyReport")}</span>
+                          <Download className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110" />
                         </li>
-                        <li className="flex items-center justify-between text-sm group hover:bg-green-50 p-2 rounded-md transition-all">
-                          <span className="text-green-700">{t("report.resourceAllocationSummary")}</span>
-                          <Download className="h-4 w-4 text-green-600 cursor-pointer hover:text-green-800 transition-all hover:scale-110" />
+                        <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                          <span className="text-blue-700">{t("report.resourceAllocationSummary")}</span>
+                          <Download className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110" />
                         </li>
                       </ul>
                     </CardContent>

@@ -351,20 +351,21 @@ function SuperuserDashboardContent() {
   return (
     <div className="w-full px-6 py-10 space-y-6">
       <div className="flex justify-between items-center">
-        <div>          <h1 className="text-3xl font-bold tracking-tight text-green-600">Superuser Dashboard</h1>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-blue-800">Superuser Dashboard</h1>
           <p className="text-muted-foreground">
             Manage orphanage admins and monitor system-wide statistics
           </p>
           {error && (
-            <div className="bg-green-50 border border-green-200 rounded-md p-3 mt-2 text-green-800 flex items-center">
-              <div className="w-6 h-6 mr-2 flex items-center justify-center rounded-full bg-green-100">
-                <span className="text-green-600 font-bold">!</span>
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mt-2 text-blue-800 flex items-center">
+              <div className="w-6 h-6 mr-2 flex items-center justify-center rounded-full bg-blue-100">
+                <span className="text-blue-600 font-bold">!</span>
               </div>
               <p>{error}</p>
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="ml-auto text-green-600 hover:text-green-700 hover:bg-green-100"
+                className="ml-auto text-blue-600 hover:text-blue-700 hover:bg-blue-100"
                 onClick={() => window.location.reload()}
               >
                 Retry
@@ -386,10 +387,10 @@ function SuperuserDashboardContent() {
           url.searchParams.set('tab', value)
         }
         window.history.pushState({}, '', url)
-      }}>        <TabsList className="grid w-full grid-cols-3 bg-green-100">
+      }}>        <TabsList className="grid w-full grid-cols-3 bg-blue-100">
           <TabsTrigger 
             value="dashboard" 
-            className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
             onClick={() => {
               // Ensure proper routing when clicking the tab directly
               if (activeTab !== "dashboard") {
@@ -401,7 +402,7 @@ function SuperuserDashboardContent() {
           >Overview</TabsTrigger>
           <TabsTrigger 
             value="admins"
-            className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all" 
+            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all" 
             onClick={() => {
               // Ensure proper routing when clicking the tab directly
               if (activeTab !== "admins") {
@@ -413,7 +414,7 @@ function SuperuserDashboardContent() {
           >Orphanage Admins</TabsTrigger>
           <TabsTrigger 
             value="reports"
-            className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all" 
+            className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all" 
             onClick={() => {
               // Ensure proper routing when clicking the tab directly
               if (activeTab !== "reports") {
@@ -422,7 +423,7 @@ function SuperuserDashboardContent() {
                 window.history.pushState({}, '', url)
               }
             }}
-          >Reports</TabsTrigger>
+          >System Reports</TabsTrigger>
         </TabsList>
         
         {/* Dashboard Overview Tab */}
@@ -612,7 +613,7 @@ function SuperuserDashboardContent() {
                         <TableCell>{admin.email}</TableCell>
                         <TableCell>{admin.centerName ?? "Unassigned"}</TableCell>
                         <TableCell>
-                          <span className={`px-2 py-1 rounded text-xs ${admin.suspended ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}`}>
+                          <span className={`px-2 py-1 rounded text-xs ${admin.suspended ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"}`}>
                             {admin.suspended ? "Suspended" : "Active"}
                           </span>
                         </TableCell>
@@ -624,7 +625,7 @@ function SuperuserDashboardContent() {
                               onClick={() => handleToggleAdminStatus(admin)}
                             >
                               {admin.suspended ? (
-                                <UserCheck className="h-4 w-4 text-green-500" />
+                                <UserCheck className="h-4 w-4 text-blue-500" />
                               ) : (
                                 <UserX className="h-4 w-4 text-amber-500" />
                               )}
@@ -649,21 +650,21 @@ function SuperuserDashboardContent() {
           {/* Reports Tab */}
         <TabsContent value="reports" className="space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-green-700">System Reports</h2>
+            <h2 className="text-2xl font-bold text-blue-700">System Reports</h2>
           </div>
           
           <Tabs defaultValue="generator" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2 bg-green-100">
+            <TabsList className="grid w-full grid-cols-2 bg-blue-100">
               <TabsTrigger 
                 value="generator"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 <FileText className="mr-2 h-4 w-4" />
                 Report Generator
               </TabsTrigger>
               <TabsTrigger 
                 value="analytics"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 <BarChart3 className="mr-2 h-4 w-4" />
                 System Analytics

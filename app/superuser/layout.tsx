@@ -26,7 +26,7 @@ export default function SuperuserLayout({
       <div className="flex-shrink-0 w-64">
         <SuperuserNav />
       </div>
-      <div className="flex-1 w-full overflow-auto bg-gradient-to-br from-green-50/50 to-white">
+      <div className="flex-1 w-full overflow-auto bg-gradient-to-br from-blue-50/50 to-white">
         <Suspense fallback={<div className="p-8">Loading...</div>}>
           {children}
         </Suspense>

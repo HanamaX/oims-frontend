@@ -132,7 +132,7 @@ export default function BranchDetails({
                             <span className={`px-2 py-1 rounded text-xs ${
                               staff.role === 'ROLE_SUPER_ADMIN' 
                                 ? 'bg-blue-100 text-blue-800' 
-                                : 'bg-green-100 text-green-800'
+                                : 'bg-blue-100 text-blue-800'
                             }`}>
                               {staff.role === 'ROLE_SUPER_ADMIN' ? <T k="staff.superAdmin" /> : <T k="staff.admin" />}
                             </span>
@@ -141,7 +141,7 @@ export default function BranchDetails({
                                 <T k="staff.suspended" />
                               </span>
                             ) : (
-                              <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
+                              <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
                                 <T k="staff.active" />
                               </span>
                             )}

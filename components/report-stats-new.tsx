@@ -134,22 +134,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
       case "orphans":
         return (
           <Tabs defaultValue="demographics">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="demographics"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.orphans.demographics")}
               </TabsTrigger>
               <TabsTrigger 
                 value="age"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.orphans.ageDistribution")}
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.orphans.status")}
               </TabsTrigger>
@@ -211,22 +211,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
       
       case "inventory":
         return (          <Tabs defaultValue="categories">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="categories"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.inventory.categories")}
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.inventory.stockStatus")}
               </TabsTrigger>
               <TabsTrigger 
                 value="transactions"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.inventory.transactions")}
               </TabsTrigger>
@@ -291,22 +291,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
       
       case "fundraising":
         return (          <Tabs defaultValue="amount">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="amount"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.fundraising.amounts")}
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.fundraising.status")}
               </TabsTrigger>
               <TabsTrigger 
                 value="timeline"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.fundraising.timeline")}
               </TabsTrigger>
@@ -372,22 +372,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
       
       case "volunteers":
         return (          <Tabs defaultValue="status">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="status"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.volunteers.status")}
               </TabsTrigger>
               <TabsTrigger 
                 value="skills"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.volunteers.skills")}
               </TabsTrigger>
               <TabsTrigger 
                 value="hours"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.volunteers.volunteerHours")}
               </TabsTrigger>
@@ -453,22 +453,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
         if (!data.roles) data.roles = [];
         
         return (          <Tabs defaultValue="departments">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="departments"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.staff.departments")}
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {ta("analytics.staff.status")}
               </TabsTrigger>
               <TabsTrigger 
                 value="roles"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {t("report.staff.roles")}
               </TabsTrigger>
@@ -527,22 +527,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
       case "branches":
         return (
           <Tabs defaultValue="distribution">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="distribution"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {t("report.branches.distribution")}
               </TabsTrigger>
               <TabsTrigger 
                 value="orphans"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {t("report.branches.orphans")}
               </TabsTrigger>
               <TabsTrigger 
                 value="resources"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 {t("report.branches.resources")}
               </TabsTrigger>

@@ -178,8 +178,8 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
     if (filters.orphanId) {
       return (
         <div className="flex flex-col space-y-2">
-          <Alert variant="default" className="bg-green-50 border-green-200">
-            <AlertCircle className="h-4 w-4 text-green-600" />
+          <Alert variant="default" className="bg-blue-50 border-blue-200">
+            <AlertCircle className="h-4 w-4 text-blue-600" />
             <AlertTitle>Orphan-specific report</AlertTitle>
             <AlertDescription>
               Generating report for {orphanName || "selected orphan"}
@@ -195,7 +195,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
           <>            <div className="flex flex-col space-y-2">
               <Label htmlFor="category">{t("report.ageGroup")}</Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.ageGroup")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -209,7 +209,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
             </div>            <div className="flex flex-col space-y-2">
               <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -227,7 +227,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
             <div className="flex flex-col space-y-2">
               <Label htmlFor="category">{t("report.category")}</Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.category")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -243,7 +243,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
             <div className="flex flex-col space-y-2">
               <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -262,7 +262,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
             <div className="flex flex-col space-y-2">
               <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -282,7 +282,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
             <div className="flex flex-col space-y-2">
               <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -300,7 +300,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
             <div className="flex flex-col space-y-2">
               <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -317,7 +317,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
             <div className="flex flex-col space-y-2">
               <Label htmlFor="status">{t("report.status")}</Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-                <SelectTrigger className="border-green-200 focus:ring-green-500">
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.status")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -337,11 +337,12 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
 
   return (
     <div className="container mx-auto py-6">
-      <Card className="w-full border-green-200 shadow-lg hover:shadow-xl transition-all">
-        <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
+      <Card className="w-full border-blue-200 shadow-lg hover:shadow-xl transition-all">
+        <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
           <div className="flex justify-between items-center">
-            <div>              <CardTitle className="text-2xl text-green-800">{t("report.generator")}</CardTitle>
-              <CardDescription className="text-green-700">
+            <div>
+              <CardTitle className="text-2xl text-blue-800">{t("report.generator")}</CardTitle>
+              <CardDescription className="text-blue-700">
                 {orphanId 
                   ? `${t("report.generate")} ${orphanName || t("orphan.selected")}`
                   : userRole === "admin"
@@ -350,46 +351,47 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                 }
               </CardDescription>
             </div>
-            <FileText className="h-8 w-8 text-green-600" />
+            <FileText className="h-8 w-8 text-blue-600" />
           </div>
         </CardHeader>
         <CardContent className="pt-6">
           {!orphanId && (
             <Tabs defaultValue="orphans" onValueChange={(value) => setActiveTab(value as ReportType)}>
-              <TabsList className="grid grid-cols-3 md:grid-cols-6 w-full mb-6 bg-green-100">                <TabsTrigger 
+              <TabsList className="grid w-full grid-cols-6 bg-blue-100">
+                <TabsTrigger 
                   value="orphans" 
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.orphans")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="inventory"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.inventory")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="fundraising"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.fundraising")}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="volunteers"
-                  className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   {t("report.volunteers")}
                 </TabsTrigger>
                 {userRole === "superadmin" && (
                   <>                    <TabsTrigger 
                       value="staff"
-                      className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                      className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                     >
                       {t("report.staff")}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="branches"
-                      className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                      className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                     >
                       {t("report.branches")}
                     </TabsTrigger>
@@ -404,7 +406,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                         onBranchChange(value === "all" ? undefined : value);
                       }
                     }}>
-                      <SelectTrigger className="border-green-200 focus:ring-green-500">
+                      <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                         <SelectValue placeholder={t("report.selectBranch")} />
                       </SelectTrigger>
                       <SelectContent>
@@ -427,7 +429,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                         onBranchChange(value === "all" ? undefined : value);
                       }
                     }}>
-                      <SelectTrigger className="border-green-200 focus:ring-green-500">
+                      <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                         <SelectValue placeholder={t("report.selectBranch")} />
                       </SelectTrigger>
                       <SelectContent>
@@ -450,7 +452,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                       />
                       <label
                         htmlFor="use-date-range"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-blue-900"
                       >
                         {t("report.useDateRange")}
                       </label>
@@ -466,20 +468,20 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                     </div>
                     
                     {!useDateRange && (
-                      <div className="text-sm text-muted-foreground mt-2 bg-green-50 p-2 rounded border border-green-200">
-                        <AlertCircle className="h-4 w-4 inline-block mr-1 text-green-600" />
+                      <div className="text-sm text-blue-700 mt-2 bg-blue-50 p-2 rounded border border-blue-200">
+                        <AlertCircle className="h-4 w-4 inline-block mr-1 text-blue-600" />
                         {t("report.allTimeData")}
                       </div>
                     )}
                     
                     <div>
-                      <Label>{t("report.format")}</Label>
+                      <Label className="text-blue-900">{t("report.format")}</Label>
                       <div className="flex gap-4 mt-2">
                         <Button
                           type="button"
                           variant={filters.exportFormat === "pdf" ? "default" : "outline"}
                           onClick={() => setFilters({ ...filters, exportFormat: "pdf" })}
-                          className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                          className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
                         >
                           PDF
                         </Button>
@@ -487,7 +489,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                           type="button"
                           variant={filters.exportFormat === "excel" ? "default" : "outline"}
                           onClick={() => setFilters({ ...filters, exportFormat: "excel" })}
-                          className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                          className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
                         >
                           Excel
                         </Button>
@@ -504,8 +506,8 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
           )}
           
           {orphanId && (
-            <div className="grid gap-6">              <Alert className="bg-green-50 border-green-200">
-                <AlertCircle className="h-4 w-4 text-green-600" />
+            <div className="grid gap-6">              <Alert className="bg-blue-50 border-blue-200">
+                <AlertCircle className="h-4 w-4 text-blue-600" />
                 <AlertTitle>{t("report.orphanSpecific")}</AlertTitle>
                 <AlertDescription>
                   {t("report.generatingDetailed")} {orphanName || t("orphan.selected")} {t("report.personalInfo")}.
@@ -537,21 +539,21 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                   </div>
                   
                   {!useDateRange && (
-                    <div className="text-sm text-muted-foreground mt-2 bg-green-50 p-2 rounded border border-green-200">
-                      <AlertCircle className="h-4 w-4 inline-block mr-1 text-green-600" />
+                    <div className="text-sm text-blue-700 mt-2 bg-blue-50 p-2 rounded border border-blue-200">
+                      <AlertCircle className="h-4 w-4 inline-block mr-1 text-blue-600" />
                       {t("report.allTimeData")}
                     </div>
                   )}
                 </div>
                 
                 <div>
-                  <Label>{t("report.format")}</Label>
+                  <Label className="text-blue-900">{t("report.format")}</Label>
                   <div className="flex gap-4 mt-2">
                     <Button
                       type="button"
                       variant={filters.exportFormat === "pdf" ? "default" : "outline"}
                       onClick={() => setFilters({ ...filters, exportFormat: "pdf" })}
-                      className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                      className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
                     >
                       PDF
                     </Button>
@@ -559,7 +561,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                       type="button"
                       variant={filters.exportFormat === "excel" ? "default" : "outline"}
                       onClick={() => setFilters({ ...filters, exportFormat: "excel" })}
-                      className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                      className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
                     >
                       Excel
                     </Button>
@@ -571,15 +573,15 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
         </CardContent>
         
         <CardFooter className="flex flex-col space-y-4">          <div className="flex justify-between w-full">
-            <Alert variant="default" className="w-full mr-4 border-green-200">
-              <AlertCircle className="h-4 w-4 text-green-600" />              <AlertTitle>{t("report.includeData")}</AlertTitle>
+            <Alert variant="default" className="w-full mr-4 border-blue-200">
+              <AlertCircle className="h-4 w-4 text-blue-600" />              <AlertTitle>{t("report.includeData")}</AlertTitle>
               <AlertDescription>
                 {t("report.selectFilters")}
               </AlertDescription>
             </Alert>
             <div className="flex space-x-4">
               <Button 
-                className={`min-w-[150px] ${buttonVariants.idle} bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-md hover:shadow-lg`} 
+                className={`min-w-[150px] ${buttonVariants.idle} bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg`} 
                 onClick={handleGenerateReport}
                 disabled={loading}
               >

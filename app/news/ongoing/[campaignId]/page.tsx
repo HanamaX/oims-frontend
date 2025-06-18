@@ -122,7 +122,7 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
   
   // Set progress bar color based on status
   const getProgressBarColor = () => {
-    if (isCompleted) return "bg-green-500";
+    if (isCompleted) return "bg-blue-500";
     if (isActive) return "bg-blue-500";
     if (isPending) return "bg-amber-500";
     if (isCancelled) return "bg-gray-500";
@@ -131,7 +131,7 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
   
   // Set status display text and color
   const getStatusDisplay = () => {
-    if (isCompleted) return { text: "COMPLETED", color: "text-green-600 bg-green-100" };
+    if (isCompleted) return { text: "COMPLETED", color: "text-blue-600 bg-blue-100" };
     if (isActive) return { text: "ACTIVE", color: "text-blue-600 bg-blue-100" };
     if (isPending) return { text: "PENDING", color: "text-amber-600 bg-amber-100" };
     if (isCancelled) return { text: "CANCELLED", color: "text-red-600 bg-red-100" };
@@ -259,8 +259,8 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
                 )}
                 
                 {isCompleted && (
-                  <div className="text-center bg-green-50 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-green-700 mb-3">Campaign Completed</h3>
+                  <div className="text-center bg-blue-50 p-6 rounded-lg">
+                    <h3 className="text-xl font-semibold text-blue-700 mb-3">Campaign Completed</h3>
                     <p className="text-gray-700">
                       Thank you to everyone who contributed! This fundraising campaign has reached its goal 
                       and is no longer accepting contributions.
