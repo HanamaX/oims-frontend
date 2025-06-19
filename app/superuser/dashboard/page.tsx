@@ -1,12 +1,12 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import React, { useState, useEffect, Suspense } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Loader2, LogOut, Plus, Trash2, UserCheck, UserX, BarChart3, FileText } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { useSearchParams, useRouter } from "next/navigation"
-import SuperuserAuthService from "@/lib/superuser-auth-service"
+import SuperuserAuthService from "@/lib/superuser-service-fix" // Using the fixed service
 import { useAuth } from "@/components/auth-provider"
 import {
   Dialog,
@@ -170,12 +170,11 @@ function SuperuserDashboardContent() {
       window.removeEventListener('popstate', handleTabFromUrl)
       window.removeEventListener('hashchange', handleTabFromUrl)
     }
-  }, [])
-  // Function to fetch all orphanage admins
+  }, [])  // Function to fetch all orphanage admins
   const fetchAdmins = async () => {
     try {
       const adminData = await SuperuserAuthService.getAllOrphanageAdmins()
-      setAdmins(adminData || [])
+      setAdmins(adminData ?? [])
     } catch (err: any) {
       console.error("Error fetching admins:", err)
       // Set empty array instead of throwing to keep the UI working

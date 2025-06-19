@@ -7,8 +7,8 @@ interface ExtendedAxiosInstance extends AxiosInstance {
 
 // Create an axios instance with default config
 const API = axios.create({
-  baseURL: "https://oims-4510ba404e0e.herokuapp.com",
-  // baseURL: "http://localhost:8080", // Use localhost for local development
+  // baseURL: "https://oims-4510ba404e0e.herokuapp.com",
+  baseURL: "http://localhost:8080", // Use localhost for local development
   timeout: 15000, // 15 seconds timeout
   headers: {
     "Content-Type": "application/json",
@@ -21,13 +21,17 @@ API.interceptors.request.use(
     const token = localStorage.getItem("jwt_token")
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
-      
-      // CRITICAL FIX: Special handling for FormData/file uploads
+        // CRITICAL FIX: Special handling for FormData/file uploads
       const isFormData = config.data instanceof FormData;
       if (isFormData) {
-        // For FormData, DON'T set Content-Type so browser can set it with boundary
+        // For FormData, explicitly delete Content-Type so browser can set it with boundary
         delete config.headers['Content-Type'];
         console.log(`FormData detected - removed Content-Type to let browser handle it`);
+        
+        // Ensure transformRequest is not overridden for FormData
+        if (!config.transformRequest) {
+          config.transformRequest = [(data) => data];
+        }
       } else if (config.headers['Content-Type'] !== 'multipart/form-data') {
         // For JSON data, set content type explicitly
         config.headers['Content-Type'] = 'application/json'

@@ -1,80 +1,216 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import "../../styles/animations.css";
+import API from "@/lib/api-service"; // Import the API instance
 
-export default function OrphanageRegistrationForm() {
-  type FormState = {
-    personalName: string;
-    gender: string;
-    email: string;
-    phone: string;
+export default function OrphanageRegistrationForm() {  type FormState = {
+    adminFullName: string;
+    adminGender: string;
+    adminEmail: string;
+    adminPhoneNumber: string;
     centerName: string;
-    placementRegion: string;
+    location: string;
     certificate: File | null;
   };
-
   const [form, setForm] = useState<FormState>({
-    personalName: "",
-    gender: "",
-    email: "",
-    phone: "",
+    adminFullName: "",
+    adminGender: "",
+    adminEmail: "",
+    adminPhoneNumber: "",
     centerName: "",
-    placementRegion: "",
+    location: "",
     certificate: null,
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [showThankYou, setShowThankYou] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, files } = e.target as HTMLInputElement;
+  const [showThankYou, setShowThankYou] = useState(false);  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, files } = e.target as HTMLInputElement;    
     if (name === "certificate") {
-      const file = files && files[0];
+      const file = files?.[0];
       if (file && file.type !== "application/pdf") {
         setError("Certificate must be a PDF file.");
         return;
       }
-      setForm({ ...form, certificate: file });
+      setForm({ ...form, certificate: file || null });
       setError("");
     } else {
       setForm({ ...form, [name]: value });
     }
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  };  // Validate form data
+  const validateForm = (formData: FormState) => {
     // Email pattern check
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(form.email)) {
-      setError("Please enter a valid email address.");
-      return;
+    if (!emailPattern.test(formData.adminEmail)) {
+      throw new Error("Please enter a valid email address.");
     }
+    
     // Phone pattern check: +countrycode and 9 digits
     const phonePattern = /^\+\d{1,4}\d{9}$/;
-    if (!phonePattern.test(form.phone)) {
-      setError("Phone number must start with country code (e.g. +254) and have exactly 9 digits after the code.");
+    if (!phonePattern.test(formData.adminPhoneNumber)) {
+      throw new Error("Phone number must start with country code (e.g. +254) and have exactly 9 digits after the code.");
+    }
+    
+    if (!formData.certificate) {
+      throw new Error("Certificate is required.");
+    }
+    
+    if (formData.certificate.type !== "application/pdf") {
+      throw new Error("Certificate must be a PDF file.");
+    }
+  };
+
+  // Submit registration data to the backend
+  const submitRegistrationData = async (formData: FormState) => {
+    const registrationData = {
+      adminFullName: formData.adminFullName,
+      adminGender: formData.adminGender,
+      adminEmail: formData.adminEmail,
+      adminPhoneNumber: formData.adminPhoneNumber,
+      centerName: formData.centerName,
+      location: formData.location
+    };
+    
+    const dataResponse = await API.post('/app/oims/orphanage-center-requests/submit-data', registrationData);
+    
+    if (!dataResponse?.data) {
+      throw new Error('Failed to submit registration data - no response received');
+    }
+    
+    // Get the requestId from the response
+    const responseData = dataResponse.data;
+    // Extract requestId from the actual response structure
+    const requestId = responseData.data?.requestId;
+    
+    console.log('Registration response:', responseData);
+    
+    if (!requestId) {
+      throw new Error('Failed to get request ID from server response');
+    }
+    
+    return requestId;
+  };  // Upload certificate to the backend
+  const uploadCertificate = async (requestId: string, certificate: File) => {
+    console.log(`Uploading certificate for request ID: ${requestId}`);
+    
+    const certificateFormData = new FormData();
+    certificateFormData.append('file', certificate);
+    
+    try {
+      console.log('File details:', {
+        name: certificate.name,
+        size: certificate.size,
+        type: certificate.type || 'No specific type'
+      });
+      
+      // Make sure Content-Type is explicitly set to undefined to let browser handle it
+      const certificateResponse = await API.post(
+        `/app/oims/orphanage-center-requests/${requestId}/upload-certificate`, 
+        certificateFormData,
+        {
+          headers: {
+            'Content-Type': undefined // This forces axios to not set the content type
+          },
+          transformRequest: (data) => {
+            // Return data as is - don't let axios transform it
+            return data;
+          }
+        }
+      );
+      
+      console.log('Certificate upload response:', certificateResponse.data);
+      
+      if (!certificateResponse?.data) {
+        console.error('Certificate upload failed:', certificateResponse);
+        throw new Error('Registration data was submitted but certificate upload failed');
+      }
+    } catch (certificateError) {
+      console.error('Error uploading certificate:', certificateError);
+      throw new Error(`Certificate upload failed: ${certificateError instanceof Error ? certificateError.message : 'Unknown error'}`);
+    }
+  };
+
+  // Alternative certificate upload method using direct fetch instead of axios
+  const uploadCertificateWithFetch = async (requestId: string, certificate: File) => {
+    console.log(`Uploading certificate using fetch for request ID: ${requestId}`);
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', certificate);
+        const token = localStorage.getItem("jwt_token");
+      const apiBaseUrl = API.defaults.baseURL ?? "http://localhost:8080"; // Fallback to default
+      
+      const response = await fetch(
+        `${apiBaseUrl}/app/oims/orphanage-center-requests/${requestId}/upload-certificate`,
+        {
+          method: 'POST',
+          headers: token ? {
+            'Authorization': `Bearer ${token}`
+          } : {},
+          body: formData
+        }
+      );
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Fetch upload failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText
+        });
+        throw new Error(`Fetch upload failed: ${response.status} ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      console.log('Fetch certificate upload response:', data);
+      return data;
+      
+    } catch (error) {
+      console.error('Error in fetch upload:', error);
+      throw new Error(`Fetch certificate upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    try {
+      // Validate form data
+      validateForm(form);
+      
+      // Send form data to backend API
+      const requestId = await submitRegistrationData(form);
+      
+      // Upload certificate if available
+      if (form.certificate) {
+        try {
+          // First try with axios
+          await uploadCertificate(requestId, form.certificate);
+        } catch (uploadError) {
+          console.error('Axios upload failed, trying with fetch:', uploadError);
+          // If axios fails, try with fetch as fallback
+          await uploadCertificateWithFetch(requestId, form.certificate);
+        }
+      }
+      
+      setSuccess("Registration submitted successfully!");
+      setShowThankYou(true);
+      setForm({
+        adminFullName: "",
+        adminGender: "",
+        adminEmail: "",
+        adminPhoneNumber: "",
+        centerName: "",
+        location: "",
+        certificate: null,
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred. Please try again later.");
+      }
       return;
     }
-    if (!form.certificate) {
-      setError("Certificate is required.");
-      return;
-    }
-    if (form.certificate.type !== "application/pdf") {
-      setError("Certificate must be a PDF file.");
-      return;
-    }
-    // TODO: Send form data to backend API
-    setSuccess("");
-    setShowThankYou(true);
-    setForm({
-      personalName: "",
-      gender: "",
-      email: "",
-      phone: "",
-      centerName: "",
-      placementRegion: "",
-      certificate: null,
-    });
   };
 
   if (showThankYou) {
@@ -165,25 +301,65 @@ export default function OrphanageRegistrationForm() {
           {/* Personal Details Section */}
           <fieldset className="mb-6 p-4 border rounded border-blue-200 animate-pop-in">
             <legend className="font-semibold text-blue-700 px-2">Personal Details</legend>
-            <div className="mb-4 animate-fade-in delay-100">
-              <label className="block font-semibold mb-1">Name</label>
-              <input type="text" name="personalName" value={form.personalName} onChange={handleChange} required className="w-full border rounded px-3 py-2" />
+            <div className="mb-4 animate-fade-in delay-100">              <label htmlFor="personalName" className="block font-semibold mb-1">Name</label>
+              <input 
+                id="personalName"
+                type="text" 
+                name="adminFullName" 
+                value={form.adminFullName} 
+                onChange={handleChange} 
+                required 
+                className="w-full border rounded px-3 py-2"
+                placeholder="Enter your full name"
+                aria-label="Personal Name" 
+              />
             </div>
             <div className="mb-4 animate-fade-in delay-200">
-              <label className="block font-semibold mb-1">Gender</label>
-              <select name="gender" value={form.gender} onChange={handleChange} required className="w-full border rounded px-3 py-2">
+              <label htmlFor="gender" className="block font-semibold mb-1">Gender</label>
+              <select 
+                id="gender"
+                name="adminGender" 
+                value={form.adminGender} 
+                onChange={handleChange} 
+                required 
+                className="w-full border rounded px-3 py-2"
+                aria-label="Gender"
+              >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
             </div>
             <div className="mb-4 animate-fade-in delay-300">
-              <label className="block font-semibold mb-1">Email</label>
-              <input type="email" name="email" value={form.email} onChange={handleChange} required className="w-full border rounded px-3 py-2" placeholder="e.g. example@email.com" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" />
+              <label htmlFor="email" className="block font-semibold mb-1">Email</label>
+              <input 
+                id="email"
+                type="email" 
+                name="adminEmail" 
+                value={form.adminEmail} 
+                onChange={handleChange} 
+                required 
+                className="w-full border rounded px-3 py-2" 
+                placeholder="e.g. example@email.com" 
+                pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                aria-label="Email Address" 
+              />
             </div>
             <div className="mb-4 animate-fade-in delay-400">
-              <label className="block font-semibold mb-1">Phone Number</label>
-              <input type="tel" name="phone" value={form.phone} onChange={handleChange} required className="w-full border rounded px-3 py-2" placeholder="e.g. +254712345678" pattern="^\+\d{1,4}\d{9}$" maxLength={14} />
+              <label htmlFor="phone" className="block font-semibold mb-1">Phone Number</label>
+              <input 
+                id="phone"
+                type="tel" 
+                name="adminPhoneNumber" 
+                value={form.adminPhoneNumber} 
+                onChange={handleChange} 
+                required 
+                className="w-full border rounded px-3 py-2" 
+                placeholder="e.g. +254712345678" 
+                pattern="^\+\d{1,4}\d{9}$" 
+                maxLength={14}
+                aria-label="Phone Number" 
+              />
               <span className="text-xs text-gray-500">Format: +countrycode followed by 9 digits (e.g. +254712345678)</span>
             </div>
           </fieldset>
@@ -191,64 +367,51 @@ export default function OrphanageRegistrationForm() {
           <fieldset className="mb-6 p-4 border rounded border-green-200 animate-pop-in delay-200">
             <legend className="font-semibold text-green-700 px-2">Center Details</legend>
             <div className="mb-4 animate-fade-in delay-500">
-              <label className="block font-semibold mb-1">Name of Center</label>
-              <input type="text" name="centerName" value={form.centerName} onChange={handleChange} required className="w-full border rounded px-3 py-2" />
-            </div>
-            <div className="mb-4 animate-fade-in delay-600">
-              <label className="block font-semibold mb-1">Placement Region</label>
-              <input type="text" name="placementRegion" value={form.placementRegion} onChange={handleChange} required className="w-full border rounded px-3 py-2" />
+              <label htmlFor="centerName" className="block font-semibold mb-1">Name of Center</label>
+              <input 
+                id="centerName"
+                type="text" 
+                name="centerName" 
+                value={form.centerName} 
+                onChange={handleChange} 
+                required 
+                className="w-full border rounded px-3 py-2"
+                placeholder="Enter center name"
+                aria-label="Center Name" 
+              />
+            </div>            <div className="mb-4 animate-fade-in delay-600">
+              <label htmlFor="location" className="block font-semibold mb-1">Location</label>
+              <input 
+                id="location"
+                type="text" 
+                name="location" 
+                value={form.location} 
+                onChange={handleChange} 
+                required 
+                className="w-full border rounded px-3 py-2"
+                placeholder="Enter center location/region"
+                aria-label="Location" 
+              />
             </div>
           </fieldset>
           {/* Certificate Upload */}
-          <div className="mb-4 animate-fade-in delay-700">
-            <label className="block font-semibold mb-1">Government Certificate (PDF only)</label>
-            <input type="file" name="certificate" accept="application/pdf" onChange={handleChange} required className="w-full" />
+          <div className="mb-4 animate-fade-in delay-700">            <label htmlFor="certificate" className="block font-semibold mb-1">Government Certificate (PDF only)</label>
+            <input 
+              id="certificate"
+              type="file" 
+              name="certificate" 
+              accept="application/pdf" 
+              onChange={handleChange} 
+              required 
+              className="w-full"
+              aria-label="Government Certificate"
+              title="Upload your government certificate (PDF format only)" 
+            />
           </div>
           {error && <div className="text-red-600 mb-2 animate-fade-in delay-800">{error}</div>}
           {success && <div className="text-green-600 mb-2 animate-fade-in delay-800">{success}</div>}
           <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded animate-pop-in delay-900">Submit</button>
-        </form>
-      </div>
-      <style jsx global>{`
-        @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        .animate-fade-in {
-          animation: fade-in 1s ease both;
-        }
-        @keyframes slide-down {
-          from { transform: translateY(-30px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-        .animate-slide-down {
-          animation: slide-down 0.8s cubic-bezier(0.4,0,0.2,1) both;
-        }
-        @keyframes slide-up {
-          from { transform: translateY(30px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-        .animate-slide-up {
-          animation: slide-up 0.8s cubic-bezier(0.4,0,0.2,1) both;
-        }
-        @keyframes pop-in {
-          0% { transform: scale(0.8); opacity: 0; }
-          80% { transform: scale(1.05); opacity: 1; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-pop-in {
-          animation: pop-in 0.7s cubic-bezier(0.4,0,0.2,1) both;
-        }
-        .delay-100 { animation-delay: 0.1s !important; }
-        .delay-200 { animation-delay: 0.2s !important; }
-        .delay-300 { animation-delay: 0.3s !important; }
-        .delay-400 { animation-delay: 0.4s !important; }
-        .delay-500 { animation-delay: 0.5s !important; }
-        .delay-600 { animation-delay: 0.6s !important; }
-        .delay-700 { animation-delay: 0.7s !important; }
-        .delay-800 { animation-delay: 0.8s !important; }
-        .delay-900 { animation-delay: 0.9s !important; }
-      `}</style>
+        </form>      </div>
     </div>
   );
 }

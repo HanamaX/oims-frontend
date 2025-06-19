@@ -96,8 +96,7 @@ const SuperuserAuthService = {
       }
       
       console.log('Orphanage admins data:', response.data);
-        
-      // Map the response data to match our interface
+        // Map the response data to match our interface
       const adminData = response.data.data.map((admin: any) => ({
         publicId: admin.publicId,
         fullName: admin.fullName ?? 'N/A',
@@ -166,22 +165,20 @@ const SuperuserAuthService = {
   toggleAdminStatus: async (adminId: string, suspended: boolean) => {
     try {
       // Since the backend API is not working, mock a successful response
-      console.log(`Using mock implementation for ${suspended ? 'suspending' : 'activating'} admin ${adminId}`);
+      console.log(`Using mock implementation for ${suspended ? 'suspending' : 'activating'} admin`, adminId);
       
       // Return a mock success response
       return {
         success: true,
-        data: {
-          publicId: adminId,
-          suspended: suspended
-        },
-        message: `Admin ${suspended ? 'suspended' : 'activated'} successfully`
+        message: `Admin ${adminId} ${suspended ? 'suspended' : 'activated'} successfully`
       };
     } catch (error) {
       console.error("Error updating admin status:", error);
       throw error;
     }
-  },  // Get system stats for superuser dashboard
+  },
+
+  // Get system statistics
   getSystemStats: async () => {
     try {
       // Since the backend API is not working, use mock data instead
