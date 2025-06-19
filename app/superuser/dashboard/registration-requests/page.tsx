@@ -149,8 +149,7 @@ export default function RegistrationRequestsPage() {
     } finally {
       setActionLoading(false);
     }
-  };
-  const filteredRequests = requests.filter((req) => {
+  };  const filteredRequests = requests.filter((req) => {
     const matchesStatus = status === "All" || req.status === status;
     const matchesSearch =
       req.centerName.toLowerCase().includes(search.toLowerCase()) ||

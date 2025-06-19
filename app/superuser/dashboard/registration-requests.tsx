@@ -1,5 +1,6 @@
+"use client";
 import React, { useEffect, useState } from "react";
-// import { Button } from "../../components/ui/button";
+import { Button } from "@/components/ui/button";
 
 interface RegistrationRequest {
   id: string;
@@ -75,29 +76,73 @@ export default function RegistrationRequests() {
   if (error) return <div className="text-red-600">{error}</div>;
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Orphanage Registration Requests</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="max-w-7xl mx-auto p-6">
+      <h2 className="text-4xl font-extrabold mb-8 text-center text-blue-900">
+        Orphanage Registration Requests
+      </h2>
+      <div className="flex flex-col gap-6">
         {requests.length === 0 && !loading && (
-          <div className="col-span-full text-center text-gray-500">No registration requests found.</div>
+          <div className="text-center text-gray-500">
+            No registration requests found.
+          </div>
         )}
         {requests.map((req) => (
-          <div key={req.id} className="bg-white rounded shadow border p-4 flex flex-col gap-2">
-            <div className="font-semibold text-blue-700 text-lg mb-1">{req.personalName}</div>
-            <div><span className="font-medium">Gender:</span> {req.gender}</div>
-            <div><span className="font-medium">Email:</span> {req.email}</div>
-            <div><span className="font-medium">Center:</span> {req.centerName}</div>
-            <div><span className="font-medium">Region:</span> {req.placementRegion}</div>
-            <div><span className="font-medium">Certificate:</span> <a href={req.certificateUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View PDF</a></div>
-            <div><span className="font-medium">Status:</span> <span className="capitalize">{req.status}</span></div>
-            <div className="flex gap-2 mt-2">
+          <div
+            key={req.id}
+            className="bg-white rounded shadow border p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+          >
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-blue-700 text-xl mb-1">
+                {req.personalName}
+              </div>
+              <div className="mb-1">
+                <span className="font-medium">Gender:</span> {req.gender}
+              </div>
+              <div className="mb-1">
+                <span className="font-medium">Email:</span> {req.email}
+              </div>
+              <div className="mb-1">
+                <span className="font-medium">Center:</span> {req.centerName}
+              </div>
+              <div className="mb-1">
+                <span className="font-medium">Region:</span> {req.placementRegion}
+              </div>
+              <div className="mb-1">
+                <span className="font-medium">Certificate:</span>{" "}
+                <a
+                  href={req.certificateUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  View PDF
+                </a>
+              </div>
+              <div className="mb-1">
+                <span className="font-medium">Status:</span>{" "}
+                <span className="capitalize">{req.status}</span>
+              </div>
+            </div>
+            <div className="flex flex-row gap-2 md:flex-col md:gap-2 min-w-[180px] md:items-end">
               {req.status === "pending" ? (
                 <>
-                  <button className="bg-green-600 text-white flex-1 rounded px-4 py-2" onClick={() => handleApprove(req.id)}>Approve</button>
-                  <button className="bg-red-600 text-white flex-1 rounded px-4 py-2" onClick={() => handleDecline(req.id)}>Decline</button>
+                  <Button
+                    className="bg-green-600 text-white flex-1 md:w-full"
+                    onClick={() => handleApprove(req.id)}
+                  >
+                    Approve
+                  </Button>
+                  <Button
+                    className="bg-red-600 text-white flex-1 md:w-full"
+                    onClick={() => handleDecline(req.id)}
+                  >
+                    Decline
+                  </Button>
                 </>
               ) : (
-                <span className="text-gray-500 flex-1 text-center">-</span>
+                <span className="text-gray-500 flex-1 text-center md:w-full">
+                  -
+                </span>
               )}
             </div>
           </div>

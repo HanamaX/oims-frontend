@@ -112,10 +112,11 @@ const translations: Record<string, Record<Language, string>> = {  // New staff m
     en: "No description provided",
     sw: "Hakuna maelezo yaliyotolewa",
   },
-  "inventory.branch": {
-    en: "Branch",
-    sw: "Tawi",
-  },
+  // Removed duplicate "inventory.branch" key to resolve object literal property duplication error
+  // "inventory.branch": {
+  //   en: "Branch",
+  //   sw: "Tawi",
+  // },
 
   // Navigation
   "nav.home": {
@@ -317,14 +318,7 @@ const translations: Record<string, Record<Language, string>> = {  // New staff m
     en: "Admin",
     sw: "Msimamizi",
   },
-  "staff.active": {
-    en: "Active",
-    sw: "Anafanya kazi",
-  },
-  "staff.suspended": {
-    en: "Suspended",
-    sw: "Amesimamishwa",
-  },
+  // Removed duplicate "staff.active" key to resolve object literal property duplication error
   "staff.staffMembers": {
     en: "staff members",
     sw: "wafanyakazi",
@@ -732,10 +726,7 @@ const translations: Record<string, Record<Language, string>> = {  // New staff m
     en: "Active",
     sw: "Anafanya kazi",
   },
-  "staff.inactive": {
-    en: "Inactive",
-    sw: "Hafanyi kazi",
-  },
+  // "staff.inactive" duplicate removed to resolve object literal property duplication error
   "staff.gender": {
     en: "Gender",
     sw: "Jinsia",
@@ -780,10 +771,7 @@ const translations: Record<string, Record<Language, string>> = {  // New staff m
     en: "Manage branch assignment and account status for",
     sw: "Simamia uhamisho wa tawi na hali ya akaunti kwa",
   },
-  "staff.admin": {
-    en: "Admin",
-    sw: "Msimamizi",
-  },
+  // "staff.admin" duplicate removed to resolve object literal property duplication error
   "staff.assignedBranch": {
     en: "Assigned Branch",
     sw: "Tawi Lililolipangwa",

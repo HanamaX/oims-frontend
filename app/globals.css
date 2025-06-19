@@ -185,6 +185,27 @@
   transform: translateZ(0);
 }
 
+/* Background image classes to replace inline styles */
+.bg-hero-image {
+  background-image: url('/image/image2.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.7);
+  transform-origin: center center;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.bg-wallpaper {
+  background-image: url('/image/backgroundwallpaper.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  transition: background-position 8s ease;
+}
+
 [data-theme="dark"] {
   --background: #1f2937;
   --foreground: #ffffff;

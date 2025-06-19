@@ -53,23 +53,11 @@ export default function HomePage() {
               <Link href="/register-orphanage" className="text-sm font-medium hover:text-blue-700">
                 Register
               </Link>
-            </nav>
-          </div><div className="flex items-center gap-4">
+            </nav>          </div><div className="flex items-center gap-4">
             <LanguageSwitcher />
             <Link href="/login">
               <Button variant="outline">
                 <T k="nav.login" />
-              </Button>
-            </Link>
-            {/* Always display superuser button */}
-            <Link href="/superuser/dashboard">
-              <Button variant="default" className="bg-green-600 hover:bg-green-700 !important">
-                <T k="nav.superuser" />
-              </Button>
-            </Link>
-            <Link href="/register-orphanage">
-              <Button variant="default" className="bg-blue-600 hover:bg-blue-700 !important">
-                Register
               </Button>
             </Link>
             <Button
@@ -91,21 +79,12 @@ export default function HomePage() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <T k="nav.about" />
-              </Link>
-              <Link
+              </Link>              <Link
                 href="/register-orphanage"
                 className="block px-3 py-2 text-sm font-medium rounded-md hover:bg-blue-50"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Register
-              </Link>
-              {/* Always show superuser link in mobile menu */}
-              <Link
-                href="/superuser/dashboard"
-                className="block px-3 py-2 text-sm font-medium rounded-md bg-green-100 text-green-800 hover:bg-green-200 !important"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <T k="nav.superuser" />
               </Link>
               <div className="flex items-center gap-2 pt-2">
                 <div className="text-sm font-medium">
@@ -119,19 +98,10 @@ export default function HomePage() {
       </header>
 
       {/* Hero Section with image2.jpg background for entire top section */}
-      <section className="relative min-h-[600px] py-12 md:py-24 flex items-center">
-        {/* Image background for entire hero section with subtle zoom animation */}
+      <section className="relative min-h-[600px] py-12 md:py-24 flex items-center">        {/* Image background for entire hero section with subtle zoom animation */}
         <div
-          className="absolute inset-0 w-full h-full -z-10 animate-zoom-bg"
-          style={{
-            backgroundImage: 'url(/image/image2.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            filter: 'brightness(0.7)',
-            transformOrigin: 'center center',
-            willChange: 'transform',
-            transform: 'translateZ(0)'
-          }}
+          className="absolute inset-0 w-full h-full -z-10 animate-zoom-bg bg-hero-image"
+          aria-hidden="true"
         ></div>
         {/* Gradient overlay for text readability */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-900/70 to-blue-900/30"></div>
@@ -147,18 +117,8 @@ export default function HomePage() {
             </p>
           </div>
         </div>
-      </section>
-      {/* Rest of the content with background */}
-      <div className="flex-grow bg-gradient-animate" 
-         style={{ 
-           backgroundImage: 'url(/image/backgroundwallpaper.jpg)', 
-           backgroundSize: 'cover',
-           backgroundAttachment: 'fixed',
-           backgroundPosition: 'center',
-           backgroundRepeat: 'no-repeat',
-           position: 'relative',
-           transition: 'background-position 8s ease'
-         }}>
+      </section>      {/* Rest of the content with background */}
+      <div className="flex-grow bg-gradient-animate bg-wallpaper">
         {/* Background overlay with subtle animation for better text readability */}
         <div className="absolute inset-0 bg-white/30 backdrop-blur-sm z-0"></div>
         
@@ -407,20 +367,19 @@ export default function HomePage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">            <div>
               <h3 className="text-lg font-semibold mb-4 text-blue-200">
                 <T k="footer.about.title" />
-              </h3>
-              <ul className="space-y-3">
+              </h3>              <ul className="space-y-3">
                 <li>
-                  <a href="#" className="text-blue-100 hover:text-white transition-colors">
+                  <a href="#" className="text-blue-100 hover:text-white transition-colors" title="About Us">
                     <T k="footer.about.aboutUs" />
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-blue-100 hover:text-white transition-colors">
+                  <a href="#" className="text-blue-100 hover:text-white transition-colors" title="Why Choose Us">
                     <T k="footer.about.why" />
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-blue-100 hover:text-white transition-colors">
+                  <a href="#" className="text-blue-100 hover:text-white transition-colors" title="Our Impact">
                     <T k="footer.about.impact" />
                   </a>
                 </li>
@@ -428,15 +387,14 @@ export default function HomePage() {
             </div>            <div>
               <h3 className="text-lg font-semibold mb-4 text-blue-200">
                 <T k="footer.resources.title" />
-              </h3>
-              <ul className="space-y-3">
+              </h3>              <ul className="space-y-3">
                 <li>
-                  <a href="#" className="text-blue-100 hover:text-white transition-colors">
+                  <a href="#" className="text-blue-100 hover:text-white transition-colors" title="FAQ">
                     <T k="footer.resources.faq" />
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-blue-100 hover:text-white transition-colors">
+                  <a href="#" className="text-blue-100 hover:text-white transition-colors" title="Campaigns">
                     <T k="footer.resources.campaigns" />
                   </a>
                 </li>
@@ -444,15 +402,14 @@ export default function HomePage() {
             </div>            <div>
               <h3 className="text-lg font-semibold mb-4 text-blue-200">
                 <T k="footer.legal.title" />
-              </h3>
-              <ul className="space-y-3">
+              </h3>              <ul className="space-y-3">
                 <li>
-                  <a href="#" className="text-blue-100 hover:text-white transition-colors">
+                  <a href="#" className="text-blue-100 hover:text-white transition-colors" title="Terms of Service">
                     <T k="footer.legal.terms" />
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-blue-100 hover:text-white transition-colors">
+                  <a href="#" className="text-blue-100 hover:text-white transition-colors" title="Privacy Policy">
                     <T k="footer.legal.privacy" />
                   </a>
                 </li>
@@ -460,15 +417,14 @@ export default function HomePage() {
             </div>            <div>
               <h3 className="text-lg font-semibold mb-4 text-blue-200">
                 <T k="footer.connect.title" />
-              </h3>
-              <div className="flex gap-4 mb-4">
-                <a href="#" className="bg-blue-800 p-2 rounded-full hover:bg-blue-700 transition-colors">
+              </h3>              <div className="flex gap-4 mb-4">
+                <a href="#" className="bg-blue-800 p-2 rounded-full hover:bg-blue-700 transition-colors" title="Facebook" aria-label="Visit our Facebook page">
                   <Facebook className="h-5 w-5" />
                 </a>
-                <a href="#" className="bg-blue-800 p-2 rounded-full hover:bg-blue-700 transition-colors">
+                <a href="#" className="bg-blue-800 p-2 rounded-full hover:bg-blue-700 transition-colors" title="Twitter" aria-label="Visit our Twitter page">
                   <Twitter className="h-5 w-5" />
                 </a>
-                <a href="#" className="bg-blue-800 p-2 rounded-full hover:bg-blue-700 transition-colors">
+                <a href="#" className="bg-blue-800 p-2 rounded-full hover:bg-blue-700 transition-colors" title="Instagram" aria-label="Visit our Instagram page">
                   <Instagram className="h-5 w-5" />
                 </a>
               </div>
