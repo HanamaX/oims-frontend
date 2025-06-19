@@ -17,8 +17,19 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
   // Use analytics-specific translations
   const { t: ta } = useAnalyticsTranslations()
   
-  // Green theme color palette for charts - inspired by Spotify
-  const colors = ["#10b981", "#059669", "#047857", "#065f46", "#064e3b", "#22c55e", "#15803d"]
+  // Blue-based multi-color palette for charts
+  const colors = [
+    "#2563eb", // blue-600
+    "#3b82f6", // blue-500
+    "#60a5fa", // blue-400
+    "#f59e42", // orange-400
+    "#fbbf24", // yellow-400
+    "#10b981", // green-500
+    "#f43f5e", // rose-500
+    "#a21caf", // purple-800
+    "#0ea5e9", // sky-500
+    "#eab308"  // amber-500
+  ]
   
   // Make sure data exists to prevent errors
   if (!data) {
@@ -182,7 +193,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <Tooltip formatter={(value) => [`${value} ${t("report.orphansCount")}`, t("report.count")]} />
                   <Bar 
                     dataKey="value" 
-                    fill="#10b981" 
+                    fill="#2563eb" 
                     animationDuration={1500}
                     animationBegin={300}
                     className="hover:opacity-80 transition-opacity"
@@ -198,7 +209,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <Tooltip formatter={(value) => [`${value} ${t("report.orphansCount")}`, t("report.count")]} />
                   <Bar 
                     dataKey="value" 
-                    fill="#059669" 
+                    fill="#1d4ed8" 
                     animationDuration={1500}
                     animationBegin={300}
                     className="hover:opacity-80 transition-opacity"
@@ -260,7 +271,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <Tooltip formatter={(value) => [`${value} ${t("report.inventory.items")}`, t("report.count")]} />
                   <Bar 
                     dataKey="value" 
-                    fill="#047857" 
+                    fill="#3b82f6" 
                     animationDuration={1500}
                     animationBegin={300}
                     className="hover:opacity-80 transition-opacity"
@@ -276,9 +287,9 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <Line 
                     type="monotone" 
                     dataKey="value" 
-                    stroke="#10b981" 
+                    stroke="#2563eb" 
                     strokeWidth={2} 
-                    dot={{ fill: "#059669" }}
+                    dot={{ fill: "#1d4ed8" }}
                     activeDot={{ r: 6 }}
                     animationDuration={2000}
                     animationBegin={300}
@@ -319,7 +330,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <Tooltip formatter={(value) => [formatCurrency(value as number), t("report.fundraising.amount")]} />
                   <Bar 
                     dataKey="value" 
-                    fill="#10b981" 
+                    fill="#2563eb" 
                     animationDuration={1500}
                     animationBegin={300}
                     className="hover:opacity-80 transition-opacity"
@@ -418,7 +429,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <YAxis />                  <Tooltip formatter={(value) => [`${value} ${t("report.volunteers.count")}`, t("report.count")]} />
                   <Bar 
                     dataKey="value" 
-                    fill="#10b981" 
+                    fill="#2563eb" 
                     animationDuration={1500}
                     animationBegin={300}
                     className="hover:opacity-80 transition-opacity"
@@ -434,9 +445,9 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <Line 
                     type="monotone" 
                     dataKey="value" 
-                    stroke="#10b981" 
+                    stroke="#2563eb" 
                     strokeWidth={2}
-                    dot={{ fill: "#059669" }}
+                    dot={{ fill: "#1d4ed8" }}
                     activeDot={{ r: 6 }}
                     animationDuration={2000}
                     animationBegin={300}
@@ -499,7 +510,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <YAxis />                  <Tooltip formatter={(value) => [`${value} ${t("dashboard.staff")}`, t("report.count")]} />
                   <Bar 
                     dataKey="value" 
-                    fill="#10b981" 
+                    fill="#2563eb" 
                     animationDuration={1500}
                     animationBegin={300}
                     className="hover:opacity-80 transition-opacity"
@@ -513,7 +524,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <YAxis />                  <Tooltip formatter={(value) => [`${value} ${t("dashboard.staff")}`, t("report.count")]} />
                   <Bar 
                     dataKey="value" 
-                    fill="#059669" 
+                    fill="#1d4ed8" 
                     animationDuration={1500}
                     animationBegin={300}
                     className="hover:opacity-80 transition-opacity"
@@ -553,7 +564,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <YAxis />                  <Tooltip formatter={(value) => [`${value}`, t("report.count")]} />
                   <Bar 
                     dataKey="value" 
-                    fill="#10b981" 
+                    fill="#2563eb" 
                     animationDuration={1500}
                     animationBegin={300}
                     className="hover:opacity-80 transition-opacity"
@@ -581,7 +592,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <YAxis tickFormatter={(value) => formatCurrency(value)} />                  <Tooltip formatter={(value) => [formatCurrency(value as number), t("report.fundraising.amount")]} />
                   <Bar 
                     dataKey="value" 
-                    fill="#059669" 
+                    fill="#1d4ed8" 
                     animationDuration={1500}
                     animationBegin={300}
                     className="hover:opacity-80 transition-opacity"
@@ -598,9 +609,9 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
   }
 
   return (
-    <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-        <CardTitle className="text-green-800">{t("report.statistics")}</CardTitle>
+    <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
+        <CardTitle className="text-blue-800">{t("report.statistics")}</CardTitle>
       </CardHeader>
       <CardContent className="p-4">
         <div className="animate-in fade-in duration-700 slide-in-from-bottom-4">

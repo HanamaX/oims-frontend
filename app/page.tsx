@@ -67,11 +67,6 @@ export default function HomePage() {
                 <T k="nav.superuser" />
               </Button>
             </Link>
-            <Link href="/register-orphanage">
-              <Button variant="default" className="bg-blue-600 hover:bg-blue-700 !important">
-                Register
-              </Button>
-            </Link>
             <Button
               className="md:hidden"
               variant="ghost"

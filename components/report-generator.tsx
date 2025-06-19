@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import ReportService, { ReportType, ReportFilters } from "@/lib/report-service"
 import { format } from "date-fns"
+import React from "react"
 
 interface ReportComponentProps {
   userRole: "admin" | "superadmin"
@@ -273,7 +274,25 @@ export default function ReportComponent({ userRole, branchId, branchName }: Repo
     }
   }
 
-  return (
+  // Add a new component for animated stat cards
+  function AnimatedStatCard({ title, value, icon, color }: { title: string; value: string | number; icon?: React.ReactNode; color: string }) {
+    return (
+      <div className={`relative overflow-hidden rounded-xl shadow-lg p-6 bg-white flex flex-col items-center justify-center min-w-[220px] min-h-[120px] group`}>      <div className="absolute inset-0 z-0 animate-ripple bg-gradient-to-br from-white via-[${color}] to-white opacity-30 group-hover:opacity-50 transition-all" />
+      <div className="absolute -bottom-8 left-0 w-full h-12 z-0 pointer-events-none">
+        <svg viewBox="0 0 1440 320" className="w-full h-full">
+          <path fill={color} fillOpacity="0.2" d="M0,224L48,202.7C96,181,192,139,288,144C384,149,480,203,576,197.3C672,192,768,128,864,128C960,128,1056,192,1152,197.3C1248,203,1344,149,1392,122.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+        </svg>
+      </div>
+            <div className="relative z-10 flex flex-col items-center">
+              {icon && <div className="mb-2 text-3xl">{icon}</div>}
+              <div className="text-4xl font-bold text-gray-800">{value}</div>
+              <div className="text-base font-medium text-gray-600 mt-1">{title}</div>
+            </div>
+          </div>
+        );
+      }
+      
+              return (
     <div className="container mx-auto py-6">
       <Card className="w-full">
         <CardHeader>
@@ -341,7 +360,7 @@ export default function ReportComponent({ userRole, branchId, branchName }: Repo
                         type="button"
                         variant={filters.exportFormat === "pdf" ? "default" : "outline"}
                         onClick={() => setFilters({ ...filters, exportFormat: "pdf" })}
-                        className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                        className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
                       >
                         PDF
                       </Button>
@@ -349,7 +368,7 @@ export default function ReportComponent({ userRole, branchId, branchName }: Repo
                         type="button"
                         variant={filters.exportFormat === "excel" ? "default" : "outline"}
                         onClick={() => setFilters({ ...filters, exportFormat: "excel" })}
-                        className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                        className="flex-1 transition-all hover:scale-105 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
                       >
                         Excel
                       </Button>
@@ -365,8 +384,8 @@ export default function ReportComponent({ userRole, branchId, branchName }: Repo
           </Tabs>
         </CardContent>        <CardFooter className="flex flex-col space-y-4">
           <div className="flex justify-between w-full">
-            <Alert variant="default" className="w-full mr-4 border-green-200">
-              <AlertCircle className="h-4 w-4 text-green-600" />
+            <Alert variant="default" className="w-full mr-4 border-blue-200">
+              <AlertCircle className="h-4 w-4 text-blue-600" />
               <AlertTitle>Reports will include data from the selected date range.</AlertTitle>
               <AlertDescription>
                 Make sure to select the appropriate filters for the most relevant results.
@@ -374,14 +393,14 @@ export default function ReportComponent({ userRole, branchId, branchName }: Repo
             </Alert>
             <div className="flex space-x-4">
               <Button 
-                className="min-w-[150px] transition-all hover:scale-105 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white" 
+                className="min-w-[150px] transition-all hover:scale-105 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white" 
                 onClick={() => setShowAnalytics(!showAnalytics)}
               >
                 <BarChart3 className="mr-2 h-4 w-4" /> 
                 {showAnalytics ? "Hide Analytics" : "Show Analytics"}
               </Button>
               <Button 
-                className="min-w-[150px] transition-all hover:scale-105 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white" 
+                className="min-w-[150px] transition-all hover:scale-105 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white" 
                 onClick={handleGenerateReport}
                 disabled={loading}
               >
@@ -402,7 +421,7 @@ export default function ReportComponent({ userRole, branchId, branchName }: Repo
           
           {showAnalytics && (
             <div className="w-full mt-4 transition-all animate-in fade-in duration-300">
-              <Card className="w-full border-green-200">
+              <Card className="w-full border-blue-200">
                 <CardHeader>
                   <CardTitle className="text-xl">Analytics Dashboard</CardTitle>
                   <CardDescription>
@@ -440,6 +459,30 @@ export default function ReportComponent({ userRole, branchId, branchName }: Repo
           )}
         </CardFooter>
       </Card>
+
+      {/* In your superuser report render, add the animated stat cards */}
+      {userRole === "superadmin" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+          <AnimatedStatCard title="Orphanage Centers" value={5} color="#2563eb" icon={<span>🏠</span>} />
+          <AnimatedStatCard title="Branches" value={12} color="#f59e42" icon={<span>🌿</span>} />
+          <AnimatedStatCard title="Orphans" value={143} color="#10b981" icon={<span>🧒</span>} />
+          <AnimatedStatCard title="Admins" value={24} color="#a21caf" icon={<span>🧑‍💼</span>} />
+          <AnimatedStatCard title="Donations (Tsh)" value={0} color="#f43f5e" icon={<span>💰</span>} />
+          <AnimatedStatCard title="Active Fundraisers" value={0} color="#fbbf24" icon={<span>🎯</span>} />
+          <AnimatedStatCard title="Inventory Items" value={0} color="#0ea5e9" icon={<span>📦</span>} />
+          <AnimatedStatCard title="Volunteers" value={58} color="#22d3ee" icon={<span>🤝</span>} />
+        </div>
+      )}
+      <style jsx>{`
+        @keyframes ripple {
+          0% { transform: scale(1); opacity: 0.7; }
+          70% { transform: scale(1.2); opacity: 0.4; }
+          100% { transform: scale(1.4); opacity: 0.2; }
+        }
+        .animate-ripple {
+          animation: ripple 2.5s infinite alternate;
+        }
+      `}</style>
     </div>
   )
 }

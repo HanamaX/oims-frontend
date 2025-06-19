@@ -10,8 +10,8 @@ interface ReportStatsProps {
 }
 
 export default function ReportStats({ data, type }: ReportStatsProps) {
-  // Green theme color palette for charts - inspired by Spotify
-  const colors = ["#10b981", "#059669", "#047857", "#065f46", "#064e3b", "#22c55e", "#15803d"]
+  // Blue theme color palette for charts - inspired by Spotify
+  const colors = ["#3b82f6", "#2563eb", "#1d4ed8", "#1e40af", "#1e3a8a", "#60a5fa", "#3b82f6"]
   // Format currency values
   const formatCurrency = (value: number) => {
     return `Tshs ${new Intl.NumberFormat('en-US', {
@@ -25,22 +25,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
     switch (type) {      case "orphans":
         return (
           <Tabs defaultValue="demographics">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="demographics"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Demographics
               </TabsTrigger>
               <TabsTrigger 
                 value="age"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Age Distribution
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Status
               </TabsTrigger>
@@ -71,7 +71,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip formatter={(value) => [`${value} orphans`, 'Count']} />
-                  <Bar dataKey="value" fill="#10b981" />
+                  <Bar dataKey="value" fill="#3b82f6" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -81,7 +81,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip formatter={(value) => [`${value} orphans`, 'Count']} />
-                  <Bar dataKey="value" fill="#059669" />
+                  <Bar dataKey="value" fill="#2563eb" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -91,22 +91,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
       case "inventory":
         return (
           <Tabs defaultValue="categories">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="categories"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Categories
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Stock Status
               </TabsTrigger>
               <TabsTrigger 
                 value="transactions"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Transactions
               </TabsTrigger>
@@ -137,7 +137,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip formatter={(value) => [`${value} items`, 'Count']} />
-                  <Bar dataKey="value" fill="#10b981" />
+                  <Bar dataKey="value" fill="#3b82f6" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -147,7 +147,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip formatter={(value) => [`${value} transactions`, 'Count']} />
-                  <Line type="monotone" dataKey="value" stroke="#059669" strokeWidth={2} />
+                  <Line type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -157,22 +157,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
       case "fundraising":
         return (
           <Tabs defaultValue="amount">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="amount"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Amounts
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Status
               </TabsTrigger>
               <TabsTrigger 
                 value="timeline"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Timeline
               </TabsTrigger>
@@ -183,7 +183,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="name" />
                   <YAxis tickFormatter={(value) => formatCurrency(value)} />
                   <Tooltip formatter={(value) => [formatCurrency(value as number), 'Amount']} />
-                  <Bar dataKey="value" fill="#10b981" />
+                  <Bar dataKey="value" fill="#3b82f6" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -213,7 +213,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="date" />
                   <YAxis tickFormatter={(value) => formatCurrency(value)} />
                   <Tooltip formatter={(value) => [formatCurrency(value as number), 'Amount']} />
-                  <Line type="monotone" dataKey="value" stroke="#059669" strokeWidth={2} />
+                  <Line type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -223,22 +223,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
       case "volunteers":
         return (
           <Tabs defaultValue="status">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="status"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Status
               </TabsTrigger>
               <TabsTrigger 
                 value="activities"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Activities
               </TabsTrigger>
               <TabsTrigger 
                 value="hours"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Volunteer Hours
               </TabsTrigger>
@@ -269,7 +269,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip formatter={(value) => [`${value} volunteers`, 'Count']} />
-                  <Bar dataKey="value" fill="#10b981" />
+                  <Bar dataKey="value" fill="#3b82f6" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -289,22 +289,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
       case "staff":
         return (
           <Tabs defaultValue="departments">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="departments"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Departments
               </TabsTrigger>
               <TabsTrigger 
                 value="status"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Status
               </TabsTrigger>
               <TabsTrigger 
                 value="roles"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Roles
               </TabsTrigger>
@@ -335,7 +335,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip formatter={(value) => [`${value} staff members`, 'Count']} />
-                  <Bar dataKey="value" fill="#10b981" />
+                  <Bar dataKey="value" fill="#3b82f6" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -345,7 +345,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip formatter={(value) => [`${value} staff members`, 'Count']} />
-                  <Bar dataKey="value" fill="#059669" />
+                  <Bar dataKey="value" fill="#2563eb" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -355,22 +355,22 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
       case "branches":
         return (
           <Tabs defaultValue="distribution">
-            <TabsList className="grid w-full grid-cols-3 bg-green-100">
+            <TabsList className="grid w-full grid-cols-3 bg-blue-100">
               <TabsTrigger 
                 value="distribution"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Distribution
               </TabsTrigger>
               <TabsTrigger 
                 value="orphans"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Orphans
               </TabsTrigger>
               <TabsTrigger 
                 value="resources"
-                className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 Resources
               </TabsTrigger>
@@ -381,7 +381,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip formatter={(value) => [`${value}`, 'Count']} />
-                  <Bar dataKey="value" fill="#10b981" />
+                  <Bar dataKey="value" fill="#3b82f6" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -391,7 +391,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip formatter={(value) => [`${value} orphans`, 'Count']} />
-                  <Bar dataKey="value" fill="#059669" />
+                  <Bar dataKey="value" fill="#2563eb" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -401,7 +401,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                   <XAxis dataKey="name" />
                   <YAxis tickFormatter={(value) => formatCurrency(value)} />
                   <Tooltip formatter={(value) => [formatCurrency(value as number), 'Amount']} />
-                  <Bar dataKey="value" fill="#047857" />
+                  <Bar dataKey="value" fill="#1d4ed8" />
                 </BarChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -413,9 +413,9 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
     }
   }
   return (
-    <Card className="border-green-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
-        <CardTitle className="text-green-800">Report Statistics</CardTitle>
+    <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-sky-50 border-b border-blue-100">
+        <CardTitle className="text-blue-800">Report Statistics</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         <div className="animate-in fade-in duration-700 slide-in-from-bottom-4">
