@@ -1,9 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import { useLanguage, T } from "@/contexts/LanguageContext"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Loader2, Users, Package, DollarSign, Bell } from "lucide-react"
+import { Loader2, Users, Coins, Bell } from "lucide-react"
 import { useAuth } from "@/components/auth-provider"
 import API from "@/lib/api-service"
 import {
@@ -35,6 +35,7 @@ export default function SupervisorDashboardPage() {
   const { t } = useLanguage()
   const { user, isAuthenticated, isLoading } = useAuth()
   const [loading, setLoading] = useState(true)
+  const notificationsLoadedRef = useRef(false)
   const [stats, setStats] = useState({
     totalOrphans: 0,
     totalVolunteers: 0,
@@ -125,11 +126,9 @@ export default function SupervisorDashboardPage() {
     } finally {
       setMarkingAsRead(null);
     }
-  };
-  
-  // Function to refresh notifications
-  const refreshNotifications = async () => {
-    if (!isAuthenticated || loading) {
+  };  // Function to refresh notifications
+  const refreshNotifications = useCallback(async () => {
+    if (!isAuthenticated) {
       return;
     }
     
@@ -166,26 +165,36 @@ export default function SupervisorDashboardPage() {
       setAllNotifications([]);
     } finally {
       setLoading(false);
+      notificationsLoadedRef.current = true;
     }
-  };
-  
-  // Effect to handle pagination
+  }, [isAuthenticated]);
+  // Effect to load dashboard data
   useEffect(() => {
-    // Mock data loading
-    const timer = setTimeout(() => {      setStats({
-        totalOrphans: 87,
-        totalVolunteers: 15,
-        totalFundraising: 0,
-        unreadNotificationsCount: 0,
-        inventoryItems: 245,
-        scheduledActivities: 12,
-        pendingRequests: 5
-      })
-      setLoading(false)
-    }, 1000)
-
-    return () => clearTimeout(timer)
-  }, [])
+    if (user) {
+      // Set stats from user data
+      setStats({
+        totalOrphans: user.dashboardStats?.totalOrphans ?? 0,
+        totalVolunteers: user.dashboardStats?.totalVolunteers ?? 0,
+        totalFundraising: user.dashboardStats?.totalFundraising ?? 0,
+        unreadNotificationsCount: user.unreadNotificationsCount ?? 0,
+        inventoryItems: 0, // Not in supervisor response
+        scheduledActivities: 0, // Not in supervisor response
+        pendingRequests: 0 // Not in supervisor response
+      });
+      
+      // Only update loading state here if we're not loading notifications
+      if (notificationsLoadedRef.current) {
+        setLoading(false);
+      }
+    }
+  }, [user]);
+  
+  // Effect to load notifications ONCE when component mounts
+  useEffect(() => {
+    if (isAuthenticated && !notificationsLoadedRef.current) {
+      refreshNotifications();
+    }
+  }, [isAuthenticated, refreshNotifications]);
 
   if (isLoading || loading) {
     return (
@@ -195,65 +204,60 @@ export default function SupervisorDashboardPage() {
       </div>
     )
   }
-  return (
-    <div className="bg-white min-h-screen py-8 px-2 md:px-0">
-      <h1 className="text-3xl font-bold mb-8 text-gray-800"><T k="supervisor.dashboard.title" /></h1>
-      <div className="space-y-6">
-        <div>
-          <p className="text-muted-foreground">
-            <T k="admin.dashboard.welcome" />, {user?.username ?? "Admin"}! {user?.branchName ? 
-              <><T k="admin.dashboard.overview" /> {user.branchName}.</> : 
-              <><T k="admin.dashboard.overview" /> <T k="admin.dashboard.yourBranch" />.</>}
-          </p>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium"><T k="admin.dashboard.totalOrphans" /></CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.totalOrphans}</div>
-              <p className="text-xs text-gray-500">+12% from last month</p>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">{t("dashboard.inventory")}</CardTitle>
-              <Package className="h-4 w-4 text-gray-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.inventoryItems}</div>
-              <p className="text-xs text-gray-500">+8 items added</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium"><T k="supervisor.dashboard.branchInfo" /></CardTitle>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
-                <path d="M3 6h18"/>
-                <path d="M7 12h10"/>
-                <path d="M10 18h4"/>
-              </svg>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold animate-in fade-in-50 duration-700 delay-200 truncate">{user?.branchName ?? t("admin.dashboard.activeBranch")}</div>
-              <p className="text-xs text-muted-foreground"><T k="supervisor.dashboard.currentBranch" /></p>
-            </CardContent>
-          </Card>
+  return (    
+  <div className="space-y-6">      <div>
+        <h1 className="text-3xl font-bold tracking-tight"><T k="supervisor.dashboard.title" /></h1>
+        <p className="text-muted-foreground">
+          <T k="admin.dashboard.welcome" />, {user?.username ?? "Admin"}! {user?.branchName ? 
+            <><T k="admin.dashboard.overview" /> {user.branchName}.</> : 
+            <><T k="admin.dashboard.overview" /> <T k="admin.dashboard.yourBranch" />.</>}
+        </p>
+      </div>      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium"><T k="admin.dashboard.totalOrphans" /></CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.totalOrphans}</div>
+            <p className="text-xs text-gray-500"><T k="supervisor.dashboard.currentOrphans" /></p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium"><T k="supervisor.dashboard.volunteers" /></CardTitle>
+            <Users className="h-4 w-4 text-blue-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.totalVolunteers}</div>
+            <p className="text-xs text-gray-500"><T k="supervisor.dashboard.activeVolunteers" /></p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium"><T k="supervisor.dashboard.branchInfo" /></CardTitle>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
+              <path d="M3 6h18"/>
+              <path d="M7 12h10"/>
+              <path d="M10 18h4"/>
+            </svg>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold animate-in fade-in-50 duration-700 delay-200 truncate">{user?.branchName ?? t("admin.dashboard.activeBranch")}</div>
+            <p className="text-xs text-muted-foreground"><T k="supervisor.dashboard.currentBranch" /></p>
+          </CardContent>
+        </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">Requests</CardTitle>
-              <DollarSign className="h-4 w-4 text-gray-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.pendingRequests}</div>
-              <p className="text-xs text-gray-500">Pending approval</p>
-            </CardContent>
-          </Card>
-        </div>
+        <Card>          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium"><T k="supervisor.dashboard.fundraising" /></CardTitle>
+            <Coins className="h-4 w-4 text-green-500" />
+          </CardHeader>          <CardContent>
+            <div className="text-2xl font-bold">Tsh {stats.totalFundraising ? stats.totalFundraising.toLocaleString() : "0"}</div>
+            <p className="text-xs text-gray-500"><T k="supervisor.dashboard.totalFunds" /></p>
+          </CardContent>
+        </Card>
+      </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="md:col-span-2">
@@ -421,7 +425,6 @@ export default function SupervisorDashboardPage() {
           </Card>
         </div>
       </div>
-    </div>
   )
 }
 

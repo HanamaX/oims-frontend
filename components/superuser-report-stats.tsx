@@ -33,21 +33,23 @@ ChartJS.register(
 )
 
 interface SystemStats {
-  totalOrphanageCenters: number
-  totalBranches: number
   totalOrphans: number
-  totalAdmins: number
-  totalDonations: number
-  activeFundraisers: number
-  totalInventoryItems: number
+  totalBranches: number
   totalVolunteers: number
+  totalFundraising: number
+  totalAdmins?: number
+  totalOrphanageCenters?: number
+  // Added these for backward compatibility with the component
+  totalDonations?: number
+  activeFundraisers?: number
+  totalInventoryItems?: number
 }
 
 interface SuperuserReportStatsProps {
   stats: SystemStats
 }
 
-export default function SuperuserReportStats({ stats }: SuperuserReportStatsProps) {
+export default function SuperuserReportStats({ stats }: Readonly<SuperuserReportStatsProps>) {
   const [activeChart, setActiveChart] = useState("orphanage")
   // Generate sample data for more detailed reports (in a real app, this would come from API)
   const orphanageCenterData = {
@@ -60,17 +62,17 @@ export default function SuperuserReportStats({ stats }: SuperuserReportStatsProp
       },
       {
         label: 'Number of Staff',
-        data: [28, 18, 40, 19, 36],
-        backgroundColor: 'rgba(16, 185, 129, 0.6)', // Green-600 with transparency
+        data: [28, 18, 40, 19, 36],        backgroundColor: 'rgba(16, 185, 129, 0.6)', // Green-600 with transparency
       }
     ],
   }
+  
   const monthlyDonationData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
-        label: 'Monthly Donations',
-        data: [1500, 2300, 1800, 3200, 2800, 3500, 4200, 3800, 5000, 4500, 6000, 5500],
+        label: 'Monthly Donations (Tsh)',
+        data: [1500000, 2300000, 1800000, 3200000, 2800000, 3500000, 4200000, 3800000, 5000000, 4500000, 6000000, 5500000],
         borderColor: 'rgb(16, 185, 129)', // Green-600
         backgroundColor: 'rgba(16, 185, 129, 0.2)',
         tension: 0.3,
@@ -99,20 +101,20 @@ export default function SuperuserReportStats({ stats }: SuperuserReportStatsProp
       {
         label: 'Inventory Distribution',
         data: [
-          stats.totalInventoryItems * 0.25,
-          stats.totalInventoryItems * 0.2,
-          stats.totalInventoryItems * 0.15,
-          stats.totalInventoryItems * 0.1,
-          stats.totalInventoryItems * 0.1,
-          stats.totalInventoryItems * 0.2
+          (stats.totalInventoryItems ?? 0) * 0.25,
+          (stats.totalInventoryItems ?? 0) * 0.2,
+          (stats.totalInventoryItems ?? 0) * 0.15,
+          (stats.totalInventoryItems ?? 0) * 0.1,
+          (stats.totalInventoryItems ?? 0) * 0.1,
+          (stats.totalInventoryItems ?? 0) * 0.2
         ],
         backgroundColor: [
           'rgba(34, 197, 94, 0.7)',  // Green-500
           'rgba(16, 185, 129, 0.7)',  // Green-600
           'rgba(5, 150, 105, 0.7)',   // Green-700
-          'rgba(4, 120, 87, 0.7)',    // Green-800
-          'rgba(6, 95, 70, 0.7)',     // Green-900
-          'rgba(20, 184, 166, 0.7)',  // Teal-500
+          'rgba(6, 95, 70, 0.7)',     // Green-800
+          'rgba(4, 120, 87, 0.7)',    // Green-700
+          'rgba(20, 184, 166, 0.7)',  // Teal-600
         ],
       },
     ],
@@ -137,10 +139,9 @@ export default function SuperuserReportStats({ stats }: SuperuserReportStatsProp
     plugins: {
       legend: {
         position: 'top' as const,
-      },
-      title: {
+      },      title: {
         display: true,
-        text: 'Monthly Donations Trend',
+        text: 'Monthly Donations Trend (Tsh)',
       },
     },
   }
@@ -185,11 +186,8 @@ export default function SuperuserReportStats({ stats }: SuperuserReportStatsProp
           This report provides a comprehensive overview of the entire orphanage management system.
           Currently, the system manages <strong>{stats.totalOrphanageCenters}</strong> orphanage centers
           with <strong>{stats.totalBranches}</strong> branches across different locations.
-        </p>
-        <p className="mb-4">
-          There are <strong>{stats.totalOrphans}</strong> orphans being cared for by a team of <strong>{stats.totalAdmins}</strong> administrators.
-          The orphanages receive support through <strong>{stats.totalDonations}</strong> donations and currently have
-          <strong> {stats.activeFundraisers}</strong> active fundraising campaigns.
+        </p>        <p className="mb-4">
+          There are <strong>{stats.totalOrphans}</strong> orphans being cared for by a team of <strong>{stats.totalAdmins}</strong> administrators.          The orphanages receive support through <strong>{(stats.totalDonations ?? 0).toLocaleString()} Tsh</strong> in donations and currently have <strong>{stats.activeFundraisers ?? 0}</strong> active fundraising campaigns.
         </p>
         <p>
           The inventory system tracks <strong>{stats.totalInventoryItems}</strong> items across all centers,
@@ -233,11 +231,10 @@ export default function SuperuserReportStats({ stats }: SuperuserReportStatsProp
               <TabsTrigger 
                 value="orphanage"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
-              >Orphanage Data</TabsTrigger>
-              <TabsTrigger 
+              >Orphanage Data</TabsTrigger>              <TabsTrigger 
                 value="donations"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
-              >Donations</TabsTrigger>
+              >Donations (Tsh)</TabsTrigger>
               <TabsTrigger 
                 value="demographics"
                 className="data-[state=active]:bg-green-600 data-[state=active]:text-white hover:bg-green-200 transition-all"
@@ -285,33 +282,28 @@ export default function SuperuserReportStats({ stats }: SuperuserReportStatsProp
           <div className="grid grid-cols-2 gap-4">
             <div className="border border-green-200 rounded p-4 bg-green-50 hover:shadow-md transition-all">
               <h3 className="text-lg font-medium text-green-800">Average Orphans per Center</h3>
-              <p className="text-3xl font-bold mt-2 text-green-700">
-                {stats.totalOrphanageCenters > 0 
-                  ? Math.round(stats.totalOrphans / stats.totalOrphanageCenters) 
+              <p className="text-3xl font-bold mt-2 text-green-700">                {(stats.totalOrphanageCenters ?? 0) > 0
+                  ? Math.round(stats.totalOrphans / (stats.totalOrphanageCenters ?? 1))
                   : 0}
               </p>
             </div>
-            <div className="border border-green-200 rounded p-4 bg-green-50 hover:shadow-md transition-all">
-              <h3 className="text-lg font-medium text-green-800">Average Donations per Fundraiser</h3>
-              <p className="text-3xl font-bold mt-2 text-green-700">
-                {stats.activeFundraisers > 0 
-                  ? Math.round(stats.totalDonations / stats.activeFundraisers) 
-                  : 0}
+            <div className="border border-green-200 rounded p-4 bg-green-50 hover:shadow-md transition-all">              <h3 className="text-lg font-medium text-green-800">Average Donations per Fundraiser (Tsh)</h3>
+              <p className="text-3xl font-bold mt-2 text-green-700">                {(stats.activeFundraisers ?? 0) > 0
+                  ? Math.round((stats.totalDonations ?? 0) / (stats.activeFundraisers ?? 1)).toLocaleString() + " Tsh"
+                  : "0 Tsh"}
               </p>
             </div>
             <div className="border border-green-200 rounded p-4 bg-green-50 hover:shadow-md transition-all">
               <h3 className="text-lg font-medium text-green-800">Admin to Orphan Ratio</h3>
-              <p className="text-3xl font-bold mt-2 text-green-700">
-                1:{stats.totalAdmins > 0 
-                  ? Math.round(stats.totalOrphans / stats.totalAdmins) 
+              <p className="text-3xl font-bold mt-2 text-green-700">                1:{(stats.totalAdmins ?? 0) > 0
+                  ? Math.round(stats.totalOrphans / (stats.totalAdmins ?? 1))
                   : 0}
               </p>
             </div>
             <div className="border border-green-200 rounded p-4 bg-green-50 hover:shadow-md transition-all">
               <h3 className="text-lg font-medium text-green-800">Inventory Items per Center</h3>
-              <p className="text-3xl font-bold mt-2 text-green-700">
-                {stats.totalOrphanageCenters > 0 
-                  ? Math.round(stats.totalInventoryItems / stats.totalOrphanageCenters) 
+              <p className="text-3xl font-bold mt-2 text-green-700">                {(stats.totalOrphanageCenters ?? 0) > 0
+                  ? Math.round((stats.totalInventoryItems ?? 0) / (stats.totalOrphanageCenters ?? 1))
                   : 0}
               </p>
             </div>

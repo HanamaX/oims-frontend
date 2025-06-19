@@ -1,4 +1,9 @@
-import axios from "axios"
+import axios, { AxiosInstance } from "axios"
+
+// Extend the AxiosInstance type to include our custom methods
+interface ExtendedAxiosInstance extends AxiosInstance {
+  clearAuth: () => void;
+}
 
 // Create an axios instance with default config
 const API = axios.create({
@@ -8,7 +13,7 @@ const API = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-})
+}) as ExtendedAxiosInstance
 
 // Add a request interceptor to include the JWT token in requests
 API.interceptors.request.use(
@@ -144,6 +149,13 @@ API.interceptors.response.use(
     return Promise.reject(error);
   },
 )
+
+// API auth utilities
+API.clearAuth = () => {
+  // Clear any cached auth headers or tokens
+  delete API.defaults.headers.common['Authorization'];
+  console.log("API authorization headers cleared");
+};
 
 // Helper function to extract the most useful error message from API errors
 export function getErrorMessage(error: any): string {

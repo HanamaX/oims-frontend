@@ -40,11 +40,45 @@ const SuperuserAuthService = {  // Check if user is authenticated as superuser
       console.error("Superuser login error:", error);
       throw error;
     }
-  },
-
-  // Logout superuser
+  },  // Logout superuser
   logout: (): void => {
-    localStorage.removeItem("superuser_auth");
+    try {
+      // Clear all superuser related tokens and data
+      localStorage.removeItem("superuser_auth");
+      localStorage.removeItem("superuser_token");
+      localStorage.removeItem("superuser_data");
+      
+      // Clear API auth headers
+      SuperuserAuthService.clearApiAuthHeaders();
+        
+      // Force removal of any session cookies by setting expired cookies
+      // This helps with browser-based sessions
+      const cookies = document.cookie.split(";");
+      for (const cookie of cookies) {
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie.trim();
+        // If the cookie is related to auth, expire it
+        if (name.toLowerCase().includes("auth") || name.toLowerCase().includes("token") || name.toLowerCase().includes("user")) {
+          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+        }
+      }
+      
+      console.log("Superuser logout completed successfully");
+    } catch (e) {
+      console.error("Error during superuser logout:", e);
+    }
+  },
+  // Helper function to clear API authentication headers
+  clearApiAuthHeaders: (): void => {
+    try {
+      // Clear any cached auth headers
+      if (API.defaults && API.defaults.headers && API.defaults.headers.common) {
+        delete API.defaults.headers.common['Authorization'];
+        console.log("API authorization headers cleared");
+      }
+    } catch (e) {
+      console.error("Error clearing API auth headers:", e);
+    }
   },
   // Get all orphanage admins
   getAllOrphanageAdmins: async () => {
@@ -169,19 +203,40 @@ const SuperuserAuthService = {  // Check if user is authenticated as superuser
   // Get system stats for superuser dashboard
   getSystemStats: async () => {
     try {
-      // Since the backend API is not working, use mock data instead
-      console.log("Using mock data for system statistics instead of API call");
+      // First try to get stats from the logged-in user data
+      if (typeof window !== 'undefined') {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          try {
+            const user = JSON.parse(userData);
+            if (user.dashboardStats) {
+              console.log("Using user dashboardStats from login:", user.dashboardStats);
+              return {
+                totalOrphans: user.dashboardStats.totalOrphans ?? 0,
+                totalBranches: user.dashboardStats.totalBranches ?? 0,
+                totalVolunteers: user.dashboardStats.totalVolunteers ?? 0,
+                totalFundraising: user.dashboardStats.totalFundraising ?? 0,
+                totalAdmins: 0,
+                totalOrphanageCenters: 0,
+              };
+            }
+          } catch (e) {
+            console.error("Error parsing user data:", e);
+          }
+        }
+      }
       
-      // Mock statistics data
+      // Fallback to mock data if user data is not available
+      console.log("Using mock data for system statistics");
+      
+      // Mock statistics data based on what's available in the login response
       const mockStats = {
-        totalOrphanageCenters: 5,
-        totalBranches: 12,
         totalOrphans: 143,
+        totalBranches: 12,
+        totalVolunteers: 58,
+        totalFundraising: 7,
         totalAdmins: 24,
-        totalDonations: 5678,
-        activeFundraisers: 7,
-        totalInventoryItems: 432,
-        totalVolunteers: 58
+        totalOrphanageCenters: 5
       };
       
       return mockStats;

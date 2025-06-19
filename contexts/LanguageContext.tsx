@@ -2199,10 +2199,29 @@ const translations: Record<string, Record<Language, string>> = {
   },  "supervisor.dashboard.activities": {
     en: "Branch Activities",
     sw: "Shughuli za Tawi",
-  },
-  "supervisor.dashboard.recentActivities": {
+  },  "supervisor.dashboard.recentActivities": {
     en: "Recent activities in your branch",
     sw: "Shughuli za hivi karibuni katika tawi lako",
+  },
+  "supervisor.dashboard.volunteers": {
+    en: "Volunteers",
+    sw: "Wataoa huduma za kujitolea",
+  },
+  "supervisor.dashboard.activeVolunteers": {
+    en: "Active volunteers",
+    sw: "Wataoa huduma za kujitolea walio hai",
+  },
+  "supervisor.dashboard.fundraising": {
+    en: "Fundraising",
+    sw: "Ukusanyaji Fedha",
+  },
+  "supervisor.dashboard.totalFunds": {
+    en: "Total funds raised",
+    sw: "Jumla ya fedha zilizokusanywa",
+  },
+  "supervisor.dashboard.currentOrphans": {
+    en: "Current orphans in care",
+    sw: "Yatima walio chini ya malezi",
   },
   "supervisor.orphans.management": {
     en: "Branch Orphan Management",

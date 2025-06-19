@@ -17,11 +17,10 @@ interface NavItem {
 }
 
 // Create a component that contains useSearchParams
-function SuperuserNavContent() {
-  const router = useRouter()
+function SuperuserNavContent() {  const router = useRouter()
   const searchParams = useSearchParams()
   const { toast } = useToast()
-  const { user } = useAuth()
+  const { user, logout: authLogout } = useAuth()
   const [mounted, setMounted] = useState(false)
   const [activeTab, setActiveTab] = useState('dashboard')
   // Check if user is authenticated as superuser
@@ -70,18 +69,43 @@ function SuperuserNavContent() {
     const tab = searchParams.get('tab')
     setActiveTab(tab ?? 'dashboard')
   }, [searchParams])
-
   const handleNavigation = (item: NavItem) => {
     router.push(item.url);
   }
-
-  const handleLogout = () => {
+    const handleLogout = () => {
+    // First use the SuperuserAuthService to remove the superuser specific flag
     SuperuserAuthService.logout()
-    toast({
-      title: "Logged Out",
-      description: "You have been logged out successfully",
-    })
-    router.push("/")
+    
+    // Check if user is authenticated through the main auth system
+    if (user) {
+      // Use the auth context's logout function for a complete logout
+      // This will redirect to login page
+      authLogout()
+    } else {
+      // If not authenticated through the main system, do a thorough cleanup
+      try {
+        // Clear all authentication tokens
+        localStorage.removeItem("jwt_token")
+        localStorage.removeItem("user")
+        localStorage.removeItem("superuser_auth")
+        
+        // Show success message
+        toast({
+          title: "Logged Out",
+          description: "You have been logged out successfully",
+        })
+        
+        // Add a small delay before redirecting to make sure toast is seen
+        setTimeout(() => {
+          // Use window.location for a complete page refresh to reset all state
+          window.location.href = "/login"
+        }, 500)
+      } catch (e) {
+        console.error("Error during logout:", e)
+        // Redirect anyway
+        window.location.href = "/login"
+      }
+    }
   }
 
   if (!mounted) return null
