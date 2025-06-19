@@ -50,6 +50,9 @@ export default function HomePage() {
               <Link href="/about-us" className="text-sm font-medium hover:text-blue-700">
                 <T k="nav.about" />
               </Link>
+              <Link href="/register-orphanage" className="text-sm font-medium hover:text-blue-700">
+                Register
+              </Link>
             </nav>
           </div><div className="flex items-center gap-4">
             <LanguageSwitcher />
@@ -62,6 +65,11 @@ export default function HomePage() {
             <Link href="/superuser/dashboard">
               <Button variant="default" className="bg-green-600 hover:bg-green-700 !important">
                 <T k="nav.superuser" />
+              </Button>
+            </Link>
+            <Link href="/register-orphanage">
+              <Button variant="default" className="bg-blue-600 hover:bg-blue-700 !important">
+                Register
               </Button>
             </Link>
             <Button
@@ -83,7 +91,15 @@ export default function HomePage() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <T k="nav.about" />
-              </Link>{/* Always show superuser link in mobile menu */}
+              </Link>
+              <Link
+                href="/register-orphanage"
+                className="block px-3 py-2 text-sm font-medium rounded-md hover:bg-blue-50"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Register
+              </Link>
+              {/* Always show superuser link in mobile menu */}
               <Link
                 href="/superuser/dashboard"
                 className="block px-3 py-2 text-sm font-medium rounded-md bg-green-100 text-green-800 hover:bg-green-200 !important"

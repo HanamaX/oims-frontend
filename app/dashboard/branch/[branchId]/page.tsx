@@ -81,7 +81,10 @@ export default function BranchViewPage() {
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="text-3xl font-bold tracking-tight">{branch.name}</h1>          <p className="text-muted-foreground">{t("branch.viewOnlyAccess", { location: branch.location })}</p>
+					<h1 className="text-3xl font-bold tracking-tight">{branch.name}</h1>
+					<p className="text-muted-foreground">
+						{t("branch.viewOnlyAccess")}
+					</p>
 				</div>
 				<Button variant="outline" onClick={() => router.push("/dashboard/superadmin/branches")}>
 					<ArrowLeft className="mr-2 h-4 w-4" />

@@ -13,6 +13,7 @@ interface NavItem {
   name: string
   tab: string
   icon: React.ReactNode
+  url: string
 }
 
 // Create a component that contains useSearchParams
@@ -43,16 +44,25 @@ function SuperuserNavContent() {
       name: "Dashboard",
       tab: "dashboard",
       icon: <LayoutDashboard className="mr-2 h-5 w-5" />,
+      url: "/superuser/dashboard"
     },
     {
       name: "Orphanage Admins",
       tab: "admins",
       icon: <Users className="mr-2 h-5 w-5" />,
+      url: "/superuser/dashboard?tab=admins"
+    },
+    {
+      name: "Registration Requests",
+      tab: "registration-requests",
+      icon: <FileBarChart className="mr-2 h-5 w-5" />,
+      url: "/superuser/dashboard/registration-requests"
     },
     {
       name: "Reports",
       tab: "reports",
       icon: <FileBarChart className="mr-2 h-5 w-5" />,
+      url: "/superuser/dashboard?tab=reports"
     },
   ]
   useEffect(() => {
@@ -62,10 +72,7 @@ function SuperuserNavContent() {
   }, [searchParams])
 
   const handleNavigation = (item: NavItem) => {
-    const url = item.tab === 'dashboard' 
-      ? '/superuser/dashboard'
-      : `/superuser/dashboard?tab=${item.tab}`
-    router.push(url)
+    router.push(item.url);
   }
 
   const handleLogout = () => {
