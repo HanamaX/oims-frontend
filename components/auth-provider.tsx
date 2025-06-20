@@ -107,7 +107,11 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
       console.log("Redirecting to login: Protected route without auth")
       router.push("/login")
     }    // If authenticated and trying to access login page, redirect to appropriate dashboard
-    if (pathname === "/login" && user && !isLoggingOut.current) {
+    // But don't redirect if we just completed a logout
+    const isLogoutComplete = typeof window !== 'undefined' && 
+      window.location.search.includes('logout=complete');
+    
+    if (pathname === "/login" && user && !isLoggingOut.current && !isLogoutComplete) {
       console.log("Redirecting from login to dashboard")
       if (user.role === "ROLE_SUPERUSER") {
         // Redirect ROLE_SUPERUSER to the superuser dashboard
@@ -248,21 +252,44 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
       return false
     }
   }
-
   const logout = () => {
     // Set flag to indicate we're initiating a logout
     isLoggingOut.current = true
     setRedirectAfterLogout(true)
 
-    // First clear localStorage
-    localStorage.removeItem("jwt_token")
-    localStorage.removeItem("user")
+    // Clear all localStorage items related to authentication
+    const authKeys = [
+      "jwt_token", "user", "superuser_auth", "superuser_token", "superuser_data",
+      "auth_token", "access_token", "refresh_token", "session_id"
+    ];
+    
+    authKeys.forEach(key => {
+      localStorage.removeItem(key);
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem(key);
+      }
+    });
+
+    // Clear all cookies more aggressively
+    if (typeof document !== 'undefined') {
+      // Get all cookies and clear them
+      document.cookie.split(";").forEach(cookie => {
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie.trim();
+        // Clear the cookie in multiple ways to ensure it's gone
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${window.location.hostname}`;
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.${window.location.hostname}`;
+      });
+    }
 
     // Then update state
     setUser(null)
 
-    // Force a hard navigation to login page
-    window.location.href = "/login"
+    console.log("All authentication data cleared during logout");
+
+    // Force a hard navigation to login page to clear any remaining state
+    window.location.replace("/login?logout=complete")
   }
 
   const contextValue = useMemo(() => ({

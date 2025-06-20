@@ -41,44 +41,70 @@ const SuperuserAuthService = {
       console.error("Superuser login error:", error);
       throw error;
     }
-  },
-
-  // Logout superuser
+  },  // Logout superuser
   logout: (): void => {
     try {
-      // Clear all superuser related tokens and data
-      localStorage.removeItem("superuser_auth");
-      localStorage.removeItem("superuser_token");
-      localStorage.removeItem("superuser_data");
+      console.log("Starting superuser logout process...");
       
-      // Clear API auth headers
-      SuperuserAuthService.clearApiAuthHeaders();
-        
-      // Force removal of any session cookies by setting expired cookies
-      // This helps with browser-based sessions
-      const cookies = document.cookie.split(";");
-      for (const cookie of cookies) {
-        const eqPos = cookie.indexOf("=");
-        const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie.trim();
-        // If the cookie is related to auth, expire it
-        if (name.toLowerCase().includes("auth") || name.toLowerCase().includes("token") || name.toLowerCase().includes("user")) {
-          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+      // Use the API service's comprehensive clearAuth method
+      if (API.clearAuth) {
+        API.clearAuth();
+      }
+      
+      // Additional manual cleanup for any missed items
+      const authKeys = [
+        "jwt_token", "user", "superuser_auth", "superuser_token", "superuser_data",
+        "auth_token", "access_token", "refresh_token", "session_id"
+      ];
+      
+      authKeys.forEach(key => {
+        localStorage.removeItem(key);
+        if (typeof sessionStorage !== 'undefined') {
+          sessionStorage.removeItem(key);
         }
+      });
+      
+      // Clear all cookies more aggressively
+      if (typeof document !== 'undefined') {
+        // Get all cookies and clear them
+        document.cookie.split(";").forEach(cookie => {
+          const eqPos = cookie.indexOf("=");
+          const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie.trim();
+          // Clear the cookie in multiple ways to ensure it's gone
+          document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+          document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${window.location.hostname}`;
+          document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.${window.location.hostname}`;
+        });
       }
       
       console.log("Superuser logout completed successfully");
+      
+      // Force page reload and redirect to login to clear any remaining state
+      if (typeof window !== 'undefined') {
+        // Use replace to prevent back button issues
+        window.location.replace("/login?logout=true");
+      }
+      
     } catch (e) {
       console.error("Error during superuser logout:", e);
+      // Even if there's an error, still try to redirect
+      if (typeof window !== 'undefined') {
+        window.location.replace("/login?logout=error");
+      }
     }
   },
 
   // Helper function to clear API authentication headers
   clearApiAuthHeaders: (): void => {
     try {
-      // Clear any cached auth headers
-      if (API.defaults && API.defaults.headers && API.defaults.headers.common) {
+      // Use the API service's clearAuth method instead of manual clearing
+      if (API.clearAuth) {
+        API.clearAuth();
+        console.log("API authorization headers cleared via API service");
+      } else if (API.defaults?.headers?.common) {
+        // Fallback to manual clearing if the method doesn't exist
         delete API.defaults.headers.common['Authorization'];
-        console.log("API authorization headers cleared");
+        console.log("API authorization headers cleared manually");
       }
     } catch (e) {
       console.error("Error clearing API auth headers:", e);
@@ -171,31 +197,8 @@ const SuperuserAuthService = {
       return {
         success: true,
         message: `Admin ${adminId} ${suspended ? 'suspended' : 'activated'} successfully`
-      };
-    } catch (error) {
+      };    } catch (error) {
       console.error("Error updating admin status:", error);
-      throw error;
-    }
-  },
-
-  // Get system statistics
-  getSystemStats: async () => {
-    try {
-      // Since the backend API is not working, use mock data instead
-      // In a real application, this would be replaced with an actual API call
-      console.log("Using mock data for system stats instead of API call");
-      
-      // Return mock statistics
-      return {
-        totalOrphans: 243,
-        totalBranches: 5,
-        totalVolunteers: 38,
-        totalFundraising: 12,
-        totalAdmins: 8,
-        totalOrphanageCenters: 5
-      };
-    } catch (error) {
-      console.error("Error fetching system stats:", error);
       throw error;
     }
   }

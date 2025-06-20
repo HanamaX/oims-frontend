@@ -21,7 +21,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -57,10 +56,6 @@ interface SystemStats {
   totalOrphanageCenters: number
   totalBranches: number
   totalOrphans: number
-  totalAdmins: number
-  totalDonations: number
-  activeFundraisers: number
-  totalInventoryItems: number
   totalVolunteers: number
   totalFundraising: number
 }
@@ -74,15 +69,10 @@ function SuperuserDashboardContent() {
     phoneNumber: "",
     fullName: "",
   })
-  
   const [stats, setStats] = useState<SystemStats>({
     totalOrphanageCenters: 0,
     totalBranches: 0,
     totalOrphans: 0,
-    totalAdmins: 0,
-    totalDonations: 0,
-    activeFundraisers: 0,
-    totalInventoryItems: 0,
     totalVolunteers: 0,
     totalFundraising: 0,
   })
@@ -123,7 +113,6 @@ function SuperuserDashboardContent() {
     }
     fetchData()
   }, [searchParams])
-
   // Function to fetch all data
   const fetchData = async () => {
     try {
@@ -138,10 +127,10 @@ function SuperuserDashboardContent() {
       }
       
       try {
-        await fetchSystemStats()
+        loadSystemStats() // Use real data from localStorage instead of API call
       } catch (statsErr: any) {
-        console.error("Error fetching system stats:", statsErr)
-        // Don't fail completely if just the stats fetch fails
+        console.error("Error loading system stats:", statsErr)
+        // Don't fail completely if just the stats loading fails
       }
     } catch (err: any) {
       console.error("Error fetching data:", err)
@@ -191,34 +180,41 @@ function SuperuserDashboardContent() {
       // Only set error if it's a critical failure
       if (err.message?.includes("Network Error")) {
         setError("Network error: Couldn't connect to the server. Please check your internet connection.")
-      }
-    }
+      }    }
   }
-  // Function to fetch system statistics
-  const fetchSystemStats = async () => {
+  
+  // Function to load system statistics from stored user data
+  const loadSystemStats = () => {
     try {
-      const statsData = await SuperuserAuthService.getSystemStats()
-      setStats({
-        totalOrphanageCenters: statsData.totalOrphanageCenters ?? 0,
-        totalBranches: statsData.totalBranches ?? 0,
-        totalOrphans: statsData.totalOrphans ?? 0,
-        totalAdmins: statsData.totalAdmins ?? 0,
-        totalDonations: (statsData as any).totalDonations ?? 0,
-        activeFundraisers: (statsData as any).activeFundraisers ?? 0,
-        totalInventoryItems: (statsData as any).totalInventoryItems ?? 0,
-        totalVolunteers: statsData.totalVolunteers ?? 0,
-        totalFundraising: statsData.totalFundraising ?? 0,
-      })
-    } catch (err: any) {
-      console.error("Error fetching system stats:", err)
+      // Get the real data from localStorage that was returned from the login response
+      const storedUser = localStorage.getItem("user")
+      if (storedUser) {
+        const userData = JSON.parse(storedUser)
+        if (userData.dashboardStats) {          setStats({
+            totalOrphanageCenters: userData.dashboardStats.totalBranches ?? 0, // Use branches as centers
+            totalBranches: userData.dashboardStats.totalBranches ?? 0,
+            totalOrphans: userData.dashboardStats.totalOrphans ?? 0,
+            totalVolunteers: userData.dashboardStats.totalVolunteers ?? 0,
+            totalFundraising: userData.dashboardStats.totalFundraising ?? 0,
+          })
+          return
+        }
+      }
+        // Fallback to zeros if no real data is available
+      console.log("No dashboard stats found in stored user data, using default values")
       setStats({
         totalOrphanageCenters: 0,
         totalBranches: 0,
         totalOrphans: 0,
-        totalAdmins: 0,
-        totalDonations: 0,
-        activeFundraisers: 0,
-        totalInventoryItems: 0,
+        totalVolunteers: 0,
+        totalFundraising: 0,
+      })
+    } catch (err: any) {
+      console.error("Error loading system stats from stored data:", err)
+      setStats({
+        totalOrphanageCenters: 0,
+        totalBranches: 0,
+        totalOrphans: 0,
         totalVolunteers: 0,
         totalFundraising: 0,
       })
@@ -428,10 +424,9 @@ function SuperuserDashboardContent() {
             }}
           >System Reports</TabsTrigger>
         </TabsList>
-        
-        {/* Dashboard Overview Tab */}
+          {/* Dashboard Overview Tab */}
         <TabsContent value="dashboard" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Total Orphanage Centers</CardTitle>
@@ -454,38 +449,13 @@ function SuperuserDashboardContent() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.totalOrphans}</div>
-              </CardContent>
-            </Card>
+              </CardContent>            </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Admins</CardTitle>
+                <CardTitle className="text-sm font-medium">Total Fundraising (TSh)</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{stats.totalAdmins}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Donations</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.totalDonations}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Active Fundraisers</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.activeFundraisers}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Inventory Items</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.totalInventoryItems}</div>
+                <div className="text-2xl font-bold">{stats.totalFundraising.toLocaleString()}</div>
               </CardContent>
             </Card>
             <Card>
@@ -497,20 +467,17 @@ function SuperuserDashboardContent() {
               </CardContent>
             </Card>
           </div>
-          
-          <Card className="mt-6">
+            <Card className="mt-6">
             <CardHeader>
               <CardTitle>System Summary</CardTitle>
               <CardDescription>
-                Overview of the entire orphanage management system
+                Overview of the orphanage management system based on real data
               </CardDescription>
-            </CardHeader>
-            <CardContent>
+            </CardHeader>            <CardContent>
               <p>
                 The system currently manages {stats.totalOrphanageCenters} orphanage centers with {stats.totalBranches} branches.
-                There are {stats.totalOrphans} orphans being cared for by {stats.totalAdmins} administrators.
-                The system has processed {stats.totalDonations} donations and has {stats.activeFundraisers} active fundraising campaigns.
-                The inventory system tracks {stats.totalInventoryItems} items, and {stats.totalVolunteers} volunteers are registered.
+                There are {stats.totalOrphans} orphans being cared for across all centers.
+                The system has TSh {stats.totalFundraising.toLocaleString()} in total fundraising and {stats.totalVolunteers} volunteers are registered.
               </p>
             </CardContent>
           </Card>

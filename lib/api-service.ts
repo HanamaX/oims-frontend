@@ -158,7 +158,41 @@ API.interceptors.response.use(
 API.clearAuth = () => {
   // Clear any cached auth headers or tokens
   delete API.defaults.headers.common['Authorization'];
-  console.log("API authorization headers cleared");
+  
+  // Clear all localStorage items related to authentication
+  localStorage.removeItem("jwt_token");
+  localStorage.removeItem("user");
+  localStorage.removeItem("superuser_auth");
+  localStorage.removeItem("superuser_token");
+  localStorage.removeItem("superuser_data");
+  
+  // Clear session storage as well
+  if (typeof sessionStorage !== 'undefined') {
+    sessionStorage.removeItem("jwt_token");
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("superuser_auth");
+    sessionStorage.removeItem("superuser_token");
+    sessionStorage.removeItem("superuser_data");
+  }
+  
+  // Clear all auth-related cookies
+  if (typeof document !== 'undefined') {
+    const cookies = document.cookie.split(";");
+    for (const cookie of cookies) {
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie.trim();
+      // Clear auth-related cookies
+      if (name.toLowerCase().includes("auth") || 
+          name.toLowerCase().includes("token") || 
+          name.toLowerCase().includes("user") ||
+          name.toLowerCase().includes("session")) {
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${window.location.hostname}`;
+      }
+    }
+  }
+  
+  console.log("API authorization headers and all session data cleared");
 };
 
 // Helper function to extract the most useful error message from API errors
