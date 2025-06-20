@@ -299,7 +299,7 @@ export default function ProfilePage() {
 
     try {
       const passwordData: UpdatePasswordRequest = {
-        oldPassword: currentPassword,
+        currentPassword: currentPassword,
         newPassword,
         // Include any additional fields if required by the API
       }
