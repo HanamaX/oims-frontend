@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* If you are not using Tailwind CSS, remove these lines. 
+   If you are using Tailwind, make sure your build tool (like PostCSS) is configured to process Tailwind directives. 
+   See https://tailwindcss.com/docs/installation for setup instructions. */
+
+
 :root {
   --background: #ffffff;
   --foreground: #000000;
@@ -21,27 +26,34 @@
 /* Custom Animations */
 @layer components {
   .report-button-success {
-    @apply bg-green-600 text-white;
+    background-color: #16a34a; /* Tailwind bg-green-600 */
+    color: #ffffff; /* Tailwind text-white */
   }
   
   .report-card {
-    @apply transition-all transform;
+    transition: all 0.2s;
+    transform: none;
   }
   
   .report-card-enter {
-    @apply translate-y-0;
+    transform: translateY(0);
   }
   
   .report-card-exit {
-    @apply -translate-y-4 opacity-0;
+    transform: translateY(-1rem);
+    opacity: 0;
   }
   
   .fade-in {
-    @apply opacity-100 transition-opacity duration-300;
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 300ms;
   }
   
   .fade-out {
-    @apply opacity-0 transition-opacity duration-300;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 300ms;
   }
   
   /* Volunteer-specific animations */
@@ -58,11 +70,28 @@
   }
   
   .volunteer-hover-lift {
-    @apply transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg;
+        transition: all 0.3s;
+        transform: none;
+    }
+    .volunteer-hover-lift:hover {
+        transform: translateY(-0.25rem);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
   }
   
   .volunteer-icon-circle {
-    @apply flex items-center justify-center w-8 h-8 rounded-full transition-transform duration-300 hover:scale-110 shadow-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    transition-property: transform, box-shadow;
+    transition-duration: 300ms;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+  }
+  .volunteer-icon-circle:hover {
+    transform: scale(1.10);
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
   }
 }
 
@@ -187,7 +216,7 @@
 
 /* Background image classes to replace inline styles */
 .bg-hero-image {
-  background-image: url('/image/image2.jpg');
+  background-image: url('/image/c2.jpg');
   background-size: cover;
   background-position: center;
   filter: brightness(0.7);
