@@ -245,7 +245,7 @@ export default function HomePage() {
             <Card className="border-blue-100 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 overflow-hidden">
               <div className="h-48 overflow-hidden">
                 <img
-                  src="/image/image1.jpg"
+                  src="/image/c2.jpg"
                   alt="Volunteering"
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform hover:scale-110 duration-500"
@@ -285,7 +285,7 @@ export default function HomePage() {
             <Card className="border-blue-100 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 overflow-hidden">
               <div className="h-48 overflow-hidden">
                 <img
-                  src="/image/card2.jpg"
+                  src="/image/c1.jpg"
                   alt="Ongoing News"
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform hover:scale-110 duration-500"
@@ -324,7 +324,7 @@ export default function HomePage() {
             <Card className="border-blue-100 shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 overflow-hidden">
               <div className="h-48 overflow-hidden">
                 <img
-                  src="/image/image2.jpg"
+                  src="/image/c3.jpg"
                   alt="Campaign Impact"
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform hover:scale-110 duration-500"

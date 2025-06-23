@@ -3,7 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   --background: #ffffff;
   --foreground: #000000;
@@ -213,7 +212,7 @@
   background-image: url('/image/c1.jpg');
   background-size: cover;
   background-position: center;
-  filter: brightness(1.0);
+  filter: brightness(0.7);
   transform-origin: center center;
   will-change: transform;
   transform: translateZ(0);

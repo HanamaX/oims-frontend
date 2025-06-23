@@ -165,6 +165,59 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       sw: "yatima katika tawi hili",
     },
     
+    // Center Overview translations
+    "centerOverview.centerOverview": {
+      en: "Center Overview",
+      sw: "Muhtasari wa Kituo",
+    },
+    "centerOverview.centerOverviewDescription": {
+      en: "View and manage your orphanage center details below.",
+      sw: "Tazama na simamia maelezo ya kituo chako cha yatima hapa chini.",
+    },
+    "centerOverview.centerName": {
+      en: "Center Name",
+      sw: "Jina la Kituo",
+    },
+    "centerOverview.location": {
+      en: "Location",
+      sw: "Mahali",
+    },
+    "centerOverview.phoneNumber": {
+      en: "Phone Number",
+      sw: "Namba ya Simu",
+    },
+    "centerOverview.address": {
+      en: "Address",
+      sw: "Anuani",
+    },
+    "centerOverview.email": {
+      en: "Email",
+      sw: "Barua pepe",
+    },
+    "centerOverview.description": {
+      en: "Description",
+      sw: "Maelezo",
+    },
+    "centerOverview.edit": {
+      en: "Edit Center",
+      sw: "Hariri Kituo",
+    },
+    "centerOverview.delete": {
+      en: "Delete Center",
+      sw: "Futa Kituo",
+    },
+    "centerOverview.editCenter": {
+      en: "Edit Center",
+      sw: "Hariri Kituo",
+    },
+    "centerOverview.editCenterDescription": {
+      en: "Update your orphanage center details below.",
+      sw: "Sasisha maelezo ya kituo chako cha yatima hapa chini.",
+    },
+    "centerOverview.save": {
+      en: "Save",
+      sw: "Hifadhi",
+    },
     // Common translations
     "common.email": {
       en: "Email",
@@ -177,6 +230,77 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     "common.gender": {
       en: "Gender",
       sw: "Jinsia",
+    },
+    // Profile role translations
+    "profile.role.orphanageAdmin": {
+      en: "Orphanage Admin",
+      sw: "Msimamizi wa Kituo",
+    },
+    "profile.role.supervisor": {
+      en: "Supervisor",
+      sw: "Msimamizi",
+    },
+    "profile.role.volunteer": {
+      en: "Volunteer",
+      sw: "Mwanajitolea",
+    },
+    "profile.role.donor": {
+      en: "Donor",
+      sw: "Mchangiaji",
+    },
+    "profile.notSpecified": {
+      en: "Not Specified",
+      sw: "Haijabainishwa",
+    },
+
+    // Registration Requests translations
+    "registrationRequests.title": {
+      en: "Orphanage Registration Requests",
+      sw: "Maombi ya Usajili wa Kituo cha Yatima",
+    },
+    "registrationRequests.noRequests": {
+      en: "No registration requests found.",
+      sw: "Hakuna maombi ya usajili yaliyopatikana.",
+    },
+    "registrationRequests.loading": {
+      en: "Loading registration requests...",
+      sw: "Inapakia maombi ya usajili...",
+    },
+    "registrationRequests.gender": {
+      en: "Gender:",
+      sw: "Jinsia:",
+    },
+    "registrationRequests.email": {
+      en: "Email:",
+      sw: "Barua pepe:",
+    },
+    "registrationRequests.center": {
+      en: "Center:",
+      sw: "Kituo:",
+    },
+    "registrationRequests.region": {
+      en: "Region:",
+      sw: "Eneo:",
+    },
+    "registrationRequests.certificate": {
+      en: "Certificate:",
+      sw: "Cheti:",
+    },
+    "registrationRequests.viewPdf": {
+      en: "View PDF",
+      sw: "Tazama PDF",
+    },
+    "registrationRequests.status": {
+      en: "Status:",
+      sw: "Hali:",
+    },
+    "registrationRequests.approve": {
+      en: "Approve",
+      sw: "Kubali",
+    },
+    "registrationRequests.decline": {
+      en: "Decline",
+      sw: "Kataa",
     },
   };
 

@@ -32,7 +32,7 @@ export default function CampaignLearnPage() {
           <Card className="mb-12 border-blue-100 shadow-xl overflow-hidden animate-slide-up">
             <div className="h-64 overflow-hidden">
               <img
-                src="/image/image2.jpg"
+                src="/image/c1.jpg"
                 alt="Campaign"
                 className="w-full h-full object-cover"
               />

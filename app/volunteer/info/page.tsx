@@ -32,7 +32,7 @@ export default function VolunteerInfoPage() {
           <Card className="mb-12 border-blue-100 shadow-xl overflow-hidden animate-slide-up">
             <div className="h-64 overflow-hidden">
               <img
-                src="/image/image1.jpg"
+                src="/image/c3.jpg"
                 alt="Volunteering"
                 className="w-full h-full object-cover"
               />

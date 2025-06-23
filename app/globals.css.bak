@@ -1,8 +1,7 @@
-/* Tailwind CSS directives - needed for @layer components to work */
+/* Tailwind CSS directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 :root {
   --background: #ffffff;
@@ -20,7 +19,7 @@
   --muted-foreground: #6b7280;
 }
 
-/* Custom Animation Classes */
+/* Custom Animations */
 @layer components {
   .report-button-success {
     background-color: #16a34a; /* Tailwind bg-green-600 */
@@ -88,7 +87,6 @@
   }
 }
 
-/* Animation Keyframes */
 @keyframes bounce-once {
   0%, 100% {
     transform: translateY(0);
@@ -213,7 +211,7 @@
   background-image: url('/image/c1.jpg');
   background-size: cover;
   background-position: center;
-  filter: brightness(1.0);
+  filter: brightness(0.7);
   transform-origin: center center;
   will-change: transform;
   transform: translateZ(0);
@@ -229,7 +227,6 @@
   transition: background-position 8s ease;
 }
 
-/* Dark Mode */
 [data-theme="dark"] {
   --background: #1f2937;
   --foreground: #ffffff;
