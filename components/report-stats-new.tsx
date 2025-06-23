@@ -127,8 +127,21 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
         newItem.name = ta("analytics.healthcare");
       } else if (item.name === "Facilities") {
         newItem.name = ta("analytics.facilities");
-      } else if (item.name === "Events") {
+      }      else if (item.name === "Events") {
         newItem.name = ta("analytics.events");
+      }
+      
+      // Translate staff roles
+      else if (item.name === "Supervisors") {
+        newItem.name = ta("analytics.supervisors");
+      } else if (item.name === "Orphanage Admins") {
+        newItem.name = ta("analytics.orphanageAdmins");
+      } else if (item.name === "Super Admins") {
+        newItem.name = ta("analytics.superAdmins");
+      } else if (item.name === "Administrators") {
+        newItem.name = ta("analytics.administrators");
+      } else if (item.name === "Suspended") {
+        newItem.name = ta("analytics.suspended");
       } else if (item.name === "Activities") {
         newItem.name = ta("analytics.activities");
       } else if (item.name === "Administration") {
@@ -166,8 +179,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
               </TabsTrigger>
             </TabsList>            <TabsContent value="demographics" className="pt-4">
               <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
+                <PieChart>                  <Pie
                     data={getTranslatedData(data.demographics)}
                     dataKey="value"
                     nameKey="name"
@@ -182,7 +194,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                     {data.demographics.map((_: any, index: number) => (
                       <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />                    ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value} ${t("report.orphansCount")}`, t("report.count")]} />
+                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.orphansCount")}`, ta("analytics.count")]} />
                 </PieChart>
               </ResponsiveContainer>
             </TabsContent>            <TabsContent value="age" className="pt-4">
@@ -190,7 +202,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 <BarChart data={getTranslatedData(data.ageGroups)}>
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip formatter={(value) => [`${value} ${t("report.orphansCount")}`, t("report.count")]} />
+                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.orphansCount")}`, ta("analytics.count")]} />
                   <Bar 
                     dataKey="value" 
                     fill="#2563eb" 
@@ -206,7 +218,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 <BarChart data={getTranslatedData(data.statusDistribution)}>
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip formatter={(value) => [`${value} ${t("report.orphansCount")}`, t("report.count")]} />
+                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.orphansCount")}`, ta("analytics.count")]} />
                   <Bar 
                     dataKey="value" 
                     fill="#1d4ed8" 
@@ -244,7 +256,8 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
             </TabsList>
             <TabsContent value="categories" className="pt-4">
               <ResponsiveContainer width="100%" height={300}>
-                <PieChart>                  <Pie
+                <PieChart>
+                  <Pie
                     data={getTranslatedData(data.categories)}
                     dataKey="value"
                     nameKey="name"
@@ -259,7 +272,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                       <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value} ${t("report.inventory.items")}`, t("report.count")]} />
+                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.inventoryItems")}`, ta("analytics.count")]} />
                 </PieChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -268,7 +281,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 <BarChart data={getTranslatedData(data.stockStatus)}>
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip formatter={(value) => [`${value} ${t("report.inventory.items")}`, t("report.count")]} />
+                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.inventoryItems")}`, ta("analytics.count")]} />
                   <Bar 
                     dataKey="value" 
                     fill="#3b82f6" 
@@ -283,7 +296,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 <LineChart data={getTranslatedData(data.transactions)}>
                   <XAxis dataKey="date" />
                   <YAxis />
-                  <Tooltip formatter={(value) => [`${value} ${t("report.inventory.transactions")}`, t("report.count")]} />
+                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.inventoryTransactions")}`, ta("analytics.count")]} />
                   <Line 
                     type="monotone" 
                     dataKey="value" 
@@ -327,7 +340,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 <BarChart data={getTranslatedData(data.amounts)}>
                   <XAxis dataKey="name" />
                   <YAxis tickFormatter={(value) => formatCurrency(value)} />
-                  <Tooltip formatter={(value) => [formatCurrency(value as number), t("report.fundraising.amount")]} />
+                  <Tooltip formatter={(value) => [formatCurrency(value as number), ta("analytics.fundraisingAmount")]} />
                   <Bar 
                     dataKey="value" 
                     fill="#2563eb" 
@@ -355,7 +368,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                       <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value} ${t("report.fundraising.campaigns")}`, t("report.count")]} />
+                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.fundraisingCampaigns")}`, ta("analytics.count")]} />
                 </PieChart>
               </ResponsiveContainer>
             </TabsContent>
@@ -364,7 +377,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 <LineChart data={getTranslatedData(data.timeline)}>
                   <XAxis dataKey="date" />
                   <YAxis tickFormatter={(value) => formatCurrency(value)} />
-                  <Tooltip formatter={(value) => [formatCurrency(value as number), t("report.fundraising.amount")]} />
+                  <Tooltip formatter={(value) => [formatCurrency(value as number), ta("analytics.fundraisingAmount")]} />
                   <Line 
                     type="monotone" 
                     dataKey="value" 
@@ -419,14 +432,14 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                     {data.status.map((_: any, index: number) => (
                       <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                     ))}
-                  </Pie>                  <Tooltip formatter={(value) => [`${value} ${t("report.volunteers.count")}`, t("report.count")]} />
+                  </Pie>                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.volunteersCount")}`, ta("analytics.count")]} />
                 </PieChart>
               </ResponsiveContainer>
             </TabsContent>            <TabsContent value="skills" className="pt-4">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getTranslatedData(data.skills)}>
                   <XAxis dataKey="name" />
-                  <YAxis />                  <Tooltip formatter={(value) => [`${value} ${t("report.volunteers.count")}`, t("report.count")]} />
+                  <YAxis />                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.volunteersCount")}`, ta("analytics.count")]} />
                   <Bar 
                     dataKey="value" 
                     fill="#2563eb" 
@@ -441,7 +454,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={getTranslatedData(data.hoursByMonth)}>
                   <XAxis dataKey="name" />
-                  <YAxis />                  <Tooltip formatter={(value) => [`${value} ${t("report.volunteers.volunteerHours")}`, t("report.count")]} />
+                  <YAxis />                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.volunteerHours")}`, ta("analytics.count")]} />
                   <Line 
                     type="monotone" 
                     dataKey="value" 
@@ -481,7 +494,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 value="roles"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
-                {t("report.staff.roles")}
+                {ta("analytics.staffRoles")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="departments" className="pt-4">
@@ -500,14 +513,15 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                     {data.departments && data.departments.map((_: any, index: number) => (
                       <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                     ))}
-                  </Pie><Tooltip formatter={(value) => [`${value} ${t("dashboard.staff")}`, t("report.count")]} />
+                  </Pie><Tooltip formatter={(value) => [`${value} ${ta("analytics.staffCount")}`, ta("analytics.count")]} />
                 </PieChart>
               </ResponsiveContainer>
             </TabsContent>            <TabsContent value="status" className="pt-4">
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getTranslatedData(data.status)}>
                   <XAxis dataKey="name" />
-                  <YAxis />                  <Tooltip formatter={(value) => [`${value} ${t("dashboard.staff")}`, t("report.count")]} />
+                  <YAxis />
+                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.staffCount")}`, ta("analytics.count")]} />
                   <Bar 
                     dataKey="value" 
                     fill="#2563eb" 
@@ -521,7 +535,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getTranslatedData(data.roles)}>
                   <XAxis dataKey="name" />
-                  <YAxis />                  <Tooltip formatter={(value) => [`${value} ${t("dashboard.staff")}`, t("report.count")]} />
+                  <YAxis />                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.staffCount")}`, ta("analytics.count")]} />
                   <Bar 
                     dataKey="value" 
                     fill="#1d4ed8" 
@@ -543,25 +557,25 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
                 value="distribution"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
-                {t("report.branches.distribution")}
+                {ta("analytics.branchesDistribution")}
               </TabsTrigger>
               <TabsTrigger 
                 value="orphans"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
-                {t("report.branches.orphans")}
+                {ta("analytics.branchesOrphans")}
               </TabsTrigger>
               <TabsTrigger 
                 value="resources"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
-                {t("report.branches.resources")}
+                {ta("analytics.branchesResources")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="distribution" className="pt-4">              <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getTranslatedData(data.distribution)}>
                   <XAxis dataKey="name" />
-                  <YAxis />                  <Tooltip formatter={(value) => [`${value}`, t("report.count")]} />
+                  <YAxis />                  <Tooltip formatter={(value) => [`${value}`, ta("analytics.count")]} />
                   <Bar 
                     dataKey="value" 
                     fill="#2563eb" 
@@ -575,7 +589,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
             <TabsContent value="orphans" className="pt-4">              <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getTranslatedData(data.orphans)}>
                   <XAxis dataKey="name" />
-                  <YAxis />                  <Tooltip formatter={(value) => [`${value} ${t("report.orphansCount")}`, t("report.count")]} />
+                  <YAxis />                  <Tooltip formatter={(value) => [`${value} ${ta("analytics.orphansCount")}`, ta("analytics.count")]} />
                   <Bar 
                     dataKey="value" 
                     fill="#15803d" 
@@ -589,7 +603,7 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
             <TabsContent value="resources" className="pt-4">              <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getTranslatedData(data.resources)}>
                   <XAxis dataKey="name" />
-                  <YAxis tickFormatter={(value) => formatCurrency(value)} />                  <Tooltip formatter={(value) => [formatCurrency(value as number), t("report.fundraising.amount")]} />
+                  <YAxis tickFormatter={(value) => formatCurrency(value)} />                  <Tooltip formatter={(value) => [formatCurrency(value as number), ta("analytics.fundraisingAmount")]} />
                   <Bar 
                     dataKey="value" 
                     fill="#1d4ed8" 
@@ -604,14 +618,13 @@ export default function ReportStats({ data, type }: ReportStatsProps) {
         )
       
       default:
-        return <p>{t("report.noData")}</p>
+        return <p>{ta("analytics.noData")}</p>
     }
   }
 
   return (
-    <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
-        <CardTitle className="text-blue-800">{t("report.statistics")}</CardTitle>
+    <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">      <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
+        <CardTitle className="text-blue-800">{ta("analytics.statistics")}</CardTitle>
       </CardHeader>
       <CardContent className="p-4">
         <div className="animate-in fade-in duration-700 slide-in-from-bottom-4">

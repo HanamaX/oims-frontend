@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { useSearchParams, useRouter } from "next/navigation"
 import SuperuserAuthService from "@/lib/superuser-service-fix" // Using the fixed service
 import { useAuth } from "@/components/auth-provider"
+import { useLanguage, T } from "@/contexts/LanguageContext"
 import {
   Dialog,
   DialogContent,
@@ -62,6 +63,7 @@ interface SystemStats {
 
 // Create a separate component for the dashboard content that uses useSearchParams
 function SuperuserDashboardContent() {
+  const { t } = useLanguage()
   // Admin state
   const [admins, setAdmins] = useState<OrphanageAdmin[]>([])
   const [newAdmin, setNewAdmin] = useState<OrphanageAdmin>({
@@ -245,8 +247,8 @@ function SuperuserDashboardContent() {
       })
       
       toast({
-        title: "Success",
-        description: `Admin ${newAdmin.fullName} has been added successfully`,
+        title: t("superuser.dashboard.success"),
+        description: t("superuser.dashboard.adminAdded"),
       })
       
       // Reset form and refresh data
@@ -346,14 +348,13 @@ function SuperuserDashboardContent() {
         <span className="ml-2">Loading superuser dashboard...</span>
       </div>
     )
-  }
-  return (
+  }  return (
     <div className="w-full px-6 py-10 space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-blue-800">Superuser Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-blue-800">{t("superuser.dashboard.title")}</h1>
           <p className="text-muted-foreground flex items-center mt-3">
-            Manage orphanage admins and monitor system-wide statistics
+            {t("superuser.dashboard.description")}
           </p>
           {error && (
             <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mt-2 text-blue-800 flex items-center">
@@ -367,14 +368,14 @@ function SuperuserDashboardContent() {
                 className="ml-auto text-blue-600 hover:text-blue-700 hover:bg-blue-100"
                 onClick={() => window.location.reload()}
               >
-                Retry
+                {t("common.retry")}
               </Button>
             </div>
           )}
         </div>
         <Button variant="ghost" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
-          Logout
+          {t("common.logout")}
         </Button>
       </div>        <Tabs value={activeTab} onValueChange={(value) => {
         setActiveTab(value)
@@ -398,7 +399,7 @@ function SuperuserDashboardContent() {
                 window.history.pushState({}, '', url)
               }
             }}
-          >Overview</TabsTrigger>
+          ><T k="superuser.dashboard.overview" /></TabsTrigger>
           <TabsTrigger 
             value="admins"
             className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all" 
@@ -410,7 +411,7 @@ function SuperuserDashboardContent() {
                 window.history.pushState({}, '', url)
               }
             }}
-          >Orphanage Admins</TabsTrigger>
+          ><T k="superuser.dashboard.orphanageAdmins" /></TabsTrigger>
           <TabsTrigger 
             value="reports"
             className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all" 
@@ -422,14 +423,13 @@ function SuperuserDashboardContent() {
                 window.history.pushState({}, '', url)
               }
             }}
-          >System Reports</TabsTrigger>
+          ><T k="superuser.dashboard.systemReports" /></TabsTrigger>
         </TabsList>
           {/* Dashboard Overview Tab */}
         <TabsContent value="dashboard" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-            <Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">            <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Orphanage Centers</CardTitle>
+                <CardTitle className="text-sm font-medium"><T k="superuser.dashboard.totalOrphanageCenters" /></CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.totalOrphanageCenters}</div>
@@ -437,7 +437,7 @@ function SuperuserDashboardContent() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Branches</CardTitle>
+                <CardTitle className="text-sm font-medium"><T k="superuser.dashboard.totalBranches" /></CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.totalBranches}</div>
@@ -445,14 +445,13 @@ function SuperuserDashboardContent() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Orphans</CardTitle>
+                <CardTitle className="text-sm font-medium"><T k="superuser.dashboard.totalOrphans" /></CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.totalOrphans}</div>
-              </CardContent>            </Card>
-            <Card>
+              </CardContent>            </Card>            <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Fundraising (TSh)</CardTitle>
+                <CardTitle className="text-sm font-medium"><T k="superuser.dashboard.totalFundraising" /> (TSh)</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.totalFundraising.toLocaleString()}</div>
@@ -460,43 +459,41 @@ function SuperuserDashboardContent() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Total Volunteers</CardTitle>
+                <CardTitle className="text-sm font-medium"><T k="superuser.dashboard.totalVolunteers" /></CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.totalVolunteers}</div>
               </CardContent>
             </Card>
-          </div>
-            <Card className="mt-6">
+          </div>            <Card className="mt-6">
             <CardHeader>
-              <CardTitle>System Summary</CardTitle>
+              <CardTitle>
+                <T k="superuser.dashboard.systemSummary" />
+              </CardTitle>
               <CardDescription>
-                Overview of the orphanage management system based on real data
+                <T k="superuser.dashboard.overviewDescription" />
               </CardDescription>
             </CardHeader>            <CardContent>
               <p>
-                The system currently manages {stats.totalOrphanageCenters} orphanage centers with {stats.totalBranches} branches.
-                There are {stats.totalOrphans} orphans being cared for across all centers.
-                The system has TSh {stats.totalFundraising.toLocaleString()} in total fundraising and {stats.totalVolunteers} volunteers are registered.
+                {t('superuser.dashboard.systemStats')} {stats.totalOrphanageCenters} {t('superuser.dashboard.centers')}, {stats.totalBranches} {t('superuser.dashboard.branches')}, {stats.totalOrphans} {t('superuser.dashboard.orphans')}, {t('superuser.dashboard.fundraising')} {stats.totalFundraising.toLocaleString()} {t('superuser.dashboard.and')} {stats.totalVolunteers} {t('superuser.dashboard.volunteers')}.
               </p>
             </CardContent>
           </Card>
         </TabsContent>
         
         {/* Orphanage Admins Tab */}
-        <TabsContent value="admins" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">Orphanage Admins Management</h2>
+        <TabsContent value="admins" className="space-y-4">          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold"><T k="superuser.dashboard.adminsManagement" /></h2>
             <Dialog open={addAdminDialogOpen} onOpenChange={setAddAdminDialogOpen}>
               <DialogTrigger asChild>
                 <Button>
                   <Plus className="mr-2 h-4 w-4" />
-                  Add New Admin
+                  <T k="superuser.dashboard.addNewAdmin" />
                 </Button>
               </DialogTrigger>
               <DialogContent className="bg-white">
                 <DialogHeader>
-                  <DialogTitle>Add New Orphanage Admin</DialogTitle>
+                  <DialogTitle><T k="superuser.dashboard.addNewAdminTitle" /></DialogTitle>
                   <DialogDescription>
                     Create a new admin account for an orphanage center
                   </DialogDescription>
@@ -620,24 +617,23 @@ function SuperuserDashboardContent() {
           {/* Reports Tab */}
         <TabsContent value="reports" className="space-y-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-blue-700">System Reports</h2>
+            <h2 className="text-2xl font-bold text-blue-700"><T k="superuser.dashboard.systemReports" /></h2>
           </div>
           
           <Tabs defaultValue="generator" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2 bg-blue-100">
-              <TabsTrigger 
+            <TabsList className="grid w-full grid-cols-2 bg-blue-100">              <TabsTrigger 
                 value="generator"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 <FileText className="mr-2 h-4 w-4" />
-                Report Generator
+                <T k="report.reportGenerator" />
               </TabsTrigger>
               <TabsTrigger 
                 value="analytics"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 <BarChart3 className="mr-2 h-4 w-4" />
-                System Analytics
+                <T k="report.systemAnalytics" />
               </TabsTrigger>
             </TabsList>
             
@@ -651,21 +647,20 @@ function SuperuserDashboardContent() {
           </Tabs>
         </TabsContent>
       </Tabs>
-      
-      {/* Delete Admin Confirmation Dialog */}
+        {/* Delete Admin Confirmation Dialog */}
       <Dialog open={deleteAdminDialogOpen} onOpenChange={setDeleteAdminDialogOpen}>
         <DialogContent className="bg-white">
           <DialogHeader>
-            <DialogTitle>Confirm Admin Deletion</DialogTitle>
+            <DialogTitle>{t("admin.confirmDeletion")}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the admin <strong>{selectedAdmin?.fullName}</strong>?
+              {t("admin.deleteConfirmMessage")} <strong>{selectedAdmin?.fullName}</strong>?
               <br /><br />
-              This action cannot be undone. The admin will no longer be able to access the system.
+              {t("admin.deleteWarning")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteAdminDialogOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button 
               variant="destructive" 
@@ -675,10 +670,10 @@ function SuperuserDashboardContent() {
               {submitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  {t("admin.deleting")}
                 </>
               ) : (
-                "Delete Admin"
+                t("admin.deleteAdmin")
               )}
             </Button>
           </DialogFooter>

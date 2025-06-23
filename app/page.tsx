@@ -50,9 +50,8 @@ export default function HomePage() {
               <nav className="hidden md:flex gap-6">
                 <Link href="/about-us" className="text-sm font-medium hover:text-blue-700">
                   <T k="nav.about" />
-                </Link>
-                <Link href="/register-orphanage" className="text-sm font-medium hover:text-blue-700">
-                  Register
+                </Link>                <Link href="/register-orphanage" className="text-sm font-medium hover:text-blue-700">
+                  <T k="nav.register" />
                 </Link>
               </nav>
             </div>
@@ -84,13 +83,12 @@ export default function HomePage() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <T k="nav.about" />
-                </Link>
-                <Link
+                </Link>                <Link
                   href="/register-orphanage"
                   className="block px-3 py-2 text-sm font-medium rounded-md hover:bg-blue-50"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Register
+                  <T k="nav.register" />
                 </Link>
                 <div className="flex items-center gap-2 pt-2">
                   <div className="text-sm font-medium">
@@ -104,7 +102,7 @@ export default function HomePage() {
         </header>
 
         {/* Hero Section with image2.jpg background for entire top section */}
-        <section className="relative min-h-[600px] py-12 md:py-24 flex items-center">
+        <section className="relative min-h-[600px] py-12 md:py-24 flex items-center overflow-hidden">
           {/* Image background for entire hero section with subtle zoom animation */}
           <div
             className="absolute inset-0 w-full h-full -z-10 animate-zoom-bg bg-hero-image"

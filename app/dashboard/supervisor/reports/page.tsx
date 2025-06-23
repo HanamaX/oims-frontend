@@ -113,7 +113,7 @@ function OrphanReportStats() {
     return (
       <div className="flex justify-center items-center p-8">
         <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
-        <span className="ml-2 text-blue-600">{t("report.loadingData")}</span>
+        <span className="ml-2 text-blue-600"><T k="report.loadingData" /></span>
       </div>
     )
   }
@@ -135,7 +135,7 @@ function InventoryReportStats() {
     return (
       <div className="flex justify-center items-center p-8">
         <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
-        <span className="ml-2 text-blue-600">{t("report.loadingData")}</span>
+        <span className="ml-2 text-blue-600"><T k="report.loadingData" /></span>
       </div>
     )
   }
@@ -157,7 +157,7 @@ function FundraiserReportStats() {
     return (
       <div className="flex justify-center items-center p-8">
         <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
-        <span className="ml-2 text-blue-600">{t("report.loadingData")}</span>
+        <span className="ml-2 text-blue-600"><T k="report.loadingData" /></span>
       </div>
     )
   }
@@ -179,7 +179,7 @@ function VolunteerReportStats() {
     return (
       <div className="flex justify-center items-center p-8">
         <Loader2 className="h-8 w-8 text-blue-600 animate-spin" />
-        <span className="ml-2 text-blue-600">{t("report.loadingData")}</span>
+        <span className="ml-2 text-blue-600"><T k="report.loadingData" /></span>
       </div>
     )
   }
@@ -188,8 +188,8 @@ function VolunteerReportStats() {
     return (
       <div className="flex flex-col items-center justify-center p-8 text-center">
         <AlertCircle className="h-8 w-8 text-red-500 mb-2" />
-        <h3 className="text-lg font-medium">{t("report.errorLoading")}</h3>
-        <p className="text-sm text-muted-foreground">{error ?? t("report.noDataAvailable")}</p>
+        <h3 className="text-lg font-medium"><T k="report.errorLoading" /></h3>
+        <p className="text-sm text-muted-foreground">{error ?? <T k="report.noDataAvailable" />}</p>
       </div>
     )  }
   
@@ -213,10 +213,9 @@ export default function SupervisorReportsPage() {
   return (
     <div className="container mx-auto py-6 space-y-8">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">{t("report.title")}</h1>
+        <div>          <h1 className="text-3xl font-bold"><T k="report.title" /></h1>
           <p className="text-muted-foreground">
-            {t("report.generate")}
+            <T k="report.generate" />
           </p>
         </div>        <Badge variant="outline" className="px-3 py-1 text-base bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md">
           {user.branchName ?? <T k="branch.label" />}
@@ -224,11 +223,10 @@ export default function SupervisorReportsPage() {
       </div>
 
       <div className="grid gap-6">          
-        <Alert className="bg-blue-50 border-blue-200">
-          <AlertCircle className="h-4 w-4 text-blue-600" />
-          <AlertTitle>{t("report.restricted")}</AlertTitle>
+        <Alert className="bg-blue-50 border-blue-200">          <AlertCircle className="h-4 w-4 text-blue-600" />
+          <AlertTitle><T k="report.restricted" /></AlertTitle>
           <AlertDescription>
-            {t("report.restriction.description")}
+            <T k="report.restriction.description" />
           </AlertDescription>
         </Alert>        <Tabs defaultValue="generator" className="space-y-6">          
           <TabsList className="grid w-full grid-cols-2 bg-blue-100">            
@@ -237,8 +235,7 @@ export default function SupervisorReportsPage() {
               className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
             >
               <div className="flex items-center space-x-2">
-                <FileType className="mr-2 h-4 w-4" />
-                <span>{t("report.generator")}</span>
+                <FileType className="mr-2 h-4 w-4" />                <span><T k="report.generator" /></span>
               </div>
             </TabsTrigger>
             <TabsTrigger 
@@ -246,7 +243,7 @@ export default function SupervisorReportsPage() {
               className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
             >
               <BarChart3 className="mr-2 h-4 w-4" />
-              {t("report.analytics")}
+              <T k="report.analytics" />
             </TabsTrigger>
           </TabsList>
           
@@ -258,30 +255,29 @@ export default function SupervisorReportsPage() {
           </TabsContent>
           
           <TabsContent value="analytics" className="space-y-6">            
-            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ReportType)}>              <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 bg-blue-100">                
-                <TabsTrigger 
+            <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ReportType)}>              <TabsList className="grid grid-cols-2 md:grid-cols-4 mb-6 bg-blue-100">                  <TabsTrigger 
                   value="orphans"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.orphans")}
+                  <T k="report.orphans" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="inventory"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.inventory")}
+                  <T k="report.inventory" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="fundraising"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.fundraising")}
+                  <T k="report.fundraising" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="volunteers"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.volunteers")}
+                  <T k="report.volunteers" />
                 </TabsTrigger>
               </TabsList>
                 <div className="mb-6">
@@ -301,44 +297,40 @@ export default function SupervisorReportsPage() {
 
               <div className="grid gap-6 md:grid-cols-2">                  
                 <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
-                    <CardTitle className="text-base text-blue-800">{t("report.summary")}</CardTitle>
-                    <CardDescription>{t("report.branchOverview")}</CardDescription>
+                  <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">                    <CardTitle className="text-base text-blue-800"><T k="report.summary" /></CardTitle>
+                    <CardDescription><T k="report.branchOverview" /></CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4 pt-4">                    <div className="flex justify-between">
-                      <span className="text-blue-700">{t("report.totalOrphans")}</span>
+                  <CardContent className="space-y-4 pt-4">                    <div className="flex justify-between">                      <span className="text-blue-700"><T k="report.totalOrphans" /></span>
                       <span className="font-medium text-blue-800">{user.dashboardStats?.totalOrphans ?? 0}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-blue-700">{t("report.activeVolunteers")}</span>
+                      <span className="text-blue-700"><T k="report.activeVolunteers" /></span>
                       <span className="font-medium text-blue-800">{user.dashboardStats?.totalVolunteers ?? 0}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-blue-700">{t("report.fundraisingCampaigns")}</span>
+                      <span className="text-blue-700"><T k="report.fundraisingCampaigns" /></span>
                       <span className="font-medium text-blue-800">{user.dashboardStats?.totalFundraising ?? 0}</span>
                     </div>
                   </CardContent>
                 </Card>                  
                   <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">                  
-                  <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
-                    <CardTitle className="text-base text-blue-800">{t("report.recentReports")}</CardTitle>
-                    <CardDescription>{t("report.previouslyGenerated")}</CardDescription>
+                  <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">                    <CardTitle className="text-base text-blue-800"><T k="report.recentReports" /></CardTitle>
+                    <CardDescription><T k="report.previouslyGenerated" /></CardDescription>
                   </CardHeader>                  <CardContent className="pt-4">
                     <ul className="space-y-3">
-                      <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
-                        <span className="text-blue-700">{t("report.monthlyOrphan")}</span>
+                      <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">                        <span className="text-blue-700"><T k="report.monthlyOrphan" /></span>
                         <Download className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110" />
                       </li>
                       <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
-                        <span className="text-blue-700">{t("report.inventoryStatus")}</span>
+                        <span className="text-blue-700"><T k="report.inventoryStatus" /></span>
                         <Download className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110" />
                       </li>
                       <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
-                        <span className="text-blue-700">{t("report.volunteerHours")}</span>
+                        <span className="text-blue-700"><T k="report.volunteerHours" /></span>
                         <Download className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110" />
                       </li>
                       <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
-                        <span className="text-blue-700">{t("report.fundraisingSummary")}</span>
+                        <span className="text-blue-700"><T k="report.fundraisingSummary" /></span>
                         <Download className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110" />
                       </li>
                     </ul>

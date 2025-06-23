@@ -16,7 +16,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import ReportService, { ReportType, ReportFilters } from "@/lib/report-service"
 import { format } from "date-fns"
 import { buttonVariants, ANIMATION_DURATION } from "./report-animations"
-import { useLanguage } from "@/contexts/LanguageContext"
+import { useLanguage, T } from "@/contexts/LanguageContext"
 import { useAnalyticsTranslations } from "@/hooks/use-analytics-translations"
 
 interface ReportComponentProps {
@@ -193,64 +193,63 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
       case "orphans":
         return (
           <>            <div className="flex flex-col space-y-2">
-              <Label htmlFor="category">{t("report.ageGroup")}</Label>
+              <Label htmlFor="category"><T k="report.ageGroup" /></Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.ageGroup")} />
+                  <SelectValue placeholder={<T k="report.ageGroup" />} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("report.allAgeGroups")}</SelectItem>
-                  <SelectItem value="infant">{t("report.infant")}</SelectItem>
-                  <SelectItem value="toddler">{t("report.toddler")}</SelectItem>
-                  <SelectItem value="child">{t("report.child")}</SelectItem>
-                  <SelectItem value="teenager">{t("report.teenager")}</SelectItem>
+                  <SelectItem value="all"><T k="report.allAgeGroups" /></SelectItem>
+                  <SelectItem value="infant"><T k="report.infant" /></SelectItem>
+                  <SelectItem value="toddler"><T k="report.toddler" /></SelectItem>
+                  <SelectItem value="child"><T k="report.child" /></SelectItem>
+                  <SelectItem value="teenager"><T k="report.teenager" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>            <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">{t("report.status")}</Label>
+              <Label htmlFor="status"><T k="report.status" /></Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.status")} />
+                  <SelectValue placeholder={<T k="report.status" />} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
-                  <SelectItem value="active">{t("report.active")}</SelectItem>
-                  <SelectItem value="inactive">{t("report.inactive")}</SelectItem>
-                  <SelectItem value="adopted">{t("report.adopted")}</SelectItem>
+                  <SelectItem value="all"><T k="report.allStatuses" /></SelectItem>
+                  <SelectItem value="active"><T k="report.active" /></SelectItem>
+                  <SelectItem value="inactive"><T k="report.inactive" /></SelectItem>
+                  <SelectItem value="adopted"><T k="report.adopted" /></SelectItem>
                 </SelectContent>
               </Select>            </div>
           </>
         );
       case "inventory":
-        return (
-          <>
+        return (          <>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="category">{t("report.category")}</Label>
+              <Label htmlFor="category"><T k="report.category" /></Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.category")} />
+                  <SelectValue placeholder={<T k="report.category" />} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("report.allCategories")}</SelectItem>
-                  <SelectItem value="food">{t("report.food")}</SelectItem>
-                  <SelectItem value="clothing">{t("report.clothing")}</SelectItem>
-                  <SelectItem value="medicine">{t("report.medicine")}</SelectItem>
-                  <SelectItem value="school">{t("report.schoolSupplies")}</SelectItem>
-                  <SelectItem value="other">{t("report.other")}</SelectItem>
+                  <SelectItem value="all"><T k="report.allCategories" /></SelectItem>
+                  <SelectItem value="food"><T k="report.food" /></SelectItem>
+                  <SelectItem value="clothing"><T k="report.clothing" /></SelectItem>
+                  <SelectItem value="medicine"><T k="report.medicine" /></SelectItem>
+                  <SelectItem value="school"><T k="report.schoolSupplies" /></SelectItem>
+                  <SelectItem value="other"><T k="report.other" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">{t("report.status")}</Label>
+              <Label htmlFor="status"><T k="report.status" /></Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.status")} />
+                  <SelectValue placeholder={<T k="report.status" />} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
-                  <SelectItem value="in_stock">{t("report.inStock")}</SelectItem>
-                  <SelectItem value="low_stock">{t("report.lowStock")}</SelectItem>
-                  <SelectItem value="out_of_stock">{t("report.outOfStock")}</SelectItem>
+                  <SelectItem value="all"><T k="report.allStatuses" /></SelectItem>
+                  <SelectItem value="in_stock"><T k="report.inStock" /></SelectItem>
+                  <SelectItem value="low_stock"><T k="report.lowStock" /></SelectItem>
+                  <SelectItem value="out_of_stock"><T k="report.outOfStock" /></SelectItem>
                 </SelectContent>
               </Select>            </div>
           </>
@@ -356,9 +355,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
         </CardHeader>
         <CardContent className="pt-6">
           {!orphanId && (
-            <Tabs defaultValue="orphans" onValueChange={(value) => setActiveTab(value as ReportType)}>
-              <TabsList className="grid w-full grid-cols-6 bg-blue-100">
-                <TabsTrigger 
+            <Tabs defaultValue="orphans" onValueChange={(value) => setActiveTab(value as ReportType)}>              <TabsList className="grid w-full grid-cols-6 bg-blue-100">                <TabsTrigger 
                   value="orphans" 
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
@@ -383,7 +380,8 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                   {t("report.volunteers")}
                 </TabsTrigger>
                 {userRole === "superadmin" && (
-                  <>                    <TabsTrigger 
+                  <>
+                    <TabsTrigger 
                       value="staff"
                       className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                     >
@@ -406,8 +404,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                         onBranchChange(value === "all" ? undefined : value);
                       }
                     }}>
-                      <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                        <SelectValue placeholder={t("report.selectBranch")} />
+                      <SelectTrigger className="border-blue-200 focus:ring-blue-500">                        <SelectValue placeholder={t("report.selectBranch")} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">{t("branch.all")} ({t("report.systemReport")})</SelectItem>
@@ -429,8 +426,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                         onBranchChange(value === "all" ? undefined : value);
                       }
                     }}>
-                      <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                        <SelectValue placeholder={t("report.selectBranch")} />
+                      <SelectTrigger className="border-blue-200 focus:ring-blue-500">                        <SelectValue placeholder={t("report.selectBranch")} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">{t("branch.all")} ({t("centre.yourCentre")})</SelectItem>
@@ -449,8 +445,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                         id="use-date-range" 
                         checked={useDateRange} 
                         onCheckedChange={(checked) => setUseDateRange(checked as boolean)}
-                      />
-                      <label
+                      />                      <label
                         htmlFor="use-date-range"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-blue-900"
                       >
@@ -466,8 +461,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                         />
                       </div>
                     </div>
-                    
-                    {!useDateRange && (
+                      {!useDateRange && (
                       <div className="text-sm text-blue-700 mt-2 bg-blue-50 p-2 rounded border border-blue-200">
                         <AlertCircle className="h-4 w-4 inline-block mr-1 text-blue-600" />
                         {t("report.allTimeData")}
@@ -523,8 +517,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                     <label
                       htmlFor="use-date-range-orphan"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      {t("report.useDateRange")}
+                    >                      {t("report.useDateRange")}
                     </label>
                   </div>
                   
@@ -537,8 +530,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                       />
                     </div>
                   </div>
-                  
-                  {!useDateRange && (
+                    {!useDateRange && (
                     <div className="text-sm text-blue-700 mt-2 bg-blue-50 p-2 rounded border border-blue-200">
                       <AlertCircle className="h-4 w-4 inline-block mr-1 text-blue-600" />
                       {t("report.allTimeData")}
@@ -574,7 +566,8 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
         
         <CardFooter className="flex flex-col space-y-4">          <div className="flex justify-between w-full">
             <Alert variant="default" className="w-full mr-4 border-blue-200">
-              <AlertCircle className="h-4 w-4 text-blue-600" />              <AlertTitle>{t("report.includeData")}</AlertTitle>
+              <AlertCircle className="h-4 w-4 text-blue-600" />
+              <AlertTitle>{t("report.includeData")}</AlertTitle>
               <AlertDescription>
                 {t("report.selectFilters")}
               </AlertDescription>
@@ -584,15 +577,14 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                 className={`min-w-[150px] ${buttonVariants.idle} bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg`} 
                 onClick={handleGenerateReport}
                 disabled={loading}
-              >
-                {loading ? (
+              >                {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
                     {generating ? "Generating Report..." : "Processing"}
                   </>
                 ) : (
                   <>                    <Download className="mr-2 h-4 w-4" /> 
-                    {t("report.generateReport")}
+                    <T k="report.generateReport" />
                   </>
                 )}
               </Button>

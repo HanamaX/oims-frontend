@@ -549,10 +549,20 @@ const analyticsTranslations: TranslationRecord = {
   "analytics.orphanageAdmins": {
     en: "Orphanage Admins",
     sw: "Wasimamizi wa Nyumba ya Yatima",
-  },
-  "analytics.superUsers": {
+  },  "analytics.superUsers": {
     en: "Super Users",
     sw: "Watumiaji wa Juu",
+  },  "analytics.superAdmins": {
+    en: "Super Admins",
+    sw: "Wasimamizi wa Juu",
+  },
+  "analytics.administrators": {
+    en: "Administrators",
+    sw: "Watawala",
+  },
+  "analytics.suspended": {
+    en: "Suspended",
+    sw: "Waliosimamishwa",
   },
   "analytics.branchAssignment": {
     en: "Branch Assignment",
@@ -656,7 +666,66 @@ const analyticsTranslations: TranslationRecord = {
   },
   "analytics.downloadReport": {
     en: "Download Report",
-    sw: "Pakua Ripoti",
+    sw: "Pakua Ripoti",  },
+  
+  // Chart tooltip labels
+  "analytics.countLabel": {
+    en: "Count", 
+    sw: "Idadi"
+  },
+  "analytics.orphansCountLabel": {
+    en: "orphans",
+    sw: "yatima"
+  },
+  "analytics.inventoryItems": {
+    en: "items",
+    sw: "bidhaa"
+  },
+  "analytics.inventoryTransactions": {
+    en: "transactions",
+    sw: "miamala"
+  },
+  "analytics.fundraisingAmount": {
+    en: "Amount",
+    sw: "Kiasi"
+  },
+  "analytics.fundraisingCampaigns": {
+    en: "campaigns",
+    sw: "kampeni"
+  },
+  "analytics.volunteersCount": {
+    en: "volunteers",
+    sw: "wanaojitolea"
+  },
+  "analytics.volunteerHours": {
+    en: "hours", 
+    sw: "masaa"
+  },
+  "analytics.staffCount": {
+    en: "staff",
+    sw: "wafanyakazi"
+  },
+  "analytics.staffRoles": {
+    en: "Staff Roles",
+    sw: "Majukumu ya Wafanyakazi"
+  },
+  "analytics.branchesDistribution": {
+    en: "Distribution",
+    sw: "Mgawanyiko"
+  },
+  "analytics.branchesOrphans": {
+    en: "Orphans by Branch",
+    sw: "Watoto Yatima kwa Tawi"
+  },  "analytics.branchesResources": {
+    en: "Resources",
+    sw: "Rasilimali"
+  },  "analytics.noData": {
+    en: "No data available",
+    sw: "Hakuna data iliyopatikana"
+  },
+  "analytics.statistics": {
+    en: "Statistics",
+    sw: "Takwimu"
   }
 }
 

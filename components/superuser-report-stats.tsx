@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Bar, Line, Pie, Doughnut } from 'react-chartjs-2'
+import { useLanguage, T } from "@/contexts/LanguageContext"
 import { 
   Chart as ChartJS, 
   CategoryScale, 
@@ -198,36 +199,35 @@ export default function SuperuserReportStats({ stats }: Readonly<SuperuserReport
       </div>
     );
   }
-
+  const { t } = useLanguage();
+  
   return (
     <div className="space-y-8">
       {/* Report Header */}
       <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
           <div className="flex justify-between items-center">
-            <div>
-              <CardTitle className="text-blue-800">System-Wide Analytics Report</CardTitle>
+            <div>              <CardTitle className="text-blue-800"><T k="report.systemReport" /></CardTitle>
               <CardDescription className="text-blue-600 flex items-center mt-3">
-                Comprehensive data analysis of all orphanage centers and operations
+                <T k="report.orgWide" />
               </CardDescription>
             </div>
             <Button onClick={handleDownloadReport} className="bg-blue-600 text-white hover:bg-blue-700">
               <Download className="mr-2 h-4 w-4" />
-              Download Report
+              {t("common.download")}
             </Button>
           </div>
         </CardHeader>
-        <CardContent>
-          {/* Replace the summary <div> with animated stat cards */}
+        <CardContent>          {/* Replace the summary <div> with animated stat cards */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-6">
-            <AnimatedStatCard title="Orphanage Centers" value={stats.totalOrphanageCenters ?? 0} color="#2563eb" icon={<span>🏠</span>} />
-            <AnimatedStatCard title="Branches" value={stats.totalBranches ?? 0} color="#f59e42" icon={<span>🌿</span>} />
-            <AnimatedStatCard title="Orphans" value={stats.totalOrphans ?? 0} color="#10b981" icon={<span>🧒</span>} />
-            <AnimatedStatCard title="Admins" value={stats.totalAdmins ?? 0} color="#a21caf" icon={<span>🧑‍💼</span>} />
-            <AnimatedStatCard title="Donations (Tsh)" value={(stats.totalDonations ?? 0).toLocaleString()} color="#f43f5e" icon={<span>💰</span>} />
-            <AnimatedStatCard title="Active Fundraisers" value={stats.activeFundraisers ?? 0} color="#fbbf24" icon={<span>🎯</span>} />
-            <AnimatedStatCard title="Inventory Items" value={stats.totalInventoryItems ?? 0} color="#0ea5e9" icon={<span>📦</span>} />
-            <AnimatedStatCard title="Volunteers" value={stats.totalVolunteers ?? 0} color="#22d3ee" icon={<span>🤝</span>} />
+            <AnimatedStatCard title={t("branch.orphanageCenters")} value={stats.totalOrphanageCenters ?? 0} color="#2563eb" icon={<span>🏠</span>} />
+            <AnimatedStatCard title={t("branch.branches")} value={stats.totalBranches ?? 0} color="#f59e42" icon={<span>🌿</span>} />
+            <AnimatedStatCard title={t("orphan.orphans")} value={stats.totalOrphans ?? 0} color="#10b981" icon={<span>🧒</span>} />
+            <AnimatedStatCard title={t("admin.admins")} value={stats.totalAdmins ?? 0} color="#a21caf" icon={<span>🧑‍💼</span>} />
+            <AnimatedStatCard title={t("fundraiser.donations")} value={(stats.totalDonations ?? 0).toLocaleString()} color="#f43f5e" icon={<span>💰</span>} />
+            <AnimatedStatCard title={t("fundraiser.activeFundraisers")} value={stats.activeFundraisers ?? 0} color="#fbbf24" icon={<span>🎯</span>} />
+            <AnimatedStatCard title={t("inventory.inventoryItems")} value={stats.totalInventoryItems ?? 0} color="#0ea5e9" icon={<span>📦</span>} />
+            <AnimatedStatCard title={t("volunteer.volunteers")} value={stats.totalVolunteers ?? 0} color="#22d3ee" icon={<span>🤝</span>} />
           </div>
           <style jsx>{`
             @keyframes ripple {
@@ -242,10 +242,9 @@ export default function SuperuserReportStats({ stats }: Readonly<SuperuserReport
         </CardContent>
       </Card>      {/* Charts Section */}
       <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
-        <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
-          <CardTitle className="text-blue-800">Detailed Analytics</CardTitle>
+        <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">          <CardTitle className="text-blue-800"><T k="report.detailedAnalytics" /></CardTitle>
           <CardDescription className="text-blue-600 flex items-center mt-3">
-            Visual representation of system data
+            <T k="report.visualRepresentation" />
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -253,19 +252,19 @@ export default function SuperuserReportStats({ stats }: Readonly<SuperuserReport
             <TabsList className="grid grid-cols-4 gap-2 bg-blue-100">
               <TabsTrigger 
                 value="orphanage"
-                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
-              >Orphanage Data</TabsTrigger>              <TabsTrigger 
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"              ><T k="report.orphanageData" /></TabsTrigger>
+              <TabsTrigger 
                 value="donations"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
-              >Donations (Tsh)</TabsTrigger>
+              ><T k="report.donations" /></TabsTrigger>
               <TabsTrigger 
                 value="demographics"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
-              >Demographics</TabsTrigger>
+              ><T k="report.demographics" /></TabsTrigger>
               <TabsTrigger 
                 value="inventory"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
-              >Inventory</TabsTrigger>
+              ><T k="report.inventory" /></TabsTrigger>
             </TabsList>
             
             <TabsContent value="orphanage" className="h-96">
@@ -295,37 +294,40 @@ export default function SuperuserReportStats({ stats }: Readonly<SuperuserReport
         </CardContent>
       </Card>      {/* Key Metrics */}
       <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
-        <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
-          <CardTitle className="text-blue-800">Key Performance Indicators</CardTitle>
+        <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">          <CardTitle className="text-blue-800"><T k="report.performanceMetrics" /></CardTitle>
           <CardDescription className="text-blue-600">
-            Important metrics to monitor system performance
+            <T k="report.importantMetrics" />
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
-            <div className="border border-blue-200 rounded p-4 bg-blue-50 hover:shadow-md transition-all">
-              <h3 className="text-lg font-medium text-blue-800">Average Orphans per Center</h3>
-              <p className="text-3xl font-bold mt-2 text-blue-700">                {(stats.totalOrphanageCenters ?? 0) > 0
+            <div className="border border-blue-200 rounded p-4 bg-blue-50 hover:shadow-md transition-all">              <h3 className="text-lg font-medium text-blue-800"><T k="report.avgOrphansPerCenter" /></h3>
+              <p className="text-3xl font-bold mt-2 text-blue-700">                
+                {(stats.totalOrphanageCenters ?? 0) > 0
                   ? Math.round(stats.totalOrphans / (stats.totalOrphanageCenters ?? 1))
                   : 0}
               </p>
             </div>
-            <div className="border border-blue-200 rounded p-4 bg-blue-50 hover:shadow-md transition-all">              <h3 className="text-lg font-medium text-blue-800">Average Donations per Fundraiser (Tsh)</h3>
-              <p className="text-3xl font-bold mt-2 text-blue-700">                {(stats.activeFundraisers ?? 0) > 0
+            <div className="border border-blue-200 rounded p-4 bg-blue-50 hover:shadow-md transition-all">
+              <h3 className="text-lg font-medium text-blue-800"><T k="report.avgDonationsPerFundraiser" /></h3>
+              <p className="text-3xl font-bold mt-2 text-blue-700">                
+                {(stats.activeFundraisers ?? 0) > 0
                   ? Math.round((stats.totalDonations ?? 0) / (stats.activeFundraisers ?? 1)).toLocaleString() + " Tsh"
                   : "0 Tsh"}
               </p>
             </div>
             <div className="border border-blue-200 rounded p-4 bg-blue-50 hover:shadow-md transition-all">
-              <h3 className="text-lg font-medium text-blue-800">Admin to Orphan Ratio</h3>
-              <p className="text-3xl font-bold mt-2 text-blue-700">                1:{(stats.totalAdmins ?? 0) > 0
+              <h3 className="text-lg font-medium text-blue-800"><T k="report.adminOrphanRatio" /></h3>
+              <p className="text-3xl font-bold mt-2 text-blue-700">                
+                1:{(stats.totalAdmins ?? 0) > 0
                   ? Math.round(stats.totalOrphans / (stats.totalAdmins ?? 1))
                   : 0}
               </p>
             </div>
             <div className="border border-blue-200 rounded p-4 bg-blue-50 hover:shadow-md transition-all">
-              <h3 className="text-lg font-medium text-blue-800">Inventory Items per Center</h3>
-              <p className="text-3xl font-bold mt-2 text-blue-700">                {(stats.totalOrphanageCenters ?? 0) > 0
+              <h3 className="text-lg font-medium text-blue-800"><T k="report.inventoryPerCenter" /></h3>
+              <p className="text-3xl font-bold mt-2 text-blue-700">                
+                {(stats.totalOrphanageCenters ?? 0) > 0
                   ? Math.round((stats.totalInventoryItems ?? 0) / (stats.totalOrphanageCenters ?? 1))
                   : 0}
               </p>

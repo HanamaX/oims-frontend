@@ -231,7 +231,7 @@ export default function SuperAdminReportsPage() {
             {t("report.comprehensive")}
           </p>
         </div>        <Badge variant="outline" className="px-3 py-1 text-base bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md">
-          <T k="roles.superAdmin" />
+          <T k="roles.Supervisor" />
         </Badge>
       </div>
 
@@ -271,37 +271,37 @@ export default function SuperAdminReportsPage() {
                   value="orphans"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.orphans")}
+                  <T k="report.orphans" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="inventory"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.inventory")}
+                  <T k="report.inventory" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="fundraising"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.fundraising")}
+                  <T k="report.fundraising" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="volunteers"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.volunteers")}
+                  <T k="report.volunteers" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="staff"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.staff")}
+                  <T k="report.staff" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="branches"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.branches")}
+                  <T k="report.branches" />
                 </TabsTrigger>
               </TabsList>
                 <TabsContent value={activeTab}>

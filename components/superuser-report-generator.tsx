@@ -8,7 +8,7 @@ import { DateRangePicker } from "@/components/ui/date-range-picker"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useLanguage } from "@/contexts/LanguageContext"
+import { useLanguage, T } from "@/contexts/LanguageContext"
 import { useToast } from "@/hooks/use-toast"
 import ReportService, { ReportFilters, ReportType } from "@/lib/report-service"
 import { format } from "date-fns"
@@ -282,14 +282,13 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
     }
   }
 
-  return (
-    <div className="space-y-6">
+  return (    <div className="space-y-6">
       <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
           <div className="flex justify-between items-center">
             <div>
-              <CardTitle className="text-blue-800">{t("report.generator")}</CardTitle>
-              <CardDescription className="text-blue-600">{t("report.createSystemReports")}</CardDescription>
+              <CardTitle className="text-blue-800"><T k="report.generator" /></CardTitle>
+              <CardDescription className="text-blue-600"><T k="report.createSystemReports" /></CardDescription>
             </div>
             <Badge variant="outline" className="text-blue-700 border-blue-200 bg-blue-50">
               Superuser
@@ -303,50 +302,48 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
               onValueChange={(value) => setActiveTab(value as ReportType)} 
               className="w-full"
             >
-              <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6 bg-blue-100">
-                <TabsTrigger 
+              <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6 bg-blue-100">                <TabsTrigger 
                   value="orphans"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.orphans")}
+                  <T k="report.orphans" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="inventory"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.inventory")}
+                  <T k="report.inventory" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="fundraising"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.fundraising")}
+                  <T k="report.fundraising" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="volunteers"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.volunteers")}
+                  <T k="report.volunteers" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="staff"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.staff")}
+                  <T k="report.staff" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="branches"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.branches")}
+                  <T k="report.branches" />
                 </TabsTrigger>
               </TabsList>
             </Tabs>
 
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="dateRange">{t("report.dateRange")}</Label>
+              <div className="space-y-4">                <div className="space-y-2">
+                  <Label htmlFor="dateRange"><T k="report.dateRange" /></Label>
                   <DateRangePicker
                     date={{ from: dateRange.from, to: dateRange.to }}
                     onDateChange={handleDateRangeChange}
@@ -355,12 +352,12 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="branch">{t("report.selectBranch")}</Label>
+                  <Label htmlFor="branch"><T k="report.selectBranch" /></Label>
                   <Select value={selectedBranch} onValueChange={setSelectedBranch}>
                     <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                       <SelectValue placeholder={t("report.selectBranch")} />
                     </SelectTrigger>                    <SelectContent>
-                      <SelectItem value="all">{t("report.allBranches")}</SelectItem>
+                      <SelectItem value="all"><T k="report.allBranches" /></SelectItem>
                       {Array.isArray(availableBranches) && availableBranches.length > 0 ? (
                         availableBranches.map((branch) => (
                           <SelectItem key={branch.id} value={branch.id}>
@@ -392,13 +389,12 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
                     </SelectContent>
                   </Select>
                 </div>
-                
-                <div className="flex items-center pt-6">
+                  <div className="flex items-center pt-6">
                   <Alert className="bg-blue-50 border-blue-200">
                     <AlertCircle className="h-4 w-4 text-blue-600" />
-                    <AlertTitle>{t("report.reportNote")}</AlertTitle>
+                    <AlertTitle><T k="report.reportNote" /></AlertTitle>
                     <AlertDescription className="text-blue-700">
-                      {t("report.reportDescription")}
+                      <T k="report.reportDescription" />
                     </AlertDescription>
                   </Alert>
                 </div>
@@ -406,8 +402,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
             </div>
           </div>
         </CardContent>
-        <CardFooter className="bg-blue-50 border-t border-blue-100 justify-end flex">
-          <Button
+        <CardFooter className="bg-blue-50 border-t border-blue-100 justify-end flex">          <Button
             onClick={handleGenerateReport}
             disabled={loading || generating}
             className="bg-blue-600 text-white hover:bg-blue-700"
@@ -415,46 +410,112 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
             {loading || generating ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t("report.generating")}
+                <T k="report.generating" />
               </>
             ) : (
               <>
                 <FileText className="mr-2 h-4 w-4" />
-                {t("report.generateReport")}
+                <T k="report.generateReport" />
               </>
             )}
           </Button>
         </CardFooter>
-      </Card>
-
-      <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
+      </Card>      <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
-          <CardTitle className="text-base text-blue-800">{t("report.systemSummary")}</CardTitle>
-          <CardDescription>{t("report.orgWide")}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4 pt-4">
+          <CardTitle className="text-base text-blue-800"><T k="report.systemSummary" /></CardTitle>
+          <CardDescription><T k="report.orgWide" /></CardDescription>
+        </CardHeader><CardContent className="space-y-4 pt-4">
           <div className="flex justify-between">
-            <span className="text-blue-700">{t("report.totalOrphanageCenters")}</span>
+            <span className="text-blue-700"><T k="report.totalOrphanageCenters" /></span>
             <span className="font-medium text-blue-800">{stats?.totalOrphanageCenters ?? 0}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-blue-700">{t("report.totalBranches")}</span>
+            <span className="text-blue-700"><T k="report.totalBranches" /></span>
             <span className="font-medium text-blue-800">{stats?.totalBranches ?? 0}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-blue-700">{t("report.totalOrphans")}</span>
+            <span className="text-blue-700"><T k="report.totalOrphans" /></span>
             <span className="font-medium text-blue-800">{stats?.totalOrphans ?? 0}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-blue-700">{t("report.totalAdmins")}</span>
+            <span className="text-blue-700"><T k="report.totalAdmins" /></span>
             <span className="font-medium text-blue-800">{stats?.totalAdmins ?? 0}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-blue-700">{t("report.totalVolunteers")}</span>
+          </div>          <div className="flex justify-between">
+            <span className="text-blue-700"><T k="report.totalVolunteers" /></span>
             <span className="font-medium text-blue-800">{stats?.totalVolunteers ?? 0}</span>
           </div>
         </CardContent>
       </Card>
+
+      {/* Branch Comparison Card */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
+          <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
+            <CardTitle className="text-base text-blue-800"><T k="report.branchComparison" /></CardTitle>
+            <CardDescription><T k="report.performanceMetrics" /></CardDescription>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <ul className="space-y-3">
+              <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                <div className="flex items-center gap-2">
+                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">🏢</span>
+                  <span className="text-blue-700"><T k="report.branchPrefix" /> A</span>
+                </div>
+                <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-300 hover:bg-blue-200 transition-all"><T k="report.topPerformer" /></Badge>
+              </li>
+              <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                <div className="flex items-center gap-2">
+                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">🏢</span>
+                  <span className="text-blue-700"><T k="report.branchPrefix" /> C</span>
+                </div>
+                <Badge variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-100 transition-all"><T k="report.highGrowth" /></Badge>
+              </li>
+              <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                <div className="flex items-center gap-2">
+                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">🏢</span>
+                  <span className="text-blue-700"><T k="report.branchPrefix" /> E</span>
+                </div>
+                <Badge variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-100 transition-all"><T k="report.mostVolunteers" /></Badge>
+              </li>
+              <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                <div className="flex items-center gap-2">
+                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">🏢</span>
+                  <span className="text-blue-700"><T k="report.branchPrefix" /> B</span>
+                </div>
+                <Badge variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-100 transition-all"><T k="report.needsAttention" /></Badge>
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        {/* Recent System Reports Card */}
+        <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
+          <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
+            <CardTitle className="text-base text-blue-800"><T k="report.recentSystemReports" /></CardTitle>
+            <CardDescription><T k="report.previouslyGenerated" /></CardDescription>
+          </CardHeader>
+          <CardContent className="pt-4">
+            <ul className="space-y-3">
+              <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                <span className="text-blue-700"><T k="report.quarterlySystemOverview" /></span>
+                <span className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110">⬇️</span>
+              </li>
+              <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                <span className="text-blue-700"><T k="report.branchPerformanceAnalysis" /></span>
+                <span className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110">⬇️</span>
+              </li>
+              <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                <span className="text-blue-700"><T k="report.staffEfficiencyReport" /></span>
+                <span className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110">⬇️</span>
+              </li>
+              <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
+                <span className="text-blue-700"><T k="report.resourceAllocationSummary" /></span>
+                <span className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110">⬇️</span>
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
