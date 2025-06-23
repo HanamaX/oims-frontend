@@ -1,24 +1,25 @@
-// "use client"
+"use client"
 
-// import { useState, useEffect } from "react"
-// import { Button } from "@/components/ui/button"
-// import { Input } from "@/components/ui/input"
-// import { Search, AlertTriangle } from "lucide-react"
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-// import VolunteerCardNew from "@/components/volunteer-card-new"
-// import VolunteerService, { CurrentVolunteerResponse } from "@/lib/volunteer-service"
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Search, AlertTriangle } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import VolunteerCardNew from "@/components/volunteer-card-new"
+import VolunteerService, { CurrentVolunteerResponse } from "@/lib/volunteer-service"
+import { useLanguage, T } from "@/contexts/LanguageContext"
 
-// export default function VolunteersPage() {
-//   const [searchTerm, setSearchTerm] = useState("")
-//   const [statusFilter, setStatusFilter] = useState<string>("all")
-//   const [volunteers, setVolunteers] = useState<CurrentVolunteerResponse[]>([])
-//   const [isLoading, setIsLoading] = useState(true)
-//   const [error, setError] = useState<string | null>(null)
-//   const [notification, setNotification] = useState<{
-//     message: string;
-//     type: "success" | "error";
-//     visible: boolean;
-//   } | null>(null)
+export default function VolunteersPage() {
+  const { t } = useLanguage()
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState<string>("all")
+  const [volunteers, setVolunteers] = useState<CurrentVolunteerResponse[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error";
+    visible: boolean;
+  } | null>(null)
 
 //   // Fetch volunteers
 //   useEffect(() => {

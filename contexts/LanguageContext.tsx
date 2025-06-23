@@ -19,6 +19,221 @@ type LanguageContextType = {
 // Create translations object
 const translations: Record<string, Record<Language, string>> = {
     
+  // Navigation translations
+  "nav.profile": {
+    en: "My Profile",
+    sw: "Wasifu Wangu",
+  },
+    
+  // Profile page translations
+  "profile.title": {
+    en: "My Profile",
+    sw: "Wasifu Wangu",
+  },
+  "profile.tab.info": {
+    en: "Profile Information",
+    sw: "Taarifa za Wasifu",
+  },
+  "profile.tab.password": {
+    en: "Change Password",
+    sw: "Badilisha Nenosiri",
+  },
+  "profile.view.title": {
+    en: "Personal Information",
+    sw: "Taarifa Binafsi",
+  },
+  "profile.view.description": {
+    en: "View and manage your profile information",
+    sw: "Tazama na simamia taarifa za wasifu wako",
+  },
+  "profile.button.edit": {
+    en: "Edit Profile",
+    sw: "Hariri Wasifu",
+  },
+  "profile.label.fullName": {
+    en: "Full Name",
+    sw: "Jina Kamili",
+  },
+  "profile.label.username": {
+    en: "Username",
+    sw: "Jina la Mtumiaji",
+  },
+  "profile.label.email": {
+    en: "Email Address",
+    sw: "Anwani ya Barua Pepe",
+  },
+  "profile.label.phone": {
+    en: "Phone Number",
+    sw: "Namba ya Simu",
+  },
+  "profile.label.phoneOptional": {
+    en: "Phone Number (Optional)",
+    sw: "Namba ya Simu (Hiari)",
+  },
+  "profile.label.gender": {
+    en: "Gender",
+    sw: "Jinsia",
+  },
+  "profile.gender.male": {
+    en: "Male",
+    sw: "Mwanamume",
+  },
+  "profile.gender.female": {
+    en: "Female",
+    sw: "Mwanamke",
+  },
+  "profile.gender.other": {
+    en: "Other",
+    sw: "Nyingine",
+  },
+  "profile.gender.preferNot": {
+    en: "Prefer Not to Say",
+    sw: "Napendelea Kutosema",
+  },  "profile.label.role": {
+    en: "Role",
+    sw: "Wajibu",
+  },
+  "profile.role.orphanageAdmin": {
+    en: "Orphanage Admin",
+    sw: "Msimamizi wa Kituo",
+  },
+  "profile.role.supervisor": {
+    en: "Supervisor",
+    sw: "Msimamizi",
+  },
+  "profile.role.volunteer": {
+    en: "Volunteer",
+    sw: "Kujitolea",
+  },
+  "profile.role.donor": {
+    en: "Donor",
+    sw: "Mfadhili",
+  },
+  "profile.notSpecified": {
+    en: "Not Specified",
+    sw: "Haijabainishwa",
+  },
+  "profile.label.branch": {
+    en: "Branch",
+    sw: "Tawi",
+  },
+  "profile.label.created": {
+    en: "Account Created",
+    sw: "Akaunti Imeundwa",
+  },
+  "profile.label.profileImage": {
+    en: "Profile Image",
+    sw: "Picha ya Wasifu",
+  },
+  "profile.button.save": {
+    en: "Save Changes",
+    sw: "Hifadhi Mabadiliko",
+  },
+  "profile.button.cancel": {
+    en: "Cancel",
+    sw: "Ghairi",
+  },
+  "profile.button.updating": {
+    en: "Updating...",
+    sw: "Inasasisha...",
+  },
+  "profile.loading": {
+    en: "Loading profile...",
+    sw: "Inapakia wasifu...",
+  },
+  "profile.success.update": {
+    en: "Profile updated successfully",
+    sw: "Wasifu umesasishwa kwa mafanikio",
+  },
+  "profile.image.upload.click": {
+    en: "Click to upload image",
+    sw: "Bofya kupakia picha",
+  },
+  "profile.image.upload.formats": {
+    en: "JPG, JPEG, PNG (max. 4MB)",
+    sw: "JPG, JPEG, PNG (max. 4MB)",
+  },
+  "profile.image.error.invalid": {
+    en: "Invalid image format or file too large",
+    sw: "Muundo wa picha usio sahihi au faili kubwa mno",
+  },
+  "profile.image.error.upload": {
+    en: "Failed to upload image. Please try again.",
+    sw: "Imeshindwa kupakia picha. Tafadhali jaribu tena.",
+  },
+  "profile.image.error.size": {
+    en: "Image file is too large (max 4MB)",
+    sw: "Faili la picha ni kubwa mno (kiwango cha juu ni 4MB)",
+  },
+  "profile.error.name": {
+    en: "Full name is required",
+    sw: "Jina kamili linahitajika",
+  },
+  "profile.error.email": {
+    en: "Email address is required",
+    sw: "Anwani ya barua pepe inahitajika",
+  },
+  "profile.error.gender": {
+    en: "Gender is required",
+    sw: "Jinsia inahitajika",
+  },
+  "profile.password.title": {
+    en: "Change Password",
+    sw: "Badilisha Nenosiri",
+  },
+  "profile.password.description": {
+    en: "Update your password to keep your account secure",
+    sw: "Sasisha nenosiri lako ili kuweka akaunti yako salama",
+  },
+  "profile.password.label.current": {
+    en: "Current Password",
+    sw: "Nenosiri la Sasa",
+  },
+  "profile.password.label.new": {
+    en: "New Password",
+    sw: "Nenosiri Jipya",
+  },
+  "profile.password.label.confirm": {
+    en: "Confirm Password",
+    sw: "Thibitisha Nenosiri",
+  },
+  "profile.password.placeholder.current": {
+    en: "Enter your current password",
+    sw: "Ingiza nenosiri lako la sasa",
+  },
+  "profile.password.placeholder.new": {
+    en: "Enter your new password",
+    sw: "Ingiza nenosiri lako jipya",
+  },
+  "profile.password.placeholder.confirm": {
+    en: "Confirm your new password",
+    sw: "Thibitisha nenosiri lako jipya",
+  },
+  "profile.password.error.current": {
+    en: "Current password is required",
+    sw: "Nenosiri la sasa linahitajika",
+  },
+  "profile.password.error.new": {
+    en: "New password is required",
+    sw: "Nenosiri jipya linahitajika",
+  },
+  "profile.password.error.match": {
+    en: "Passwords do not match",
+    sw: "Manenosiri hayalingani",
+  },
+  "profile.password.error.length": {
+    en: "Password must be at least 8 characters",
+    sw: "Nenosiri lazima liwe na angalau herufi 8",
+  },
+  "profile.password.error.update": {
+    en: "Failed to update password. Please check your current password and try again.",
+    sw: "Imeshindwa kusasisha nenosiri. Tafadhali angalia nenosiri lako la sasa na ujaribu tena.",
+  },
+  "profile.password.success": {
+    en: "Password updated successfully",
+    sw: "Nenosiri limesasishwa kwa mafanikio",
+  },
+    
   // New staff management keys
   "staffManagement.title": {
     en: "Staff Overview",
@@ -47,195 +262,6 @@ const translations: Record<string, Record<Language, string>> = {
   "staff.enterEmailSelectBranchRole": {
     en: "Enter the email and select branch and role for the new staff member",
     sw: "Ingiza barua pepe na uchague tawi na jukumu la mfanyakazi mpya",
-  },
-  "staff.noName": {
-    en: "No Name",
-    sw: "Hakuna Jina",
-  },
-  
-  // New inventory item translation keys
-  "inventoryDetails.loadingDetails": {
-    en: "Loading item details...",
-    sw: "Inapakia maelezo ya bidhaa...",
-  },
-  "inventoryDetails.noDataFound": {
-    en: "No data found for this inventory item",
-    sw: "Hakuna data iliyopatikana kwa bidhaa hii",
-  },
-  "inventoryDetails.failedToLoad": {
-    en: "Failed to load inventory item details",
-    sw: "Imeshindwa kupakia maelezo ya bidhaa",
-  },
-  "inventoryDetails.backToInventory": {
-    en: "Back to Inventory",
-    sw: "Rudi kwenye Orodha ya Bidhaa",
-  },
-  "inventoryDetails.itemDetails": {
-    en: "Item Details",
-    sw: "Maelezo ya Bidhaa",
-  },
-  "inventoryDetails.currentQuantity": {
-    en: "Current Quantity",
-    sw: "Kiasi cha Sasa",
-  },
-  "inventoryDetails.unitPrice": {
-    en: "Unit Price",
-    sw: "Bei ya Kitengo",
-  },
-  "inventoryDetails.totalValue": {
-    en: "Total Value",
-    sw: "Thamani Jumla",
-  },
-  "inventoryDetails.totalIn": {
-    en: "Total In",
-    sw: "Jumla ya Upokeaji",
-  },
-  "inventoryDetails.totalOut": {
-    en: "Total Out",
-    sw: "Jumla ya Usambazaji",
-  },
-  "inventoryDetails.units": {
-    en: "units",
-    sw: "vipande",
-  },
-  "inventoryDetails.transactionHistory": {
-    en: "Transaction History",
-    sw: "Historia ya Miamala",
-  },
-  "inventoryDetails.noTransactions": {
-    en: "No transaction history available",
-    sw: "Hakuna historia ya miamala iliyopatikana",
-  },
-  "inventoryDetails.received": {
-    en: "Received ",
-    sw: "Imepokelewa ",
-  },
-  "inventoryDetails.distributed": {
-    en: "Distributed ",
-    sw: "Imesambazwa ",
-  },
-  "inventoryDetails.noDescription": {
-    en: "No description provided",
-    sw: "Hakuna maelezo yaliyotolewa",
-  },  "inventory.branch": {
-    en: "Branch",
-    sw: "Tawi",
-  },
-  
-  // Inventory Actions and Messages
-  "inventory.addTransaction": {
-    en: "Add Transaction",
-    sw: "Ongeza Muamala",
-  },
-  "inventory.editItem": {
-    en: "Edit Item",
-    sw: "Hariri Bidhaa",
-  },
-  "inventory.deleteItem": {
-    en: "Delete Item",
-    sw: "Futa Bidhaa",
-  },
-  "inventory.recordFirstTransaction": {
-    en: "Record First Transaction",
-    sw: "Rekodi Muamala wa Kwanza",
-  },
-  "inventory.deleteTransactionConfirm": {
-    en: "Delete this transaction?",
-    sw: "Futa muamala huu?",
-  },
-  "inventory.deleteTransactionWarning": {
-    en: "This action cannot be undone. This will permanently delete this transaction record.",
-    sw: "Tendo hili haliwezi kutenguliwa. Hii itafuta rekodi ya muamala huu kabisa.",
-  },
-  "inventory.deleteTransaction": {
-    en: "Delete Transaction",
-    sw: "Futa Muamala",
-  },
-  "inventory.deleteItemWarning": {
-    en: "This action cannot be undone. This will permanently delete this inventory item and all associated transaction history.",
-    sw: "Tendo hili haliwezi kutenguliwa. Hii itafuta bidhaa hii na historia yote ya miamala inayohusiana.",
-  },
-  "inventory.itemUpdated": {
-    en: "Item Updated",
-    sw: "Bidhaa Imesasishwa",
-  },
-  "inventory.itemUpdatedDescription": {
-    en: "The inventory item has been successfully updated.",
-    sw: "Bidhaa imesasishwa kwa mafanikio.",
-  },
-  "inventory.updateFailed": {
-    en: "Update Failed",
-    sw: "Usasishaji Umeshindwa",
-  },
-  "inventory.updateFailedDescription": {
-    en: "There was a problem updating the inventory item.",
-    sw: "Kulikuwa na tatizo la kusasisha bidhaa.",
-  },
-  "inventory.itemDeleted": {
-    en: "Item Deleted",
-    sw: "Bidhaa Imefutwa",
-  },
-  "inventory.itemDeletedDescription": {
-    en: "The inventory item has been successfully deleted.",
-    sw: "Bidhaa imefutwa kwa mafanikio.",
-  },
-  "inventory.deleteFailed": {
-    en: "Delete Failed",
-    sw: "Ufutaji Umeshindwa",
-  },
-  "inventory.deleteFailedDescription": {
-    en: "There was a problem deleting the inventory item.",
-    sw: "Kulikuwa na tatizo la kufuta bidhaa.",
-  },
-  "inventory.transactionAdded": {
-    en: "Transaction Added",
-    sw: "Muamala Umeongezwa",
-  },
-  "inventory.transactionAddedDescription": {
-    en: "The inventory transaction has been successfully recorded.",
-    sw: "Muamala wa bidhaa umeandikishwa kwa mafanikio.",
-  },
-  "inventory.transactionFailed": {
-    en: "Transaction Failed",
-    sw: "Muamala Umeshindwa",
-  },
-  "inventory.transactionFailedDescription": {
-    en: "There was a problem recording the inventory transaction.",
-    sw: "Kulikuwa na tatizo la kuandikisha muamala wa bidhaa.",
-  },
-  "inventory.transactionUpdated": {
-    en: "Transaction Updated",
-    sw: "Muamala Umesasishwa",
-  },
-  "inventory.transactionUpdatedDescription": {
-    en: "The inventory transaction has been successfully updated.",
-    sw: "Muamala wa bidhaa umesasishwa kwa mafanikio.",
-  },
-  "inventory.transactionUpdateFailedDescription": {
-    en: "There was a problem updating the inventory transaction.",
-    sw: "Kulikuwa na tatizo la kusasisha muamala wa bidhaa.",
-  },
-  "inventory.transactionDeleted": {
-    en: "Transaction Deleted",
-    sw: "Muamala Umefutwa",
-  },
-  "inventory.transactionDeletedDescription": {
-    en: "The inventory transaction has been successfully deleted.",
-    sw: "Muamala wa bidhaa umefutwa kwa mafanikio.",
-  },
-  "inventory.transactionDeleteFailedDescription": {
-    en: "There was a problem deleting the inventory transaction.",
-    sw: "Kulikuwa na tatizo la kufuta muamala wa bidhaa.",
-  },
-  
-  // UI Elements
-  "ui.cancel": {
-    en: "Cancel",
-    sw: "Ghairi",
-  },
-  "ui.deleting": {
-    en: "Deleting...",
-    sw: "Inafuta...",
   },
   "ui.edit": {
     en: "Edit",
@@ -313,10 +339,17 @@ const translations: Record<string, Record<Language, string>> = {
   "dashboard.staff": {
     en: "Staff Management",
     sw: "Usimamizi wa Wafanyakazi",
-  },
-  "dashboard.settings": {
+  },  "dashboard.settings": {
     en: "Settings",
     sw: "Mipangilio",
+  },
+  "dashboard.centerManagement": {
+    en: "Center Management",
+    sw: "Usimamizi wa Kituo",
+  },
+  "dashboard.reports": {
+    en: "Reports",
+    sw: "Ripoti",
   },
   // Forms
   "form.submit": {
@@ -356,10 +389,21 @@ const translations: Record<string, Record<Language, string>> = {
   "common.creating": {
     en: "Creating...",
     sw: "Inaunda...",
-  },
-  "common.updating": {
+  },  "common.updating": {
     en: "Updating...",
     sw: "Inasasisha...",
+  },
+  "common.email": {
+    en: "Email",
+    sw: "Barua pepe",
+  },
+  "common.branch": {
+    en: "Branch",
+    sw: "Tawi",
+  },
+  "common.role": {
+    en: "Role",
+    sw: "Jukumu",
   },
   "common.adding": {
     en: "Adding...",
@@ -381,8 +425,11 @@ const translations: Record<string, Record<Language, string>> = {
     en: "of",
     sw: "kati ya",
   },
-
   // Center Management specific translations
+  "centerManagement.title": {
+    en: "Center Management",
+    sw: "Usimamizi wa Kituo",
+  },
   "centerManagement.loadingMessage": {
     en: "Loading center information...",
     sw: "Inapakia taarifa za kituo...",
@@ -391,13 +438,41 @@ const translations: Record<string, Record<Language, string>> = {
     en: "Manage your orphanage center and branches",
     sw: "Simamia kituo chako cha yatima na matawi",
   },
-  "centerManagement.createDescription": {
+  "centerManagement.description.exists": {
+    en: "View details of your orphanage center and branches",
+    sw: "Tazama maelezo ya kituo chako cha yatima na matawi",
+  },
+  "centerManagement.description.create": {
     en: "Create your main orphanage center",
     sw: "Unda kituo chako kikuu cha yatima",
   },
   "centerManagement.readOnlyMode": {
     en: "Read-Only Mode: Center information can only be viewed",
     sw: "Hali ya Kusoma Tu: Taarifa za kituo zinaweza kuonwa tu",
+  },
+  "centerManagement.readOnlyModeDescription": {
+    en: "As a supervisor, you can view but not modify center information",
+    sw: "Kama msimamizi, unaweza kuona lakini si kubadilisha taarifa za kituo",
+  },
+  "centerManagement.tabs.overview": {
+    en: "Overview",
+    sw: "Muhtasari",
+  },
+  "centerManagement.tabs.branches": {
+    en: "Branches",
+    sw: "Matawi",
+  },
+  "centerManagement.tabs.staff": {
+    en: "Staff",
+    sw: "Wafanyakazi",
+  },
+  "centerManagement.viewOnly": {
+    en: "Read-Only Mode",
+    sw: "Hali ya Kusoma Tu",
+  },
+  "centerManagement.loading": {
+    en: "Loading center information...",
+    sw: "Inapakia taarifa za kituo...",
   },
 
   // Center Overview specific translations  
@@ -416,8 +491,7 @@ const translations: Record<string, Record<Language, string>> = {
   "centerOverview.editCenterDescription": {
     en: "Update the details for your orphanage center",
     sw: "Sasisha maelezo ya kituo chako cha yatima",
-  },
-  "centerOverview.centerName": {
+  },  "centerOverview.centerName": {
     en: "Center Name",
     sw: "Jina la Kituo",
   },
@@ -440,6 +514,50 @@ const translations: Record<string, Record<Language, string>> = {
   "centerOverview.description": {
     en: "Description",
     sw: "Maelezo",
+  },
+  "centerOverview.form.centerName": {
+    en: "Center Name",
+    sw: "Jina la Kituo",
+  },
+  "centerOverview.form.location": {
+    en: "Location",
+    sw: "Eneo",
+  },
+  "centerOverview.form.address": {
+    en: "Address",
+    sw: "Anwani",
+  },
+  "centerOverview.form.phoneNumber": {
+    en: "Phone Number",
+    sw: "Nambari ya Simu",
+  },
+  "centerOverview.form.email": {
+    en: "Email",
+    sw: "Barua pepe",
+  },
+  "centerOverview.form.description": {
+    en: "Description",
+    sw: "Maelezo",
+  },
+  "centerOverview.form.updateButton": {
+    en: "Update Center",
+    sw: "Sasisha Kituo",
+  },
+  "centerOverview.actions.editDetails": {
+    en: "Edit Details",
+    sw: "Hariri Maelezo",
+  },
+  "centerOverview.actions.deleteCenter": {
+    en: "Delete Center",
+    sw: "Futa Kituo",
+  },
+  "centerOverview.edit.title": {
+    en: "Edit Center",
+    sw: "Hariri Kituo",
+  },
+  "centerOverview.edit.description": {
+    en: "Update the center's information",
+    sw: "Sasisha taarifa za kituo",
   },
   "centerOverview.updateCenter": {
     en: "Update Center",
@@ -564,10 +682,45 @@ const translations: Record<string, Record<Language, string>> = {
   "branch.createFirstBranch": {
     en: "Create your first branch to get started.",
     sw: "Unda tawi lako la kwanza ili kuanza.",
-  },
-  "branch.orphansInBranch": {
+  },  "branch.orphansInBranch": {
     en: "orphans in this branch",
     sw: "yatima katika tawi hili",
+  },
+  "branch.backToCenter": {
+    en: "← Back to Center",
+    sw: "← Rudi kwenye Kituo",
+  },
+  "branch.readOnlyModeMessage": {
+    en: "🔒 Read-Only Mode: Branch information can only be viewed, not modified.",
+    sw: "🔒 Hali ya Kusoma Tu: Taarifa za tawi zinaweza kuonwa tu, sio kubadilishwa.",
+  },
+  "branch.updateBranchButton": {
+    en: "Update Branch",
+    sw: "Sasisha Tawi",
+  },
+  "staff.readOnlyModeMessage": {
+    en: "🔒 Read-Only Mode: Staff can only be viewed",
+    sw: "🔒 Hali ya Kusoma Tu: Wafanyakazi wanaweza kuonwa tu",
+  },
+  "staff.viewStaffMessage": {
+    en: "View staff members across all branches (Read-Only Mode)",
+    sw: "Tazama wafanyakazi katika matawi yote (Hali ya Kusoma Tu)",
+  },
+  "common.readOnlyMode": {
+    en: "Read-Only Mode",
+    sw: "Hali ya Kusoma Tu",
+  },
+  "common.cannotModifyCenter": {
+    en: "Center information cannot be modified in read-only mode",
+    sw: "Taarifa za kituo haziwezi kubadilishwa katika hali ya kusoma tu",
+  },
+  "common.cannotModifyBranch": {
+    en: "Branch information cannot be modified in read-only mode",
+    sw: "Taarifa za tawi haziwezi kubadilishwa katika hali ya kusoma tu",
+  },
+  "common.cannotModifyStaff": {
+    en: "Staff information cannot be modified in read-only mode",
+    sw: "Taarifa za wafanyakazi haziwezi kubadilishwa katika hali ya kusoma tu",
   },
 
   // Thank you messages
@@ -968,10 +1121,13 @@ const translations: Record<string, Record<Language, string>> = {
   "orphan.dateOfBirth": {
     en: "Date of Birth",
     sw: "Tarehe ya Kuzaliwa",
-  },
-  "orphan.hasProfileImage": {
+  },  "orphan.hasProfileImage": {
     en: "Has Profile Image",
     sw: "Ana Picha ya Wasifu",
+  },
+  "orphan.orphans": {
+    en: "Orphans",
+    sw: "Yatima",
   },
   "orphan.gender": {
     en: "Gender",
@@ -995,15 +1151,57 @@ const translations: Record<string, Record<Language, string>> = {
   "orphan.academic.records": {
     en: "Academic Records",
     sw: "Rekodi za Elimu",
-  },
-  "orphan.medical.records": {
+  },  "orphan.medical.records": {
     en: "Medical Records",
     sw: "Rekodi za Matibabu",
+  },
+  "orphan.medical.noRecords": {
+    en: "No medical records found for this orphan.",
+    sw: "Hakuna rekodi za matibabu zilizopatikana kwa huyu yatima.",
+  },
+  "orphan.medical.loadingRecords": {
+    en: "Loading medical records...",
+    sw: "Inapakia rekodi za matibabu...",
+  },
+  "orphan.medical.loadingDetails": {
+    en: "Loading record details...",
+    sw: "Inapakia maelezo ya rekodi...",
+  },  "orphan.medical.tryAgain": {
+    en: "Try Again",
+    sw: "Jaribu Tena",
+  },
+  "orphan.medical.addRecord": {
+    en: "Add Medical Record",
+    sw: "Ongeza Rekodi ya Matibabu",
+  },
+  "orphan.medical.addNewRecord": {
+    en: "Add New Medical Record",
+    sw: "Ongeza Rekodi Mpya ya Matibabu",
+  },
+  "orphan.medical.hospital": {
+    en: "Hospital",
+    sw: "Hospitali",
+  },
+  "orphan.medical.treatment": {
+    en: "Treatment",
+    sw: "Matibabu",
+  },
+  "orphan.medical.notes": {
+    en: "Notes",
+    sw: "Maelezo",
+  },
+  "orphan.medical.followUpDate": {
+    en: "Follow-up Date",
+    sw: "Tarehe ya Ufuatiliaji",
+  },
+  "orphan.medical.viewDetails": {
+    en: "View Details",
+    sw: "Angalia Maelezo",
   },
   "orphan.loadingDetails": {
     en: "Loading orphan details...",
     sw: "Inapakia maelezo ya yatima...",
-  },  "orphan.branch": {
+  },"orphan.branch": {
     en: "Branch",
     sw: "Tawi",
   },
@@ -1025,11 +1223,14 @@ const translations: Record<string, Record<Language, string>> = {
     en: "Unknown",
     sw: "Haijulikani",
   },
-
   // Inventory
   "inventory.category": {
     en: "Category",
     sw: "Kategoria",
+  },
+  "inventory.branch": {
+    en: "Branch",
+    sw: "Tawi",
   },
   "inventory.quantity": {
     en: "Quantity",
@@ -1167,10 +1368,75 @@ const translations: Record<string, Record<Language, string>> = {
   "inventory.failedToLoad": {
     en: "Failed to load inventory items. Please try again.",
     sw: "Imeshindwa kupakia bidhaa. Tafadhali jaribu tena.",
-  },
-  "inventory.noDataFound": {
+  },  "inventory.noDataFound": {
     en: "No inventory data found",
     sw: "Hakuna data ya bidhaa iliyopatikana",
+  },
+
+  // Inventory Details
+  "inventoryDetails.loadingDetails": {
+    en: "Loading inventory details...",
+    sw: "Inapakia maelezo ya bidhaa...",
+  },
+  "inventoryDetails.noDataFound": {
+    en: "No inventory details found",
+    sw: "Hakuna maelezo ya bidhaa yaliyopatikana",
+  },
+  "inventoryDetails.failedToLoad": {
+    en: "Failed to load inventory details",
+    sw: "Imeshindwa kupakia maelezo ya bidhaa",
+  },
+  "inventoryDetails.backToInventory": {
+    en: "Back to Inventory",
+    sw: "Rudi kwenye Bidhaa",
+  },
+  "inventoryDetails.itemDetails": {
+    en: "Item Details",
+    sw: "Maelezo ya Bidhaa",
+  },
+  "inventoryDetails.currentQuantity": {
+    en: "Current Quantity",
+    sw: "Kiasi cha Sasa",
+  },
+  "inventoryDetails.unitPrice": {
+    en: "Unit Price",
+    sw: "Bei kwa Kiasi",
+  },
+  "inventoryDetails.totalValue": {
+    en: "Total Value",
+    sw: "Thamani Kamili",
+  },
+  "inventoryDetails.totalIn": {
+    en: "Total In",
+    sw: "Jumla Iliyoingia",
+  },
+  "inventoryDetails.totalOut": {
+    en: "Total Out",
+    sw: "Jumla Iliyotoka",
+  },
+  "inventoryDetails.units": {
+    en: "units",
+    sw: "vipimo",
+  },
+  "inventoryDetails.transactionHistory": {
+    en: "Transaction History",
+    sw: "Historia ya Miamala",
+  },
+  "inventoryDetails.noTransactions": {
+    en: "No transactions found for this item.",
+    sw: "Hakuna miamala iliyopatikana kwa bidhaa hii.",
+  },
+  "inventoryDetails.received": {
+    en: "Received",
+    sw: "Imepokelewa",
+  },
+  "inventoryDetails.distributed": {
+    en: "Distributed",
+    sw: "Imesambazwa",
+  },
+  "inventoryDetails.noDescription": {
+    en: "No description provided",
+    sw: "Hakuna maelezo yaliyotolewa",
   },
 
   // Fundraiser
@@ -2965,10 +3231,67 @@ const translations: Record<string, Record<Language, string>> = {
   "orphan.details.guardianDeletedDesc": {
     en: "Guardian information has been successfully deleted.",
     sw: "Taarifa za mlezi zimefutwa kwa mafanikio.",
-  },
-  "orphan.details.guardianDeleteFailed": {
+  },  "orphan.details.guardianDeleteFailed": {
     en: "Failed to Delete Guardian",
     sw: "Imeshindwa Kufuta Mlezi",
+  },
+  
+  // Volunteer Management
+  "volunteers.title": {
+    en: "Volunteer Management",
+    sw: "Usimamizi wa Watu wa Kujitolea",
+  },
+  "volunteers.description": {
+    en: "Review, approve, and manage volunteer applications",
+    sw: "Pitia, idhinisha, na simamia maombi ya watu wa kujitolea",
+  },
+  "volunteers.viewAcrossBranches": {
+    en: "View and manage volunteers across all branches",
+    sw: "Angalia na simamia watu wa kujitolea kutoka matawi yote",
+  },
+  "volunteers.search": {
+    en: "Search volunteers...",
+    sw: "Tafuta watu wa kujitolea...",
+  },
+  "volunteers.status.all": {
+    en: "All Volunteers",
+    sw: "Watu Wote wa Kujitolea",
+  },
+  "volunteers.status.pending": {
+    en: "Pending Approval",
+    sw: "Inasubiri Idhini",
+  },
+  "volunteers.status.approved": {
+    en: "Approved",
+    sw: "Imeidhinishwa",
+  },
+  "volunteers.status.rejected": {
+    en: "Rejected",
+    sw: "Imekataliwa",
+  },
+  "volunteers.status.active": {
+    en: "Active",
+    sw: "Hai",
+  },
+  "volunteers.status.inactive": {
+    en: "Inactive", 
+    sw: "Haifanyi kazi",
+  },
+  "volunteers.filterByStatus": {
+    en: "Filter by status",
+    sw: "Chuja kwa hali",
+  },
+  "volunteers.noResults": {
+    en: "No volunteers found matching your criteria.",
+    sw: "Hakuna watu wa kujitolea waliopatikana kulingana na vigezo vyako.",
+  },
+  "volunteers.loading": {
+    en: "Loading volunteers...",
+    sw: "Inapakia watu wa kujitolea...",
+  },
+  "volunteers.tryAgain": {
+    en: "Try Again",
+    sw: "Jaribu Tena",
   },
   "orphan.details.orphanUpdated": {
     en: "Orphan Updated",

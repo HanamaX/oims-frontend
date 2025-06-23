@@ -55,7 +55,7 @@ interface Staff {
 }
 
 export default function CenterManagementPage() {
-  const { language } = useLanguage()
+  const { language, t } = useLanguage()
   
   // Center state
   const [centre, setCentre] = useState<OrphanageCentre>({
@@ -227,25 +227,23 @@ export default function CenterManagementPage() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }))
-  }
-  // Handle center form submission (read-only mode)
+  }  // Handle center form submission (read-only mode)
   const handleCenterSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     toast({
-      title: "Read-Only Mode",
-      description: "Center information cannot be modified in read-only mode",
+      title: t("common.readOnlyMode"),
+      description: t("common.cannotModifyCenter"),
       variant: "destructive",
     })
-  }
-  // Handle branch form submission (read-only mode)
+  }  // Handle branch form submission (read-only mode)
   const handleBranchSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     toast({
-      title: "Read-Only Mode",
-      description: "Branch information cannot be modified in read-only mode",
+      title: t("common.readOnlyMode"),
+      description: t("common.cannotModifyBranch"),
       variant: "destructive",
     })
-  }  // Handle opening branch details
+  }// Handle opening branch details
   const handleBranchClick = (branch: Branch) => {
     setSelectedBranch(branch)
     // Filter staff for the selected branch
@@ -266,8 +264,8 @@ export default function CenterManagementPage() {
   }  // Handle staff update (read-only mode)
   const handleStaffUpdate = async (updatedStaff: Staff) => {
     toast({
-      title: "Read-Only Mode",
-      description: "Staff information cannot be modified in read-only mode",
+      title: t("common.readOnlyMode"),
+      description: t("common.cannotModifyStaff"),
       variant: "destructive",
     })
     setShowStaffEditModal(false)
@@ -285,10 +283,9 @@ export default function CenterManagementPage() {
 
   return (
     <div className="space-y-6">      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight"><T k="centerManagement.title" /></h1>
+        <div>          <h1 className="text-3xl font-bold tracking-tight"><T k="centerManagement.title" /></h1>
           <p className="text-muted-foreground">
-            {centerExists ? <T k="centerManagement.description" /> : <T k="centerManagement.createDescription" />}
+            {centerExists ? <T k="centerManagement.description.exists" /> : <T k="centerManagement.description.create" />}
           </p>
           {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
@@ -304,19 +301,16 @@ export default function CenterManagementPage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name"><T k="centerOverview.centerName" /></Label>
+                  <Label htmlFor="name"><T k="centerOverview.form.centerName" /></Label>
                   <Input id="name" name="name" value={centre.name} onChange={handleCenterChange} required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="location"><T k="centerOverview.location" /></Label>
+                </div>                <div className="space-y-2">
+                  <Label htmlFor="location"><T k="centerOverview.form.location" /></Label>
                   <Input id="location" name="location" value={centre.location} onChange={handleCenterChange} required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="address"><T k="centerOverview.address" /></Label>
+                </div>                <div className="space-y-2">
+                  <Label htmlFor="address"><T k="centerOverview.form.address" /></Label>
                   <Input id="address" name="address" value={centre.address} onChange={handleCenterChange} required />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phoneNumber"><T k="centerOverview.phoneNumber" /></Label>
+                </div>                <div className="space-y-2">
+                  <Label htmlFor="phoneNumber"><T k="centerOverview.form.phoneNumber" /></Label>
                   <Input
                     id="phoneNumber"
                     name="phoneNumber"
@@ -325,12 +319,11 @@ export default function CenterManagementPage() {
                     required
                   />
                 </div>                <div className="space-y-2">
-                  <Label htmlFor="email"><T k="centerOverview.email" /></Label>
+                  <Label htmlFor="email"><T k="centerOverview.form.email" /></Label>
                   <Input id="email" name="email" type="email" value={centre.email} onChange={handleCenterChange} required />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="description"><T k="centerOverview.description" /></Label>
+              </div>              <div className="space-y-2">
+                <Label htmlFor="description"><T k="centerOverview.form.description" /></Label>
                 <Textarea
                   id="description"
                   name="description"
@@ -353,10 +346,9 @@ export default function CenterManagementPage() {
           </form>
         </Card>      ) : showBranchDetails ? (
         // Branch Details View
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
+        <div className="space-y-4">          <div className="flex justify-between items-center">
             <Button variant="outline" onClick={handleCloseBranchDetails}>
-              &larr; Back to Center
+              <T k="branch.backToCenter" />
             </Button>
           </div>
           
@@ -403,16 +395,16 @@ export default function CenterManagementPage() {
                     onClick={() => setIsEditingBranchInDetailView(false)}
                     disabled={false}
                   >
-                    Cancel
+                    <T k="common.cancel" />
                   </Button>
                   <Button type="submit" disabled={false}>
                     {false ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Updating...
+                        <T k="common.updating" />
                       </>
                     ) : (
-                      <>Update Branch</>
+                      <T k="branch.updateBranchButton" />
                     )}
                   </Button>
                 </CardFooter>
@@ -513,10 +505,9 @@ export default function CenterManagementPage() {
                     )}
                   </div>
                 </div>              </CardContent>
-              <CardFooter>
-                <div className="w-full p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <CardFooter>                <div className="w-full p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <p className="text-sm text-blue-800 font-medium">
-                    🔒 Read-Only Mode: Branch information can only be viewed, not modified.
+                    <T k="branch.readOnlyModeMessage" />
                   </p>
                 </div>
               </CardFooter>
@@ -535,26 +526,25 @@ export default function CenterManagementPage() {
           <TabsContent value="overview" className="space-y-4">
             {isEditingCenter ? (
               <Card className="shadow-lg border-blue-200">
-                <form onSubmit={handleCenterSubmit}>                  <CardHeader className="bg-blue-100 rounded-t-lg">
-                    <CardTitle className="text-blue-800"><T k="centerOverview.editCenter" /></CardTitle>
-                    <CardDescription className="text-blue-700"><T k="centerOverview.editCenterDescription" /></CardDescription>
+                <form onSubmit={handleCenterSubmit}>                  <CardHeader className="bg-blue-100 rounded-t-lg">                    <CardTitle className="text-blue-800"><T k="centerOverview.edit.title" /></CardTitle>
+                    <CardDescription className="text-blue-700"><T k="centerOverview.edit.description" /></CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="name" className="text-blue-900"><T k="centerOverview.centerName" /></Label>
+                        <Label htmlFor="name" className="text-blue-900"><T k="centerOverview.form.centerName" /></Label>
                         <Input id="name" name="name" value={centre.name} onChange={handleCenterChange} required className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="location" className="text-blue-900"><T k="centerOverview.location" /></Label>
+                        <Label htmlFor="location" className="text-blue-900"><T k="centerOverview.form.location" /></Label>
                         <Input id="location" name="location" value={centre.location} onChange={handleCenterChange} required className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="address" className="text-blue-900"><T k="centerOverview.address" /></Label>
+                        <Label htmlFor="address" className="text-blue-900"><T k="centerOverview.form.address" /></Label>
                         <Input id="address" name="address" value={centre.address} onChange={handleCenterChange} required className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500" />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="phoneNumber" className="text-blue-900"><T k="centerOverview.phoneNumber" /></Label>
+                        <Label htmlFor="phoneNumber" className="text-blue-900"><T k="centerOverview.form.phoneNumber" /></Label>
                         <Input
                           id="phoneNumber"
                           name="phoneNumber"
@@ -565,18 +555,17 @@ export default function CenterManagementPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="email" className="text-blue-900"><T k="centerOverview.email" /></Label>
+                        <Label htmlFor="email" className="text-blue-900"><T k="centerOverview.form.email" /></Label>
                         <Input id="email" name="email" value={centre.email} onChange={handleCenterChange} required className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500" />
                       </div>
                       <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="description" className="text-blue-900"><T k="centerOverview.description" /></Label>
+                        <Label htmlFor="description" className="text-blue-900"><T k="centerOverview.form.description" /></Label>
                         <Textarea id="description" name="description" value={centre.description} onChange={handleCenterChange} className="bg-white border-blue-200 focus:border-blue-500 focus:ring-blue-500" />
                       </div>
                     </div>
                   </CardContent>
-                  <CardFooter className="flex justify-end bg-blue-50 rounded-b-lg">
-                    <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
-                      <T k="centerOverview.save" />
+                  <CardFooter className="flex justify-end bg-blue-50 rounded-b-lg">                  <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
+                      <T k="centerOverview.form.updateButton" />
                     </Button>
                   </CardFooter>
                 </form>
@@ -590,34 +579,33 @@ export default function CenterManagementPage() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm font-medium text-blue-900"><T k="centerOverview.centerName" /></p>
+                      <p className="text-sm font-medium text-blue-900"><T k="centerOverview.form.centerName" /></p>
                       <p className="text-lg font-bold text-blue-800">{centre.name}</p>
                       <p className="text-sm text-blue-700">{centre.location}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-blue-900"><T k="centerOverview.phoneNumber" /></p>
+                      <p className="text-sm font-medium text-blue-900"><T k="centerOverview.form.phoneNumber" /></p>
                       <p className="text-blue-800">{centre.phoneNumber}</p>
                     </div>
                   </div>
                   <div className="mt-4">
-                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.address" /></p>
+                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.form.address" /></p>
                     <p className="text-blue-700">{centre.address}</p>
                   </div>
                   <div className="mt-2">
-                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.email" /></p>
+                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.form.email" /></p>
                     <p className="text-blue-700">{centre.email}</p>
                   </div>
                   <div className="mt-2">
-                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.description" /></p>
+                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.form.description" /></p>
                     <p className="text-blue-700">{centre.description}</p>
                   </div>
                 </CardContent>
-                <CardFooter className="bg-blue-50 rounded-b-lg flex justify-between items-center">
-                  <Button variant="outline" className="border-blue-600 text-blue-700 hover:bg-blue-100 hover:text-blue-900">
-                    <T k="centerOverview.edit" />
+                <CardFooter className="bg-blue-50 rounded-b-lg flex justify-between items-center">                  <Button variant="outline" className="border-blue-600 text-blue-700 hover:bg-blue-100 hover:text-blue-900">
+                    <T k="centerOverview.actions.editDetails" />
                   </Button>
                   <Button variant="outline" className="border-red-600 text-red-700 hover:bg-red-50 hover:text-red-900">
-                    <T k="centerOverview.delete" />
+                    <T k="centerOverview.actions.deleteCenter" />
                   </Button>
                 </CardFooter>
               </Card>
@@ -640,16 +628,13 @@ export default function CenterManagementPage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Branch Name</Label>
+                      <div className="space-y-2">                        <Label htmlFor="name"><T k="branch.branchName" /></Label>
                         <Input id="name" name="name" value={branch.name} onChange={handleBranchChange} required />
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="location">Location</Label>
+                      <div className="space-y-2">                        <Label htmlFor="location"><T k="centerOverview.form.location" /></Label>
                         <Input id="location" name="location" value={branch.location} onChange={handleBranchChange} required />
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="phoneNumber">Phone Number</Label>
+                      <div className="space-y-2">                        <Label htmlFor="phoneNumber"><T k="centerOverview.form.phoneNumber" /></Label>
                         <Input
                           id="phoneNumber"
                           name="phoneNumber"
@@ -665,7 +650,7 @@ export default function CenterManagementPage() {
                           checked={branch.isHQ || false}
                           onCheckedChange={(checked) => setBranch((prev) => ({ ...prev, isHQ: checked === true }))}
                         />
-                        <Label htmlFor="isHQ">Is Headquarters</Label>
+                        <Label htmlFor="isHQ"><T k="branch.isHeadquarters" /></Label>
                       </div>
                     </div>
                   </CardContent>
@@ -722,18 +707,16 @@ export default function CenterManagementPage() {
                                 <div>
                                   <div className="flex items-center gap-2">
                                     <h3 className="font-semibold">{branch.name}</h3>
-                                    {branch.isHQ && (
-                                      <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
-                                        HQ
+                                    {branch.isHQ && (                                      <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">
+                                        <T k="branch.headquarters" />
                                       </span>
                                     )}
                                   </div>
-                                  <p className="text-sm text-muted-foreground">{branch.location}</p>                                  <div className="flex items-center gap-4 mt-1 text-sm">
-                                    <span className="text-muted-foreground">
-                                      Staff: {branch.staffCount ?? 0}
+                                  <p className="text-sm text-muted-foreground">{branch.location}</p>                                  <div className="flex items-center gap-4 mt-1 text-sm">                                    <span className="text-muted-foreground">
+                                      <T k="staff.staff" />: {branch.staffCount ?? 0}
                                     </span>
                                     <span className="text-muted-foreground">
-                                      Orphans: {branch.orphanCount ?? 0}
+                                      <T k="orphan.orphans" />: {branch.orphanCount ?? 0}
                                     </span>
                                   </div>
                                 </div>
@@ -753,20 +736,18 @@ export default function CenterManagementPage() {
           </TabsContent>
             {/* Staff Tab */}
           <TabsContent value="staff" className="space-y-4">
-            <div className="flex justify-between items-center">              <div>
-                <h2 className="text-xl font-bold">Staff Overview</h2>
-                <p className="text-sm text-muted-foreground mt-1">View staff members across all branches (Read-Only Mode)</p>
+            <div className="flex justify-between items-center">              <div>                <h2 className="text-xl font-bold"><T k="staffManagement.title" /></h2>
+                <p className="text-sm text-muted-foreground mt-1"><T k="staff.viewStaffMessage" /></p>
               </div>
               <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
                 <p className="text-sm text-blue-800 font-medium">
-                  🔒 Read-Only Mode: Staff can only be viewed
+                  <T k="staff.readOnlyModeMessage" />
                 </p>
               </div>
             </div>
               {staffMembers.length === 0 ? (
               <div className="text-center py-8">
-                <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium">No Staff Members</h3>
+                <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />                <h3 className="text-lg font-medium"><T k="staff.noStaffMembers" /></h3>
                 <p className="text-muted-foreground"><T k="staff.goToStaffManagement" /></p>
               </div>
             ) : (
@@ -824,10 +805,9 @@ export default function CenterManagementPage() {
                                         <Phone className="h-4 w-4 text-purple-500" />
                                         <span>{staff.phoneNumber}</span>
                                       </div>
-                                    )}
-                                    <div className="flex items-center gap-2 text-sm text-purple-600 font-medium mt-2">
+                                    )}                                      <div className="flex items-center gap-2 text-sm text-purple-600 font-medium mt-2">
                                       <Building2 className="h-4 w-4" />
-                                      <span>Organization Level</span>
+                                      <span><T k="staff.organizationLevel" /></span>
                                     </div>
                                   </div>
                                 </div>
@@ -878,15 +858,13 @@ export default function CenterManagementPage() {
                                                   ? 'bg-blue-100 text-blue-800' 
                                                   : 'bg-green-100 text-green-800'
                                               }`}>
-                                                {staff.role === 'ROLE_SUPER_ADMIN' ? 'Super Admin' : 'Admin'}
+                                                {staff.role === 'ROLE_SUPER_ADMIN' ? <T k="staff.superAdmin" /> : <T k="staff.admin" />}
                                               </span>
-                                              {staff.suspended ? (
-                                                <span className="bg-red-100 text-red-800 px-2 py-0.5 rounded-full text-xs">
-                                                  Suspended
+                                              {staff.suspended ? (                                                <span className="bg-red-100 text-red-800 px-2 py-0.5 rounded-full text-xs">
+                                                  <T k="staff.suspended" />
                                                 </span>
-                                              ) : (
-                                                <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs">
-                                                  Active
+                                              ) : (                                                <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs">
+                                                  <T k="staff.active" />
                                                 </span>
                                               )}
                                             </div>
@@ -906,7 +884,7 @@ export default function CenterManagementPage() {
                                     </div>
                                   ))}
                                 {staffMembers.filter(s => s.branchPublicId === branch.publicId).length === 0 && (
-                                  <p className="text-sm text-muted-foreground text-center py-2">No staff assigned</p>
+                                  <p className="text-sm text-muted-foreground text-center py-2"><T k="staff.noStaffAssigned" /></p>
                                 )}
                               </div>
                             </ScrollArea>

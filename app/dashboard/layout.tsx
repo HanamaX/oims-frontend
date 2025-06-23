@@ -16,12 +16,11 @@ function SupervisorNavigation({ isActive }: Readonly<{ isActive: (path: string) 
     <div className="dashboard-section">
       <div className="dashboard-section-title">Management</div>
       <ul className="dashboard-nav">
-        <li className="dashboard-nav-item">
-          <Link
+        <li className="dashboard-nav-item">          <Link
             href="/dashboard/supervisor/center-management"
             className={`dashboard-link ${isActive("/dashboard/supervisor/center-management") ? "dashboard-link-active" : ""}`}
           >
-            Center Management
+            <T k="dashboard.centerManagement" />
           </Link>
         </li>
         <li className="dashboard-nav-item">
@@ -55,12 +54,11 @@ function SupervisorNavigation({ isActive }: Readonly<{ isActive: (path: string) 
             <T k="dashboard.volunteers" />
           </Link>
         </li>
-        <li className="dashboard-nav-item">
-          <Link
+        <li className="dashboard-nav-item">          <Link
             href="/dashboard/supervisor/reports"
             className={`dashboard-link ${isActive("/dashboard/supervisor/reports") ? "dashboard-link-active" : ""}`}
           >
-            Reports
+            <T k="dashboard.reports" />
           </Link>
         </li>
       </ul>
@@ -74,12 +72,11 @@ function OrphanageAdminNavigation({ isActive }: Readonly<{ isActive: (path: stri
     <div className="dashboard-section">
       <div className="dashboard-section-title">Management</div>
       <ul className="dashboard-nav">
-        <li className="dashboard-nav-item">
-          <Link
+        <li className="dashboard-nav-item">          <Link
             href="/dashboard/orphanage_admin/center-management"
             className={`dashboard-link ${isActive("/dashboard/orphanage_admin/center-management") ? "dashboard-link-active" : ""}`}
           >
-            Center Management
+            <T k="dashboard.centerManagement" />
           </Link>
         </li>
         <li className="dashboard-nav-item">
@@ -113,12 +110,11 @@ function OrphanageAdminNavigation({ isActive }: Readonly<{ isActive: (path: stri
             <T k="dashboard.inventory" />
           </Link>
         </li>
-        <li className="dashboard-nav-item">
-          <Link
+        <li className="dashboard-nav-item">          <Link
             href="/dashboard/orphanage_admin/reports"
             className={`dashboard-link ${isActive("/dashboard/orphanage_admin/reports") ? "dashboard-link-active" : ""}`}
           >
-            Reports
+            <T k="dashboard.reports" />
           </Link>
         </li>
       </ul>
@@ -151,13 +147,12 @@ function GeneralNavigation({ user, isActive }: Readonly<{ user: any, isActive: (
             </Link>
           </li>
         )}
-        <li className="dashboard-nav-item">
-          <Link
+        <li className="dashboard-nav-item">          <Link
             href="/dashboard/profile"
             className={`dashboard-link-flex ${isActive("/dashboard/profile") ? "dashboard-link-active" : ""}`}
           >
             <User size={16} />
-            <span>My Profile</span>
+            <span><T k="nav.profile" /></span>
           </Link>
         </li>
       </ul>
