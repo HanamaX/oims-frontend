@@ -189,35 +189,34 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
         );
       case "inventory":
         return (
-          <>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="category">{t("report.category")}</Label>
+          <>            <div className="flex flex-col space-y-2">
+              <Label htmlFor="category"><T k="report.category" /></Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.category")} />
+                  <SelectValue placeholder={<T k="report.category" />} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("report.allCategories")}</SelectItem>
-                  <SelectItem value="food">{t("report.food")}</SelectItem>
-                  <SelectItem value="clothing">{t("report.clothing")}</SelectItem>
-                  <SelectItem value="medicine">{t("report.medicine")}</SelectItem>
-                  <SelectItem value="school">{t("report.schoolSupplies")}</SelectItem>
-                  <SelectItem value="furniture">{t("report.furniture")}</SelectItem>
-                  <SelectItem value="other">{t("report.other")}</SelectItem>
+                  <SelectItem value="all"><T k="report.allCategories" /></SelectItem>
+                  <SelectItem value="food"><T k="report.food" /></SelectItem>
+                  <SelectItem value="clothing"><T k="report.clothing" /></SelectItem>
+                  <SelectItem value="medicine"><T k="report.medicine" /></SelectItem>
+                  <SelectItem value="school"><T k="report.schoolSupplies" /></SelectItem>
+                  <SelectItem value="furniture"><T k="report.furniture" /></SelectItem>
+                  <SelectItem value="other"><T k="report.other" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">{t("report.stockStatus")}</Label>
+              <Label htmlFor="status"><T k="report.stockStatus" /></Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.stockStatus")} />
+                  <SelectValue placeholder={<T k="report.stockStatus" />} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("report.allStockStatuses")}</SelectItem>
-                  <SelectItem value="in_stock">{t("report.inStock")}</SelectItem>
-                  <SelectItem value="low_stock">{t("report.lowStock")}</SelectItem>
-                  <SelectItem value="out_of_stock">{t("report.outOfStock")}</SelectItem>
+                  <SelectItem value="all"><T k="report.allStockStatuses" /></SelectItem>
+                  <SelectItem value="in_stock"><T k="report.inStock" /></SelectItem>
+                  <SelectItem value="low_stock"><T k="report.lowStock" /></SelectItem>
+                  <SelectItem value="out_of_stock"><T k="report.outOfStock" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -247,13 +246,12 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={t("report.campaignStatus")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
-                  <SelectItem value="pending">{t("report.pending")}</SelectItem>
-                  <SelectItem value="approved">{t("report.approved")}</SelectItem>
-                  <SelectItem value="completed">{t("report.completed")}</SelectItem>
-                  <SelectItem value="rejected">{t("report.rejected")}</SelectItem>
+                </SelectTrigger>                <SelectContent>
+                  <SelectItem value="all"><T k="report.allStatuses" /></SelectItem>
+                  <SelectItem value="pending"><T k="report.pending" /></SelectItem>
+                  <SelectItem value="approved"><T k="report.approved" /></SelectItem>
+                  <SelectItem value="completed"><T k="report.completed" /></SelectItem>
+                  <SelectItem value="rejected"><T k="report.rejected" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>

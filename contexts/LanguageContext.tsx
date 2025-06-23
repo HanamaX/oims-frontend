@@ -3367,10 +3367,37 @@ const translations: Record<string, Record<Language, string>> = {
   },  "report.branches": {
     en: "Branches",
     sw: "Matawi",
-  },
-  "report.inventory": {
+  },  "report.inventory": {
     en: "Inventory",
     sw: "Bidhaa",
+  },
+  "report.category": {
+    en: "Category",
+    sw: "Kategoria",
+  },
+  "report.allCategories": {
+    en: "All Categories",
+    sw: "Kategoria Zote",
+  },
+  "report.food": {
+    en: "Food",
+    sw: "Chakula",
+  },
+  "report.clothing": {
+    en: "Clothing",
+    sw: "Mavazi",
+  },
+  "report.medicine": {
+    en: "Medicine",
+    sw: "Dawa",
+  },
+  "report.schoolSupplies": {
+    en: "School Supplies",
+    sw: "Vifaa vya Shule",
+  },
+  "report.other": {
+    en: "Other",
+    sw: "Nyingine",
   },
   
   // Additional report translations
@@ -3486,10 +3513,21 @@ const translations: Record<string, Record<Language, string>> = {
   "report.status": {
     en: "Status",
     sw: "Hali",
-  },
-  "report.pending": {
+  },  "report.pending": {
     en: "Pending",
     sw: "Inasubiri",
+  },
+  "report.approved": {
+    en: "Approved",
+    sw: "Imeidhinishwa",
+  },
+  "report.rejected": {
+    en: "Rejected",
+    sw: "Imekataliwa",
+  },
+  "report.completed": {
+    en: "Completed",
+    sw: "Imekamilika",
   },
   "report.includeData": {
     en: "Include Data",
@@ -3502,10 +3540,33 @@ const translations: Record<string, Record<Language, string>> = {
   "report.useDateRange": {
     en: "Use Date Range",
     sw: "Tumia Kipindi cha Tarehe",
-  },
-  "report.dateRange": {
+  },  "report.dateRange": {
     en: "Date Range",
     sw: "Kipindi cha Tarehe",
+  },
+  "report.generatingReportEllipsis": {
+    en: "Generating Report...",
+    sw: "Inazalisha Ripoti...",
+  },  "report.processing": {
+    en: "Processing",
+    sw: "Inachakata",
+  },
+  "report.generatingFor": {
+    en: "Generating report for",
+    sw: "Inazalisha ripoti ya",
+  },
+  // Inventory status
+  "report.inStock": {
+    en: "In Stock",
+    sw: "Zinapatikana",
+  },
+  "report.lowStock": {
+    en: "Low Stock",
+    sw: "Zinaisha",
+  },
+  "report.outOfStock": {
+    en: "Out of Stock",
+    sw: "Zimeisha",
   },
   "report.statistics": {
     en: "Statistics",

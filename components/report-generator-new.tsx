@@ -109,8 +109,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
     const handleGenerateReport = async () => {
     try {
       setLoading(true)
-      setGenerating(true)
-        // Show initial toast
+      setGenerating(true)      // Show initial toast
       toast({
         title: t("report.generatingReport"),
         description: t("report.pleaseWait"),
@@ -177,12 +176,11 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
     // If orphanId is provided, we're generating a specific orphan report
     if (filters.orphanId) {
       return (
-        <div className="flex flex-col space-y-2">
-          <Alert variant="default" className="bg-blue-50 border-blue-200">
+        <div className="flex flex-col space-y-2">          <Alert variant="default" className="bg-blue-50 border-blue-200">
             <AlertCircle className="h-4 w-4 text-blue-600" />
-            <AlertTitle>Orphan-specific report</AlertTitle>
+            <AlertTitle><T k="report.orphanSpecific" /></AlertTitle>
             <AlertDescription>
-              Generating report for {orphanName || "selected orphan"}
+              <T k="report.generatingFor" /> {orphanName || <T k="orphan.selected" />}
             </AlertDescription>
           </Alert>
         </div>
@@ -253,42 +251,38 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                 </SelectContent>
               </Select>            </div>
           </>
-        );
-
-      case "fundraising":
+        );      case "fundraising":
         return (
           <>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">{t("report.status")}</Label>
+              <Label htmlFor="status"><T k="report.status" /></Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.status")} />
+                  <SelectValue placeholder={<T k="report.status" />} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
-                  <SelectItem value="PENDING">{t("report.pending")}</SelectItem>
-                  <SelectItem value="APPROVED">{t("report.approved")}</SelectItem>
-                  <SelectItem value="REJECTED">{t("report.rejected")}</SelectItem>
-                  <SelectItem value="COMPLETED">{t("report.completed")}</SelectItem>
+                  <SelectItem value="all"><T k="report.allStatuses" /></SelectItem>
+                  <SelectItem value="PENDING"><T k="report.pending" /></SelectItem>
+                  <SelectItem value="APPROVED"><T k="report.approved" /></SelectItem>
+                  <SelectItem value="REJECTED"><T k="report.rejected" /></SelectItem>
+                  <SelectItem value="COMPLETED"><T k="report.completed" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>
-          </>        );
-
-      case "volunteers":
+          </>        );      case "volunteers":
         return (
           <>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">{t("report.status")}</Label>
+              <Label htmlFor="status"><T k="report.status" /></Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.status")} />
+                  <SelectValue placeholder={<T k="report.status" />} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
-                  <SelectItem value="ACTIVE">{t("report.active")}</SelectItem>
-                  <SelectItem value="INACTIVE">{t("report.inactive")}</SelectItem>
-                  <SelectItem value="PENDING">{t("report.pending")}</SelectItem>
+                  <SelectItem value="all"><T k="report.allStatuses" /></SelectItem>
+                  <SelectItem value="ACTIVE"><T k="report.active" /></SelectItem>
+                  <SelectItem value="INACTIVE"><T k="report.inactive" /></SelectItem>
+                  <SelectItem value="PENDING"><T k="report.pending" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -297,15 +291,15 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
         return (
           <>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">{t("report.status")}</Label>
+              <Label htmlFor="status"><T k="report.status" /></Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.status")} />
+                  <SelectValue placeholder={<T k="report.status" />} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
-                  <SelectItem value="active">{t("report.active")}</SelectItem>
-                  <SelectItem value="inactive">{t("report.inactive")}</SelectItem>
+                  <SelectItem value="all"><T k="report.allStatuses" /></SelectItem>
+                  <SelectItem value="active"><T k="report.active" /></SelectItem>
+                  <SelectItem value="inactive"><T k="report.inactive" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -314,15 +308,15 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
         return (
           <>
             <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">{t("report.status")}</Label>
+              <Label htmlFor="status"><T k="report.status" /></Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.status")} />
+                  <SelectValue placeholder={<T k="report.status" />} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">{t("report.allStatuses")}</SelectItem>
-                  <SelectItem value="active">{t("report.active")}</SelectItem>
-                  <SelectItem value="inactive">{t("report.inactive")}</SelectItem>
+                  <SelectItem value="all"><T k="report.allStatuses" /></SelectItem>
+                  <SelectItem value="active"><T k="report.active" /></SelectItem>
+                  <SelectItem value="inactive"><T k="report.inactive" /></SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -339,14 +333,13 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
       <Card className="w-full border-blue-200 shadow-lg hover:shadow-xl transition-all">
         <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
           <div className="flex justify-between items-center">
-            <div>
-              <CardTitle className="text-2xl text-blue-800">{t("report.generator")}</CardTitle>
+            <div>              <CardTitle className="text-2xl text-blue-800"><T k="report.generator" /></CardTitle>
               <CardDescription className="text-blue-700">
                 {orphanId 
-                  ? `${t("report.generate")} ${orphanName || t("orphan.selected")}`
+                  ? <><T k="report.generate" /> {orphanName || <T k="orphan.selected" />}</>
                   : userRole === "admin"
-                    ? `${t("report.generate")} ${branchName || t("branch.your")}`
-                    : t("report.comprehensive")
+                    ? <><T k="report.generate" /> {branchName || <T k="branch.your" />}</>
+                    : <T k="report.comprehensive" />
                 }
               </CardDescription>
             </div>
@@ -359,55 +352,54 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                   value="orphans" 
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.orphans")}
+                  <T k="report.orphans" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="inventory"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.inventory")}
+                  <T k="report.inventory" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="fundraising"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.fundraising")}
+                  <T k="report.fundraising" />
                 </TabsTrigger>
                 <TabsTrigger 
                   value="volunteers"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
-                  {t("report.volunteers")}
+                  <T k="report.volunteers" />
                 </TabsTrigger>
                 {userRole === "superadmin" && (
-                  <>
-                    <TabsTrigger 
+                  <>                    <TabsTrigger 
                       value="staff"
                       className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                     >
-                      {t("report.staff")}
+                      <T k="report.staff" />
                     </TabsTrigger>
                     <TabsTrigger 
                       value="branches"
                       className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                     >
-                      {t("report.branches")}
+                      <T k="report.branches" />
                     </TabsTrigger>
                   </>
                 )}
               </TabsList>
                 <div className="grid gap-4">                {userRole === "superadmin" && (
-                  <div className="flex flex-col space-y-2">                      <Label htmlFor="branch">{t("branch.label")}</Label>
+                  <div className="flex flex-col space-y-2">                      <Label htmlFor="branch"><T k="branch.label" /></Label>
                     <Select value={selectedBranch} onValueChange={(value) => {
                       setSelectedBranch(value);
                       if (onBranchChange) {
                         onBranchChange(value === "all" ? undefined : value);
                       }
                     }}>
-                      <SelectTrigger className="border-blue-200 focus:ring-blue-500">                        <SelectValue placeholder={t("report.selectBranch")} />
+                      <SelectTrigger className="border-blue-200 focus:ring-blue-500">                        <SelectValue placeholder={<T k="report.selectBranch" />} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">{t("branch.all")} ({t("report.systemReport")})</SelectItem>
+                        <SelectItem value="all"><T k="branch.all" /> (<T k="report.systemReport" />)</SelectItem>
                         {availableBranches.map((branch) => (
                           <SelectItem key={branch.publicId || branch.id} value={branch.publicId || branch.id}>
                             {branch.name}
@@ -419,17 +411,17 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                 )}
                 
                 {userRole === "admin" && availableBranches.length > 0 && (
-                  <div className="flex flex-col space-y-2">                      <Label htmlFor="branch">{t("branch.label")}</Label>
+                  <div className="flex flex-col space-y-2">                      <Label htmlFor="branch"><T k="branch.label" /></Label>
                     <Select value={selectedBranch} onValueChange={(value) => {
                       setSelectedBranch(value);
                       if (onBranchChange) {
                         onBranchChange(value === "all" ? undefined : value);
                       }
                     }}>
-                      <SelectTrigger className="border-blue-200 focus:ring-blue-500">                        <SelectValue placeholder={t("report.selectBranch")} />
+                      <SelectTrigger className="border-blue-200 focus:ring-blue-500">                        <SelectValue placeholder={<T k="report.selectBranch" />} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">{t("branch.all")} ({t("centre.yourCentre")})</SelectItem>
+                        <SelectItem value="all"><T k="branch.all" /> (<T k="centre.yourCentre" />)</SelectItem>
                         {availableBranches.map((branch) => (
                           <SelectItem key={branch.publicId || branch.id} value={branch.publicId || branch.id}>
                             {branch.name}
@@ -449,11 +441,10 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                         htmlFor="use-date-range"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-blue-900"
                       >
-                        {t("report.useDateRange")}
+                        <T k="report.useDateRange" />
                       </label>
                     </div>
-                      <div className={useDateRange ? "" : "opacity-50 pointer-events-none"}>
-                      <Label htmlFor="date-range">{t("report.dateRange")}</Label>
+                      <div className={useDateRange ? "" : "opacity-50 pointer-events-none"}>                      <Label htmlFor="date-range"><T k="report.dateRange" /></Label>
                       <div className="mt-2">
                         <DateRangePicker
                           date={{ from: dateRange.from, to: dateRange.to }}
@@ -464,12 +455,12 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                       {!useDateRange && (
                       <div className="text-sm text-blue-700 mt-2 bg-blue-50 p-2 rounded border border-blue-200">
                         <AlertCircle className="h-4 w-4 inline-block mr-1 text-blue-600" />
-                        {t("report.allTimeData")}
+                        <T k="report.allTimeData" />
                       </div>
                     )}
                     
                     <div>
-                      <Label className="text-blue-900">{t("report.format")}</Label>
+                      <Label className="text-blue-900"><T k="report.format" /></Label>
                       <div className="flex gap-4 mt-2">
                         <Button
                           type="button"
@@ -502,9 +493,9 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
           {orphanId && (
             <div className="grid gap-6">              <Alert className="bg-blue-50 border-blue-200">
                 <AlertCircle className="h-4 w-4 text-blue-600" />
-                <AlertTitle>{t("report.orphanSpecific")}</AlertTitle>
+                <AlertTitle><T k="report.orphanSpecific" /></AlertTitle>
                 <AlertDescription>
-                  {t("report.generatingDetailed")} {orphanName || t("orphan.selected")} {t("report.personalInfo")}.
+                  <T k="report.generatingDetailed" /> {orphanName || <T k="orphan.selected" />} <T k="report.personalInfo" />.
                 </AlertDescription>
               </Alert>
                 <div className="grid md:grid-cols-2 gap-6">              <div className="space-y-4">
@@ -513,16 +504,14 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                       id="use-date-range-orphan" 
                       checked={useDateRange} 
                       onCheckedChange={(checked) => setUseDateRange(checked as boolean)}
-                    />
-                    <label
+                    />                    <label
                       htmlFor="use-date-range-orphan"
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >                      {t("report.useDateRange")}
+                    >                      <T k="report.useDateRange" />
                     </label>
                   </div>
                   
-                  <div className={useDateRange ? "" : "opacity-50 pointer-events-none"}>
-                    <Label htmlFor="date-range-orphan">{t("report.dateRange")}</Label>
+                  <div className={useDateRange ? "" : "opacity-50 pointer-events-none"}>                    <Label htmlFor="date-range-orphan"><T k="report.dateRange" /></Label>
                     <div className="mt-2">
                       <DateRangePicker
                         date={{ from: dateRange.from, to: dateRange.to }}
@@ -533,13 +522,13 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                     {!useDateRange && (
                     <div className="text-sm text-blue-700 mt-2 bg-blue-50 p-2 rounded border border-blue-200">
                       <AlertCircle className="h-4 w-4 inline-block mr-1 text-blue-600" />
-                      {t("report.allTimeData")}
+                      <T k="report.allTimeData" />
                     </div>
                   )}
                 </div>
                 
                 <div>
-                  <Label className="text-blue-900">{t("report.format")}</Label>
+                  <Label className="text-blue-900"><T k="report.format" /></Label>
                   <div className="flex gap-4 mt-2">
                     <Button
                       type="button"
@@ -564,12 +553,11 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
           )}
         </CardContent>
         
-        <CardFooter className="flex flex-col space-y-4">          <div className="flex justify-between w-full">
-            <Alert variant="default" className="w-full mr-4 border-blue-200">
+        <CardFooter className="flex flex-col space-y-4">          <div className="flex justify-between w-full">            <Alert variant="default" className="w-full mr-4 border-blue-200">
               <AlertCircle className="h-4 w-4 text-blue-600" />
-              <AlertTitle>{t("report.includeData")}</AlertTitle>
+              <AlertTitle><T k="report.includeData" /></AlertTitle>
               <AlertDescription>
-                {t("report.selectFilters")}
+                <T k="report.selectFilters" />
               </AlertDescription>
             </Alert>
             <div className="flex space-x-4">
@@ -578,9 +566,8 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                 onClick={handleGenerateReport}
                 disabled={loading}
               >                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
-                    {generating ? "Generating Report..." : "Processing"}
+                  <>                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> 
+                    {generating ? <T k="report.generatingReportEllipsis" /> : <T k="report.processing" />}
                   </>
                 ) : (
                   <>                    <Download className="mr-2 h-4 w-4" /> 
