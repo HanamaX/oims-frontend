@@ -272,10 +272,13 @@ const translations: Record<string, Record<Language, string>> = {
   "nav.logout": {
     en: "Log out",
     sw: "Toka",
-  },
-  "nav.superuser": {
+  },  "nav.superuser": {
     en: "Superuser",
     sw: "Mtumiaji mkuu"
+  },
+  "nav.register": {
+    en: "Register",
+    sw: "Sajili"
   },
 
   // Dashboard
@@ -2307,7 +2310,7 @@ const translations: Record<string, Record<Language, string>> = {
   },
   "orphans.filter.active": {
     en: "Active Orphans",
-    sw: "Yatima Wanaishi",
+    sw: "Yatima Wanavyofanya Kazi",
   },
   "orphans.filter.graduated": {
     en: "Graduated Orphans",
@@ -3048,810 +3051,387 @@ const translations: Record<string, Record<Language, string>> = {
     en: "Select gender",
     sw: "Chagua jinsia",
   },
-  "orphan.form.male": {
-    en: "Male",
-    sw: "Kiume",
-  },
-  "orphan.form.female": {
-    en: "Female",
-    sw: "Kike",
-  },
-  "orphan.form.other": {
-    en: "Other",
-    sw: "Nyingine",
-  },
-  "orphan.form.origin": {
-    en: "Origin",
-    sw: "Asili",
-  },
-  "orphan.form.originPlaceholder": {
-    en: "City or region of origin",
-    sw: "Jiji au mkoa wa asili",
-  },
-  "orphan.form.religion": {
-    en: "Religion",
-    sw: "Dini",
-  },
-  "orphan.form.religionPlaceholder": {
-    en: "Religion",
-    sw: "Dini",
-  },
-  "orphan.form.bloodGroup": {
-    en: "Blood Group",
-    sw: "Aina ya Damu",
-  },
-  "orphan.form.bloodGroupPlaceholder": {
-    en: "E.g., O+, A-, etc.",
-    sw: "Mfano, O+, A-, n.k.",
-  },
-  "orphan.form.hobbies": {
-    en: "Hobbies",
-    sw: "Burudani",
-  },
-  "orphan.form.hobbiesPlaceholder": {
-    en: "Hobbies",
-    sw: "Burudani",
-  },
-  "orphan.form.allergies": {
-    en: "Allergies",
-    sw: "Mzio",
-  },
-  "orphan.form.allergiesPlaceholder": {
-    en: "Comma-separated list",
-    sw: "Orodha iliyotenganishwa na koma",
-  },
-  "orphan.form.education": {
-    en: "Education",
-    sw: "Elimu",
-  },
-  "orphan.form.educationLevel": {
-    en: "Education Level",
-    sw: "Kiwango cha Elimu",
-  },
-  "orphan.form.selectEducationLevel": {
-    en: "Select education level",
-    sw: "Chagua kiwango cha elimu",
-  },
-  "orphan.form.kindergarten": {
-    en: "Kindergarten",
-    sw: "Chekechea",
-  },
-  "orphan.form.primary": {
-    en: "Primary",
-    sw: "Msingi",
-  },
-  "orphan.form.secondary": {
-    en: "Secondary",
-    sw: "Sekondari",
-  },
-  "orphan.form.highSchool": {
-    en: "High School",
-    sw: "Shule ya Upili",
-  },
-  "orphan.form.college": {
-    en: "College",
-    sw: "Chuo",
-  },
-  "orphan.form.university": {
-    en: "University",
-    sw: "Chuo Kikuu",
-  },
-  "orphan.form.none": {
-    en: "None",
-    sw: "Hakuna",
-  },
-  "orphan.form.previousSchool": {
-    en: "Previous School",
-    sw: "Shule ya Awali",
-  },
-  "orphan.form.previousSchoolPlaceholder": {
-    en: "Previous school name",
-    sw: "Jina la shule ya awali",
-  },
-  "orphan.form.additionalInformation": {
-    en: "Additional Information",
-    sw: "Taarifa za Ziada",
-  },
-  "orphan.form.specialNeeds": {
-    en: "Special Needs",
-    sw: "Mahitaji Maalum",
-  },
-  "orphan.form.specialNeedsPlaceholder": {
-    en: "Any special needs",
-    sw: "Mahitaji yoyote maalum",
-  },
-  "orphan.form.medicalHistory": {
-    en: "Medical History",
-    sw: "Historia ya Kimatibabu",
-  },
-  "orphan.form.medicalHistoryPlaceholder": {
-    en: "Medical history",
-    sw: "Historia ya kimatibabu",
-  },
-  "orphan.form.adoptionReason": {
-    en: "Adoption Reason",
-    sw: "Sababu ya Kukuza",
-  },
-  "orphan.form.adoptionReasonPlaceholder": {
-    en: "Reason for adoption",
-    sw: "Sababu ya kukuza",
-  },
-  "orphan.form.cancel": {
-    en: "Cancel",
-    sw: "Ghairi",
-  },  "orphan.form.saveOrphan": {
-    en: "Save Orphan",
-    sw: "Hifadhi Yatima",
-  },
 
-  // Orphan medical tab translations
-  "orphan.medical.loadingRecords": {
-    en: "Loading medical records...",
-    sw: "Inapakia rekodi za kimatibabu...",
+  // Orphanage Registration page translations
+  "orphanage.registration.title": {
+    en: "Orphanage Registration",
+    sw: "Usajili wa Kituo cha Watoto Yatima",
   },
-  "orphan.medical.tryAgain": {
-    en: "Try Again",
-    sw: "Jaribu Tena",
+  "orphanage.registration.howTo": {
+    en: "How to Register Your Orphanage",
+    sw: "Jinsi ya Kusajili Kituo Chako cha Watoto Yatima",
   },
-  "orphan.medical.loadingDetails": {
-    en: "Loading medical record details...",
-    sw: "Inapakia maelezo ya rekodi za kimatibabu...",
+  "orphanage.registration.step1.title": {
+    en: "1. Prepare Your Details",
+    sw: "1. Andaa Maelezo Yako",
   },
-  "orphan.medical.noRecords": {
-    en: "No medical records found for this orphan",
-    sw: "Hakuna rekodi za kimatibabu zilizopatikana kwa yatima huyu",
+  "orphanage.registration.step1.desc": {
+    en: "Gather your personal and center details, including a valid government certificate in PDF format.",
+    sw: "Kusanya maelezo yako binafsi na ya kituo, pamoja na cheti halali cha serikali katika muundo wa PDF.",
   },
-  "orphan.medical.addRecord": {
-    en: "Add Medical Record",
-    sw: "Ongeza Rekodi ya Kimatibabu",
+  "orphanage.registration.step2.title": {
+    en: "2. Fill the Form",
+    sw: "2. Jaza Fomu",
   },
-  "orphan.medical.addNewRecord": {
-    en: "Add New Record",
-    sw: "Ongeza Rekodi Mpya",
+  "orphanage.registration.step2.desc": {
+    en: "Enter accurate information in all required fields. Ensure your email and phone number follow the specified format.",
+    sw: "Ingiza maelezo sahihi katika sehemu zote zinazohitajika. Hakikisha barua pepe na namba yako ya simu zinafuata muundo uliobainishwa.",
   },
-  "orphan.medical.hospital": {
-    en: "Hospital",
-    sw: "Hospitali",
+  "orphanage.registration.step3.title": {
+    en: "3. Upload Certificate",
+    sw: "3. Pakia Cheti",
   },
-  "orphan.medical.treatment": {
-    en: "Treatment",
-    sw: "Matibabu",
+  "orphanage.registration.step3.desc": {
+    en: "Upload a government-issued certificate (PDF only) to verify your orphanage's legitimacy.",
+    sw: "Pakia cheti kilichotolewa na serikali (PDF pekee) ili kuthibitisha uhalali wa kituo chako cha watoto yatima.",
   },
-  "orphan.medical.notes": {
-    en: "Notes",
-    sw: "Maelezo",
+  "orphanage.registration.step4.title": {
+    en: "4. Submit & Await Review",
+    sw: "4. Wasilisha na Subiri Ukaguzi",
   },
-  "orphan.medical.followUpDate": {
-    en: "Follow-up Date",
-    sw: "Tarehe ya Kufuatilia",
-  },  "orphan.medical.viewDetails": {
-    en: "View Details",
-    sw: "Ona Maelezo",
+  "orphanage.registration.step4.desc": {
+    en: "Your request will be reviewed by our team. You will be notified via email once approved or if more information is needed.",
+    sw: "Ombi lako litakaguliwa na timu yetu. Utaarifiwa kupitia barua pepe mara tu linapoidhinishwa au ikiwa taarifa zaidi zinahitajika.",
   },
-
-  // General translations
-  "general.close": {
-    en: "Close",
-    sw: "Funga",
+  "orphanage.registration.whyRegister": {
+    en: "Why Register for OIMS",
+    sw: "Kwa Nini Usajili kwa OIMS",
   },
-
-  // Profile
-  "profile.title": {
-    en: "My Profile",
-    sw: "Wasifu Wangu"
+  "orphanage.registration.benefit1.title": {
+    en: "Access a Secure Platform",
+    sw: "Fikia Jukwaa Salama",
   },
-  "profile.tab.info": {
-    en: "Profile Information",
-    sw: "Taarifa za Wasifu"
+  "orphanage.registration.benefit1.desc": {
+    en: "Access a secure and organized platform for managing your orphanage's data.",
+    sw: "Fikia jukwaa salama na lililopangwa vizuri kwa usimamizi wa data ya kituo chako cha watoto yatima.",
   },
-  "profile.tab.password": {
-    en: "Change Password",
-    sw: "Badilisha Nenosiri"
+  "orphanage.registration.benefit2.title": {
+    en: "Connect Efficiently",
+    sw: "Unganisha kwa Ufanisi",
   },
-  "profile.view.title": {
-    en: "Profile Details",
-    sw: "Maelezo ya Wasifu"
+  "orphanage.registration.benefit2.desc": {
+    en: "Connect with donors, volunteers, and support networks more efficiently.",
+    sw: "Unganisha na wafadhili, kujitolea, na mitandao ya msaada kwa ufanisi zaidi.",
   },
-  "profile.view.description": {
-    en: "View and manage your personal information",
-    sw: "Angalia na simamia taarifa zako za kibinafsi"
+  "orphanage.registration.benefit3.title": {
+    en: "Analytics & Reporting",
+    sw: "Uchambuzi na Ripoti",
   },
-  "profile.button.edit": {
-    en: "Edit Profile",
-    sw: "Hariri Wasifu"
+  "orphanage.registration.benefit3.desc": {
+    en: "Benefit from analytics and reporting tools to improve your operations.",
+    sw: "Nufaika kutoka kwa zana za uchambuzi na ripoti ili kuboresha shughuli zako.",
   },
-  "profile.label.fullName": {
-    en: "Full Name",
-    sw: "Jina Kamili"
+  "orphanage.registration.benefit4.title": {
+    en: "Transparency & Trust",
+    sw: "Uwazi na Imani",
   },
-  "profile.label.username": {
-    en: "Username",
-    sw: "Jina la Mtumiaji"
+  "orphanage.registration.benefit4.desc": {
+    en: "Enhance transparency and trust with stakeholders and the community.",
+    sw: "Boresha uwazi na imani na washikadau na jamii.",
   },
-  "profile.label.email": {
-    en: "Email Address",
-    sw: "Anwani ya Barua Pepe"
+  "orphanage.registration.personalDetails": {
+    en: "Personal Details",
+    sw: "Maelezo Binafsi",
   },
-  "profile.label.phone": {
-    en: "Phone Number",
-    sw: "Namba ya Simu"
+  "orphanage.registration.name": {
+    en: "Name",
+    sw: "Jina",
   },
-  "profile.label.gender": {
-   
-   
-   
+  "orphanage.registration.enterName": {
+    en: "Enter your full name",
+    sw: "Ingiza jina lako kamili",
+  },
+  "orphanage.registration.gender": {
     en: "Gender",
-    sw: "Jinsia"
+    sw: "Jinsia",
   },
-  "profile.notSpecified": {
-    en: "Not specified",
-    sw: "Haijabainishwa"
+  "orphanage.registration.selectGender": {
+    en: "Select Gender",
+    sw: "Chagua Jinsia",
   },
-  "profile.label.role": {
-    en: "Role",
-    sw: "Wajibu"
-  },
-  "profile.gender.male": {
+  "orphanage.registration.male": {
     en: "Male",
-    sw: "Mwanaume"
+    sw: "Mume",
   },
-  "profile.gender.female": {
+  "orphanage.registration.female": {
     en: "Female",
-    sw: "Mwanamke"
+    sw: "Mke",
   },
-  "profile.gender.other": {
-    en: "Other",
-    sw: "Nyingine"
+  "orphanage.registration.email": {
+    en: "Email",
+    sw: "Barua Pepe",
   },
-  "profile.gender.preferNot": {
-    en: "Prefer not to say",
-    sw: "Napendelea kutosema"
+  "orphanage.registration.emailPlaceholder": {
+    en: "e.g. example@email.com",
+    sw: "k.m. mfano@barua.com",
   },
-  "profile.loading": {
-    en: "Loading profile...",
-    sw: "Inapakia wasifu..."
+  "orphanage.registration.phone": {
+    en: "Phone Number",
+    sw: "Nambari ya Simu",
   },
-  "profile.success.update": {
-    en: "Profile updated successfully",
-    sw: "Wasifu umesasishwa kwa mafanikio"
+  "orphanage.registration.phonePlaceholder": {
+    en: "e.g. +254712345678",
+    sw: "k.m. +254712345678",
   },
-  "profile.password.title": {
-    en: "Change Password",
-    sw: "Badilisha Nenosiri"
+  "orphanage.registration.phoneFormat": {
+    en: "Format: +countrycode followed by 9 digits (e.g. +254712345678)",
+    sw: "Muundo: +msimbo wa nchi ikifuatiwa na tarakimu 9 (k.m. +254712345678)",
   },
-  "profile.password.description": {
-    en: "Update your account password",
-    sw: "Sasisha nenosiri la akaunti yako"
+  "orphanage.registration.centerDetails": {
+    en: "Center Details",
+    sw: "Maelezo ya Kituo",
   },
-  "profile.password.label.current": {
-    en: "Current Password",
-    sw: "Nenosiri la Sasa"
+  "orphanage.registration.centerName": {
+    en: "Name of Center",
+    sw: "Jina la Kituo",
   },
-  "profile.password.placeholder.current": {
-    en: "Enter your current password",
-    sw: "Ingiza nenosiri lako la sasa"
+  "orphanage.registration.enterCenterName": {
+    en: "Enter center name",
+    sw: "Ingiza jina la kituo",
   },
-  "profile.password.label.new": {
-    en: "New Password",
-    sw: "Nenosiri Jipya"
+  "orphanage.registration.location": {
+    en: "Location",
+    sw: "Mahali",
   },
-  "profile.password.placeholder.new": {
-    en: "Enter new password",
-    sw: "Ingiza nenosiri jipya"
+  "orphanage.registration.enterLocation": {
+    en: "Enter center location",
+    sw: "Ingiza eneo la kituo",
   },
-  "profile.password.label.confirm": {
-    en: "Confirm Password",
-    sw: "Thibitisha Nenosiri"
+  "orphanage.registration.certificate": {
+    en: "Government Certificate (PDF only)",
+    sw: "Cheti cha Serikali (PDF pekee)",
   },
-  "profile.password.placeholder.confirm": {
-    en: "Confirm your new password",
-    sw: "Thibitisha nenosiri jipya"
+  "orphanage.registration.submit": {
+    en: "Submit",
+    sw: "Wasilisha",
   },
-  "profile.password.success": {
-    en: "Password updated successfully",
-    sw: "Nenosiri limesasishwa kwa mafanikio"
+  "orphanage.registration.thankYou": {
+    en: "Thank You!",
+    sw: "Asante!",
   },
-  "profile.password.error.current": {
-    en: "Current password is required",
-    sw: "Nenosiri la sasa linahitajika"
+  "orphanage.registration.successMessage": {
+    en: "Your registration request has been submitted successfully.",
+    sw: "Ombi lako la usajili limewasilishwa kwa mafanikio.",
   },
-  "profile.password.error.new": {
-    en: "New password is required",
-    sw: "Nenosiri jipya linahitajika"
-  },
-  "profile.password.error.match": {
-    en: "Passwords do not match",
-    sw: "Manenosiri hayalingani"
-  },
-  "profile.password.error.length": {
-    en: "Password must be at least 8 characters long",
-    sw: "Nenosiri lazima liwe na angalau herufi 8"
-  },
-  "profile.password.error.update": {
-    en: "Failed to update password. Please check your current password and try again.",
-    sw: "Imeshindwa kusasisha nenosiri. Tafadhali angalia nenosiri lako la sasa na ujaribu tena."
-  },
-  "profile.button.cancel": {
-    en: "Cancel",
-    sw: "Ghairi"
-  },
-  "profile.button.save": {
-    en: "Save Changes",
-    sw: "Hifadhi Mabadiliko"
-  },
-  "profile.button.updating": {
-    en: "Updating...",
-    sw: "Inasasisha..."
-  },
-
-    "fundraiser.coordinator": {
-    en: "Coordinator",
-    sw: "Mratibu",
-  },
-  "fundraiser.purpose": {
-    en: "Purpose",
-    sw: "Madhumuni",
-  },
-  "fundraiser.date": {
-    en: "Date",
-    sw: "Tarehe",
-  },  "fundraiser.status": {
-    en: "Status",
-    sw: "Hali",
-  },
-  "fundraiser.status.approved": {
-    en: "Approved",
-    sw: "Imeidhinishwa",
-  },
-  "fundraiser.status.completed": {
-    en: "Completed",
-    sw: "Imekamilika",
-  },
-  "fundraiser.status.pending": {
-    en: "Pending",
-    sw: "Inasubiri",
-  },
-  "fundraiser.status.rejected": {
-    en: "Rejected",
-    sw: "Imekataliwa",
-  },
-  "fundraiser.status.cancelled": {
-    en: "Cancelled",
-    sw: "Imesitishwa",
-  },  "fundraiser.actions": {
-    en: "Actions",
-    sw: "Vitendo",
+  "orphanage.registration.detailMessage": {
+    en: "We appreciate your effort to join the Orphanage Information System. Our team will review your submission and contact you soon.",
+    sw: "Tunashukuru jitihada yako ya kujiunga na Mfumo wa Habari wa Kituo cha Watoto Yatima. Timu yetu itakagua wasilisho lako na kuwasiliana nawe hivi karibuni.",
+  },  "orphanage.registration.goHome": {
+    en: "Go to Home",
+    sw: "Rudi Mwanzo",
   },
   
-  // Fundraiser specific translations for supervisor
-  "fundraiser.management": {
-    en: "Fundraiser Management",
-    sw: "Usimamizi wa Mchango",
+  // Auth-related translations
+  "auth.signIn": {
+    en: "Sign In",
+    sw: "Ingia",
   },
-  "fundraiser.description": {
-    en: "Manage fundraisers for your branch",
-    sw: "Simamia michango kwa tawi lako",
+  "common.chooseFile": {
+    en: "Choose file",
+    sw: "Chagua faili",
   },
-  "fundraiser.viewPublicCampaigns": {
-    en: "View Public Campaigns",
-    sw: "Angalia Kampeni za Umma",
+  "common.noFileChosen": {
+    en: "No file chosen",
+    sw: "Hakuna faili iliyochaguliwa",
   },
-  "fundraiser.search": {
-    en: "Search fundraisers...",
-    sw: "Tafuta michango...",
+  
+  // Superuser Dashboard and Report translations
+  "superuser.dashboard.systemStats": {
+    en: "The system currently manages",
+    sw: "Mfumo kwa sasa unasimamia"
   },
-  "fundraiser.filter.status": {
-    en: "Filter by status",
-    sw: "Chuja kwa hali",
+  "superuser.dashboard.centers": {
+    en: "orphanage centers",
+    sw: "vituo vya watoto yatima"
   },
-  "fundraiser.filter.all": {
-    en: "All Statuses",
-    sw: "Hali Zote",
+  "superuser.dashboard.branches": {
+    en: "branches",
+    sw: "matawi"
   },
-  "fundraiser.filter.pending": {
-    en: "Pending",
-    sw: "Inasubiri",
-  },
-  "fundraiser.filter.active": {
-    en: "Active",
-    sw: "Hai",
-  },
-  "fundraiser.filter.completed": {
-    en: "Completed",
-    sw: "Imekamilika",
-  },
-  "fundraiser.filter.rejected": {
-    en: "Rejected",
-    sw: "Imekataliwa",
-  },
-  "fundraiser.approvedSuccess": {
-    en: "Fundraiser approved successfully",
-    sw: "Mchango umeidhinishwa kwa mafanikio",
-  },
-  "fundraiser.approveFailed": {
-    en: "Failed to approve fundraiser. Please try again.",
-    sw: "Imeshindwa kuidhinisha mchango. Tafadhali jaribu tena.",
-  },
-  "fundraiser.rejectedSuccess": {
-    en: "Fundraiser rejected successfully",
-    sw: "Mchango umekataliwa kwa mafanikio",
-  },
-  "fundraiser.rejectFailed": {
-    en: "Failed to reject fundraiser. Please try again.",
-    sw: "Imeshindwa kukataa mchango. Tafadhali jaribu tena.",
-  },
-  "fundraiser.deletedSuccess": {
-    en: "Fundraiser deleted successfully",
-    sw: "Mchango umefutwa kwa mafanikio",
-  },
-  "fundraiser.deleteFailed": {
-    en: "Failed to delete fundraiser. Please try again.",
-    sw: "Imeshindwa kufuta mchango. Tafadhali jaribu tena.",
-  },
-  "fundraiser.completedSuccess": {
-    en: "Fundraiser marked as completed successfully",
-    sw: "Mchango umewekwa alama ya kukamilika kwa mafanikio",
-  },
-  "fundraiser.completeFailed": {
-    en: "Failed to mark fundraiser as completed. Please try again.",
-    sw: "Imeshindwa kuweka alama ya kukamilika kwa kampeni ya kukusanya fedha. Tafadhali jaribu tena.",
-  },
-  "fundraiser.cancelledSuccess": {
-    en: "Fundraiser cancelled successfully",
-    sw: "Mchango umeghairiwa kwa mafanikio",
-  },
-  "fundraiser.cancelFailed": {
-    en: "Failed to cancel fundraiser. Please try again.",
-    sw: "Imeshindwa kughairi mchango. Tafadhali jaribu tena.",
-  },
-  "fundraiser.rejectTitle": {
-    en: "Reject Fundraiser",
-    sw: "Kataa Mchango",
-  },
-  "fundraiser.rejectDescription": {
-    en: "Please provide a reason for rejecting this fundraiser. This information will be stored and displayed in the fundraiser record.",
-    sw: "Tafadhali toa sababu ya kukataa mchango huu. Taarifa hii itahifadhiwa na kuonyeshwa katika rekodi ya mchango.",
-  },
-  "fundraiser.rejectReasonLabel": {
-    en: "Reason for rejection",
-    sw: "Sababu ya kukataa",
-  },
-  "fundraiser.rejectReasonPlaceholder": {
-    en: "Explain why you're rejecting this fundraiser...",
-    sw: "Eleza kwa nini unakataa mchango huu...",
-  },
-  "fundraiser.rejectButton": {
-    en: "Reject",
-    sw: "Kataa",
-  },
-  "ui.processing": {
-    en: "Processing...",
-    sw: "Inachakata...",
-  },
-
-  // Reports & Analytics
-  "report.inactive": {
-    en: "Inactive",
-    sw: "Wasiohai",
-  },
-  "report.adopted": {
-    en: "Adopted",
-    sw: "Asiliwa",
-  },
-  "report.age.0-2": {
-    en: "0-2 years",
-    sw: "miaka 0-2",
-  },
-  "report.age.3-5": {
-    en: "3-5 years",
-    sw: "miaka 3-5",
-  }, 
-  "report.age.6-12": {
-    en: "6-12 years",
-    sw: "miaka 6-12",
-  },
-  "report.age.13-17": {
-    en: "13-17 years",
-    sw: "miaka 13-17",
-  },
-  "report.gender.male": {
-    en: "Male",
-    sw: "Kiume",
-  },
-  "report.gender.female": {
-    en: "Female",
-    sw: "Kike",
-  },
-  "report.category": {
-    en: "Category",
-    sw: "Kategoria",
-  },
-  "report.allCategories": {
-    en: "All Categories",
-    sw: "Kategoria Zote",
-  },
-  "report.food": {
-    en: "Food",
-    sw: "Chakula",
-  },
-  "report.clothing": {
-    en: "Clothing",
-    sw: "Mavazi",
-  },
-  "report.medicine": {
-    en: "Medicine",
-    sw: "Dawa",
-  },
-  "report.schoolSupplies": {
-    en: "School Supplies",
-    sw: "Vifaa vya Shule",
-  },
-  "report.other": {
-    en: "Other",
-    sw: "Nyingine",
-  },
-  "report.inStock": {
-    en: "In Stock",
-    sw: "Zinapatikana",
-  },
-  "report.lowStock": {
-    en: "Low Stock",
-    sw: "Zinaisha",
-  },
-  "report.outOfStock": {
-    en: "Out of Stock",
-    sw: "Zimeisha",
-  },
-  "report.pending": {
-    en: "Pending",
-    sw: "Inasubiri",
-  },
-  "report.approved": {
-    en: "Approved",
-    sw: "Imeidhinishwa",
-  },
-  "report.rejected": {
-    en: "Rejected",
-    sw: "Imekataliwa",
-  },
-  "report.completed": {
-    en: "Completed",
-    sw: "Imekamilika",
-  },
-  "report.orphanSpecific": {
-    en: "Orphan-specific report",
-    sw: "Ripoti mahususi ya yatima",
-  },
-  "report.generatingDetailed": {
-    en: "Generating detailed report for",
-    sw: "Kutengeneza ripoti ya kina kwa",
-  },
-  "report.personalInfo": {
-    en: "including personal information, medical records, and academic history",
-    sw: "ikijumuisha taarifa binafsi, rekodi za matibabu, na historia ya kielimu",
-  },
-  "report.selectBranch": {
-    en: "Select branch",
-    sw: "Chagua tawi",
-  },  "report.systemReport": {
-    en: "System Report",
-    sw: "Ripoti ya Mfumo",
-  },
-  "report.statistics": {
-    en: "Statistics",
-    sw: "Takwimu",
-  },
-  "report.orphans.demographics": {
-    en: "Demographics",
-    sw: "Demografia",
-  },
-  "report.orphans.ageDistribution": {
-    en: "Age Distribution",
-    sw: "Mgawanyo wa Umri",
-  },  "report.orphans.status": {
-    en: "Status",
-    sw: "Hali",
-  },
-  "report.branches.orphans": {
-    en: "Orphans",
-    sw: "Watoto Yatima",
-  },
-  "report.count": {
-    en: "Count",
-    sw: "Idadi",
-  },  "report.orphansCount": {
+  "superuser.dashboard.orphans": {
     en: "orphans",
-    sw: "watoto yatima",
+    sw: "watoto yatima"
   },
-  // Inventory translations
-  "report.inventory.categories": {
-    en: "Categories",
-    sw: "Makundi",
+  "superuser.dashboard.fundraising": {
+    en: "TSh",
+    sw: "TSh"
   },
-  "report.inventory.stockStatus": {
-    en: "Stock Status",
-    sw: "Hali ya Hifadhi",
+  "superuser.dashboard.and": {
+    en: "and",
+    sw: "na"
   },
-  "report.inventory.transactions": {
-    en: "Transactions",
-    sw: "Miamala",
-  },
-  "report.inventory.items": {
-    en: "items",
-    sw: "bidhaa",
-  },  // Volunteers translations
-  "report.volunteers.status": {
-    en: "Status",
-    sw: "Hali",
-  },
-  "report.volunteers.activities": {
-    en: "Activities",
-    sw: "Shughuli",
-  },
-  "report.volunteers.volunteerHours": {
-    en: "Volunteer Hours",
-    sw: "Masaa ya Kujitolea",
-  },
-  "report.volunteers.count": {
+  "superuser.dashboard.volunteers": {
     en: "volunteers",
-    sw: "wajitolea",
-  },  // Fundraising translations
-  "report.fundraising.amounts": {
-    en: "Amounts",
-    sw: "Kiasi",
+    sw: "watu waliojitolea"
   },
-  "report.fundraising.status": {
-    en: "Status",
-    sw: "Hali",
+  "report.systemReport": {
+    en: "System Report",
+    sw: "Ripoti ya Mfumo"
   },
-  "report.fundraising.timeline": {
-    en: "Timeline",
-    sw: "Muda",
+  "report.systemSummary": {
+    en: "System Summary",
+    sw: "Muhtasari wa Mfumo"
   },
-  "report.fundraising.amount": {
-    en: "Amount",
-    sw: "Kiasi",
+  "report.orgWide": {
+    en: "Organization-wide Overview",
+    sw: "Muhtasari wa Shirika Zima"
   },
-  "report.fundraising.campaigns": {
-    en: "campaigns",
-    sw: "kampeni",
-  },  // Staff translations
-  "report.staff.departments": {
-    en: "Departments",
-    sw: "Idara",
+  "report.totalBranches": {
+    en: "Total Branches",
+    sw: "Jumla ya Matawi"
   },
-  "report.staff.status": {
-    en: "Status",
-    sw: "Hali",
+  "report.totalOrphansCount": {
+    en: "Total Orphans",
+    sw: "Jumla ya Yatima"
   },
-  "report.staff.roles": {
-    en: "Roles",
-    sw: "Majukumu",
-  },  // Branch translations
-  "report.branches.distribution": {
-    en: "Distribution",
-    sw: "Mgawanyo",
+  "report.totalVolunteers": {
+    en: "Total Volunteers",
+    sw: "Jumla ya Watu Waliojitolea"
   },
-  "report.branches.resources": {
-    en: "Resources",
-    sw: "Rasilimali",
+  "report.totalFundraisers": {
+    en: "Total Fundraisers",
+    sw: "Jumla ya Michango"
   },
-  // Education categories
-  "report.education": {
-    en: "Education",
-    sw: "Elimu",
+  "report.branchComparison": {
+    en: "Branch Comparison",
+    sw: "Ulinganisho wa Matawi"
   },
-  "report.healthcare": {
-    en: "Healthcare",
-    sw: "Afya",
+  "report.performanceMetrics": {
+    en: "Performance Metrics",
+    sw: "Vigezo vya Utendaji"
   },
-  "report.facilities": {
-    en: "Facilities",
-    sw: "Vifaa",
+  "report.branchPrefix": {
+    en: "Branch",
+    sw: "Tawi"
   },
-  "report.events": {
-    en: "Events",
-    sw: "Matukio",
+  "report.topPerformer": {
+    en: "Top Performer",
+    sw: "Mtendaji Bora"
   },
-  "report.activities": {
-    en: "Activities",
-    sw: "Shughuli",
+  "report.highGrowth": {
+    en: "High Growth",
+    sw: "Ukuaji wa Juu"
   },
-  "report.administration": {
-    en: "Administration",
-    sw: "Utawala",
+  "report.mostVolunteers": {
+    en: "Most Volunteers",
+    sw: "Watu Waliojitolea Wengi"
   },
-  "report.title": {
-    en: "Reports & Analytics",
-    sw: "Ripoti na Uchambuzi",
+  "report.needsAttention": {
+    en: "Needs Attention",
+    sw: "Inahitaji Umakini"
   },
-  "report.inventory.in": {
-    en: "IN",
-    sw: "NDANI",
+  "report.recentSystemReports": {
+    en: "Recent System Reports",
+    sw: "Ripoti za Mfumo za Hivi Karibuni"
   },
-  "report.inventory.out": {
-    en: "OUT",
-    sw: "NJE",
+  "report.previouslyGeneratedReports": {
+    en: "Previously Generated Reports",
+    sw: "Ripoti zilizotengenezwa hapo awali"
   },
-  "report.generate": {
-    en: "Generate detailed reports and view analytics for your branch",
-    sw: "Tengeneza ripoti za kina na angalia uchambuzi wa tawi lako",
+  "report.quarterlySystemOverview": {
+    en: "Quarterly System Overview",
+    sw: "Muhtasari wa Mfumo wa Robo Mwaka"
   },
-  "report.system": {
-    en: "System Reports & Analytics",
-    sw: "Ripoti na Uchambuzi wa Mfumo",
+  "report.branchPerformanceAnalysis": {
+    en: "Branch Performance Analysis",
+    sw: "Uchambuzi wa Utendaji wa Matawi"
   },
-  "report.comprehensive": {
-    en: "Comprehensive reports and analytics across all branches",
-    sw: "Ripoti kamili na uchambuzi katika matawi yote",
+  "report.staffEfficiencyReport": {
+    en: "Staff Efficiency Report",
+    sw: "Ripoti ya Ufanisi wa Wafanyakazi"
+  },  "report.resourceAllocationSummary": {
+    en: "Resource Allocation Summary",
+    sw: "Muhtasari wa Ugawaji Rasilimali",
   },
-  "report.restricted": {
-    en: "Report access is restricted",
-    sw: "Upatikanaji wa ripoti umezuiliwa",
+  "report.detailedAnalytics": {
+    en: "Detailed Analytics",
+    sw: "Uchambuzi wa Kina",
   },
-  "report.restriction.description": {
-    en: "Branch administrators can only generate reports for data within their assigned branch.",
-    sw: "Wasimamizi wa matawi wanaweza kutengeneza ripoti za data ndani ya tawi lao tu.",
-  },
-  "report.fullAccess": {
-    en: "Full system access",
-    sw: "Ufikiaji kamili wa mfumo",
-  },
-  "report.fullAccess.description": {
-    en: "As a Super Admin, you can generate reports for individual branches or the entire system.",
-    sw: "Kama Msimamizi Mkuu, unaweza kutengeneza ripoti kwa matawi ya mtu binafsi au mfumo mzima.",
-  },
-  "report.generator": {
-    en: "Report Generator",
-    sw: "Jenereta ya Ripoti",
-  },
-  "report.analytics": {
-    en: "Analytics Dashboard",
-    sw: "Dashibodi ya Uchambuzi",
-  },
-  "report.systemAnalytics": {
-    en: "System Analytics",
-    sw: "Uchambuzi wa Mfumo",
-  },
+  
+  // Missing report tab translations
   "report.orphans": {
     en: "Orphans",
     sw: "Yatima",
+  },
+  "report.fundraising": {
+    en: "Fundraising",
+    sw: "Uchangishaji",
+  },
+  "report.volunteers": {
+    en: "Volunteers", 
+    sw: "Wanaojitolea",
+  },
+  "report.staff": {
+    en: "Staff",
+    sw: "Wafanyakazi",
+  },  "report.branches": {
+    en: "Branches",
+    sw: "Matawi",
   },
   "report.inventory": {
     en: "Inventory",
     sw: "Bidhaa",
   },
-  "report.fundraising": {
-    en: "Fundraising",
-    sw: "Ukusanyaji Fedha",
+  
+  // Additional report translations
+  "report.system": {
+    en: "System Report",
+    sw: "Ripoti ya Mfumo",
   },
-  "report.volunteers": {
-    en: "Volunteers",
-    sw: "Wajitolea",
+  "report.comprehensive": {
+    en: "Comprehensive Report",
+    sw: "Ripoti Kamili",
   },
-  "report.staff": {
-    en: "Staff",
-    sw: "Wafanyakazi",
+  "roles.Supervisor": {
+    en: "Supervisor",
+    sw: "Msimamizi",
   },
-  "report.branches": {
-    en: "Branches",
-    sw: "Matawi",
+  "report.fullAccess": {
+    en: "Full Access",
+    sw: "Upatikanaji Kamili",
+  },
+  "report.fullAccess.description": {
+    en: "You have full access to branch reports",
+    sw: "Una upatikanaji kamili kwa ripoti za tawi",
+  },
+  "report.generator": {
+    en: "Report Generator",
+    sw: "Kizalishaji cha Ripoti",
+  },
+  "report.systemAnalytics": {
+    en: "System Analytics",
+    sw: "Uchanganuzi wa Mfumo",
+  },
+  "report.analytics": {
+    en: "Analytics",
+    sw: "Uchanganuzi",
+  },
+  "report.title": {
+    en: "Reports",
+    sw: "Ripoti",
+  },  "report.generate": {
+    en: "Generate detailed reports for your branch",
+    sw: "Tengeneza ripoti za kina kwa tawi lako",
+  },
+  "report.generateReport": {
+    en: "Generate Report",
+    sw: "Tengeneza Ripoti",
+  },
+  "report.restricted": {
+    en: "Restricted Access",
+    sw: "Upatikanaji Uliowekewa Mipaka",
+  },
+  "report.restriction.description": {
+    en: "You can only view and generate reports for your assigned branch",
+    sw: "Unaweza tu kuona na kutengeneza ripoti za tawi lako ulilotengewa",
   },
   "report.summary": {
-    en: "Summary",
-    sw: "Muhtasari",
+    en: "Branch Summary",
+    sw: "Muhtasari wa Tawi",
   },
   "report.branchOverview": {
-    en: "Branch overview at a glance",
-    sw: "Muhtasari wa tawi kwa haraka",
-  },
-  "report.systemSummary": {
-    en: "System Summary",
-    sw: "Muhtasari wa Mfumo",
-  },
-  "report.orgWide": {
-    en: "Organization-wide metrics",
-    sw: "Vipimo vya shirika zima",
+    en: "Quick overview of your branch",
+    sw: "Muhtasari wa haraka wa tawi lako",
   },
   "report.totalOrphans": {
     en: "Total Orphans",
@@ -3859,11 +3439,11 @@ const translations: Record<string, Record<Language, string>> = {
   },
   "report.activeVolunteers": {
     en: "Active Volunteers",
-    sw: "Wajitolea Wanaofanya Kazi",
+    sw: "Wanaojitolea Wanaofanya Kazi",
   },
   "report.fundraisingCampaigns": {
     en: "Fundraising Campaigns",
-    sw: "Kampeni za Ukusanyaji Fedha",
+    sw: "Kampeni za Uchangishaji",
   },
   "report.recentReports": {
     en: "Recent Reports",
@@ -3871,88 +3451,100 @@ const translations: Record<string, Record<Language, string>> = {
   },
   "report.previouslyGenerated": {
     en: "Previously generated reports",
-    sw: "Ripoti zilizotolewa awali",
+    sw: "Ripoti zilizotangulia kutengenezwa",
   },
   "report.monthlyOrphan": {
     en: "Monthly Orphan Report",
     sw: "Ripoti ya Kila Mwezi ya Yatima",
   },
   "report.inventoryStatus": {
-    en: "Inventory Status",
-    sw: "Hali ya Bidhaa",
-  },  "report.volunteerHours": {
-    en: "Volunteer Hours Q2",
-    sw: "Masaa ya Kujitolea Robo ya 2",
+    en: "Inventory Status Report",
+    sw: "Ripoti ya Hali ya Bidhaa",
+  },
+  "report.volunteerHours": {
+    en: "Volunteer Hours Report",
+    sw: "Ripoti ya Masaa ya Wanaojitolea",
   },
   "report.fundraisingSummary": {
     en: "Fundraising Summary",
-    sw: "Muhtasari wa Ukusanyaji Fedha",
+    sw: "Muhtasari wa Uchangishaji",
   },
-  "report.branchComparison": {
-    en: "Branch Comparison",
-    sw: "Ulinganisho wa Matawi",
+  "report.loadingData": {
+    en: "Loading data...",
+    sw: "Inapakia data...",
   },
-  "report.performanceMetrics": {
-    en: "Performance metrics by branch",
-    sw: "Vipimo vya utendaji kwa tawi",
+  "report.errorLoading": {
+    en: "Error Loading Data",
+    sw: "Hitilafu Kupakia Data",
   },
-  "report.totalBranches": {
-    en: "Total Branches",
-    sw: "Jumla ya Matawi",
+  "report.noDataAvailable": {
+    en: "No data available",
+    sw: "Hakuna data inayopatikana",
   },
-  "report.totalVolunteers": {
-    en: "Total Volunteers",
-    sw: "Jumla ya Wajitolea",
+  
+  // Additional report generator translations
+  "report.status": {
+    en: "Status",
+    sw: "Hali",
   },
-  "report.totalFundraisers": {
-    en: "Total Fundraisers",
-    sw: "Jumla ya Ukusanyaji Fedha",
+  "report.pending": {
+    en: "Pending",
+    sw: "Inasubiri",
   },
-  "report.branchPrefix": {
-    en: "Branch",
-    sw: "Tawi",
+  "report.includeData": {
+    en: "Include Data",
+    sw: "Jumuisha Data",
   },
-  "report.topPerformer": {
-    en: "Top Performer",
-    sw: "Mtendeaji Bora Zaidi",
+  "report.selectFilters": {
+    en: "Select Filters",
+    sw: "Chagua Vichujio",
   },
-  "report.highGrowth": {
-    en: "High Growth",
-    sw: "Ukuaji wa Juu",
+  "report.useDateRange": {
+    en: "Use Date Range",
+    sw: "Tumia Kipindi cha Tarehe",
   },
-  "report.mostVolunteers": {
-    en: "Most Volunteers",
-    sw: "Wajitolea Wengi Zaidi",
-  },
-  "report.needsAttention": {
-    en: "Needs Attention",
-    sw: "Inahitaji Umakini",
-  },
-  "report.recentSystemReports": {
-    en: "Recent System Reports",
-    sw: "Ripoti za Mfumo za Hivi Karibuni",
-  },
-  "report.quarterlySystemOverview": {
-    en: "Quarterly System Overview",
-    sw: "Muhtasari wa Mfumo wa Robo Mwaka",
-  },
-  "report.branchPerformanceAnalysis": {
-    en: "Branch Performance Analysis",
-    sw: "Uchambuzi wa Utendaji wa Tawi",
-  },
-  "report.staffEfficiencyReport": {
-    en: "Staff Efficiency Report",
-    sw: "Ripoti ya Ufanisi wa Wafanyakazi",
-  },
-  "report.resourceAllocationSummary": {
-    en: "Resource Allocation Summary",
-    sw: "Muhtasari wa Ugawaji Rasilimali",
-  },
-  // Report generator form fields and labels
   "report.dateRange": {
-    en: "Select Date Range",
-    sw: "Chagua Kipindi cha Tarehe",
+    en: "Date Range",
+    sw: "Kipindi cha Tarehe",
   },
+  "report.statistics": {
+    en: "Statistics",
+    sw: "Takwimu",
+  },
+  "report.format": {
+    en: "Export Format",
+    sw: "Muundo wa Kuhamishia",
+  },
+  "report.allTimeData": {
+    en: "Report will include all time data",
+    sw: "Ripoti itajumuisha data ya wakati wote",
+  },
+  "report.orphanSpecific": {
+    en: "Orphan-Specific Report",
+    sw: "Ripoti Mahususi ya Yatima",
+  },
+  "report.generatingDetailed": {
+    en: "Generating a detailed report for",
+    sw: "Kutengeneza ripoti ya kina kwa",
+  },
+  "report.personalInfo": {
+    en: "personal information",
+    sw: "taarifa binafsi",
+  },
+  "orphan.selected": {
+    en: "the selected orphan",
+    sw: "yatima aliyechaguliwa",
+  },
+  "report.selectBranch": {
+    en: "Select Branch",
+    sw: "Chagua Tawi",
+  },  // report.systemReport is defined elsewhere
+  "centre.yourCentre": {
+    en: "Your Centre",
+    sw: "Kituo Chako",
+  },
+  
+  // Orphan age groups and statuses for reports
   "report.ageGroup": {
     en: "Age Group",
     sw: "Kikundi cha Umri",
@@ -3961,30 +3553,7 @@ const translations: Record<string, Record<Language, string>> = {
     en: "All Age Groups",
     sw: "Vikundi Vyote vya Umri",
   },
-  "report.status": {
-    en: "Status",
-    sw: "Hali",
-  },
-  "report.allStatuses": {
-    en: "All Statuses",
-    sw: "Hali Zote",
-  },
-  "report.format": {
-    en: "Report Format",
-    sw: "Muundo wa Ripoti",
-  },
-  "report.includeData": {
-    en: "Reports will include data from the selected date range.",
-    sw: "Ripoti zitajumuisha data kutoka kipindi cha tarehe kilichochaguliwa.",
-  },
-  "report.selectFilters": {
-    en: "Make sure to select the appropriate filters for the most relevant results.",
-    sw: "Hakikisha umechagua vichujio sahihi kwa matokeo muhimu zaidi.",
-  },
-  "report.generateReport": {
-    en: "Generate Report",
-    sw: "Tengeneza Ripoti",
-  },  "report.infant": {
+  "report.infant": {
     en: "Infant (0-2 years)",
     sw: "Mtoto mchanga (miaka 0-2)",
   },
@@ -3999,421 +3568,25 @@ const translations: Record<string, Record<Language, string>> = {
   "report.teenager": {
     en: "Teenager (13-17 years)",
     sw: "Kijana (miaka 13-17)",
-  },  "report.active": {
+  },
+  "report.allStatuses": {
+    en: "All Statuses",
+    sw: "Hali Zote",
+  },
+  "report.active": {
     en: "Active",
     sw: "Hai",
   },
-  "volunteers.status.pending": {
-    en: "Pending",
-    sw: "Inasubiri",
-  },
-  "volunteers.status.approved": {
-    en: "Approved", 
-    sw: "Imeidhinishwa",
-  },
-  "volunteers.status.rejected": {
-    en: "Rejected",
-    sw: "Imekataliwa",
-  },  "volunteers.filter.branch": {
-    en: "Filter by branch",
-    sw: "Chuja kwa tawi",
-  },
-  
-  "volunteers.viewAcrossBranches": {
-    en: "View volunteers across all branches",
-    sw: "Angalia wajitolea katika matawi yote",
-  },
-  "volunteers.approvedSuccess": {
-    en: "Volunteer approved successfully",
-    sw: "Mjitolea ameidhinishwa kwa ufanisi",
-  },
-  "volunteers.approveFailed": {
-    en: "Failed to approve volunteer. Please try again.",
-    sw: "Imeshindwa kuidhinisha mjitolea. Tafadhali jaribu tena.",
-  },
-  "volunteers.rejectedSuccess": {
-    en: "Volunteer rejected successfully",
-    sw: "Mjitolea amekataliwa kwa ufanisi",
-  },
-  "volunteers.rejectFailed": {
-    en: "Failed to reject volunteer. Please try again.",
-    sw: "Imeshindwa kukataa mjitolea. Tafadhali jaribu tena.",
-  },
-  "volunteers.deleteSuccess": {
-    en: "Volunteer removed successfully",
-    sw: "Mjitolea ameondolewa kwa ufanisi",
-  },
-  "volunteers.deleteFailed": {
-    en: "Failed to remove volunteer. Please try again.",
-    sw: "Imeshindwa kuondoa mjitolea. Tafadhali jaribu tena.",
-  },
-  "volunteers.rejectTitle": {
-    en: "Reject Volunteer",
-    sw: "Kataa Mjitolea",
-  },
-  "volunteers.rejectDescription": {
-    en: "Please provide a reason for rejecting this volunteer. This information will be stored and displayed in the volunteer record.",
-    sw: "Tafadhali toa sababu ya kukataa mjitolea huyu. Maelezo haya yatahifadhiwa na kuonyeshwa katika rekodi ya mjitolea.",
-  },
-  "volunteers.rejectReasonLabel": {
-    en: "Reason for rejection",
-    sw: "Sababu ya kukataa",
-  },
-  "volunteers.rejectReasonPlaceholder": {
-    en: "Explain why you're rejecting this volunteer application...",
-    sw: "Eleza kwa nini unakataa maombi haya ya mjitolea...",
-  },
-  "volunteers.closeNotification": {
-    en: "Close notification",
-    sw: "Funga taarifa",
-  },
-  "volunteers.processingRequest": {
-    en: "Processing...",
-    sw: "Inasindika...",
-  },
-  "volunteers.rejectButton": {
-    en: "Reject",
-    sw: "Kataa",
-  },
-  "volunteers.cancelButton": {
-    en: "Cancel",
-    sw: "Ghairi",
-  },
-  "volunteers.noVolunteersFound": {
-    en: "No volunteers found matching your criteria.",
-    sw: "Hakuna wajitolea wanaolingana na vigezo vyako.",
-  },
-
-  // Campaign page translations
-  "campaign.loading": {
-    en: "Loading campaign details...",
-    sw: "Inapakia maelezo ya kampeni...",
-  },
-  "campaign.notFound": {
-    en: "Campaign not found",
-    sw: "Kampeni haijapatikana",
-  },
-  "campaign.goBack": {
-    en: "Go Back",
-    sw: "Rudi Nyuma",
-  },
-  "campaign.details.and.contributors": {
-    en: "Campaign details and contributors",
-    sw: "Maelezo ya kampeni na wachangiaji",
-  },
-  "campaign.backToFundraisers": {
-    en: "Back to Fundraisers",
-    sw: "Rudi kwa Kampeni za Ukusanyaji Fedha",
-  },
-  "campaign.details": {
-    en: "Details",
-    sw: "Maelezo",
-  },
-  "campaign.contributors": {
-    en: "Contributors",
-    sw: "Wachangiaji",
-  },
-  "campaign.image.placeholder": {
-    en: "No image available",
-    sw: "Hakuna picha inayopatikana",
-  },
-  "campaign.progress": {
-    en: "Campaign Progress",
-    sw: "Maendeleo ya Kampeni",
-  },
-  "campaign.raised": {
-    en: "raised",
-    sw: "imekusanywa",
-  },
-  "campaign.goal": {
-    en: "Goal",
-    sw: "Lengo",
-  },
-  "campaign.contributors.count": {
-    en: "contributors",
-    sw: "wachangiaji",
-  },
-  "campaign.remaining": {
-    en: "remaining",
-    sw: "imebaki",
-  },
-  "campaign.eventPeriod": {
-    en: "Event Period",
-    sw: "Kipindi cha Tukio",
-  },
-  "campaign.coordinator": {
-    en: "Coordinator",
-    sw: "Mratibu",
-  },
-  "campaign.contactEmail": {
-    en: "Contact Email",
-    sw: "Barua Pepe ya Mawasiliano",
-  },
-  "campaign.contactPhone": {
-    en: "Contact Phone",
-    sw: "Simu ya Mawasiliano",
-  },
-  "campaign.suggestedContribution": {
-    en: "Suggested Contribution",
-    sw: "Mchango Unaopendekezwa",
-  },
-  "campaign.purpose": {
-    en: "Purpose",
-    sw: "Madhumuni",
-  },
-  "campaign.fundraisingReason": {
-    en: "Fundraising Reason",
-    sw: "Sababu ya Kukusanya Fedha",
-  },
-  "campaign.budgetBreakdown": {
-    en: "Budget Breakdown",
-    sw: "Mgawanyo wa Bajeti",
-  },
-  "campaign.distribution": {
-    en: "Fund Distribution",
-    sw: "Mgawanyo wa Fedha",
-  },
-  "campaign.orphanageAmount": {
-    en: "Orphanage Amount",
-    sw: "Kiasi cha Nyumba ya Yatima",
-  },
-  "campaign.eventAmount": {
-    en: "Event Amount",
-    sw: "Kiasi cha Tukio",
-  },
-  "campaign.viewPublicPage": {
-    en: "View Public Campaign Page",
-    sw: "Angalia Ukurasa wa Kampeni wa Umma",
-  },
-  "campaign.campaignContributors": {
-    en: "Campaign Contributors",
-    sw: "Wachangiaji wa Kampeni",
-  },
-  "campaign.noContributions": {
-    en: "No contributions have been made to this campaign yet.",
-    sw: "Hakuna michango iliyofanywa kwa kampeni hii bado.",
-  },
-  "campaign.contributor.name": {
-    en: "Name",
-    sw: "Jina",
-  },
-  "campaign.contributor.email": {
-    en: "Email",
-    sw: "Barua Pepe",
-  },
-  "campaign.contributor.amount": {
-    en: "Amount",
-    sw: "Kiasi",
-  },
-  "campaign.contributor.date": {
-    en: "Date",
-    sw: "Tarehe",
-  },
-  "campaign.contributor.paymentMethod": {
-    en: "Payment Method",
-    sw: "Njia ya Malipo",
-  },
-  "campaign.contributor.status": {
-    en: "Status",
-    sw: "Hali",
-  },
-  "campaign.contributor.anonymous": {
-    en: "Anonymous",
-    sw: "Bila Jina",
-  },
-  "campaign.contributor.notAvailable": {
-    en: "N/A",
-    sw: "Haipo",
-  },
-  "campaign.contributor.status.completed": {
-    en: "Completed",
-    sw: "Imekamilika",
-  },
-  "campaign.contributor.status.pending": {
-    en: "Pending",
-    sw: "Inasubiri",
-  },
-  "campaign.contributor.status.unknown": {
-    en: "Unknown",
-    sw: "Haijulikani",
-  },
-
-
-  // Center Management translations
-  "centerManagement.title": {
-    en: "Center Management",
-    sw: "Usimamizi wa Kituo",
-  },
-  "centerManagement.description.exists": {
-    en: "Manage your orphanage center and branches",
-    sw: "Simamia kituo chako cha yatima na matawi",
-  },
-  "centerManagement.description.create": {
-    en: "Create your main orphanage center",
-    sw: "Unda kituo chako kikuu cha yatima",
-  },
-  "centerManagement.loading": {
-    en: "Loading center information...",
-    sw: "Inapakia taarifa za kituo...",
-  },
-  "centerManagement.tabs.overview": {
-    en: "Center Overview",
-    sw: "Muhtasari wa Kituo",
-  },
-  "centerManagement.tabs.branches": {
-    en: "Branches",
-    sw: "Matawi",
-  },
-  "centerManagement.tabs.staff": {
-    en: "Staff",
-    sw: "Wafanyakazi",
-  },
-  "centerManagement.deleteDialog.title": {
-    en: "Confirm Orphanage Center Deletion",
-    sw: "Thibitisha Ufutaji wa Kituo cha Yatima",
-  },
-  "centerManagement.deleteDialog.description": {
-    en: "Are you sure you want to delete the orphanage center",
-    sw: "Je, una uhakika unataka kufuta kituo cha yatima",
-  },
-  "centerManagement.deleteDialog.warning": {
-    en: "This action cannot be undone. All data associated with this center including all branches, orphans, staff records, inventory, donations, and other information will be permanently deleted.",
-    sw: "Kitendo hiki hakiwezi kubatilishwa na kitafuta kabisa akaunti yao na ufikiaji wa mfumo.",
-  },
-  "centerManagement.deleteDialog.criticalWarning": {
-    en: "This is a critical action that will remove ALL data from your system.",
-    sw: "Hii ni hatua muhimu ambayo itaondoa data YOTE kutoka mfumo wako.",
-  },
-  "centerManagement.deleteDialog.deleting": {
-    en: "Deleting...",
-    sw: "Inafuta...",
-  },
-  "centerManagement.deleteDialog.deleteButton": {
-    en: "Delete Orphanage Center",
-    sw: "Futa Kituo cha Yatima",
-  },
-  "centerManagement.deleteDialog.deleteError": {
-    en: "Cannot delete center: Missing center ID",
-    sw: "Haiwezi kufuta kituo: Kitambulisho cha kituo hakipatikani",
-  },
-  
-  // Center Overview translations
-  "centerOverview.create.title": {
-    en: "Create Orphanage Center",
-    sw: "Unda Kituo cha Yatima",
-  },
-  "centerOverview.create.description": {
-    en: "Enter the details for your main orphanage center",
-    sw: "Ingiza maelezo ya kituo chako kikuu cha yatima",
-  },
-  "centerOverview.edit.title": {
-    en: "Edit Orphanage Center",
-    sw: "Hariri Kituo cha Yatima",
-  },
-  "centerOverview.edit.description": {
-    en: "Update the details for your orphanage center",
-    sw: "Sasisha maelezo ya kituo chako cha yatima",
-  },
-  "centerOverview.form.centerName": {
-    en: "Center Name",
-    sw: "Jina la Kituo",
-  },
-  "centerOverview.form.location": {
-    en: "Location",
-    sw: "Eneo",
-  },
-  "centerOverview.form.address": {
-    en: "Address",
-    sw: "Anwani",
-  },
-  "centerOverview.form.phoneNumber": {
-    en: "Phone Number",
-    sw: "Nambari ya Simu",
-  },
-  "centerOverview.form.description": {
-    en: "Description",
-    sw: "Maelezo",
-  },
-  "centerOverview.form.creating": {
-    en: "Creating...",
-    sw: "Inaunda...",
-  },
-  "centerOverview.form.createButton": {
-    en: "Create Center",
-    sw: "Unda Kituo",
-  },
-  "centerOverview.form.updating": {
-    en: "Updating...",
-    sw: "Inasasisha...",
-  },
-  "centerOverview.form.updateButton": {
-    en: "Update Center",
-    sw: "Sasisha Kituo",
-  },
-  "centerOverview.actions.editDetails": {
-    en: "Edit Center Details",
-    sw: "Hariri Maelezo ya Kituo",
-  },
-  "centerOverview.actions.deleteCenter": {
-    en: "Delete Center",
-    sw: "Futa Kituo",
-  },
-  "centerOverview.success.created": {
-    en: "Center created successfully",
-    sw: "Kituo kimeundwa kwa ufanisi",
-  },
-  "centerOverview.success.updated": {
-    en: "Center information updated successfully",
-    sw: "Taarifa za kituo zimesasishwa kwa ufanisi",
-  },
-  "centerOverview.success.deleted": {
-    en: "Center has been deleted successfully",
-    sw: "Kituo kimefutwa kwa ufanisi",
-  },
-  "centerOverview.error.save": {
-    en: "Failed to save center information. Please try again.",
-    sw: "Imeshindwa kuhifadhi taarifa za kituo. Tafadhali jaribu tena.",
-  },
-  "centerOverview.error.delete": {
-    en: "Failed to delete center",
-    sw: "Imeshindwa kufuta kituo",
-  },
-
-  // Staff Settings translations
-  "staff.settings": {
-    en: "Staff Settings",
-    sw: "Mipangilio ya Wafanyakazi",
-  },
-  "staff.information": {
-    en: "Staff Information",
-    sw: "Taarifa za Mfanyakazi",
-  },
-  "staff.staffMember": {
-    en: "Staff Member",
-    sw: "Mfanyakazi",
-  },
-
-  "staff.cannotChangeSelfStatus": {
-    en: "You cannot change your own account status",
-    sw: "Huwezi kubadilisha hali ya akaunti yako mwenyewe",
-  },
-  "common.gender": {
-    en: "Gender",
-    sw: "Jinsia",
-  },
-  "common.phone": {
-    en: "Phone",
-    sw: "Simu",
-  },
-  "common.email": {
-    en: "Email",
-    sw: "Barua pepe",
-  },
-  "locale": {
-    en: "en",
-    sw: "sw",
+  "report.inactive": {
+    en: "Inactive",
+    sw: "Isiyo Hai",
+  },
+  "report.adopted": {
+    en: "Adopted",
+    sw: "Ametolewa",
   },
 }
+
 
 // Create the context with default values
 const LanguageContext = createContext<LanguageContextType>({
