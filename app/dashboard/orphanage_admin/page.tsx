@@ -160,7 +160,7 @@ export default function OrphanageAdminDashboard() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${stats.totalFundraising.toLocaleString()}</div>
+            <div className="text-2xl font-bold">Tshs {stats.totalFundraising.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground"><T k="orphanageAdmin.dashboard.fundsRaisedToDate" /></p>
           </CardContent>
         </Card>
