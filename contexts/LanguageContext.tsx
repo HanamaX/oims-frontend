@@ -3,12 +3,12 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 
 // Define available languages
-export type Language = "en" | "sw"
+export type AppLanguage = "en" | "sw"
 
 // Create context type
 type LanguageContextType = {
-  language: Language
-  setLanguage: (lang: Language) => void
+  language: AppLanguage
+  setLanguage: (lang: AppLanguage) => void
   t: (key: string) => string
 }
 
@@ -17,7 +17,7 @@ type LanguageContextType = {
 
 
 // Create translations object
-const translations: Record<string, Record<Language, string>> = {
+const translations: Record<string, Record<AppLanguage, string>> = {
     
   // Navigation translations
   "nav.profile": {
@@ -3964,13 +3964,239 @@ const translations: Record<string, Record<Language, string>> = {
   "report.inactive": {
     en: "Inactive",
     sw: "Isiyo Hai",
-  },
-  "report.adopted": {
+  },  "report.adopted": {
     en: "Adopted",
     sw: "Ametolewa",
   },
+  "report.reportGenerator": {
+    en: "Report Generator",
+    sw: "Jenereta ya Ripoti",
+  },  "report.systemAnalyticsTab": {
+    en: "System Analytics",
+    sw: "Uchambuzi wa Mfumo",
+  },
+  "report.createSystemReports": {
+    en: "Create System Reports",
+    sw: "Tengeneza Ripoti za Mfumo",
+  },
+  "report.allBranches": {
+    en: "All Branches",
+    sw: "Matawi Yote",
+  },
+  "report.exportFormat": {
+    en: "Export Format",
+    sw: "Muundo wa Uhamishaji",
+  },
+  "report.document": {
+    en: "Document",
+    sw: "Nyaraka",
+  },
+  "report.reportNote": {
+    en: "Report Note",
+    sw: "Maelezo ya Ripoti",
+  },
+  "report.reportDescription": {
+    en: "Report Description",
+    sw: "Maelezo ya Ripoti",
+  },
+  "report.totalOrphanageCenters": {
+    en: "Total Orphanage Centers",
+    sw: "Jumla ya Vituo vya Yatima",  },
+  "report.totalAdmins": {
+    en: "Total Admins",
+    sw: "Jumla ya Wasimamizi",
+  },
+
+  // Analytics translations
+  "analytics.detailedAnalytics": {
+    en: "Detailed Analytics",
+    sw: "Uchambuzi wa Kina",
+  },
+  "analytics.performanceMetrics": {
+    en: "Performance Metrics",
+    sw: "Vipimo vya Utendaji",
+  },
+  "analytics.importantMetrics": {
+    en: "Important Metrics",
+    sw: "Vipimo Muhimu",
+  },
+    // Analytics - Categories
+  "branch.orphanageCenters": {
+    en: "Orphanage Centers",
+    sw: "Vituo vya Yatima",
+  },
+  "analytics.branches": {
+    en: "Branches",
+    sw: "Matawi",
+  },
+  "analytics.orphans": {
+    en: "Orphans",
+    sw: "Yatima",
+  },
+  "admin.admins": {
+    en: "Admins",
+    sw: "Wasimamizi",
+  },
+  "fundraiser.donations": {
+    en: "Donations",
+    sw: "Michango",
+  },
+  "fundraiser.activeFundraisers": {
+    en: "Active Fundraisers",
+    sw: "Ukusanyaji Fedha Unaoendelea",
+  },
+  "inventory.inventoryItems": {
+    en: "Inventory Items",
+    sw: "Bidhaa za Ghala",
+  },
+  "volunteer.volunteers": {
+    en: "Volunteers",    sw: "Wataalam wa Kujitolea",
+  },
+  
+  // Analytics - Report sections
+  "report.visualRepresentation": {
+    en: "Visual Representation",
+    sw: "Uwakilishi wa Picha",
+  },
+  "report.orphanageData": {
+    en: "Orphanage Data",
+    sw: "Data ya Vituo vya Yatima",
+  },
+  "report.donations": {
+    en: "Donations",
+    sw: "Michango",  },
+  "report.demographics": {
+    en: "Demographics",
+    sw: "Takwimu za Idadi",
+  },
+  "report.inventoryTab": {
+    en: "Inventory",
+    sw: "Bidhaa",
+  },
+  
+  // Analytics - Metrics
+  "report.avgOrphansPerCenter": {
+    en: "Avg. Orphans per Center",
+    sw: "Wastani wa Yatima kwa Kituo",
+  },
+  "report.avgDonationsPerFundraiser": {
+    en: "Avg. Donations per Fundraiser",
+    sw: "Wastani wa Michango kwa Ukusanyaji",
+  },  "report.adminOrphanRatio": {
+    en: "Admin to Orphan Ratio",
+    sw: "Uwiano wa Msimamizi kwa Yatima",
+  },
+  "report.inventoryPerCenter": {
+    en: "Inventory Items per Center",
+    sw: "Bidhaa za Ghala kwa Kituo",
+  },
+  "report.importantMetrics": {
+    en: "Key performance indicators and system metrics",
+    sw: "Viashiria muhimu vya utendaji na vipimo vya mfumo",
+  },
+  // Superuser translations
+  "superuser.title": {
+    en: "Superuser",
+    sw: "Msimamizi Mkuu",
+  },
+  "superuser.dashboard.title": {
+    en: "Superuser Dashboard",
+    sw: "Dashibodi ya Msimamizi Mkuu",
+  },
+  "superuser.dashboard.description": {
+    en: "Manage orphanage centers, administrators, and system operations",
+    sw: "Simamia vituo vya yatima, wasimamizi, na utendaji wa mfumo",
+  },
+  "superuser.dashboard.overview": {
+    en: "Overview",
+    sw: "Muhtasari",
+  },
+  "superuser.dashboard.orphanageAdmins": {
+    en: "Orphanage Admins",
+    sw: "Wasimamizi wa Vituo",
+  },
+  "superuser.dashboard.registrationRequests": {
+    en: "Registration Requests",
+    sw: "Maombi ya Usajili",
+  },
+  "superuser.dashboard.systemReports": {
+    en: "System Reports",
+    sw: "Ripoti za Mfumo",
+  },
+  "superuser.dashboard.totalOrphanageCenters": {
+    en: "Total Orphanage Centers",
+    sw: "Jumla ya Vituo vya Yatima",
+  },
+  "superuser.dashboard.totalBranches": {
+    en: "Total Branches",
+    sw: "Jumla ya Matawi",
+  },
+  "superuser.dashboard.totalOrphans": {
+    en: "Total Orphans",
+    sw: "Jumla ya Yatima",
+  },
+  "superuser.dashboard.totalFundraising": {
+    en: "Total Fundraising",
+    sw: "Jumla ya Ukusanyaji Fedha",
+  },
+  "superuser.dashboard.totalVolunteers": {
+    en: "Total Volunteers",
+    sw: "Jumla ya Wataalam wa Kujitolea",
+  },
+  "superuser.dashboard.systemSummary": {
+    en: "System Summary",
+    sw: "Muhtasari wa Mfumo",
+  },
+  "superuser.dashboard.overviewDescription": {
+    en: "Overview of orphanage centers and system statistics",
+    sw: "Muhtasari wa vituo vya yatima na takwimu za mfumo",
+  },  "superuser.dashboard.systemStatsText": {
+    en: "The system currently manages",
+    sw: "Mfumo kwa sasa unasimamia",
+  },
+  "superuser.dashboard.centersText": {
+    en: "orphanage centers",
+    sw: "vituo vya yatima",
+  },
+  "superuser.dashboard.branchesText": {
+    en: "branches",
+    sw: "matawi",
+  },
+  "superuser.dashboard.orphansText": {
+    en: "orphans",
+    sw: "yatima",
+  },
+  "superuser.dashboard.fundraisingText": {
+    en: "TSh",
+    sw: "TSh",
+  },
+  "superuser.dashboard.andText": {
+    en: "and",
+    sw: "na",
+  },
+  "superuser.dashboard.volunteersText": {
+    en: "volunteers",
+    sw: "wataalam wa kujitolea",
+  },
+  "superuser.dashboard.adminsManagement": {
+    en: "Orphanage Administrators Management",
+    sw: "Usimamizi wa Wasimamizi wa Vituo vya Yatima",
+  },
+  "superuser.dashboard.addNewAdmin": {
+    en: "Add New Admin",
+    sw: "Ongeza Msimamizi Mpya",
+  },
+  "superuser.dashboard.addNewAdminTitle": {
+    en: "Add New Orphanage Admin",
+    sw: "Ongeza Msimamizi Mpya wa Kituo",
+  },
+  "common.logout": {
+    en: "Logout",
+    sw: "Toka",
+  },
 }
 
+// Use the context type we already defined at the top of the file
 
 // Create the context with default values
 const LanguageContext = createContext<LanguageContextType>({
@@ -3981,11 +4207,11 @@ const LanguageContext = createContext<LanguageContextType>({
 
 // Create the provider component
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>("en")
+  const [language, setLanguage] = useState<AppLanguage>("en")
 
   // Load language preference from localStorage on mount
   useEffect(() => {
-    const savedLanguage = localStorage.getItem("language") as Language
+    const savedLanguage = localStorage.getItem("language") as AppLanguage
     if (savedLanguage && (savedLanguage === "en" || savedLanguage === "sw")) {
       setLanguage(savedLanguage)
     }

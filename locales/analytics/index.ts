@@ -1,6 +1,6 @@
 "use client"
 
-import { Language } from '@/contexts/LanguageContext'
+import { type AppLanguage as Language } from '@/contexts/LanguageContext'
 
 // Define the translation record type
 type TranslationRecord = Record<string, Record<Language, string>>
@@ -726,6 +726,94 @@ const analyticsTranslations: TranslationRecord = {
   "analytics.statistics": {
     en: "Statistics",
     sw: "Takwimu"
+  },
+  
+  // Missing report campaign and inventory keys
+  "analytics.campaign": {
+    en: "Campaign",
+    sw: "Kampeni"
+  },
+  "analytics.allCampaigns": {
+    en: "All Campaigns",
+    sw: "Kampeni Zote"
+  },
+  "analytics.campaignStatus": {
+    en: "Campaign Status",
+    sw: "Hali ya Kampeni"
+  },
+  "analytics.stockStatus": {
+    en: "Stock Status",
+    sw: "Hali ya Stoki"
+  },
+  "analytics.allStockStatus": {
+    en: "All Stock Statuses",
+    sw: "Hali Zote za Stoki"
+  },
+  
+  // Additional report specific keys for system analytics
+  "report.campaign": {
+    en: "Campaign",
+    sw: "Kampeni"
+  },
+  "report.allCampaigns": {
+    en: "All Campaigns",
+    sw: "Kampeni Zote"
+  },
+  "report.campaignStatus": {
+    en: "Campaign Status",
+    sw: "Hali ya Kampeni"
+  },
+  "report.stockStatus": {
+    en: "Stock Status",
+    sw: "Hali ya Stoki"
+  },
+  "report.allStockStatuses": {
+    en: "All Stock Statuses",
+    sw: "Hali Zote za Stoki"
+  },
+  "report.allStatuses": {
+    en: "All Statuses",
+    sw: "Hali Zote"
+  },
+  
+  // Category translations used in campaign filters
+  "report.education": {
+    en: "Education",
+    sw: "Elimu"
+  },
+  "report.healthcare": {
+    en: "Healthcare",
+    sw: "Afya"
+  },
+  "report.facilities": {
+    en: "Facilities",
+    sw: "Vifaa"
+  },
+  "report.events": {
+    en: "Events",
+    sw: "Matukio"
+  },
+  "report.other": {
+    en: "Other",
+    sw: "Nyingine"
+  },
+  
+  // Status translations
+  "report.pending": {
+    en: "Pending",
+    sw: "Inasubiri"
+  },
+  "report.approved": {
+    en: "Approved",
+    sw: "Imeidhinishwa"
+  },
+  "report.completed": {
+    en: "Completed",
+    sw: "Imekamilika"
+  },
+  "report.rejected": {
+    en: "Rejected",
+    sw: "Imekataliwa"
   }
 }
 

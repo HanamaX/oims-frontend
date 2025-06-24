@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils"
 import SuperuserAuthService from "@/lib/superuser-auth-service"
 import { useToast } from "@/components/ui/use-toast"
 import { useAuth } from "./auth-provider"
+import { LanguageSwitcher } from "./language-switcher"
+import { useLanguage, T } from "@/contexts/LanguageContext"
 
 interface NavItem {
   name: string
@@ -17,11 +19,11 @@ interface NavItem {
 }
 
 // Create a component that contains useSearchParams
-function SuperuserNavContent() {
-  const router = useRouter()
+function SuperuserNavContent() {  const router = useRouter()
   const searchParams = useSearchParams()
   const { toast } = useToast()
   const { user } = useAuth()
+  const { t } = useLanguage()
   const [mounted, setMounted] = useState(false)
   const [activeTab, setActiveTab] = useState('dashboard')
   // Check if user is authenticated as superuser
@@ -38,28 +40,27 @@ function SuperuserNavContent() {
       }
     }
   }, [user, router, toast, mounted])
-
   const navItems: NavItem[] = [
     {
-      name: "Dashboard",
+      name: t("superuser.dashboard.overview"),
       tab: "dashboard",
       icon: <LayoutDashboard className="mr-2 h-5 w-5" />,
       url: "/superuser/dashboard"
     },
     {
-      name: "Orphanage Admins",
+      name: t("superuser.dashboard.orphanageAdmins"),
       tab: "admins",
       icon: <Users className="mr-2 h-5 w-5" />,
       url: "/superuser/dashboard?tab=admins"
     },
     {
-      name: "Registration Requests",
+      name: t("superuser.dashboard.registrationRequests"),
       tab: "registration-requests",
       icon: <FileBarChart className="mr-2 h-5 w-5" />,
       url: "/superuser/dashboard/registration-requests"
     },
     {
-      name: "Reports",
+      name: t("superuser.dashboard.systemReports"),
       tab: "reports",
       icon: <FileBarChart className="mr-2 h-5 w-5" />,
       url: "/superuser/dashboard?tab=reports"
@@ -88,9 +89,8 @@ function SuperuserNavContent() {
 
   return (
     <nav className="h-screen flex flex-col bg-blue-50 border-r border-blue-200 p-4">
-      <div className="space-y-2">
-        <h1 className="text-xl font-bold text-blue-900 px-10 mb-2 flex items-center font-semibold">
-          Superuser
+      <div className="space-y-2">        <h1 className="text-xl font-bold text-blue-900 px-10 mb-2 flex items-center font-semibold">
+          <T k="superuser.title" />
         </h1>
         {navItems.map((item) => (
           <Button
@@ -108,15 +108,19 @@ function SuperuserNavContent() {
             {item.name}
           </Button>
         ))}
-      </div>
-      <div className="mt-auto">
+      </div>      <div className="mt-auto">
+        <div className="mb-4 flex justify-center">
+          <div className="w-full">
+            <LanguageSwitcher />
+          </div>
+        </div>
         <Button
           variant="ghost"
           className="w-full flex items-center px-2 py-2 text-sm font-medium rounded-md text-blue-900 hover:bg-blue-200"
           onClick={handleLogout}
         >
           <LogOut className="mr-2 h-5 w-5" />
-          Logout
+          <T k="common.logout" />
         </Button>
       </div>
     </nav>
@@ -129,7 +133,7 @@ function SuperuserNavLoading() {
     <nav className="h-screen flex flex-col bg-blue-50 border-r border-blue-200 p-4">
       <div className="space-y-2">
         <h2 className="text-xl font-bold text-blue-900 px-2 mb-4">
-          Super Admin
+          <T k="superuser.title" />
         </h2>
         <div className="flex justify-center py-4">
           <Loader2 className="h-6 w-6 animate-spin text-blue-600" />

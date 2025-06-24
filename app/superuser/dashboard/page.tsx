@@ -473,9 +473,8 @@ function SuperuserDashboardContent() {
               <CardDescription>
                 <T k="superuser.dashboard.overviewDescription" />
               </CardDescription>
-            </CardHeader>            <CardContent>
-              <p>
-                {t('superuser.dashboard.systemStats')} {stats.totalOrphanageCenters} {t('superuser.dashboard.centers')}, {stats.totalBranches} {t('superuser.dashboard.branches')}, {stats.totalOrphans} {t('superuser.dashboard.orphans')}, {t('superuser.dashboard.fundraising')} {stats.totalFundraising.toLocaleString()} {t('superuser.dashboard.and')} {stats.totalVolunteers} {t('superuser.dashboard.volunteers')}.
+            </CardHeader>            <CardContent>              <p>
+                {t('superuser.dashboard.systemStatsText')} {stats.totalOrphanageCenters} {t('superuser.dashboard.centersText')}, {stats.totalBranches} {t('superuser.dashboard.branchesText')}, {stats.totalOrphans} {t('superuser.dashboard.orphansText')}, {t('superuser.dashboard.fundraisingText')} {stats.totalFundraising.toLocaleString()} {t('superuser.dashboard.andText')} {stats.totalVolunteers} {t('superuser.dashboard.volunteersText')}.
               </p>
             </CardContent>
           </Card>
@@ -633,7 +632,7 @@ function SuperuserDashboardContent() {
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
               >
                 <BarChart3 className="mr-2 h-4 w-4" />
-                <T k="report.systemAnalytics" />
+                <T k="report.systemAnalyticsTab" />
               </TabsTrigger>
             </TabsList>
             

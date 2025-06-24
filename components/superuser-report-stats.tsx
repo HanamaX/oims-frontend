@@ -242,7 +242,7 @@ export default function SuperuserReportStats({ stats }: Readonly<SuperuserReport
         </CardContent>
       </Card>      {/* Charts Section */}
       <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
-        <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">          <CardTitle className="text-blue-800"><T k="report.detailedAnalytics" /></CardTitle>
+        <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">          <CardTitle className="text-blue-800"><T k="analytics.detailedAnalytics" /></CardTitle>
           <CardDescription className="text-blue-600 flex items-center mt-3">
             <T k="report.visualRepresentation" />
           </CardDescription>
@@ -260,11 +260,10 @@ export default function SuperuserReportStats({ stats }: Readonly<SuperuserReport
               <TabsTrigger 
                 value="demographics"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
-              ><T k="report.demographics" /></TabsTrigger>
-              <TabsTrigger 
+              ><T k="report.demographics" /></TabsTrigger>              <TabsTrigger 
                 value="inventory"
                 className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
-              ><T k="report.inventory" /></TabsTrigger>
+              ><T k="report.inventoryTab" /></TabsTrigger>
             </TabsList>
             
             <TabsContent value="orphanage" className="h-96">
@@ -294,9 +293,8 @@ export default function SuperuserReportStats({ stats }: Readonly<SuperuserReport
         </CardContent>
       </Card>      {/* Key Metrics */}
       <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
-        <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">          <CardTitle className="text-blue-800"><T k="report.performanceMetrics" /></CardTitle>
-          <CardDescription className="text-blue-600">
-            <T k="report.importantMetrics" />
+        <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">          <CardTitle className="text-blue-800"><T k="analytics.performanceMetrics" /></CardTitle>          <CardDescription className="text-blue-600">
+            <T k="analytics.importantMetrics" />
           </CardDescription>
         </CardHeader>
         <CardContent>
