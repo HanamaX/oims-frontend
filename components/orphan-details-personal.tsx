@@ -24,6 +24,7 @@ import {
 import OrphanFormEdit from "./orphan-form-edit"
 import Image from "next/image"
 import { useLanguage } from "@/contexts/LanguageContext"
+import { usePathname } from "next/navigation"
 
 interface OrphanDetailsPersonalProps {
   readonly orphan: OrphanDetails | null
@@ -33,6 +34,8 @@ interface OrphanDetailsPersonalProps {
 export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Readonly<OrphanDetailsPersonalProps>) {
   const { toast } = useToast()
   const { t, language } = useLanguage()
+  const pathname = usePathname();
+  const isSupervisorDashboard = pathname?.includes("/dashboard/supervisor/");
   const [isGuardianFormOpen, setIsGuardianFormOpen] = useState(false)
   const [isDeleteGuardianDialogOpen, setIsDeleteGuardianDialogOpen] = useState(false)
   const [isDeleteOrphanDialogOpen, setIsDeleteOrphanDialogOpen] = useState(false)

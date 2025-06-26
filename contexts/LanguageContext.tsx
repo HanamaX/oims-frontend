@@ -3274,7 +3274,7 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     sw: "Hai",
   },
   "volunteers.status.inactive": {
-    en: "Inactive", 
+    en: "Inactive",
     sw: "Haifanyi kazi",
   },
   "volunteers.filterByStatus": {
@@ -3374,63 +3374,165 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Select gender",
     sw: "Chagua jinsia",
   },
-
-  // Orphanage Registration page translations
-  "orphanage.registration.title": {
-    en: "Orphanage Registration",
-    sw: "Usajili wa Kituo cha Watoto Yatima",
+  "orphan.form.male": {
+    en: "Male",
+    sw: "Kiume",
   },
-  "orphanage.registration.howTo": {
-    en: "How to Register Your Orphanage",
-    sw: "Jinsi ya Kusajili Kituo Chako cha Watoto Yatima",
+  "orphan.form.female": {
+    en: "Female",
+    sw: "Kike",
   },
-  "orphanage.registration.step1.title": {
-    en: "1. Prepare Your Details",
-    sw: "1. Andaa Maelezo Yako",
+  "orphan.form.other": {
+    en: "Other",
+    sw: "Nyingine",
   },
-  "orphanage.registration.step1.desc": {
-    en: "Gather your personal and center details, including a valid government certificate in PDF format.",
-    sw: "Kusanya maelezo yako binafsi na ya kituo, pamoja na cheti halali cha serikali katika muundo wa PDF.",
+  "orphan.form.origin": {
+    en: "Origin",
+    sw: "Asili",
   },
-  "orphanage.registration.step2.title": {
-    en: "2. Fill the Form",
-    sw: "2. Jaza Fomu",
+  "orphan.form.originPlaceholder": {
+    en: "Enter place of origin",
+    sw: "Ingiza mahali pa asili",
   },
-  "orphanage.registration.step2.desc": {
-    en: "Enter accurate information in all required fields. Ensure your email and phone number follow the specified format.",
-    sw: "Ingiza maelezo sahihi katika sehemu zote zinazohitajika. Hakikisha barua pepe na namba yako ya simu zinafuata muundo uliobainishwa.",
+  "orphan.form.religion": {
+    en: "Religion",
+    sw: "Dini",
   },
-  "orphanage.registration.step3.title": {
-    en: "3. Upload Certificate",
-    sw: "3. Pakia Cheti",
+  "orphan.form.religionPlaceholder": {
+    en: "Enter religion",
+    sw: "Ingiza dini",
   },
-  "orphanage.registration.step3.desc": {
-    en: "Upload a government-issued certificate (PDF only) to verify your orphanage's legitimacy.",
-    sw: "Pakia cheti kilichotolewa na serikali (PDF pekee) ili kuthibitisha uhalali wa kituo chako cha watoto yatima.",
+  "orphan.form.bloodGroup": {
+    en: "Blood Group",
+    sw: "Kundi la Damu",
   },
-  "orphanage.registration.step4.title": {
-    en: "4. Submit & Await Review",
-    sw: "4. Wasilisha na Subiri Ukaguzi",
+  "orphan.form.bloodGroupPlaceholder": {
+    en: "Enter blood group",
+    sw: "Ingiza kundi la damu",
   },
-  "orphanage.registration.step4.desc": {
-    en: "Your request will be reviewed by our team. You will be notified via email once approved or if more information is needed.",
-    sw: "Ombi lako litakaguliwa na timu yetu. Utaarifiwa kupitia barua pepe mara tu linapoidhinishwa au ikiwa taarifa zaidi zinahitajika.",
+  "orphan.form.hobbies": {
+    en: "Hobbies",
+    sw: "Hobi",
   },
-  "orphanage.registration.whyRegister": {
-    en: "Why Register for OIMS",
-    sw: "Kwa Nini Usajili kwa OIMS",
+  "orphan.form.hobbiesPlaceholder": {
+    en: "Enter hobbies",
+    sw: "Ingiza hobi",
   },
-  "orphanage.registration.benefit1.title": {
-    en: "Access a Secure Platform",
-    sw: "Fikia Jukwaa Salama",
+  "orphan.form.allergies": {
+    en: "Allergies",
+    sw: "Mzio",
   },
-  "orphanage.registration.benefit1.desc": {
-    en: "Access a secure and organized platform for managing your orphanage's data.",
-    sw: "Fikia jukwaa salama na lililopangwa vizuri kwa usimamizi wa data ya kituo chako cha watoto yatima.",
+  "orphan.form.allergiesPlaceholder": {
+    en: "Enter allergies (comma separated)",
+    sw: "Ingiza mzio (tenganisha kwa koma)",
   },
-  "orphanage.registration.benefit2.title": {
-    en: "Connect Efficiently",
-    sw: "Unganisha kwa Ufanisi",
+  "orphan.form.education": {
+    en: "Education",
+    sw: "Elimu",
+  },
+  "orphan.form.educationLevel": {
+    en: "Education Level",
+    sw: "Kiwango cha Elimu",
+  },
+  "orphan.form.selectEducationLevel": {
+    en: "Select Education Level",
+    sw: "Chagua Kiwango cha Elimu",
+  },
+  "orphan.form.kindergarten": {
+    en: "Kindergarten",
+    sw: "Chekechea",
+  },
+  "orphan.form.primary": {
+    en: "Primary",
+    sw: "Shule ya Msingi",
+  },
+  "orphan.form.secondary": {
+    en: "Secondary",
+    sw: "Sekondari",
+  },
+  "orphan.form.highSchool": {
+    en: "High School",
+    sw: "Shule ya Sekondari ya Juu",
+  },
+  "orphan.form.college": {
+    en: "College",
+    sw: "Chuo",
+  },
+  "orphan.form.university": {
+    en: "University",
+    sw: "Chuo Kikuu",
+  },
+  "orphan.form.none": {
+    en: "None",
+    sw: "Hakuna",
+  },
+  "orphan.form.previousSchool": {
+    en: "Previous School",
+    sw: "Shule ya Awali",
+  },
+  "orphan.form.previousSchoolPlaceholder": {
+    en: "Enter previous school name",
+    sw: "Ingiza jina la shule ya awali",
+  },
+  "orphan.form.additionalInformation": {
+    en: "Additional Information",
+    sw: "Taarifa za Ziada",
+  },
+  "orphan.form.specialNeeds": {
+    en: "Special Needs",
+    sw: "Mahitaji Maalum",
+  },
+  "orphan.form.specialNeedsPlaceholder": {
+    en: "Describe any special needs",
+    sw: "Eleza mahitaji maalum yoyote",
+  },
+  "orphan.form.medicalHistory": {
+    en: "Medical History",
+    sw: "Historia ya Matibabu",
+  },
+  "orphan.form.medicalHistoryPlaceholder": {
+    en: "Enter medical history details",
+    sw: "Ingiza maelezo ya historia ya matibabu",
+  },
+  "orphan.form.adoptionReason": {
+    en: "Adoption Reason",
+    sw: "Sababu ya Kuasili",
+  },
+  "orphan.form.adoptionReasonPlaceholder": {
+    en: "Enter reason for adoption",
+    sw: "Ingiza sababu ya kuasili",
+  },
+  "orphan.form.cancel": {
+    en: "Cancel",
+    sw: "Ghairi",
+  },
+  "orphan.form.saveOrphan": {
+    en: "Save Orphan",
+    sw: "Hifadhi Yatima",
+  },
+  "orphan.form.birthDate": {
+    en: "Birth Date",
+    sw: "Tarehe ya Kuzaliwa",
+  },
+  "orphan.form.additionalInfoTitle": {
+    en: "Additional Information",
+    sw: "Taarifa za Ziada",
+  },
+  "orphan.form.basicInfoTitle": {
+    en: "Basic Information",
+    sw: "Taarifa za Msingi",
+  },
+  "orphan.form.medicalInfoTitle": {
+    en: "Medical Information",
+    sw: "Taarifa za Matibabu",
+  },
+  "orphan.form.editTitle": {
+    en: "Edit Orphan",
+    sw: "Hariri Taarifa za Yatima",
+  },
+  "orphan.form.editDescription": {
+    en: "Update the orphan's details below. Required fields are marked with an asterisk (*).",
+    sw: "Sasisha taarifa za yatima hapa chini. Sehemu muhimu zimeonyeshwa kwa alama ya nyota (*).",
   },
   "orphanage.registration.benefit2.desc": {
     en: "Connect with donors, volunteers, and support networks more efficiently.",

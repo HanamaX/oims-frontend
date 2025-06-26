@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea'
 import { OrphanUpdateRequest } from '@/lib/orphan-service'
 import { OrphanDetails, Orphan } from '@/lib/orphan-types'
+import { usePathname } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Extending types to handle the fields we need for editing
 type EditableOrphan = {
@@ -41,6 +43,10 @@ interface OrphanFormEditProps {
 }
 
 export default function OrphanFormEdit({ open, onOpenChange, onSubmit, orphan }: Readonly<OrphanFormEditProps>) {
+  const pathname = usePathname();
+  const { t } = useLanguage();
+  const isSupervisorDashboard = pathname?.includes("/dashboard/supervisor/");
+  
   const [fullName, setFullName] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
   const [gender, setGender] = useState('')
@@ -151,37 +157,52 @@ export default function OrphanFormEdit({ open, onOpenChange, onSubmit, orphan }:
     onSubmit(orphanData)
   }
 
+  // Helper to get correct label key
+  const getLabel = (formKey: string, fallback: string) =>
+    isSupervisorDashboard ? t(formKey) : fallback;
+  const getPlaceholder = (formKey: string, fallback: string) =>
+    isSupervisorDashboard ? t(formKey) : fallback;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='sm:max-w-[700px] max-h-[80vh] overflow-y-auto bg-white'>
-        <DialogHeader>
-          <DialogTitle>Edit Orphan</DialogTitle>
-          <DialogDescription>
-            Update the orphan's details below. Required fields are marked with an asterisk (*).
+      <DialogContent className='w-full max-w-[95vw] lg:max-w-[85vw] h-[90vh] overflow-hidden bg-white border border-blue-200 shadow-lg relative mx-auto'>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white opacity-50 z-0"></div>
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-blue-700"></div>
+        
+        <DialogHeader className="relative z-10">
+          <DialogTitle className="text-blue-700 text-xl font-semibold flex items-center">
+            {getLabel("orphan.form.editTitle", "Edit Orphan")}
+          </DialogTitle>
+          <DialogDescription className="text-gray-600">
+            {getLabel("orphan.form.editDescription", "Update the orphan's details below. Required fields are marked with an asterisk (*).")}
           </DialogDescription>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className='space-y-4 py-2'>
+        <div className="overflow-y-auto pr-2 h-[calc(100%-130px)] relative z-10">
+          <form onSubmit={handleSubmit} className='space-y-5 py-3'>
           {/* Basic Information Section */}
-          <div className="border rounded-md p-3 bg-slate-50">
-            <h3 className="font-medium mb-2">Basic Information</h3>
+          <div className="border rounded-md p-4 bg-gradient-to-r from-blue-50 to-slate-50 shadow-sm border-blue-200">
+            <h3 className="text-blue-700 font-medium mb-3 flex items-center">
+              <span className="w-1.5 h-6 bg-blue-500 rounded-full inline-block mr-2"></span>
+              {getLabel("orphan.form.basicInfoTitle", "Basic Information")}
+            </h3>
             <div className='grid md:grid-cols-2 gap-4'>
               <div className='grid grid-cols-4 items-center gap-2'>
-                <Label htmlFor='fullName' className='text-right col-span-1'>
-                  Full Name *
+                <Label htmlFor='fullName' className='text-right col-span-1 text-blue-800'>
+                  {getLabel("orphan.form.fullName", "Full Name *")}
                 </Label>
                 <Input
                   id='fullName'
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className='col-span-3'
+                  className='col-span-3 focus:ring-blue-500 focus:border-blue-500'
                   required
                 />
               </div>
               
               <div className='grid grid-cols-4 items-center gap-2'>
                 <Label htmlFor='dateOfBirth' className='text-right col-span-1'>
-                  Birth Date *
+                  {getLabel("orphan.form.birthDate", "Birth Date *")}
                 </Label>
                 <Input
                   id='dateOfBirth'
@@ -195,11 +216,11 @@ export default function OrphanFormEdit({ open, onOpenChange, onSubmit, orphan }:
               
               <div className='grid grid-cols-4 items-center gap-2'>
                 <Label htmlFor='gender' className='text-right col-span-1'>
-                  Gender *
+                  {getLabel("orphan.form.gender", "Gender *")}
                 </Label>
                 <Select value={gender} onValueChange={setGender} required>
                   <SelectTrigger className='col-span-3'>
-                    <SelectValue placeholder='Select gender' />
+                    <SelectValue placeholder={getPlaceholder("orphan.form.selectGender", "Select gender")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value='MALE'>Male</SelectItem>
@@ -211,7 +232,7 @@ export default function OrphanFormEdit({ open, onOpenChange, onSubmit, orphan }:
               
               <div className='grid grid-cols-4 items-center gap-2'>
                 <Label htmlFor='origin' className='text-right col-span-1'>
-                  Origin
+                  {getLabel("orphan.form.origin", "Origin")}
                 </Label>
                 <Input
                   id='origin'
@@ -224,12 +245,15 @@ export default function OrphanFormEdit({ open, onOpenChange, onSubmit, orphan }:
           </div>
           
           {/* Medical Information Section */}
-          <div className="border rounded-md p-3 bg-slate-50">
-            <h3 className="font-medium mb-2">Medical Information</h3>
+          <div className="border rounded-md p-4 bg-gradient-to-r from-blue-50 to-slate-50 shadow-sm border-blue-200">
+            <h3 className="text-blue-700 font-medium mb-3 flex items-center">
+              <span className="w-1.5 h-6 bg-blue-500 rounded-full inline-block mr-2"></span>
+              {getLabel("orphan.form.medicalInfoTitle", "Medical Information")}
+            </h3>
             <div className='grid md:grid-cols-2 gap-4'>
               <div className='grid grid-cols-4 items-center gap-2'>
                 <Label htmlFor='bloodGroup' className='text-right col-span-1'>
-                  Blood Group
+                  {getLabel("orphan.form.bloodGroup", "Blood Group")}
                 </Label>
                 <Input
                   id='bloodGroup'
@@ -241,39 +265,42 @@ export default function OrphanFormEdit({ open, onOpenChange, onSubmit, orphan }:
               
               <div className='grid grid-cols-4 items-center gap-2'>
                 <Label htmlFor='allergies' className='text-right col-span-1'>
-                  Allergies
+                  {getLabel("orphan.form.allergies", "Allergies")}
                 </Label>
                 <Input
                   id='allergies'
                   value={allergies}
                   onChange={(e) => setAllergies(e.target.value)}
-                  placeholder='Separate with commas'
+                  placeholder={getPlaceholder("orphan.form.allergiesPlaceholder", "Separate with commas")}
                   className='col-span-3'
                 />
               </div>
               
               <div className='grid grid-cols-4 items-center gap-2 md:col-span-2'>
                 <Label htmlFor='specialNeeds' className='text-right col-span-1'>
-                  Special Needs
+                  {getLabel("orphan.form.specialNeeds", "Special Needs")}
                 </Label>
                 <Textarea
                   id='specialNeeds'
                   value={specialNeeds}
                   onChange={(e) => setSpecialNeeds(e.target.value)}
                   className='col-span-3 h-20'
-                  placeholder='Describe any special needs'
+                  placeholder={getPlaceholder("orphan.form.specialNeedsPlaceholder", "Describe any special needs")}
                 />
               </div>
             </div>
           </div>
           
           {/* Additional Information Section */}
-          <div className="border rounded-md p-3 bg-slate-50">
-            <h3 className="font-medium mb-2">Additional Information</h3>
+          <div className="border rounded-md p-4 bg-gradient-to-r from-blue-50 to-slate-50 shadow-sm border-blue-200">
+            <h3 className="text-blue-700 font-medium mb-3 flex items-center">
+              <span className="w-1.5 h-6 bg-blue-500 rounded-full inline-block mr-2"></span>
+              {getLabel("orphan.form.additionalInfoTitle", "Additional Information")}
+            </h3>
             <div className='grid md:grid-cols-2 gap-4'>
               <div className='grid grid-cols-4 items-center gap-2'>
                 <Label htmlFor='religion' className='text-right col-span-1'>
-                  Religion
+                  {getLabel("orphan.form.religion", "Religion")}
                 </Label>
                 <Input
                   id='religion'
@@ -285,11 +312,11 @@ export default function OrphanFormEdit({ open, onOpenChange, onSubmit, orphan }:
               
               <div className='grid grid-cols-4 items-center gap-2'>
                 <Label htmlFor='educationLevel' className='text-right col-span-1'>
-                  Education
+                  {getLabel("orphan.form.educationLevel", "Education")}
                 </Label>
                 <Select value={educationLevel} onValueChange={setEducationLevel}>
-                  <SelectTrigger className='col-span-3'>
-                    <SelectValue placeholder='Select level' />
+                  <SelectTrigger className='col-span-3 border-gray-300 focus:ring-blue-500 focus:border-blue-500'>
+                    <SelectValue placeholder={getPlaceholder("orphan.form.selectEducationLevel", "Select level")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value='Kindergarten'>Kindergarten</SelectItem>
@@ -305,26 +332,26 @@ export default function OrphanFormEdit({ open, onOpenChange, onSubmit, orphan }:
               
               <div className='grid grid-cols-4 items-center gap-2'>
                 <Label htmlFor='hobbies' className='text-right col-span-1'>
-                  Hobbies
+                  {getLabel("orphan.form.hobbies", "Hobbies")}
                 </Label>
                 <Textarea
                   id='hobbies'
                   value={hobbies}
                   onChange={(e) => setHobbies(e.target.value)}
                   className='col-span-3 h-20'
-                  placeholder='List hobbies and interests'
+                  placeholder={getPlaceholder("orphan.form.hobbiesPlaceholder", "List hobbies and interests")}
                 />
               </div>
               
               <div className='grid grid-cols-4 items-center gap-2'>
-                <Label htmlFor='background' className='text-right col-span-1'>
-                  Background *
+                <Label htmlFor='background' className='text-right col-span-1 text-blue-800'>
+                  {getLabel("orphan.form.adoptionReason", "Background *")}<span className="text-red-500 ml-0.5">*</span>
                 </Label>
                 <Textarea
                   id='background'
                   value={background}
                   onChange={(e) => setBackground(e.target.value)}
-                  placeholder='Background information'
+                  placeholder={getPlaceholder("orphan.form.adoptionReasonPlaceholder", "Background information")}
                   className='col-span-3 h-20'
                   required
                 />
@@ -332,13 +359,17 @@ export default function OrphanFormEdit({ open, onOpenChange, onSubmit, orphan }:
             </div>
           </div>
           
-          <DialogFooter>
-            <Button type='button' variant='outline' onClick={() => onOpenChange(false)}>
-              Cancel
+          <DialogFooter className="pt-3 pb-2 border-t border-blue-100 mt-2 bg-blue-50 bg-opacity-50">
+            <Button type='button' variant='outline' onClick={() => onOpenChange(false)} 
+              className="border-blue-300 text-blue-700 hover:bg-blue-100">
+              {getLabel("orphan.form.cancel", "Cancel")}
             </Button>
-            <Button type='submit'>Update Orphan</Button>
+            <Button type='submit' className="bg-blue-600 hover:bg-blue-700 text-white">
+              {getLabel("orphan.form.saveOrphan", "Update Orphan")}
+            </Button>
           </DialogFooter>
         </form>
+        </div>
       </DialogContent>
     </Dialog>
   )
