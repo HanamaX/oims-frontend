@@ -7,6 +7,60 @@
    If you are using Tailwind, make sure your build tool (like PostCSS) is configured to process Tailwind directives. 
    See https://tailwindcss.com/docs/installation for setup instructions. */
 
+/* Modal handling */
+.dialog-open {
+  overflow: hidden;
+}
+
+/* Fix for dialog overlapping with sidebar */
+[data-state="open"][role="dialog"] {
+  position: fixed;
+  z-index: 1001;
+}
+
+[data-state="open"][role="dialog"] + [data-radix-popper-content-wrapper] {
+  z-index: 1002 !important;
+}
+
+/* Orphan form layout */
+.orphan-form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .orphan-form-row {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.orphan-form-label {
+  width: 100%;
+  color: #1e40af;
+  margin-bottom: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .orphan-form-label {
+    width: 140px;
+    text-align: right;
+    margin-right: 1rem;
+    margin-bottom: 0;
+  }
+}
+
+.orphan-form-input {
+  width: 100%;
+}
+
+.orphan-form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
 :root {
   --background: #ffffff;
   --foreground: #000000;

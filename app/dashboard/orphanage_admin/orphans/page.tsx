@@ -19,6 +19,9 @@ import {
   PaginationNext, 
   PaginationPrevious 
 } from "@/components/ui/pagination"
+import OrphanForm from "@/components/orphan-form"
+import { OrphanCreateRequest } from "@/lib/orphan-service"
+import { toast } from "@/components/ui/use-toast"
 
 // Utility function to calculate age from date of birth
 const calculateAge = (dateOfBirth: string): number => {
@@ -34,7 +37,8 @@ const calculateAge = (dateOfBirth: string): number => {
   return age;
 };
 
-export default function OrphanageAdminOrphansPage() {  const router = useRouter()
+export default function OrphanageAdminOrphansPage() {  
+  const router = useRouter()
   const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState("")
   const [branchFilter, setBranchFilter] = useState<string>("all")
@@ -46,6 +50,7 @@ export default function OrphanageAdminOrphansPage() {  const router = useRouter(
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [branches, setBranches] = useState<{name: string, publicId: string}[]>([])
+  const [showAddOrphanForm, setShowAddOrphanForm] = useState(false)
 
   // Function to fetch orphans data from API
   const fetchOrphans = async () => {
@@ -150,12 +155,59 @@ export default function OrphanageAdminOrphansPage() {  const router = useRouter(
     }
   }, [filteredOrphans.length, orphansPerPage, currentPage]);
 
+  // Function to handle creating a new orphan
+  const handleCreateOrphan = async (orphanData: OrphanCreateRequest) => {
+    try {
+      const response = await API.post("/app/oims/orphans", orphanData);
+      
+      if (response.data?.data) {
+        const newOrphan = response.data.data;
+        
+        // Add the new orphan to the list and refresh
+        await fetchOrphans();
+        
+        // Close the form
+        setShowAddOrphanForm(false);
+        
+        // Show success message
+        toast({
+          title: t("orphans.createdTitle"),
+          description: t("orphans.createdDescription"),
+          variant: "default",
+          className: "bg-green-100 border-green-500 text-green-800"
+        });
+      }
+    } catch (err: any) {
+      console.error("Failed to create orphan:", err);
+      
+      toast({
+        title: t("orphans.errorTitle"),
+        description: err.message || t("orphans.errorDescription"),
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">      <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight"><T k="orphans.management" /></h1>
           <p className="text-muted-foreground mt-2"><T k="orphans.description" /></p>
         </div>
+        <Button 
+          onClick={() => setShowAddOrphanForm(true)} 
+          className="bg-blue-600 hover:bg-blue-700 text-white"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          <T k="orphans.addOrphan" />
+        </Button>
+        
+        {/* Add Orphan Form Dialog */}
+        <OrphanForm 
+          open={showAddOrphanForm} 
+          onOpenChange={setShowAddOrphanForm}
+          onSubmit={handleCreateOrphan}
+        />
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">        <div className="flex items-center space-x-2 flex-1">
