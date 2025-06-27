@@ -250,11 +250,12 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card className="w-full max-w-4xl mx-auto animate-fadeIn rounded-xl overflow-hidden shadow-lg">
       <form onSubmit={handleSubmit}>
-        <CardHeader className=" border-b bg-blue-200 border-blue-100">
-          <CardTitle>Start a Fundraising Campaign</CardTitle>
-          <CardDescription>
+        <CardHeader className="border-b bg-blue-200 border-blue-100 relative">
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-blue-700 rounded-t-xl"></div>
+          <CardTitle className="text-blue-800 text-xl font-semibold pt-2">Start a Fundraising Campaign</CardTitle>
+          <CardDescription className="text-blue-700">
             Fill in the details below to create a new fundraising campaign for the orphanage
           </CardDescription>
         </CardHeader>
@@ -269,6 +270,7 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
                 value={formData.eventName}
                 onChange={handleInputChange}
                 required
+                className="rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
               />
             </div>
             <div className="space-y-2">
@@ -280,6 +282,7 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
                 value={formData.coordinatorName}
                 onChange={handleInputChange}
                 required
+                className="rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
               />
             </div>
           </div>
@@ -294,7 +297,7 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
                 placeholder="e.g., coordinator@example.com"
                 value={formData.coordinatorEmail}
                 onChange={handleInputChange}
-                className={errors.coordinatorEmail ? "border-red-500" : ""}
+                className={errors.coordinatorEmail ? "border-red-500 rounded-xl" : "rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"}
                 required
               />
               {errors.coordinatorEmail && <p className="text-sm text-red-500">{errors.coordinatorEmail}</p>}
@@ -523,7 +526,7 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
             <p className="text-xs text-amber-600">Note: The image will be uploaded after the fundraiser is created.</p>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between border-t bg-blue-200 border-blue-100 p-6">
+        <CardFooter className="flex justify-between border-t bg-blue-200 border-blue-100 p-6 rounded-b-xl">
           {posterFile && (
             <div className="mr-auto">
               <p className="text-sm font-medium text-green-700">
@@ -532,10 +535,19 @@ export default function FundraiserForm({ onSubmit, isSubmitting: externalIsSubmi
               </p>
             </div>
           )}
-          <Button variant="outline" type="button" onClick={() => router.push("/")}>
+          <Button 
+            variant="outline" 
+            type="button" 
+            onClick={() => router.push("/")}
+            className="border-blue-300 text-blue-700 hover:bg-blue-100 rounded-xl"
+          >
             Go Back Home
           </Button>
-          <Button type="submit" disabled={isSubmitting || externalIsSubmitting}>
+          <Button 
+            type="submit" 
+            disabled={isSubmitting || externalIsSubmitting}
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
+          >
             {isSubmitting || externalIsSubmitting ? "Submitting..." : "Submit Fundraiser"}
           </Button>
         </CardFooter>

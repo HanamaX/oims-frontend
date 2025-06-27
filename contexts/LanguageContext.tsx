@@ -1279,6 +1279,80 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Price",
     sw: "Bei",
   },
+  
+  // Inventory Form
+  "inventory.form.title": {
+    en: "Add New Inventory Item",
+    sw: "Ongeza Bidhaa Mpya",
+  },
+  "inventory.form.instructions": {
+    en: "Fill in the details to add a new item to the inventory. New items start with a quantity of zero. After creating the item, you can use the transaction system to manage quantities through \"IN\" and \"OUT\" transactions.",
+    sw: "Jaza maelezo kuongeza bidhaa mpya kwenye orodha. Bidhaa mpya zinaanza na kiasi sifuri. Baada ya kuunda bidhaa, unaweza kutumia mfumo wa kufanyia shughuli kuongeza na kupunguza idadi kupitia miamala ya \"Kuingia\" na \"Kutoka\".",
+  },
+  "inventory.form.itemName": {
+    en: "Item Name",
+    sw: "Jina la Bidhaa",
+  },
+  "inventory.form.category": {
+    en: "Category",
+    sw: "Kategoria",
+  },
+  "inventory.form.selectCategory": {
+    en: "Select category",
+    sw: "Chagua kategoria",
+  },
+  "inventory.form.price": {
+    en: "Price (Tshs)",
+    sw: "Bei (Tshs)",
+  },
+  "inventory.form.minQuantity": {
+    en: "Minimum Quantity",
+    sw: "Kiasi cha Chini",
+  },
+  "inventory.form.description": {
+    en: "Description",
+    sw: "Maelezo",
+  },
+  "inventory.form.cancel": {
+    en: "Cancel",
+    sw: "Ghairi",
+  },
+  "inventory.form.addItem": {
+    en: "Add Item",
+    sw: "Ongeza Bidhaa",
+  },
+  "inventory.form.education": {
+    en: "Education",
+    sw: "Elimu",
+  },
+  "inventory.form.apparel": {
+    en: "Apparel",
+    sw: "Mavazi",
+  },
+  "inventory.form.nutrition": {
+    en: "Nutrition",
+    sw: "Lishe",
+  },
+  "inventory.form.medical": {
+    en: "Medical",
+    sw: "Matibabu",
+  },
+  "inventory.form.furniture": {
+    en: "Furniture",
+    sw: "Samani",
+  },
+  "inventory.form.electronics": {
+    en: "Electronics",
+    sw: "Elektroniki",
+  },
+  "inventory.form.sports": {
+    en: "Sports",
+    sw: "Michezo",
+  },
+  "inventory.form.other": {
+    en: "Other",
+    sw: "Nyingine",
+  },
   "inventory.minQuantity": {
     en: "Min Quantity",
     sw: "Kiasi cha Chini",

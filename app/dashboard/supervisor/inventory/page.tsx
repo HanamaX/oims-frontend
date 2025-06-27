@@ -20,6 +20,11 @@ export default function InventoryPage() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  // Debug form open/close
+  useEffect(() => {
+    console.log('Form open state changed:', isFormOpen);
+  }, [isFormOpen]);
   const [error, setError] = useState<string | null>(null)
   const [notification, setNotification] = useState<{
     message: string;
@@ -208,8 +213,12 @@ export default function InventoryPage() {
           <p className="text-muted-foreground mt-2"><T k="supervisor.inventory.viewManage" /></p>
         </div>
         <Button 
-          onClick={() => setIsFormOpen(true)} 
+          onClick={() => {
+            console.log('Add item button clicked')
+            setIsFormOpen(true)
+          }} 
           disabled={isSubmitting}
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
         >
           <Plus className="mr-2 h-4 w-4" /> <T k="inventory.addItem" />
         </Button>
