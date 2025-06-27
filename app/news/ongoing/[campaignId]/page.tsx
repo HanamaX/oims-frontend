@@ -1,11 +1,12 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import * as ProgressPrimitive from "@radix-ui/react-progress"
 import { ChevronRight, Calendar, Users, DollarSign, ClipboardList, Loader2 } from "lucide-react"
 import Link from "next/link"
 import ContributionForm from "./contribution-form"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 // Define types for campaign data
 interface Fundraiser {
@@ -37,14 +38,14 @@ interface Campaign {
 }
 
 export default function CampaignDetailPage({ params }: { readonly params: { campaignId: string } }) {
-  // Unwrap the params object using React.use() with proper typing
-  const unwrappedParams = React.use(params as any) as { campaignId: string };
-  const campaignId = unwrappedParams.campaignId;
+  // Get campaignId directly from params
+  const campaignId = params.campaignId;
   
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showContributionForm, setShowContributionForm] = useState(false);
+  const { t, language } = useLanguage();
   
   // Fetch campaign details from the API
   useEffect(() => {
@@ -89,7 +90,7 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
     return (
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 flex justify-center items-center">
         <Loader2 className="h-8 w-8 text-blue-600 animate-spin mr-2" />
-        <span className="text-blue-600 text-lg">Loading campaign details...</span>
+        <span className="text-blue-600 text-lg">{t("campaign.details.loading")}</span>
       </div>
     );
   }
@@ -99,11 +100,11 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center bg-red-50 p-8 rounded-lg">
-            <h2 className="text-2xl text-red-600 font-bold mb-4">{error ?? 'Campaign not found'}</h2>
-            <p className="mb-6">The campaign you're looking for does not exist or may have been removed.</p>
+            <h2 className="text-2xl text-red-600 font-bold mb-4">{error ?? t("campaign.details.notFound")}</h2>
+            <p className="mb-6">{t("campaign.details.notFoundDescription")}</p>
             <Link href="/news/ongoing">
               <Button className="bg-blue-600 hover:bg-blue-700">
-                Return to Campaigns
+                {t("campaigns.returnToList")}
               </Button>
             </Link>
           </div>
@@ -131,11 +132,11 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
   
   // Set status display text and color
   const getStatusDisplay = () => {
-    if (isCompleted) return { text: "COMPLETED", color: "text-blue-600 bg-blue-100" };
-    if (isActive) return { text: "ACTIVE", color: "text-blue-600 bg-blue-100" };
-    if (isPending) return { text: "PENDING", color: "text-amber-600 bg-amber-100" };
-    if (isCancelled) return { text: "CANCELLED", color: "text-red-600 bg-red-100" };
-    return { text: "UNKNOWN", color: "text-gray-600 bg-gray-100" };
+    if (isCompleted) return { text: t("campaign.status.completed"), color: "text-blue-600 bg-blue-100" };
+    if (isActive) return { text: t("campaign.status.active"), color: "text-blue-600 bg-blue-100" };
+    if (isPending) return { text: t("campaign.status.pending"), color: "text-amber-600 bg-amber-100" };
+    if (isCancelled) return { text: t("campaign.status.cancelled"), color: "text-red-600 bg-red-100" };
+    return { text: t("campaign.status.unknown"), color: "text-gray-600 bg-gray-100" };
   };
   
   const statusDisplay = getStatusDisplay();
@@ -145,7 +146,7 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
       <div className="container mx-auto px-4">
         <Link href="/news/ongoing" className="inline-flex items-center mb-8 text-blue-600 hover:text-blue-800 transition-colors">
           <ChevronRight className="h-4 w-4 rotate-180 mr-1" />
-          Back to Campaigns
+          {t("campaigns.returnToList")}
         </Link>
 
         <div className="max-w-4xl mx-auto">
@@ -159,12 +160,12 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
             </div>
             
             <div className="p-6 md:p-8">
-              <h1 className="text-3xl font-bold text-blue-800 mb-2">{campaign.fundraiser.eventName}</h1>
+              <h1 className="text-3xl font-bold text-blue-800 mb-2">{campaign.fundraiser.eventName || t("campaign.saveAChild")}</h1>
               <p className="text-lg text-gray-600 mb-6">{campaign.fundraiser.purpose}</p>                <div className="mb-6">
                 <div className="flex justify-between items-center text-sm mb-2">
-                  <span className="font-semibold text-lg">Tshs {campaign.raisedAmount.toLocaleString()} raised</span>
+                  <span className="font-semibold text-lg">Tshs {campaign.raisedAmount.toLocaleString(language === 'sw' ? 'sw-TZ' : 'en-US')} {t("campaign.details.raised")}</span>
                   <div className="flex items-center">
-                    <span className="text-gray-600 text-lg mr-3">Goal: Tshs {campaign.fundraiser.goal.toLocaleString()}</span>
+                    <span className="text-gray-600 text-lg mr-3">{t("campaign.details.goal")} Tshs {campaign.fundraiser.goal.toLocaleString(language === 'sw' ? 'sw-TZ' : 'en-US')}</span>
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusDisplay.color}`}>
                       {statusDisplay.text}
                     </span>
@@ -178,19 +179,19 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
                     style={{ transform: `translateX(-${100 - (progressPercentage || 0)}%)` }}
                   />
                 </ProgressPrimitive.Root>                <div className="flex justify-between text-sm mt-2">
-                  <span className="text-gray-600">{campaign.contributors} contributors</span>
-                  <span className="text-gray-600">Tshs {campaign.amountRemaining.toLocaleString()} remaining</span>
+                  <span className="text-gray-600">{campaign.contributors} {t("campaign.details.contributors.count")}</span>
+                  <span className="text-gray-600">Tshs {campaign.amountRemaining.toLocaleString(language === 'sw' ? 'sw-TZ' : 'en-US')} {t("campaign.details.remaining")}</span>
                 </div>
               </div>
               
               <div className="grid md:grid-cols-2 gap-6 mb-8">
                 <div>
-                  <h2 className="text-xl font-semibold text-blue-800 mb-3">Campaign Details</h2>
+                  <h2 className="text-xl font-semibold text-blue-800 mb-3">{t("campaign.details.title")}</h2>
                   <div className="space-y-3">
                     <div className="flex items-start">
                       <Calendar className="h-5 w-5 text-blue-600 mr-2 mt-0.5" />
                       <div>
-                        <p className="font-medium">Event Period</p>
+                        <p className="font-medium">{t("campaign.details.eventPeriod")}</p>
                         <p className="text-gray-600">
                           {formatDate(campaign.fundraiser.eventStartDate)} - {formatDate(campaign.fundraiser.eventEndDate)}
                         </p>
@@ -199,24 +200,24 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
                     <div className="flex items-start">
                       <Users className="h-5 w-5 text-blue-600 mr-2 mt-0.5" />
                       <div>
-                        <p className="font-medium">Coordinator</p>
+                        <p className="font-medium">{t("campaign.details.coordinator")}</p>
                         <p className="text-gray-600">{campaign.fundraiser.coordinatorName}</p>
                       </div>
                     </div>                    <div className="flex items-start">
                       <DollarSign className="h-5 w-5 text-blue-600 mr-2 mt-0.5" />
                       <div>
-                        <p className="font-medium">Suggested Contribution</p>
-                        <p className="text-gray-600">Tshs {campaign.fundraiser.amountPayedPerIndividual.toLocaleString()}</p>
+                        <p className="font-medium">{t("campaign.details.suggestedContribution")}</p>
+                        <p className="text-gray-600">Tshs {campaign.fundraiser.amountPayedPerIndividual.toLocaleString(language === 'sw' ? 'sw-TZ' : 'en-US')}</p>
                       </div>
                     </div>
                   </div>
                 </div>
                 
                 <div>
-                  <h2 className="text-xl font-semibold text-blue-800 mb-3">Fundraising Reason</h2>
+                  <h2 className="text-xl font-semibold text-blue-800 mb-3">{t("campaign.details.fundraisingReason")}</h2>
                   <p className="text-gray-700 mb-4">{campaign.fundraiser.fundraisingReason}</p>
                   
-                  <h3 className="text-lg font-semibold text-blue-800 mb-2">Budget Breakdown</h3>
+                  <h3 className="text-lg font-semibold text-blue-800 mb-2">{t("campaign.details.budgetBreakdown")}</h3>
                   <div className="bg-blue-50 p-3 rounded-lg">
                     <div className="flex items-start">
                       <ClipboardList className="h-5 w-5 text-blue-600 mr-2 mt-0.5" />
@@ -227,15 +228,15 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
               </div>
                 <div className="border-t border-gray-200 pt-6 mt-6">
                 {isActive && !showContributionForm && (                  <div className="text-center">
-                    <p className="text-lg text-gray-700 mb-4">Ready to make a difference?</p>
+                    <p className="text-lg text-gray-700 mb-4">{t("campaign.contribute.readyPrompt")}</p>
                     <Button 
                       className="bg-blue-600 hover:bg-blue-700 text-lg py-6 px-8"
                       onClick={() => setShowContributionForm(true)}
                     >
-                      Contribute to this Campaign
+                      {t("campaign.contribute.button")}
                     </Button>
                     <p className="text-sm text-gray-500 mt-3">
-                      Minimum contribution: Tshs {campaign.fundraiser.amountPayedPerIndividual.toLocaleString()}
+                      {t("campaign.contribute.minimum")}: Tshs {campaign.fundraiser.amountPayedPerIndividual.toLocaleString(language === 'sw' ? 'sw-TZ' : 'en-US')}
                     </p>
                   </div>
                 )}
@@ -250,30 +251,27 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
                 
                 {isPending && (
                   <div className="text-center bg-amber-50 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-amber-700 mb-3">This Campaign is Still Pending</h3>
+                    <h3 className="text-xl font-semibold text-amber-700 mb-3">{t("campaign.status.pendingTitle")}</h3>
                     <p className="text-gray-700">
-                      This fundraising campaign is currently under review and not yet open for contributions. 
-                      Please check back later when the campaign is active.
+                      {t("campaign.status.pendingDescription")}
                     </p>
                   </div>
                 )}
                 
                 {isCompleted && (
                   <div className="text-center bg-blue-50 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-blue-700 mb-3">Campaign Completed</h3>
+                    <h3 className="text-xl font-semibold text-blue-700 mb-3">{t("campaign.status.completedTitle")}</h3>
                     <p className="text-gray-700">
-                      Thank you to everyone who contributed! This fundraising campaign has reached its goal 
-                      and is no longer accepting contributions.
+                      {t("campaign.status.completedDescription")}
                     </p>
                   </div>
                 )}
                 
                 {isCancelled && (
                   <div className="text-center bg-red-50 p-6 rounded-lg">
-                    <h3 className="text-xl font-semibold text-red-700 mb-3">Campaign Cancelled</h3>
+                    <h3 className="text-xl font-semibold text-red-700 mb-3">{t("campaign.status.cancelledTitle")}</h3>
                     <p className="text-gray-700">
-                      This fundraising campaign has been cancelled and is no longer accepting contributions. 
-                      Thank you for your interest.
+                      {t("campaign.status.cancelledDescription")}
                     </p>
                   </div>
                 )}
@@ -283,7 +281,7 @@ export default function CampaignDetailPage({ params }: { readonly params: { camp
           
           <div className="text-center mt-12">
             <Link href="/" className="text-blue-600 hover:text-blue-800 transition-colors">
-              Return to Home
+              {t("campaign.learn.backToHome")}
             </Link>
           </div>
         </div>

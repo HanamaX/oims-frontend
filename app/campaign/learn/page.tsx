@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle, ChevronRight, Gift, Heart } from "lucide-react"
 import Link from "next/link"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 export default function CampaignLearnPage() {
   const router = useRouter()
   const [showConfirmation, setShowConfirmation] = useState(false)
+  const { t } = useLanguage()
 
   const handleStartCampaign = () => {
     router.push("/fundraiser/new")
@@ -20,13 +22,13 @@ export default function CampaignLearnPage() {
       <div className="container mx-auto px-4">
         <Link href="/" className="inline-flex items-center mb-8 text-blue-600 hover:text-blue-800 transition-colors">
           <ChevronRight className="h-4 w-4 rotate-180 mr-1" />
-          Back to Home
+          {t("campaign.learn.backToHome")}
         </Link>
 
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold text-blue-800 mb-4">Start a Campaign</h1>
-            <p className="text-xl text-blue-600">Make a meaningful difference in children's lives</p>
+            <h1 className="text-4xl md:text-5xl font-bold text-blue-800 mb-4">{t("campaign.learn.title")}</h1>
+            <p className="text-xl text-blue-600">{t("campaign.learn.subtitle")}</p>
           </div>
 
           <Card className="mb-12 border-blue-100 shadow-xl overflow-hidden animate-slide-up">
@@ -39,90 +41,87 @@ export default function CampaignLearnPage() {
             </div>
             <CardContent className="pt-8 pb-6">
               <div className="prose lg:prose-lg">
-                <h2 className="text-2xl font-semibold text-blue-800 mb-4">How to Start a Campaign</h2>
+                <h2 className="text-2xl font-semibold text-blue-800 mb-4">{t("campaign.learn.howToStart")}</h2>
                 <p className="mb-6">
-                  Starting a campaign is a powerful way to create positive change for children in need. 
-                  Whether you want to raise funds for education, healthcare, or recreational activities, 
-                  your initiative can transform lives and bring hope to those who need it most.
+                  {t("campaign.learn.description")}
                 </p>
 
                 <div className="grid md:grid-cols-2 gap-8 my-12">
                   <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
                     <h3 className="flex items-center text-xl font-semibold text-blue-700 mb-3">
                       <span className="flex items-center justify-center bg-blue-700 text-white rounded-full w-8 h-8 mr-3">1</span>
-                      Choose a Cause
+                      {t("campaign.learn.step1.title")}
                     </h3>
                     <p className="text-gray-700">
-                      Identify the specific need you want to address. Focus on an area where your campaign can make a tangible impact.
+                      {t("campaign.learn.step1.description")}
                     </p>
                   </div>
 
                   <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
                     <h3 className="flex items-center text-xl font-semibold text-blue-700 mb-3">
                       <span className="flex items-center justify-center bg-blue-700 text-white rounded-full w-8 h-8 mr-3">2</span>
-                      Set a Goal
+                      {t("campaign.learn.step2.title")}
                     </h3>
                     <p className="text-gray-700">
-                      Determine how much funding you need and what it will accomplish. Clear goals help motivate donors.
+                      {t("campaign.learn.step2.description")}
                     </p>
                   </div>
 
                   <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
                     <h3 className="flex items-center text-xl font-semibold text-blue-700 mb-3">
                       <span className="flex items-center justify-center bg-blue-700 text-white rounded-full w-8 h-8 mr-3">3</span>
-                      Tell Your Story
+                      {t("campaign.learn.step3.title")}
                     </h3>
                     <p className="text-gray-700">
-                      Share why this cause matters to you and how donations will make a difference. Authentic stories inspire action.
+                      {t("campaign.learn.step3.description")}
                     </p>
                   </div>
 
                   <div className="bg-blue-50 p-6 rounded-lg border border-blue-100">
                     <h3 className="flex items-center text-xl font-semibold text-blue-700 mb-3">
                       <span className="flex items-center justify-center bg-blue-700 text-white rounded-full w-8 h-8 mr-3">4</span>
-                      Spread the Word
+                      {t("campaign.learn.step4.title")}
                     </h3>
                     <p className="text-gray-700">
-                      Share your campaign with friends, family, and social networks. The wider your reach, the greater your impact.
+                      {t("campaign.learn.step4.description")}
                     </p>
                   </div>
                 </div>
 
-                <h3 className="text-2xl font-semibold text-blue-800 mb-4">The Impact of Your Campaign</h3>
+                <h3 className="text-2xl font-semibold text-blue-800 mb-4">{t("campaign.learn.impact.title")}</h3>
                 <p>
-                  When you start a campaign, you're not just raising funds—you're creating opportunities and building futures.
-                  Your efforts can provide:
+                  {t("campaign.learn.impact.description")}
                 </p>
                 
                 <ul className="my-6 space-y-4">
                   <li className="flex items-start">
                     <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
-                    <span>Educational materials and tuition for children who otherwise couldn't afford school</span>
+                    <span>{t("campaign.learn.impact.education")}</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
-                    <span>Medical care and health services for vulnerable youth</span>
+                    <span>{t("campaign.learn.impact.medical")}</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
-                    <span>Sports equipment and recreational activities that foster physical and mental wellbeing</span>
+                    <span>{t("campaign.learn.impact.sports")}</span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="h-6 w-6 text-green-500 mr-3 mt-1 flex-shrink-0" />
-                    <span>Basic necessities like food, clothing, and safe shelter</span>
+                    <span>{t("campaign.learn.impact.basic")}</span>
                   </li>
                 </ul>
               </div>
             </CardContent>
             <CardFooter className="border-t border-blue-100 bg-blue-50/50 p-6">
               <div className="w-full space-y-4">
-                <h4 className="text-center text-xl font-medium text-blue-800">Ready to make a difference?</h4>
+                <h4 className="text-center text-xl font-medium text-blue-800">{t("campaign.learn.ready")}</h4>
                 <Button
                   size="lg"
                   className="w-full bg-blue-600 hover:bg-blue-700 transition-all py-6 text-lg"
                   onClick={() => setShowConfirmation(true)}
                 >
-                  <Gift className="mr-2 h-5 w-5" /> Start Your Campaign Now
+                  <Gift className="mr-2 h-5 w-5" /> {t("campaign.learn.startButton")}
                 </Button>
               </div>
             </CardFooter>
@@ -130,13 +129,12 @@ export default function CampaignLearnPage() {
 
           {/* Confirmation Dialog */}
           {showConfirmation && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in 
-            ">
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in">
               <Card className="w-full max-w-md border-blue-100 animate-scale-in bg-white/95 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-center text-blue-800">Start a Campaign</CardTitle>
+                  <CardTitle className="text-center text-blue-800">{t("campaign.learn.confirmDialog.title")}</CardTitle>
                   <CardDescription className="text-center">
-                    Do you wish to start a campaign?
+                    {t("campaign.learn.confirmDialog.description")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex justify-center">
@@ -148,13 +146,13 @@ export default function CampaignLearnPage() {
                     variant="outline"
                     onClick={() => setShowConfirmation(false)}
                   >
-                    Cancel
+                    {t("campaign.learn.confirmDialog.cancel")}
                   </Button>
                   <Button
                     className="w-full sm:w-1/2 bg-blue-600 hover:bg-blue-700"
                     onClick={handleStartCampaign}
                   >
-                    Yes, Let's Begin
+                    {t("campaign.learn.confirmDialog.confirm")}
                   </Button>
                 </CardFooter>
               </Card>
@@ -163,7 +161,7 @@ export default function CampaignLearnPage() {
 
           <div className="text-center mt-12">
             <Link href="/" className="text-blue-600 hover:text-blue-800 transition-colors">
-              Return to Home
+              {t("campaign.learn.returnHome")}
             </Link>
           </div>
         </div>

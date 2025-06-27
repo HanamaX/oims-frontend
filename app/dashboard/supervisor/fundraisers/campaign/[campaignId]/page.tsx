@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress"
 import { Calendar, Users, DollarSign, ClipboardList, ChevronLeft, Mail, Phone, ArrowLeft, Loader2 } from "lucide-react"
 import FundraiserService from "@/lib/fundraiser-service"
 import Link from "next/link"
-import React from "react"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 interface Contributor {
   publicId: string;
@@ -22,10 +22,10 @@ interface Contributor {
 }
 
 export default function CampaignDetailsPage({ params }: { readonly params: { campaignId: string } }) {
-  // Unwrap the params object using React.use() with proper typing
-  const unwrappedParams = React.use(params as any) as { campaignId: string };
-  const campaignId = unwrappedParams.campaignId;
+  // Get campaignId directly from params instead of using React.use()
+  const campaignId = params.campaignId;
   
+  const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState("details")
   const [campaign, setCampaign] = useState<any>(null)
   const [contributors, setContributors] = useState<Contributor[]>([])
@@ -74,7 +74,7 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Loader2 className="h-8 w-8 text-blue-500 animate-spin mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading campaign details...</p>
+          <p className="text-muted-foreground">{t("campaign.details.loading")}</p>
         </div>
       </div>
     )
@@ -84,13 +84,13 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="text-red-500 mb-4 text-xl">⚠️ {error || "Campaign not found"}</div>
+          <div className="text-red-500 mb-4 text-xl">⚠️ {error || t("campaign.details.notFound")}</div>
           <Button 
             onClick={() => window.history.back()} 
             variant="outline"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Go Back
+            {t("campaign.details.goBack")}
           </Button>
         </div>
       </div>
@@ -105,19 +105,19 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{fundraiser.eventName}</h1>
-          <p className="text-muted-foreground mt-1">Campaign Details and Contributors</p>
+          <h1 className="text-3xl font-bold tracking-tight">{fundraiser.eventName || t("campaign.saveAChild")}</h1>
+          <p className="text-muted-foreground mt-1">{t("campaign.details.andContributors")}</p>
         </div>
         <Button variant="outline" onClick={() => window.history.back()}>
           <ChevronLeft className="mr-2 h-4 w-4" />
-          Back to Fundraisers
+          {t("campaign.backToFundraisers")}
         </Button>
       </div>
 
       <Tabs defaultValue="details" value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="details">Campaign Details</TabsTrigger>
-          <TabsTrigger value="contributors">Contributors</TabsTrigger>
+          <TabsTrigger value="details">{t("campaign.details.title")}</TabsTrigger>
+          <TabsTrigger value="contributors">{t("campaign.details.contributors")}</TabsTrigger>
         </TabsList>
         
         <TabsContent value="details" className="mt-4">
@@ -130,27 +130,30 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                       ? fundraiser.imageUrl.startsWith('http') 
                         ? fundraiser.imageUrl 
                         : `https://oims-4510ba404e0e.herokuapp.com${fundraiser.imageUrl}`
-                      : "/placeholder.svg?height=300&width=400&text=Fundraiser+Image"}
-                    alt={fundraiser.eventName}
+                      : `/placeholder.svg?height=300&width=400&text=${encodeURIComponent(t("campaign.image.placeholder"))}`}
+                    alt={fundraiser.eventName || t("campaign.saveAChild")}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       // Handle image load error by falling back to placeholder
-                      e.currentTarget.src = "/placeholder.svg?height=300&width=400&text=Fundraiser+Image"
+                      e.currentTarget.src = `/placeholder.svg?height=300&width=400&text=${encodeURIComponent(t("campaign.image.placeholder"))}`
                     }}
                   />
                 </div>
                 
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-xl font-semibold mb-2">Campaign Progress</h2>                    <div className="mb-2">                      <div className="flex justify-between text-sm">
-                        <span className="font-medium">Tshs {(campaign.raisedAmount || 0).toLocaleString()} raised</span>
-                        <span className="text-muted-foreground">Goal: Tshs {(fundraiser.goal || 0).toLocaleString()}</span>
+                    <h2 className="text-xl font-semibold mb-2">{t("campaign.details.progress")}</h2>
+                    <div className="mb-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-medium">Tshs {(campaign.raisedAmount || 0).toLocaleString()} {t("campaign.details.raised")}</span>
+                        <span className="text-muted-foreground">{t("campaign.details.goal")} Tshs {(fundraiser.goal || 0).toLocaleString()}</span>
                       </div>
                       <Progress value={progressPercentage} className="h-2 mt-2" />
-                    </div>                    <div className="text-sm text-muted-foreground mt-2">
-                      <span className="font-medium">{campaign.contributors || 0} contributors</span>
+                    </div>
+                    <div className="text-sm text-muted-foreground mt-2">
+                      <span className="font-medium">{campaign.contributors || 0} {t("campaign.details.contributors.count")}</span>
                       {(campaign.amountRemaining || 0) > 0 && (
-                        <span className="ml-4">Tshs {(campaign.amountRemaining || 0).toLocaleString()} remaining</span>
+                        <span className="ml-4">Tshs {(campaign.amountRemaining || 0).toLocaleString()} {t("campaign.details.remaining")}</span>
                       )}
                     </div>
                   </div>
@@ -159,7 +162,7 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                     <div className="flex items-start">
                       <Calendar className="h-5 w-5 text-muted-foreground mr-2 flex-shrink-0" />
                       <div>
-                        <p className="font-medium">Event Period</p>
+                        <p className="font-medium">{t("campaign.details.eventPeriod")}</p>
                         <p className="text-muted-foreground">
                           {formatDate(fundraiser.eventStartDate)} - {formatDate(fundraiser.eventEndDate)}
                         </p>
@@ -169,7 +172,7 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                     <div className="flex items-start">
                       <Users className="h-5 w-5 text-muted-foreground mr-2 flex-shrink-0" />
                       <div>
-                        <p className="font-medium">Coordinator</p>
+                        <p className="font-medium">{t("campaign.details.coordinator")}</p>
                         <p className="text-muted-foreground">{fundraiser.coordinatorName}</p>
                       </div>
                     </div>
@@ -177,7 +180,7 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                     <div className="flex items-start">
                       <Mail className="h-5 w-5 text-muted-foreground mr-2 flex-shrink-0" />
                       <div>
-                        <p className="font-medium">Contact Email</p>
+                        <p className="font-medium">{t("campaign.details.contactEmail")}</p>
                         <p className="text-muted-foreground">{fundraiser.coordinatorEmail}</p>
                       </div>
                     </div>
@@ -185,14 +188,14 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                     <div className="flex items-start">
                       <Phone className="h-5 w-5 text-muted-foreground mr-2 flex-shrink-0" />
                       <div>
-                        <p className="font-medium">Contact Phone</p>
+                        <p className="font-medium">{t("campaign.details.contactPhone")}</p>
                         <p className="text-muted-foreground">{fundraiser.phoneNumber}</p>
                       </div>
                     </div>
                       <div className="flex items-start">
                       <DollarSign className="h-5 w-5 text-muted-foreground mr-2 flex-shrink-0" />
                       <div>
-                        <p className="font-medium">Suggested Contribution</p>
+                        <p className="font-medium">{t("campaign.details.suggestedContribution")}</p>
                         <p className="text-muted-foreground">Tshs {fundraiser.amountPayedPerIndividual?.toLocaleString()}</p>
                       </div>
                     </div>
@@ -202,29 +205,32 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
               
               <div className="grid md:grid-cols-2 gap-6 mt-8">
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Purpose</h3>
+                  <h3 className="text-lg font-semibold mb-2">{t("campaign.details.purpose")}</h3>
                   <p className="text-muted-foreground">{fundraiser.purpose}</p>
                   
-                  <h3 className="text-lg font-semibold mt-6 mb-2">Fundraising Reason</h3>
+                  <h3 className="text-lg font-semibold mt-6 mb-2">{t("campaign.details.fundraisingReason")}</h3>
                   <p className="text-muted-foreground">{fundraiser.fundraisingReason}</p>
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Budget Breakdown</h3>
+                  <h3 className="text-lg font-semibold mb-2">{t("campaign.details.budgetBreakdown")}</h3>
                   <div className="flex items-start bg-slate-50 p-4 rounded-md">
                     <ClipboardList className="h-5 w-5 text-muted-foreground mr-2 flex-shrink-0 mt-1" />
                     <p className="text-muted-foreground">{fundraiser.budgetBreakdown}</p>
                   </div>
                   
                   <div className="mt-6">
-                    <h3 className="text-lg font-semibold mb-2">Distribution</h3>                      <div className="grid grid-cols-2 gap-4 mt-4">
+                    <h3 className="text-lg font-semibold mb-2">{t("campaign.details.distribution")}</h3>
+                    <div className="grid grid-cols-2 gap-4 mt-4">
                       <div className="bg-slate-50 p-4 rounded-md text-center">
-                        <p className="font-medium text-sm">Orphanage Amount</p>                        <p className="text-2xl font-bold text-blue-600 mt-1">
+                        <p className="font-medium text-sm">{t("campaign.details.orphanageAmount")}</p>
+                        <p className="text-2xl font-bold text-blue-600 mt-1">
                           Tshs {(campaign.orphanageAmount || 0).toLocaleString()}
                         </p>
                       </div>
                       <div className="bg-slate-50 p-4 rounded-md text-center">
-                        <p className="font-medium text-sm">Event Amount</p>                        <p className="text-2xl font-bold text-blue-600 mt-1">
+                        <p className="font-medium text-sm">{t("campaign.details.eventAmount")}</p>
+                        <p className="text-2xl font-bold text-blue-600 mt-1">
                           Tshs {(campaign.eventAmount || 0).toLocaleString()}
                         </p>
                       </div>
@@ -232,12 +238,12 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                   </div>
                 </div>
               </div>
-                <div className="mt-8">
+              <div className="mt-8">
                 <Link 
                   href={`/news/ongoing/${campaign.publicId}`} 
                   className="text-blue-600 hover:text-blue-800 underline"
                 >
-                  View Public Campaign Page
+                  {t("campaign.details.viewPublic")}
                 </Link>
               </div>
             </CardContent>
@@ -247,29 +253,30 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
         <TabsContent value="contributors" className="mt-4">
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Campaign Contributors</h2>
+              <h2 className="text-xl font-semibold mb-4">{t("campaign.contributors.title")}</h2>
               
               {contributors.length === 0 ? (
                 <div className="text-center py-10">
-                  <p className="text-muted-foreground">No contributions have been made to this campaign yet.</p>
+                  <p className="text-muted-foreground">{t("campaign.contributors.none")}</p>
                 </div>
               ) : (
                 <div className="overflow-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b text-left">
-                        <th className="pb-2 font-medium">Name</th>
-                        <th className="pb-2 font-medium">Email</th>
-                        <th className="pb-2 font-medium">Phone</th>
-                        <th className="pb-2 font-medium">Amount</th>
-                        <th className="pb-2 font-medium">Date</th>
-                        <th className="pb-2 font-medium">Payment Method</th>
-                        <th className="pb-2 font-medium">Status</th>
+                        <th className="pb-2 font-medium">{t("campaign.contributors.table.name")}</th>
+                        <th className="pb-2 font-medium">{t("campaign.contributors.table.email")}</th>
+                        <th className="pb-2 font-medium">{t("campaign.contributors.table.phone")}</th>
+                        <th className="pb-2 font-medium">{t("campaign.contributors.table.amount")}</th>
+                        <th className="pb-2 font-medium">{t("campaign.contributors.table.date")}</th>
+                        <th className="pb-2 font-medium">{t("campaign.contributors.table.paymentMethod")}</th>
+                        <th className="pb-2 font-medium">{t("campaign.contributors.table.status")}</th>
                       </tr>
                     </thead>
                     <tbody>
                       {contributors.map((contributor) => (
-                        <tr key={contributor.publicId} className="border-b hover:bg-slate-50">                          <td className="py-3">{contributor.name || "Anonymous"}</td>
+                        <tr key={contributor.publicId} className="border-b hover:bg-slate-50">                          
+                          <td className="py-3">{contributor.name || t("campaign.contributors.anonymous")}</td>
                           <td className="py-3">{contributor.email || "N/A"}</td>
                           <td className="py-3">{contributor.phoneNumber || "N/A"}</td>
                           <td className="py-3">Tshs {(contributor.amount || 0).toLocaleString()}</td>
@@ -281,7 +288,12 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                               contributor.status === "PENDING" ? "bg-yellow-100 text-yellow-800" :
                               "bg-red-100 text-red-800"
                             }`}>
-                              {contributor.status || "UNKNOWN"}</span>
+                              {contributor.status === "COMPLETED" 
+                                ? t("campaign.status.completed") 
+                                : contributor.status === "PENDING" 
+                                  ? t("campaign.status.pending")
+                                  : t("campaign.status.unknown")}
+                            </span>
                           </td>
                         </tr>
                       ))}

@@ -2077,6 +2077,367 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Campaign Completed",
     sw: "Kampeni Imekamilika",
   },
+  
+  "campaign.learn.title": {
+    en: "Start a Campaign",
+    sw: "Anzisha Kampeni"
+  },
+  "campaign.learn.subtitle": {
+    en: "Make a meaningful difference in children's lives",
+    sw: "Fanya mabadiliko ya maana katika maisha ya watoto"
+  },
+  "campaign.learn.backToHome": {
+    en: "Back to Home",
+    sw: "Rudi Nyumbani"
+  },
+  "campaign.learn.howToStart": {
+    en: "How to Start a Campaign",
+    sw: "Jinsi ya Kuanzisha Kampeni"
+  },
+  "campaign.learn.description": {
+    en: "Starting a campaign is a powerful way to create positive change for children in need. Whether you want to raise funds for education, healthcare, or recreational activities, your initiative can transform lives and bring hope to those who need it most.",
+    sw: "Kuanzisha kampeni ni njia yenye nguvu ya kuunda mabadiliko chanya kwa watoto wanaohitaji. Ikiwa unataka kukusanya fedha kwa elimu, huduma za afya, au shughuli za burudani, juhudi zako zinaweza kubadilisha maisha na kuleta matumaini kwa walio na mahitaji."
+  },
+  "campaign.learn.step1.title": {
+    en: "Choose a Cause",
+    sw: "Chagua Lengo"
+  },
+  "campaign.learn.step1.description": {
+    en: "Identify the specific need you want to address. Focus on an area where your campaign can make a tangible impact.",
+    sw: "Tambua hitaji mahususi unalotaka kushughulikia. Lenga eneo ambapo kampeni yako inaweza kufanya matokeo yanayoonekana."
+  },
+  "campaign.learn.step2.title": {
+    en: "Set a Goal",
+    sw: "Weka Lengo"
+  },
+  "campaign.learn.step2.description": {
+    en: "Determine how much funding you need and what it will accomplish. Clear goals help motivate donors.",
+    sw: "Amua kiasi cha fedha unachohitaji na kile kitakachofanikisha. Malengo wazi husaidia kuhamasisha wafadhili."
+  },
+  "campaign.learn.step3.title": {
+    en: "Tell Your Story",
+    sw: "Simulia Hadithi Yako"
+  },
+  "campaign.learn.step3.description": {
+    en: "Share why this cause matters to you and how donations will make a difference. Authentic stories inspire action.",
+    sw: "Shiriki kwa nini lengo hili ni muhimu kwako na jinsi michango itakavyofanya tofauti. Hadithi za kweli zinahamasisha hatua."
+  },
+  "campaign.learn.step4.title": {
+    en: "Spread the Word",
+    sw: "Eneza Habari"
+  },
+  "campaign.learn.step4.description": {
+    en: "Share your campaign with friends, family, and social networks. The wider your reach, the greater your impact.",
+    sw: "Shiriki kampeni yako na marafiki, familia, na mitandao ya kijamii. Kadri ufikiwaji wako unavyokuwa mpana, ndivyo athari yako inavyokuwa kubwa."
+  },
+  "campaign.learn.impact.title": {
+    en: "The Impact of Your Campaign",
+    sw: "Athari ya Kampeni Yako"
+  },
+  "campaign.learn.impact.description": {
+    en: "When you start a campaign, you're not just raising funds—you're creating opportunities and building futures. Your efforts can provide:",
+    sw: "Unapoanzisha kampeni, huwa hukusanyi fedha tu—unaunda fursa na kujenga siku za usoni. Juhudi zako zinaweza kutoa:"
+  },
+  "campaign.learn.impact.education": {
+    en: "Educational materials and tuition for children who otherwise couldn't afford school",
+    sw: "Vifaa vya elimu na ada za shule kwa watoto ambao hawangekuwa na uwezo wa kulipia shule"
+  },
+  "campaign.learn.impact.medical": {
+    en: "Medical care and health services for vulnerable youth",
+    sw: "Huduma za matibabu na huduma za afya kwa vijana walio hatarini"
+  },
+  "campaign.learn.impact.sports": {
+    en: "Sports equipment and recreational activities that foster physical and mental wellbeing",
+    sw: "Vifaa vya michezo na shughuli za burudani zinazokuznia afya ya kimwili na kiakili"
+  },
+  "campaign.learn.impact.basic": {
+    en: "Basic necessities like food, clothing, and safe shelter",
+    sw: "Mahitaji ya msingi kama chakula, mavazi, na malazi salama"
+  },
+  "campaign.learn.ready": {
+    en: "Ready to make a difference?",
+    sw: "Uko tayari kuleta mabadiliko?"
+  },
+  "campaign.learn.startButton": {
+    en: "Start Your Campaign Now",
+    sw: "Anzisha Kampeni Yako Sasa"
+  },
+  "campaign.learn.confirmDialog.title": {
+    en: "Start a Campaign",
+    sw: "Anzisha Kampeni"
+  },
+  "campaign.learn.confirmDialog.description": {
+    en: "Do you wish to start a campaign?",
+    sw: "Je, ungependa kuanzisha kampeni?"
+  },
+  "campaign.learn.confirmDialog.cancel": {
+    en: "Cancel",
+    sw: "Ghairi"
+  },
+  "campaign.learn.confirmDialog.confirm": {
+    en: "Yes, Let's Begin",
+    sw: "Ndio, Tuanze"
+  },
+  "campaign.learn.returnHome": {
+    en: "Return to Home",
+    sw: "Rudi Nyumbani"
+  },
+  
+  "campaign.details.title": {
+    en: "Campaign Details",
+    sw: "Maelezo ya Kampeni"
+  },
+  "campaign.details.contributors": {
+    en: "Contributors",
+    sw: "Wachangiaji"
+  },
+  "campaign.details.back": {
+    en: "Back to Fundraisers",
+    sw: "Rudi kwa Michango"
+  },
+  "campaign.details.loading": {
+    en: "Loading campaign details...",
+    sw: "Inapakia maelezo ya kampeni..."
+  },
+  "campaign.details.notFound": {
+    en: "Campaign not found",
+    sw: "Kampeni haijapatikana"
+  },
+  "campaign.details.goBack": {
+    en: "Go Back",
+    sw: "Rudi Nyuma"
+  },
+  "campaign.details.andContributors": {
+    en: "Campaign Details and Contributors",
+    sw: "Maelezo ya Kampeni na Wachangiaji"
+  },
+  "campaign.details.progress": {
+    en: "Campaign Progress",
+    sw: "Maendeleo ya Kampeni"
+  },
+  "campaign.details.raised": {
+    en: "raised",
+    sw: "imechangwa"
+  },
+  "campaign.details.goal": {
+    en: "Goal:",
+    sw: "Lengo:"
+  },
+  "campaign.details.contributors.count": {
+    en: "contributors",
+    sw: "wachangiaji"
+  },
+  "campaign.details.remaining": {
+    en: "remaining",
+    sw: "imebaki"
+  },
+  "campaign.details.eventPeriod": {
+    en: "Event Period",
+    sw: "Kipindi cha Tukio"
+  },
+  "campaign.details.coordinator": {
+    en: "Coordinator",
+    sw: "Mratibu"
+  },
+  "campaign.details.contactEmail": {
+    en: "Contact Email",
+    sw: "Barua Pepe ya Mawasiliano"
+  },
+  "campaign.details.contactPhone": {
+    en: "Contact Phone",
+    sw: "Simu ya Mawasiliano"
+  },
+  "campaign.details.suggestedContribution": {
+    en: "Suggested Contribution",
+    sw: "Mchango Unaopendekezwa"
+  },
+  "campaign.details.purpose": {
+    en: "Purpose",
+    sw: "Madhumuni"
+  },
+  "campaign.details.fundraisingReason": {
+    en: "Fundraising Reason",
+    sw: "Sababu ya Kuchangisha"
+  },
+  "campaign.details.budgetBreakdown": {
+    en: "Budget Breakdown",
+    sw: "Mgawanyo wa Bajeti"
+  },
+  "campaign.details.distribution": {
+    en: "Distribution",
+    sw: "Ugawaji"
+  },
+  "campaign.details.orphanageAmount": {
+    en: "Orphanage Amount",
+    sw: "Kiasi cha Nyumba ya Watoto"
+  },
+  "campaign.details.eventAmount": {
+    en: "Event Amount",
+    sw: "Kiasi cha Tukio"
+  },
+  "campaign.details.viewPublic": {
+    en: "View Public Campaign Page",
+    sw: "Angalia Ukurasa wa Kampeni ya Umma"
+  },
+  "campaign.backToFundraisers": {
+    en: "Back to Fundraisers",
+    sw: "Rudi kwa Miradi ya Kuchangisha"
+  },
+  "campaign.image.placeholder": {
+    en: "Fundraiser Image",
+    sw: "Picha ya Mradi wa Kuchangisha"
+  },
+  "campaign.saveAChild": {
+    en: "Save A Child",
+    sw: "Okoa Mtoto"
+  },
+  "campaign.viewPublicPage": {
+    en: "View Public Campaign Page",
+    sw: "Angalia Ukurasa wa Kampeni ya Umma"
+  },
+  "campaign.image.fallback": {
+    en: "Fundraiser Image",
+    sw: "Picha ya Kampeni"
+  },
+  // Remove duplicate campaign keys that have campaign.details.* versions
+  
+  // Remove duplicate campaign keys that have campaign.details.* versions
+  
+  "campaign.contributors.title": {
+    en: "Campaign Contributors",
+    sw: "Wachangiaji wa Kampeni"
+  },
+  "campaign.contributors.none": {
+    en: "No contributions have been made to this campaign yet.",
+    sw: "Hakuna michango iliyofanywa kwa kampeni hii bado."
+  },
+  "campaign.contributors.table.name": {
+    en: "Name",
+    sw: "Jina"
+  },
+  "campaign.contributors.table.email": {
+    en: "Email",
+    sw: "Barua Pepe"
+  },
+  "campaign.contributors.table.phone": {
+    en: "Phone",
+    sw: "Simu"
+  },
+  "campaign.contributors.table.amount": {
+    en: "Amount",
+    sw: "Kiasi"
+  },
+  "campaign.contributors.table.date": {
+    en: "Date",
+    sw: "Tarehe"
+  },
+  "campaign.contributors.table.paymentMethod": {
+    en: "Payment Method",
+    sw: "Njia ya Malipo"
+  },
+  "campaign.contributors.table.status": {
+    en: "Status",
+    sw: "Hali"
+  },
+  "campaign.contributors.anonymous": {
+    en: "Anonymous",
+    sw: "Asiyejulikana"
+  },
+  "campaign.status.completed": {
+    en: "COMPLETED",
+    sw: "IMEKAMILIKA"
+  },
+  "campaign.status.pending": {
+    en: "PENDING",
+    sw: "INASUBIRI"
+  },
+  "campaign.status.unknown": {
+    en: "UNKNOWN",
+    sw: "HAIJULIKANI"
+  },
+  "campaign.status.active": {
+    en: "ACTIVE",
+    sw: "INAFANYA KAZI"
+  },
+  "campaign.status.cancelled": {
+    en: "CANCELLED",
+    sw: "IMESITISHWA"
+  },
+  "campaign.details.notFoundDescription": {
+    en: "The campaign you're looking for does not exist or may have been removed.",
+    sw: "Kampeni unayotafuta haipo au inaweza kuwa imeondolewa."
+  },
+  "campaigns.returnToList": {
+    en: "Return to Campaigns",
+    sw: "Rudi kwenye Kampeni"
+  },
+  "campaign.contribute.readyPrompt": {
+    en: "Ready to make a difference?",
+    sw: "Uko tayari kuleta mabadiliko?"
+  },
+  "campaign.contribute.button": {
+    en: "Contribute to this Campaign",
+    sw: "Changia kwenye Kampeni Hii"
+  },
+  "campaign.contribute.minimum": {
+    en: "Minimum contribution",
+    sw: "Mchango wa chini"
+  },
+  "campaign.status.pendingTitle": {
+    en: "This Campaign is Still Pending",
+    sw: "Kampeni Hii Bado Inasubiri"
+  },
+  "campaign.status.pendingDescription": {
+    en: "This fundraising campaign is currently under review and not yet open for contributions. Please check back later when the campaign is active.",
+    sw: "Kampeni hii ya ukusanyaji fedha iko chini ya ukaguzi na bado haijafunguliwa kwa michango. Tafadhali angalia tena baadaye wakati kampeni itakapokuwa inafanya kazi."
+  },
+  "campaign.status.completedTitle": {
+    en: "Campaign Completed",
+    sw: "Kampeni Imekamilika"
+  },
+  "campaign.status.completedDescription": {
+    en: "Thank you to everyone who contributed! This fundraising campaign has reached its goal and is no longer accepting contributions.",
+    sw: "Asante kwa kila mtu aliyechangia! Kampeni hii ya ukusanyaji fedha imefika lengo lake na haipokelei tena michango."
+  },
+  "campaign.status.cancelledTitle": {
+    en: "Campaign Cancelled",
+    sw: "Kampeni Imesitishwa"
+  },
+  "campaign.status.cancelledDescription": {
+    en: "This fundraising campaign has been cancelled and is no longer accepting contributions. Thank you for your interest.",
+    sw: "Kampeni hii ya ukusanyaji fedha imesitishwa na haipokelei tena michango. Asante kwa nia yako."
+  },
+  
+  // Campaign page translations
+  "campaigns.ongoing.title": {
+    en: "Ongoing Campaigns",
+    sw: "Kampeni Zinazoendelea",
+  },
+  "campaigns.ongoing.subtitle": {
+    en: "Join our mission to support children in need through these active initiatives",
+    sw: "Jiunge na dhamira yetu ya kuwasaidia watoto wanaohitaji kupitia juhudi hizi zinazoendelea",
+  },
+  "campaigns.ongoing.empty": {
+    en: "No active campaigns at the moment. Please check back later.",
+    sw: "Hakuna kampeni zinazoendelea kwa sasa. Tafadhali angalia tena baadaye.",
+  },
+  "campaigns.start.title": {
+    en: "Want to Start Your Own Campaign?",
+    sw: "Unataka Kuanza Kampeni Yako Mwenyewe?",
+  },
+  "campaigns.start.description": {
+    en: "Have an idea for a campaign? You can create your own fundraiser and make a difference.",
+    sw: "Una wazo la kampeni? Unaweza kuunda mchango wako mwenyewe na kuleta mabadiliko.",
+  },
+  "campaigns.start.cta": {
+    en: "Learn How to Start",
+    sw: "Jifunze Jinsi ya Kuanza",
+  },
+  "campaigns.returnHome": {
+    en: "Return to Home",
+    sw: "Rudi Mwanzo",
+  },
+  
   "home.mission.title": {
     en: "Your success is our success!",
     sw: "Mafanikio yako ni mafanikio yetu!",
