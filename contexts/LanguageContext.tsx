@@ -1439,6 +1439,48 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Update Transaction",
     sw: "Sasisha Muamala",
   },
+  
+  // Inventory Edit Form
+  "inventory.edit.title": {
+    en: "Edit Inventory Item",
+    sw: "Hariri Bidhaa ya Ghala",
+  },
+  "inventory.edit.description": {
+    en: "Update the details of this inventory item",
+    sw: "Sasisha maelezo ya bidhaa hii ya ghala",
+  },
+  "inventory.edit.itemName": {
+    en: "Item Name",
+    sw: "Jina la Bidhaa",
+  },
+  "inventory.edit.category": {
+    en: "Category",
+    sw: "Kategoria",
+  },
+  "inventory.edit.quantity": {
+    en: "Quantity",
+    sw: "Kiasi",
+  },
+  "inventory.edit.price": {
+    en: "Price (Tshs per unit)",
+    sw: "Bei (Tshs kwa kila kipimo)",
+  },
+  "inventory.edit.minQuantity": {
+    en: "Minimum Quantity (for low stock warning)",
+    sw: "Kiasi cha Chini (kwa onyo la bidhaa kupungua)",
+  },
+  "inventory.edit.selectCategory": {
+    en: "Select category",
+    sw: "Chagua kategoria",
+  },
+  "inventory.edit.cancel": {
+    en: "Cancel",
+    sw: "Ghairi",
+  },
+  "inventory.edit.updateItem": {
+    en: "Update Item",
+    sw: "Sasisha Bidhaa",
+  },
   "inventory.addSuccess": {
     en: "Inventory item \"{0}\" added successfully",
     sw: "Bidhaa \"{0}\" imeongezwa kwa mafanikio",
@@ -1446,6 +1488,22 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   "inventory.addFail": {
     en: "Failed to add inventory item. Please try again.",
     sw: "Imeshindwa kuongeza bidhaa. Tafadhali jaribu tena.",
+  },
+  "inventory.addTransaction": {
+    en: "Add Transaction",
+    sw: "Ongeza Muamala",
+  },
+  "inventory.editItem": {
+    en: "Edit Item",
+    sw: "Hariri Bidhaa",
+  },
+  "inventory.deleteItem": {
+    en: "Delete Item",
+    sw: "Futa Bidhaa",
+  },
+  "inventory.deleteItemWarning": {
+    en: "Are you sure you want to delete this item? This action cannot be undone.",
+    sw: "Je, una uhakika unataka kufuta bidhaa hii? Hatua hii haiwezi kutendwa kinyume.",
   },
   "inventory.education": {
     en: "Education",
