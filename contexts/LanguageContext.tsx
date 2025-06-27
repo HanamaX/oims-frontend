@@ -3168,6 +3168,10 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Add Guardian",
     sw: "Ongeza Mlezi",
   },
+  "orphan.details.editGuardian": {
+    en: "Edit Guardian",
+    sw: "Hariri Mlezi",
+  },
   "orphan.details.name": {
     en: "Name",
     sw: "Jina",
@@ -3234,6 +3238,120 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   },  "orphan.details.guardianDeleteFailed": {
     en: "Failed to Delete Guardian",
     sw: "Imeshindwa Kufuta Mlezi",
+  },
+  
+  // Guardian Form
+  "guardian.form.addGuardian": {
+    en: "Add Guardian",
+    sw: "Ongeza Mlezi",
+  },
+  "guardian.form.editGuardian": {
+    en: "Edit Guardian",
+    sw: "Hariri Mlezi",
+  },
+  "guardian.form.addDescription": {
+    en: "Enter the guardian details below. Required fields are marked with an asterisk (*).",
+    sw: "Ingiza taarifa za mlezi hapa chini. Sehemu muhimu zimeonyeshwa kwa alama ya nyota (*).",
+  },
+  "guardian.form.editDescription": {
+    en: "Update the guardian information below.",
+    sw: "Sasisha taarifa za mlezi hapa chini.",
+  },
+  "guardian.form.requiredFields": {
+    en: "Please fill in all required fields",
+    sw: "Tafadhali jaza sehemu zote muhimu",
+  },
+  "guardian.form.fullName": {
+    en: "Full Name",
+    sw: "Jina Kamili",
+  },
+  "guardian.form.relationship": {
+    en: "Relationship",
+    sw: "Uhusiano",
+  },
+  "guardian.form.selectRelationship": {
+    en: "Select relationship",
+    sw: "Chagua uhusiano",
+  },
+  "guardian.form.parent": {
+    en: "Parent",
+    sw: "Mzazi",
+  },
+  "guardian.form.grandparent": {
+    en: "Grandparent",
+    sw: "Babu/Bibi",
+  },
+  "guardian.form.sibling": {
+    en: "Sibling",
+    sw: "Ndugu",
+  },
+  "guardian.form.uncle": {
+    en: "Uncle",
+    sw: "Mjomba/Baba mdogo",
+  },
+  "guardian.form.aunt": {
+    en: "Aunt",
+    sw: "Shangazi/Mama mdogo",
+  },
+  "guardian.form.cousin": {
+    en: "Cousin",
+    sw: "Binamu",
+  },
+  "guardian.form.guardian": {
+    en: "Guardian",
+    sw: "Mlezi",
+  },
+  "guardian.form.familyFriend": {
+    en: "Family Friend",
+    sw: "Rafiki wa Familia",
+  },
+  "guardian.form.other": {
+    en: "Other",
+    sw: "Nyingine",
+  },
+  "guardian.form.phoneNumber": {
+    en: "Phone Number",
+    sw: "Namba ya Simu",
+  },
+  "guardian.form.sex": {
+    en: "Sex",
+    sw: "Jinsia",
+  },
+  "guardian.form.selectSex": {
+    en: "Select sex",
+    sw: "Chagua jinsia",
+  },
+  "guardian.form.male": {
+    en: "Male",
+    sw: "Mwanaume",
+  },
+  "guardian.form.female": {
+    en: "Female",
+    sw: "Mwanamke",
+  },
+  "guardian.form.email": {
+    en: "Email",
+    sw: "Barua pepe",
+  },
+  "guardian.form.address": {
+    en: "Address",
+    sw: "Anwani",
+  },
+  "guardian.form.occupation": {
+    en: "Occupation",
+    sw: "Kazi",
+  },
+  "guardian.form.cancel": {
+    en: "Cancel",
+    sw: "Ghairi",
+  },
+  "guardian.form.update": {
+    en: "Update Guardian",
+    sw: "Sasisha Mlezi",
+  },
+  "guardian.form.add": {
+    en: "Add Guardian",
+    sw: "Ongeza Mlezi",
   },
   
   // Volunteer Management

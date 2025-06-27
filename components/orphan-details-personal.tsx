@@ -292,9 +292,9 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     }
   };
     return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 animate-fadeIn">
       {/* Orphan Image */}
-      <Card className="md:col-span-1">        <CardHeader>
+      <Card className="md:col-span-1 shadow-lg rounded-xl overflow-hidden">        <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
             {t("orphan.details.profileImage")}
@@ -302,7 +302,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
         </CardHeader>
         <CardContent className="flex flex-col items-center">
           {orphanImageUrl ? (
-            <div className="w-64 h-64 overflow-hidden relative rounded-full border">
+            <div className="w-64 h-64 overflow-hidden relative rounded-full border shadow-md">
               <Image 
                 src={orphanImageUrl}
                 alt={`${orphan.fullName} Profile`}
@@ -325,7 +325,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       </Card>
 
       {/* Main Details */}
-      <Card className="md:col-span-2">        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="md:col-span-2 shadow-lg rounded-xl overflow-hidden">        <CardHeader>
           <div className="flex items-center space-x-2">
             <CardTitle>{t("orphan.details.personalInformation")}</CardTitle>
             {orphan.status && (
@@ -334,38 +334,6 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
               </Badge>
             )}
           </div>
-          {!readOnly && (
-            <div className="flex space-x-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setIsEditOrphanOpen(true)}
-              >
-                <Edit className="h-4 w-4 mr-1" />
-                {t("orphan.details.editDetails")}
-              </Button>
-              {orphan.status?.toLowerCase() !== 'active' && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-green-50 text-green-700 hover:bg-green-100"
-                  onClick={() => setIsActivateDialogOpen(true)}
-                >
-                  {t("orphan.details.activate")}
-                </Button>
-              )}
-              {orphan.status?.toLowerCase() === 'active' && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-orange-50 text-orange-700 hover:bg-orange-100"
-                  onClick={() => setIsInactivateDialogOpen(true)}
-                >
-                  {t("orphan.details.inactivate")}
-                </Button>
-              )}
-            </div>
-          )}
         </CardHeader>
         <CardContent className="space-y-4">          <div className="grid grid-cols-2 gap-4">
             <div>
@@ -444,7 +412,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             {orphan.allergies && orphan.allergies.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 {orphan.allergies.map((allergy) => (
-                  <Badge key={`allergy-${allergy}`} variant="outline">{allergy}</Badge>
+                  <Badge key={`allergy-${allergy}`} variant="outline" className="rounded-xl">{allergy}</Badge>
                 ))}
               </div>
             ) : (
@@ -452,10 +420,43 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             )}
           </div>
         </CardContent>
+        {!readOnly && (
+          <div className="border-t p-4 flex justify-end space-x-2 bg-gray-50">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setIsEditOrphanOpen(true)}
+              className="rounded-xl"
+            >
+              <Edit className="h-4 w-4 mr-1" />
+              {t("orphan.details.editDetails")}
+            </Button>
+            {orphan.status?.toLowerCase() !== 'active' && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-green-50 text-green-700 hover:bg-green-100 rounded-xl"
+                onClick={() => setIsActivateDialogOpen(true)}
+              >
+                {t("orphan.details.activate")}
+              </Button>
+            )}
+            {orphan.status?.toLowerCase() === 'active' && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-orange-50 text-orange-700 hover:bg-orange-100 rounded-xl"
+                onClick={() => setIsInactivateDialogOpen(true)}
+              >
+                {t("orphan.details.inactivate")}
+              </Button>
+            )}
+          </div>
+        )}
       </Card>
       
       {/* Orphan Activation Dialog */}
-      <AlertDialog open={isActivateDialogOpen} onOpenChange={setIsActivateDialogOpen}>        <AlertDialogContent>
+      <AlertDialog open={isActivateDialogOpen} onOpenChange={setIsActivateDialogOpen}>        <AlertDialogContent className="rounded-xl overflow-hidden">
           <AlertDialogHeader>
             <AlertDialogTitle>{t("orphan.details.activateOrphan")}</AlertDialogTitle>
             <AlertDialogDescription>
@@ -468,7 +469,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             </label>
             <textarea
               id="reason"
-              className="w-full min-h-[100px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full min-h-[100px] p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
               placeholder={t("orphan.details.activationPlaceholder")}
               value={statusChangeReason}
               onChange={(e) => setStatusChangeReason(e.target.value)}
@@ -481,13 +482,14 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                 setIsActivateDialogOpen(false);
               }}
               disabled={isSubmitting}
+              className="rounded-xl"
             >
               {t("orphan.details.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleActivateOrphan}
               disabled={!statusChangeReason.trim() || isSubmitting}
-              className="bg-green-600 hover:bg-green-700 focus:ring-green-500"
+              className="bg-green-600 hover:bg-green-700 focus:ring-green-500 rounded-xl"
             >
               {isSubmitting ? (
                 <>
@@ -503,7 +505,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       </AlertDialog>
       
       {/* Orphan Inactivation Dialog */}
-      <AlertDialog open={isInactivateDialogOpen} onOpenChange={setIsInactivateDialogOpen}>        <AlertDialogContent>
+      <AlertDialog open={isInactivateDialogOpen} onOpenChange={setIsInactivateDialogOpen}>        <AlertDialogContent className="rounded-xl overflow-hidden">
           <AlertDialogHeader>
             <AlertDialogTitle>{t("orphan.details.inactivateOrphan")}</AlertDialogTitle>
             <AlertDialogDescription>
@@ -516,7 +518,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             </label>
             <textarea
               id="reason"
-              className="w-full min-h-[100px] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full min-h-[100px] p-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
               placeholder={t("orphan.details.inactivationPlaceholder")}
               value={statusChangeReason}
               onChange={(e) => setStatusChangeReason(e.target.value)}
@@ -529,13 +531,14 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                 setIsInactivateDialogOpen(false);
               }}
               disabled={isSubmitting}
+              className="rounded-xl"
             >
               {t("orphan.details.cancel")}
             </AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleInactivateOrphan}
               disabled={!statusChangeReason.trim() || isSubmitting}
-              className="bg-orange-600 hover:bg-orange-700 focus:ring-orange-500"
+              className="bg-orange-600 hover:bg-orange-700 focus:ring-orange-500 rounded-xl"
             >
               {isSubmitting ? (
                 <>
@@ -551,41 +554,20 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       </AlertDialog>
       
       {/* Guardian Information */}
-      <Card>        <CardHeader className="flex flex-row items-center justify-between">
+      <Card className="shadow-lg rounded-xl overflow-hidden">        
+        <CardHeader>
           <div>
             <CardTitle>{t("orphan.details.guardianInformation")}</CardTitle>
             <CardDescription>{t("orphan.details.guardianInformationDesc")}</CardDescription>
           </div>
-          {!readOnly && (
-            orphan.guardian ? (              
-            <div className="flex space-x-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setIsGuardianFormOpen(true)}
-                >
-                  <Edit className="h-4 w-4 mr-1" />
-                  {t("orphan.details.edit")}
-                </Button>
-                {/* Delete button removed as requested */}
-              </div>
-            ) : (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setIsGuardianFormOpen(true)}
-              >
-                <Plus className="h-4 w-4 mr-1" />
-                {t("orphan.details.addGuardian")}
-              </Button>
-            )
-          )}
-        </CardHeader><CardContent>
+        </CardHeader>
+        <CardContent>
           {orphan.guardian ? (
-            <div className="space-y-4">              {/* Guardian Image - centered at top */}
+            <div className="space-y-4">              
+              {/* Guardian Image - centered at top */}
               <div className="flex flex-col items-center">
                 {guardianImageUrl ? (
-                  <div className="w-32 h-32 overflow-hidden relative rounded-full border">
+                  <div className="w-32 h-32 overflow-hidden relative rounded-full border shadow-md">
                     <Image 
                       src={guardianImageUrl}
                       alt={`${orphan.guardian.name} Profile`}
@@ -605,7 +587,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                   </div>
                 )}
               </div>
-                {/* Guardian Details */}
+              {/* Guardian Details */}
               <div className="space-y-3">
                 <div>
                   <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.name")}</h3>
@@ -637,6 +619,28 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             <p className="text-muted-foreground italic">{t("orphan.details.noGuardianInfo")}</p>
           )}
         </CardContent>
+        {!readOnly && (
+          <div className="border-t p-4 flex justify-end space-x-2 bg-gray-50">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsGuardianFormOpen(true)}
+              className="rounded-xl flex items-center"
+            >
+              {orphan.guardian ? (
+                <>
+                  <Edit className="h-4 w-4 mr-1" />
+                  {t("orphan.details.editGuardian")}
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4 mr-1" />
+                  {t("orphan.details.addGuardian")}
+                </>
+              )}
+            </Button>
+          </div>
+        )}
       </Card>
         {/* Guardian Form Dialog - Only render when not in readOnly mode */}
       {!readOnly && (
