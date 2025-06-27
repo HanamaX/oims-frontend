@@ -2363,6 +2363,29 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "CANCELLED",
     sw: "IMESITISHWA"
   },
+  
+  // Fundraiser translations
+  "fundraiser.currency": {
+    en: "Tshs",
+    sw: "Tshs"
+  },
+  "fundraiser.status.approved": {
+    en: "APPROVED",
+    sw: "IMEIDHINISHWA"
+  },
+  "fundraiser.status.pending": {
+    en: "PENDING",
+    sw: "INASUBIRI"
+  },
+  "fundraiser.status.rejected": {
+    en: "REJECTED",
+    sw: "IMEKATALIWA"
+  },
+  "fundraiser.status.completed": {
+    en: "COMPLETED",
+    sw: "IMEKAMILIKA"
+  },
+  
   "campaign.details.notFoundDescription": {
     en: "The campaign you're looking for does not exist or may have been removed.",
     sw: "Kampeni unayotafuta haipo au inaweza kuwa imeondolewa."
