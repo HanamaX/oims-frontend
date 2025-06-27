@@ -1373,6 +1373,72 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "No inventory items found matching your criteria.",
     sw: "Hakuna bidhaa zilizopatikana zinazofanana na vigezo vyako.",
   },
+  
+  // Inventory Transaction Form
+  "inventory.transaction.form.title": {
+    en: "Record Inventory Transaction",
+    sw: "Rekodi Muamala wa Bidhaa",
+  },
+  "inventory.transaction.form.editTitle": {
+    en: "Edit Transaction",
+    sw: "Hariri Muamala",
+  },
+  "inventory.transaction.form.description": {
+    en: "Record items being added to or removed from inventory",
+    sw: "Rekodi bidhaa zinazoongezwa au kuondolewa kwenye ghala",
+  },
+  "inventory.transaction.form.editDescription": {
+    en: "Update the details of this inventory transaction",
+    sw: "Sasisha maelezo ya muamala huu wa bidhaa",
+  },
+  "inventory.transaction.form.type": {
+    en: "Transaction Type",
+    sw: "Aina ya Muamala",
+  },
+  "inventory.transaction.form.incoming": {
+    en: "Incoming",
+    sw: "Zinazoingizwa",
+  },
+  "inventory.transaction.form.incomingDesc": {
+    en: "Items received into inventory",
+    sw: "Bidhaa zilizopokelewa kwenye ghala",
+  },
+  "inventory.transaction.form.outgoing": {
+    en: "Outgoing",
+    sw: "Zinazotolewa",
+  },
+  "inventory.transaction.form.outgoingDesc": {
+    en: "Items distributed or used",
+    sw: "Bidhaa zilizogawiwa au kutumika",
+  },
+  "inventory.transaction.form.quantity": {
+    en: "Quantity",
+    sw: "Kiasi",
+  },
+  "inventory.transaction.form.descriptionLabel": {
+    en: "Description",
+    sw: "Maelezo",
+  },
+  "inventory.transaction.form.descPlaceholder": {
+    en: "Briefly describe the reason for this transaction",
+    sw: "Eleza kwa ufupi sababu ya muamala huu",
+  },
+  "inventory.transaction.form.cancel": {
+    en: "Cancel",
+    sw: "Ghairi",
+  },
+  "inventory.transaction.form.recordIncoming": {
+    en: "Record Incoming Items",
+    sw: "Rekodi Bidhaa Zinazoingia",
+  },
+  "inventory.transaction.form.recordOutgoing": {
+    en: "Record Outgoing Items",
+    sw: "Rekodi Bidhaa Zinazotoka",
+  },
+  "inventory.transaction.form.updateTransaction": {
+    en: "Update Transaction",
+    sw: "Sasisha Muamala",
+  },
   "inventory.addSuccess": {
     en: "Inventory item \"{0}\" added successfully",
     sw: "Bidhaa \"{0}\" imeongezwa kwa mafanikio",
