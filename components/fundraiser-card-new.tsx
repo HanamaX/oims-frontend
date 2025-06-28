@@ -1,9 +1,11 @@
 "use client"
 
+import { useState, useCallback, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Edit, Trash2, Calendar, Mail, Phone, DollarSign, ClipboardList } from "lucide-react"
+import Image from "next/image"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,6 +28,34 @@ interface FundraiserCardProps {
 }
 
 export default function FundraiserCardNew({ fundraiser, onEdit, onDelete, onApprove, onReject }: Readonly<FundraiserCardProps>) {
+  const [imageError, setImageError] = useState(false)
+  const [imageLoading, setImageLoading] = useState(true)
+
+  // Helper function to construct image URLs consistently
+  const getImageUrl = useCallback((imageUrl?: string) => {
+    if (!imageUrl || imageUrl.trim() === "") return null
+    // Images should come as full URLs from the backend, just like profile pictures
+    return imageUrl
+  }, [])
+
+  // Memoized image URL to prevent unnecessary recalculations
+  const fundraiserImageUrl = useMemo(() => {
+    if (!fundraiser?.imageUrl || imageError) return null
+    const url = getImageUrl(fundraiser.imageUrl)
+    console.debug(`Fundraiser image URL for ${fundraiser.eventName}:`, {
+      original: fundraiser.imageUrl,
+      isFullUrl: fundraiser.imageUrl.startsWith('http'),
+      final: url
+    })
+    return url
+  }, [fundraiser?.imageUrl, fundraiser.eventName, imageError, getImageUrl])
+
+  // Handle image error
+  const handleImageError = useCallback(() => {
+    console.warn(`Failed to load fundraiser image: ${fundraiser.imageUrl}`)
+    setImageError(true)
+    setImageLoading(false)
+  }, [fundraiser.imageUrl])
   // Format date
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -57,11 +87,33 @@ export default function FundraiserCardNew({ fundraiser, onEdit, onDelete, onAppr
         {/* Image section */}
         <div className="md:col-span-1">
           <div className="aspect-[4/3] w-full overflow-hidden">
-            <img
-              src={fundraiser.imageUrl ?? "/placeholder.svg?height=300&width=400&text=Fundraiser+Image"}
-              alt={fundraiser.eventName}
-              className="w-full h-full object-cover rounded-l"
-            />
+            {fundraiserImageUrl ? (
+              <div className="w-full h-full relative">
+                {imageLoading && (
+                  <div className="absolute inset-0 bg-gray-100 animate-pulse rounded-l flex items-center justify-center">
+                    <div className="text-gray-400">Loading...</div>
+                  </div>
+                )}
+                <Image
+                  src={fundraiserImageUrl}
+                  alt={fundraiser.eventName}
+                  fill
+                  style={{ objectFit: "cover" }}
+                  className="rounded-l"
+                  onError={handleImageError}
+                  onLoad={() => setImageLoading(false)}
+                  unoptimized
+                  priority={false}
+                />
+              </div>
+            ) : (
+              <div className="w-full h-full bg-gray-100 rounded-l flex items-center justify-center">
+                <div className="text-center text-gray-500">
+                  <div className="text-3xl mb-2">🖼️</div>
+                  <p className="text-xs">No image available</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         

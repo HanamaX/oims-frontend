@@ -6,7 +6,7 @@ import API from "@/lib/api-service"; // Import the API instance
 import { T, useLanguage } from "@/contexts/LanguageContext";
 
 export default function OrphanageRegistrationForm() {  
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   
   type FormState = {
     adminFullName: string;
@@ -225,7 +225,11 @@ export default function OrphanageRegistrationForm() {
           <T k="orphanage.registration.detailMessage" />
         </p>
         <Link href="/">
-          <button className="bg-blue-600 text-white px-6 py-2 rounded text-lg">
+          <button 
+            className="bg-blue-600 text-white px-6 py-2 rounded text-lg"
+            aria-label={t("orphanage.registration.goHome")}
+            title={t("orphanage.registration.goHome")}
+          >
             <T k="orphanage.registration.goHome" />
           </button>
         </Link>
@@ -240,7 +244,11 @@ export default function OrphanageRegistrationForm() {
           <Link href="/" className="font-bold text-3xl text-blue-700 underline">
             OIMS
           </Link>          <div className="flex items-center gap-4">            <Link href="/login">
-              <button className="border border-blue-600 text-blue-700 px-4 py-2 rounded hover:bg-blue-50">
+              <button 
+                className="border border-blue-600 text-blue-700 px-4 py-2 rounded hover:bg-blue-50"
+                aria-label={t("auth.signIn")}
+                title={t("auth.signIn")}
+              >
                 <T k="auth.signIn" />
               </button>
             </Link>
@@ -498,7 +506,12 @@ export default function OrphanageRegistrationForm() {
             </div>
             {error && <div className="text-red-600 mb-2 animate-fade-in delay-800">{error}</div>}
             {success && <div className="text-green-600 mb-2 animate-fade-in delay-800">{success}</div>}
-            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded animate-pop-in delay-900">
+            <button 
+              type="submit" 
+              className="bg-blue-600 text-white px-4 py-2 rounded animate-pop-in delay-900"
+              aria-label={t("orphanage.registration.submit")}
+              title={t("orphanage.registration.submit")}
+            >
               <T k="orphanage.registration.submit" />
             </button>
           </form>
