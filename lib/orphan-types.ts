@@ -13,6 +13,17 @@ export interface Guardian {
   imageUrl?: string | null
 }
 
+export interface Certificate {
+  id?: string
+  publicId?: string
+  type: string
+  fileUrl: string
+  filename: string
+  issueDate: string
+  description?: string
+  orphanPublicId?: string
+}
+
 export interface OrphanDetails {
   publicId: string
   fullName: string
@@ -35,6 +46,7 @@ export interface OrphanDetails {
   branchName: string
   guardian: Guardian | null
   status?: string
+  certificates?: Certificate[]
 }
 
 export interface AcademicSubject {

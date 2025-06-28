@@ -5,9 +5,10 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Edit, Plus, Loader2, User } from "lucide-react"
-import { OrphanDetails, Guardian } from "@/lib/orphan-types"
+import { Edit, Plus, Loader2, User, File, Calendar } from "lucide-react"
+import { OrphanDetails, Guardian, Certificate } from "@/lib/orphan-types"
 import GuardianForm from "./guardian-form"
+import CertificateForm from "./orphan-certificates-tab"
 import { useToast } from "@/hooks/use-toast"
 import API from "@/lib/api-service"
 import OrphanService from "@/lib/orphan-service"
@@ -47,9 +48,13 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
   const [isInactivateDialogOpen, setIsInactivateDialogOpen] = useState(false)
   const [statusChangeReason, setStatusChangeReason] = useState("")
   
+  // Add state for certificates
+  const [certificates, setCertificates] = useState<Certificate[]>(orphan?.certificates || [])
+  
   // Image error states
   const [orphanImageError, setOrphanImageError] = useState(false)
   const [guardianImageError, setGuardianImageError] = useState(false)
+  const [isCertificateFormOpen, setIsCertificateFormOpen] = useState(false)
 
   // Format date with localization
   const formatDate = useCallback((dateString: string) => {
@@ -291,50 +296,97 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       setIsSubmitting(false);
     }
   };
+
+  // Function to handle adding a certificate
+  const handleAddCertificate = async (certificate: Certificate) => {
+    if (!orphan?.publicId) return
+    
+    setIsSubmitting(true)
+    try {
+      // In a real implementation, you would upload the file and certificate data to the server
+      // For now, we'll simulate this by adding it to the local state
+      const newCertificate = {
+        ...certificate,
+        id: `temp-${Date.now()}`, // Temporary ID
+        publicId: `temp-${Date.now()}`, // Temporary public ID
+        orphanPublicId: orphan.publicId
+      }
+      
+      // Add the new certificate to the list
+      setCertificates([...certificates, newCertificate])
+      
+      toast({
+        title: t("orphan.certificates.addSuccess"),
+        description: t("orphan.certificates.addSuccessDesc")
+      })
+      
+      // Close the form
+      setIsCertificateFormOpen(false)
+    } catch (error: any) {
+      console.error("Failed to add certificate:", error)
+      toast({
+        title: t("orphan.certificates.addFailed"),
+        description: error.message || t("orphan.details.errorOccurred"),
+        variant: "destructive"
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
     return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 animate-fadeIn">
-      {/* Orphan Image */}
-      <Card className="md:col-span-1 shadow-lg rounded-xl overflow-hidden">        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5" />
-            {t("orphan.details.profileImage")}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col items-center">
-          {orphanImageUrl ? (
-            <div className="w-64 h-64 overflow-hidden relative rounded-full border shadow-md">
-              <Image 
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 animate-fadeIn">
+
+      {/* Main Details */}
+      <Card className="md:col-span-5 shadow-lg rounded-xl overflow-hidden">        <CardHeader>
+    <div className="flex items-center space-x-2">
+      <CardTitle className="flex items-center gap-3">
+        {/* Small profile image next to name */}
+        <span className="flex items-center gap-2">
+          <span className="relative w-10 h-10 cursor-pointer group" onClick={() => document.getElementById('orphan-profile-upload')?.click()}>
+            {orphanImageUrl ? (
+              <Image
                 src={orphanImageUrl}
                 alt={`${orphan.fullName} Profile`}
                 fill
-                style={{ objectFit: "cover" }}
-                className="rounded-full"
+                style={{ objectFit: 'cover' }}
+                className="rounded-full border border-blue-300 shadow-sm"
                 onError={handleOrphanImageError}
                 unoptimized
                 priority
               />
-            </div>
-          ) : (
-            <div className="w-64 h-64 bg-gray-100 rounded-full border flex items-center justify-center">
-              <div className="text-blue-500">
-                <User className="h-12 w-12" />
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Main Details */}
-      <Card className="md:col-span-2 shadow-lg rounded-xl overflow-hidden">        <CardHeader>
-          <div className="flex items-center space-x-2">
-            <CardTitle>{t("orphan.details.personalInformation")}</CardTitle>
-            {orphan.status && (
-              <Badge className={`${orphan.status?.toLowerCase() === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                {orphan.status === 'ACTIVE' ? t("orphan.details.active") : t("orphan.details.inactive")}
-              </Badge>
+            ) : (
+              <span className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center border border-blue-300 text-blue-400">
+                <User className="h-6 w-6" />
+              </span>
             )}
-          </div>
-        </CardHeader>
+            <input
+              id="orphan-profile-upload"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={e => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  // TODO: Implement upload logic here
+                  // You can call a handler or set state to upload the image
+                }
+              }}
+            />
+            <span className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1 text-xs opacity-80 group-hover:opacity-100 transition-opacity">
+              <Edit className="h-3 w-3" />
+            </span>
+          </span>
+          <span>{orphan.fullName}</span>
+        </span>
+      </CardTitle>
+      {orphan.status && (
+        <Badge className={`${orphan.status?.toLowerCase() === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+          {orphan.status === 'ACTIVE' ? t("orphan.details.active") : t("orphan.details.inactive")}
+        </Badge>
+      )}
+    </div>
+  </CardHeader>
         <CardContent className="space-y-4">          <div className="grid grid-cols-2 gap-4">
             <div>
               <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.fullName")}</h3>
@@ -554,7 +606,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       </AlertDialog>
       
       {/* Guardian Information */}
-      <Card className="shadow-lg rounded-xl overflow-hidden">        
+      <Card className="md:col-span-3 shadow-lg rounded-xl overflow-hidden min-w-[250px]">        
         <CardHeader>
           <div>
             <CardTitle>{t("orphan.details.guardianInformation")}</CardTitle>
@@ -625,7 +677,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
               variant="outline"
               size="sm"
               onClick={() => setIsGuardianFormOpen(true)}
-              className="rounded-xl flex items-center"
+              className="rounded-xl flex items-center w-full"
             >
               {orphan.guardian ? (
                 <>
@@ -642,7 +694,76 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
           </div>
         )}
       </Card>
-        {/* Guardian Form Dialog - Only render when not in readOnly mode */}
+
+      {/* Certificate Records */}
+      <Card className="md:col-span-4 shadow-lg rounded-xl overflow-hidden">
+        <CardHeader>
+          <div>
+            <CardTitle>{t("orphan.details.certificateRecords")}</CardTitle>
+            <CardDescription>{t("orphan.details.certificateRecordsDesc")}</CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {certificates.length === 0 ? (
+              <p className="text-muted-foreground italic">{t("orphan.details.noCertificates")}</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-left py-2 font-medium text-muted-foreground">{t("orphan.details.certificateType")}</th>
+                      <th className="text-left py-2 font-medium text-muted-foreground">{t("orphan.details.certificateDate")}</th>
+                      <th className="text-right py-2 font-medium text-muted-foreground">{t("orphan.details.certificateOptions")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {certificates.map((cert, index) => (
+                      <tr key={cert.id || `cert-${index}`} className="border-b">
+                        <td className="py-3">
+                          <div className="flex items-center">
+                            <File className="h-4 w-4 mr-2 text-blue-500" />
+                            {cert.type === 'BIRTH_CERTIFICATE' && t("orphan.details.birthCertificate")}
+                            {cert.type === 'EDUCATION_CERTIFICATE' && t("orphan.details.educationCertificate")}
+                            {cert.type === 'MEDICAL_CERTIFICATE' && t("orphan.details.medicalCertificate")}
+                            {cert.type === 'OTHER' && t("orphan.details.otherCertificate")}
+                          </div>
+                        </td>
+                        <td className="py-3">
+                          <div className="flex items-center">
+                            <Calendar className="h-4 w-4 mr-2 text-gray-400" />
+                            {cert.issueDate ? new Date(cert.issueDate).toLocaleDateString() : '-'}
+                          </div>
+                        </td>
+                        <td className="py-3 text-right">
+                          <Button variant="ghost" size="sm" className="h-8 px-2 text-blue-600">
+                            {t("orphan.details.viewCertificate")}
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </CardContent>
+        {!readOnly && (
+          <div className="border-t p-4 flex justify-end space-x-2 bg-gray-50">
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-xl flex items-center w-full"
+              onClick={() => setIsCertificateFormOpen(true)}
+            >
+              <Plus className="h-4 w-4 mr-1" />
+              {t("orphan.details.addCertificate")}
+            </Button>
+          </div>
+        )}
+      </Card>
+        
+      {/* Guardian Form Dialog - Only render when not in readOnly mode */}
       {!readOnly && (
         <>
           <GuardianForm 
@@ -652,6 +773,16 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             guardian={orphan.guardian} 
           />
             {/* Delete Guardian Dialog removed as requested */}
+          
+          {/* Certificate Form */}
+          {orphan && (
+            <CertificateForm
+              open={isCertificateFormOpen}
+              onOpenChange={setIsCertificateFormOpen}
+              onSubmit={handleAddCertificate}
+              orphanId={orphan.publicId}
+            />
+          )}
           
           {/* Edit Orphan Form */}
           <OrphanFormEdit 

@@ -31,6 +31,10 @@ export default function GuardianForm({ open, onOpenChange, onSubmit, guardian }:
   const [address, setAddress] = useState('')
   const [occupation, setOccupation] = useState('')
   
+  // Photo uploads
+  const [childPhoto, setChildPhoto] = useState<File | null>(null)
+  const [guardianPhoto, setGuardianPhoto] = useState<File | null>(null)
+  
   // Load guardian data when the component opens or guardian data changes
   useEffect(() => {
     if (guardian) {
@@ -44,6 +48,16 @@ export default function GuardianForm({ open, onOpenChange, onSubmit, guardian }:
     }
   }, [guardian])
   
+  // Function to handle file input changes
+  const handleFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setter: React.Dispatch<React.SetStateAction<File | null>>
+  ) => {
+    if (e.target.files && e.target.files[0]) {
+      setter(e.target.files[0]);
+    }
+  };
+  
   // Function to handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -55,14 +69,17 @@ export default function GuardianForm({ open, onOpenChange, onSubmit, guardian }:
     }
     
     // Create guardian data object
-    const guardianData: Guardian = {
+    const guardianData: Guardian & { childPhoto?: File; guardianPhoto?: File } = {
       name,
       relationship,
       contactNumber,
       sex,
       email,
       address,
-      occupation
+      occupation,
+      // Add photo files if they exist
+      childPhoto: childPhoto || undefined,
+      guardianPhoto: guardianPhoto || undefined
     }
     
     // Submit the data
@@ -217,6 +234,44 @@ export default function GuardianForm({ open, onOpenChange, onSubmit, guardian }:
                 className='col-span-3 border border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-100 rounded-xl p-2 transition duration-200'
                 placeholder="Enter occupation"
               />
+            </div>
+            
+            {/* Photo uploads section */}
+            <div className="col-span-full mt-4 mb-2">
+              <h3 className="font-medium text-blue-700 mb-2">{t('orphan.form.guardianSection')}</h3>
+              <div className="border-t border-blue-100 mb-4"></div>
+            </div>
+            
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='childPhoto' className='text-right block text-gray-700 font-medium'>
+                {t('orphan.form.childPhoto')}
+              </Label>
+              <div className='col-span-3'>
+                <Input
+                  id='childPhoto'
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, setChildPhoto)}
+                  className='border border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-100 rounded-xl p-2 transition duration-200'
+                />
+                <p className="text-xs text-gray-500 mt-1">{t('orphan.form.uploadChildPhoto')}</p>
+              </div>
+            </div>
+            
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='guardianPhoto' className='text-right block text-gray-700 font-medium'>
+                {t('orphan.form.guardianPhoto')}
+              </Label>
+              <div className='col-span-3'>
+                <Input
+                  id='guardianPhoto'
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, setGuardianPhoto)}
+                  className='border border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-100 rounded-xl p-2 transition duration-200'
+                />
+                <p className="text-xs text-gray-500 mt-1">{t('orphan.form.uploadGuardianPhoto')}</p>
+              </div>
             </div>
           </div>
           

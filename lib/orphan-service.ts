@@ -1,10 +1,11 @@
 import API, { getErrorMessage } from "./api-service"
-import { Orphan } from "./orphan-types"
+import { Orphan, Certificate } from "./orphan-types"
 
 export interface OrphanCreateRequest {
   origin: string
   fullName: string
   dateOfBirth: string
+  arrivalDate: string      // New field: Date of arrival at the orphanage
   religion: string
   adoptionReason: string
   gender: string
@@ -13,8 +14,34 @@ export interface OrphanCreateRequest {
   medicalHistory: string
   specialNeeds: string
   hobbies: string
+  
+  // Education fields
   educationLevel: string
   previousSchoolName: string
+  educationStartDate?: string  // New field: Education time frame start
+  educationEndDate?: string    // New field: Education time frame end
+  
+  // Referral information
+  referralOfficer?: string    // New field: Officer who brought the orphan
+  referralDepartment?: string // New field: Department of referring officer
+  referralPhone?: string      // New field: Phone of referring officer
+  referralDate?: string       // New field: Date of referral
+  referralDocument?: File     // New field: Referral document
+  
+  // Guardian information and files
+  guardianName?: string       // New field: Guardian name
+  guardianPhone?: string      // New field: Guardian phone number
+  guardianResidence?: string  // New field: Guardian place of residence
+  relationship?: string       // New field: Relationship with the child
+  
+  // Files moved to certificate records
+  birthCertificate?: File     // New field: Birth certificate
+  educationCertificate?: File // New field: Education certificate
+  additionalFiles?: File[]    // New field: Other necessary files
+  
+  // Photos for guardian records
+  childPhoto?: File           // New field: Child photo
+  guardianPhoto?: File        // New field: Guardian photo
 }
 
 export interface OrphanUpdateRequest {
@@ -36,6 +63,15 @@ export interface OrphanUpdateRequest {
 export interface OrphanStatusChangeRequest {
   orphanPublicId: string
   reason: string
+}
+
+// New interface for certificate upload
+export interface CertificateUploadRequest {
+  orphanPublicId: string
+  type: string
+  file: File
+  issueDate?: string
+  description?: string
 }
 
 const OrphanService = {
@@ -252,6 +288,47 @@ const OrphanService = {
       console.error("Delete orphan error:", error)
       error.friendlyMessage = `Failed to delete orphan: ${getErrorMessage(error)}`
       throw error
+    }
+  },
+
+  // New method to get certificates for an orphan
+  getCertificates: async (orphanPublicId: string) => {
+    try {
+      const response = await API.get(`/orphans/${orphanPublicId}/certificates`)
+      return response.data
+    } catch (error) {
+      throw getErrorMessage(error)
+    }
+  },
+
+  // New method to upload a certificate
+  uploadCertificate: async (request: CertificateUploadRequest) => {
+    try {
+      const formData = new FormData()
+      formData.append('orphanId', request.orphanPublicId)
+      formData.append('type', request.type)
+      formData.append('file', request.file)
+      if (request.issueDate) formData.append('issueDate', request.issueDate)
+      if (request.description) formData.append('description', request.description)
+      
+      const response = await API.post(`/orphans/${request.orphanPublicId}/certificates`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      return response.data
+    } catch (error) {
+      throw getErrorMessage(error)
+    }
+  },
+
+  // New method to delete a certificate
+  deleteCertificate: async (orphanPublicId: string, certificateId: string) => {
+    try {
+      const response = await API.delete(`/orphans/${orphanPublicId}/certificates/${certificateId}`)
+      return response.data
+    } catch (error) {
+      throw getErrorMessage(error)
     }
   },
 }

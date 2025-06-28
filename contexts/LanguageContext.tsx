@@ -2364,11 +2364,7 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     sw: "IMESITISHWA"
   },
   
-  // Fundraiser translations
-  "fundraiser.currency": {
-    en: "Tshs",
-    sw: "Tshs"
-  },
+  // Fundraiser status translations
   "fundraiser.status.approved": {
     en: "APPROVED",
     sw: "IMEIDHINISHWA"
@@ -3662,6 +3658,46 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Current Level",
     sw: "Kiwango cha Sasa",
   },
+  "orphan.details.certificateRecords": {
+    en: "Certificate Records",
+    sw: "Rekodi za Vyeti",
+  },
+  "orphan.details.certificateRecordsDesc": {
+    en: "View and manage important certificates and documents",
+    sw: "Angalia na simamia vyeti na nyaraka muhimu",
+  },
+  "orphan.details.educationCertificate": {
+    en: "Education Certificate",
+    sw: "Cheti cha Elimu",
+  },
+  "orphan.details.birthCertificate": {
+    en: "Birth Certificate",
+    sw: "Cheti cha Kuzaliwa",
+  },
+  "orphan.details.uploadCertificate": {
+    en: "Upload Certificate",
+    sw: "Pakia Cheti",
+  },
+  "orphan.details.addCertificate": {
+    en: "Add Certificate",
+    sw: "Ongeza Cheti",
+  },
+  "orphan.details.noCertificates": {
+    en: "No certificates available",
+    sw: "Hakuna vyeti vilivyopatikana",
+  },
+  "orphan.details.certificateType": {
+    en: "Certificate Type",
+    sw: "Aina ya Cheti",
+  },
+  "orphan.details.certificateDate": {
+    en: "Date Uploaded",
+    sw: "Tarehe ya Kupakia",
+  },
+  "orphan.details.certificateOptions": {
+    en: "Options",
+    sw: "Chaguo",
+  },
   "orphan.details.currentSchool": {
     en: "Current School",
     sw: "Shule ya Sasa",
@@ -4112,11 +4148,11 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   },
   "orphan.form.hobbies": {
     en: "Hobbies",
-    sw: "Hobi",
+    sw: "Kipaji",
   },
   "orphan.form.hobbiesPlaceholder": {
     en: "Enter hobbies",
-    sw: "Ingiza hobi",
+    sw: "Ingiza kipaji",
   },
   "orphan.form.allergies": {
     en: "Allergies",
@@ -4209,6 +4245,147 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   "orphan.form.saveOrphan": {
     en: "Save Orphan",
     sw: "Hifadhi Yatima",
+  },
+  // New translation keys for new orphan form fields
+  "orphan.form.arrivalDate": {
+    en: "Date of Arrival",
+    sw: "Tarehe ya Kuwasili",
+  },
+  "orphan.form.arrivalDatePlaceholder": {
+    en: "Select date of arrival at the orphanage",
+    sw: "Chagua tarehe ya kuwasili kwenye kituo cha watoto",
+  },
+  "orphan.form.referralSection": {
+    en: "Referral Information",
+    sw: "Taarifa za Rufaa",
+  },
+  "orphan.form.referralOfficer": {
+    en: "Referring Officer",
+    sw: "Afisa wa Rufaa",
+  },
+  "orphan.form.referralOfficerPlaceholder": {
+    en: "Enter name of referring officer",
+    sw: "Ingiza jina la afisa wa rufaa",
+  },
+  "orphan.form.referralDepartment": {
+    en: "Department",
+    sw: "Idara",
+  },
+  "orphan.form.referralDepartmentPlaceholder": {
+    en: "Enter referring department",
+    sw: "Ingiza idara ya rufaa",
+  },
+  "orphan.form.referralPhone": {
+    en: "Officer Phone",
+    sw: "Simu ya Afisa",
+  },
+  "orphan.form.referralPhonePlaceholder": {
+    en: "Enter referring officer's phone number",
+    sw: "Ingiza namba ya simu ya afisa wa rufaa",
+  },
+  "orphan.form.referralDate": {
+    en: "Referral Date",
+    sw: "Tarehe ya Rufaa",
+  },
+  "orphan.form.referralDocument": {
+    en: "Referral Document",
+    sw: "Nyaraka ya Rufaa",
+  },
+  "orphan.form.referralDocumentPlaceholder": {
+    en: "Upload referral document",
+    sw: "Pakia nyaraka ya rufaa",
+  },
+  "orphan.form.uploadDocument": {
+    en: "Upload Document",
+    sw: "Pakia Nyaraka",
+  },
+  "orphan.form.educationTimeFrame": {
+    en: "Education Time Frame",
+    sw: "Muda wa Elimu",
+  },
+  "orphan.form.educationStartDate": {
+    en: "Start Date",
+    sw: "Tarehe ya Kuanza",
+  },
+  "orphan.form.educationEndDate": {
+    en: "End Date",
+    sw: "Tarehe ya Kumaliza",
+  },
+  "orphan.form.educationCertificate": {
+    en: "Education Certificate",
+    sw: "Cheti cha Elimu",
+  },
+  "orphan.form.uploadCertificate": {
+    en: "Upload Certificate",
+    sw: "Pakia Cheti",
+  },
+  "orphan.form.guardianSection": {
+    en: "Guardian Information",
+    sw: "Taarifa za Mlezi",
+  },
+  "orphan.form.guardianName": {
+    en: "Guardian Name",
+    sw: "Jina la Mlezi",
+  },
+  "orphan.form.guardianNamePlaceholder": {
+    en: "Enter guardian's full name",
+    sw: "Ingiza jina kamili la mlezi",
+  },
+  "orphan.form.guardianPhone": {
+    en: "Guardian Phone",
+    sw: "Namba ya Simu ya Mlezi",
+  },
+  "orphan.form.guardianPhonePlaceholder": {
+    en: "Enter guardian's phone number",
+    sw: "Ingiza namba ya simu ya mlezi",
+  },
+  "orphan.form.guardianResidence": {
+    en: "Place of Residence",
+    sw: "Mahali pa Kuishi",
+  },
+  "orphan.form.guardianResidencePlaceholder": {
+    en: "Enter guardian's place of residence",
+    sw: "Ingiza mahali mlezi anapoishi",
+  },
+  "orphan.form.relationship": {
+    en: "Relationship with Child",
+    sw: "Uhusiano na Mtoto",
+  },
+  "orphan.form.relationshipPlaceholder": {
+    en: "Enter relationship (e.g. uncle, none)",
+    sw: "Ingiza uhusiano (mfano mjomba, hakuna)",
+  },
+  "orphan.form.childPhoto": {
+    en: "Child Photo",
+    sw: "Picha ya Mtoto",
+  },
+  "orphan.form.uploadChildPhoto": {
+    en: "Upload Child Photo",
+    sw: "Pakia Picha ya Mtoto",
+  },
+  "orphan.form.guardianPhoto": {
+    en: "Guardian Photo",
+    sw: "Picha ya Mlezi",
+  },
+  "orphan.form.uploadGuardianPhoto": {
+    en: "Upload Guardian Photo",
+    sw: "Pakia Picha ya Mlezi",
+  },
+  "orphan.form.birthCertificate": {
+    en: "Birth Certificate",
+    sw: "Cheti cha Kuzaliwa",
+  },
+  "orphan.form.uploadBirthCertificate": {
+    en: "Upload Birth Certificate",
+    sw: "Pakia Cheti cha Kuzaliwa",
+  },
+  "orphan.form.additionalFiles": {
+    en: "Additional Files",
+    sw: "Faili za Ziada",
+  },
+  "orphan.form.uploadAdditionalFiles": {
+    en: "Upload Additional Files",
+    sw: "Pakia Faili za Ziada",
   },
   "orphan.form.birthDate": {
     en: "Birth Date",
