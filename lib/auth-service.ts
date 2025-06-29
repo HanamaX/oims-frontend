@@ -19,6 +19,9 @@ export interface LoginResponse {
       authorities: { authority: string }[]
       credentialsNonExpired: boolean
       accountNonExpired: boolean
+      branchPublicId?: string
+      orphanageCentrePublicId?: string
+      orphanageCentreName?: string
       createdDate?: string
     }
     branchName?: string | null
