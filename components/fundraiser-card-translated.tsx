@@ -51,10 +51,8 @@ export default function FundraiserCard({
   // Helper function to construct image URLs consistently
   const getImageUrl = useCallback((imageUrl?: string) => {
     if (!imageUrl || imageUrl.trim() === "") return null
-    if (imageUrl.startsWith('http')) {
-      return imageUrl
-    }
-    return `https://oims-4510ba404e0e.herokuapp.com${imageUrl}`
+    // Images should come as full URLs from the backend, just like profile pictures
+    return imageUrl
   }, [])
 
   // Memoized image URL to prevent unnecessary recalculations
