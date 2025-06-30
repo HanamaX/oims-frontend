@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Textarea } from "@/components/ui/textarea"
 import { Loader2 } from "lucide-react"
 import API from "@/lib/api-service"
 import { useToast } from "@/components/ui/use-toast"
@@ -84,6 +85,7 @@ export default function CenterManagementPage() {
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("overview")
   const [deleteCenterDialogOpen, setDeleteCenterDialogOpen] = useState(false)
+  const [leaveRequestReason, setLeaveRequestReason] = useState("")
 
   const { toast } = useToast()
   const { t } = useLanguage()
@@ -225,12 +227,12 @@ export default function CenterManagementPage() {
     setBranchStaff([])
     setShowBranchDetails(false)
   }
-  // Handle center delete
+  // Handle center leave request
   const handleDeleteCenter = () => {
     if (!centre.publicId) {
       toast({
         title: t("common.error"),
-        description: t("centerManagement.deleteDialog.deleteError"),
+        description: t("centerManagement.leaveRequest.error"),
         variant: "destructive",
       })
       return
@@ -239,49 +241,39 @@ export default function CenterManagementPage() {
     setDeleteCenterDialogOpen(true)
   }
 
-  // Confirm center delete
+  // Confirm center leave request
   const confirmDeleteCenter = async () => {
-    if (!centre.publicId) return
+    if (!centre.publicId || !leaveRequestReason.trim()) {
+      toast({
+        title: t("common.error"),
+        description: t("centerManagement.leaveRequest.reasonRequired"),
+        variant: "destructive",
+      })
+      return
+    }
     
     setSubmitting(true)
     setError(null)
     
     try {
-      await API.delete(`/app/oims/orphanages/delorphanage/${centre.publicId}`)
-      
-      // Reset state
-      setCentre({
-        name: "",
-        location: "",
-        address: "",
-        phoneNumber: "",
-        email: "",
-        description: "",
+      await API.post('/app/oims/orphanage-centers/leave-requests', {
+        centrePublicId: centre.publicId,
+        reason: leaveRequestReason.trim()
       })
-      setCenterExists(false)
-      setBranches([])
       
-      // Update localStorage
-      try {
-        const userData = localStorage.getItem("user")
-        if (userData) {
-          const parsedUser = JSON.parse(userData)
-          parsedUser.isCentreCreated = false
-          localStorage.setItem("user", JSON.stringify(parsedUser))
-        }
-      } catch (storageErr) {
-        console.error("Failed to update local storage:", storageErr)
-      }
-        toast({
+      // Reset form
+      setLeaveRequestReason("")
+      
+      toast({
         title: t("common.success"),
-        description: t("centerOverview.success.deleted"),
+        description: t("centerManagement.leaveRequest.success"),
       })
     } catch (err: any) {
-      console.error("Error deleting center:", err)
-      setError(err.response?.data?.message ?? "Failed to delete center. Please try again.")
+      console.error("Error submitting leave request:", err)
+      setError(err.response?.data?.message ?? "Failed to submit leave request. Please try again.")
       toast({
         title: t("common.error"),
-        description: t("centerOverview.error.delete"),
+        description: t("centerManagement.leaveRequest.submitError"),
         variant: "destructive",
       })
     } finally {
@@ -369,35 +361,58 @@ export default function CenterManagementPage() {
           </TabsContent>
         </Tabs>
       )}
-        {/* Delete Center Confirmation Dialog */}
+        {/* Leave Request Dialog */}
       <Dialog open={deleteCenterDialogOpen} onOpenChange={setDeleteCenterDialogOpen}>
         <DialogContent className="bg-white">
           <DialogHeader>
-            <DialogTitle><T k="centerManagement.deleteDialog.title" /></DialogTitle>
+            <DialogTitle><T k="centerManagement.leaveRequest.title" /></DialogTitle>
             <DialogDescription>
-              <T k="centerManagement.deleteDialog.description" /> <strong>{centre.name}</strong>?
-              <br /><br />
-              <T k="centerManagement.deleteDialog.warning" />
-              <br /><br />
-              <span className="text-red-600 font-medium"><T k="centerManagement.deleteDialog.criticalWarning" /></span>
+              <T k="centerManagement.leaveRequest.description" />
             </DialogDescription>
           </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label htmlFor="leaveReason" className="text-sm font-medium">
+                <T k="centerManagement.leaveRequest.reasonLabel" />
+                <span className="text-red-500">*</span>
+              </label>
+              <Textarea
+                id="leaveReason"
+                placeholder={t("centerManagement.leaveRequest.reasonPlaceholder")}
+                value={leaveRequestReason}
+                onChange={(e) => setLeaveRequestReason(e.target.value)}
+                className="min-h-[100px]"
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                <T k="centerManagement.leaveRequest.reasonNote" />
+              </p>
+            </div>
+          </div>
+          
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteCenterDialogOpen(false)}>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setDeleteCenterDialogOpen(false)
+                setLeaveRequestReason("")
+              }}
+            >
               <T k="common.cancel" />
             </Button>
             <Button 
-              variant="destructive" 
+              variant="default" 
               onClick={confirmDeleteCenter}
-              disabled={submitting}
+              disabled={submitting || !leaveRequestReason.trim()}
             >
               {submitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  <T k="centerManagement.deleteDialog.deleting" />
+                  <T k="centerManagement.leaveRequest.submitting" />
                 </>
               ) : (
-                <T k="centerManagement.deleteDialog.deleteButton" />
+                <T k="centerManagement.leaveRequest.submitButton" />
               )}
             </Button>
           </DialogFooter>

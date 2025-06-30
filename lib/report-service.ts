@@ -228,16 +228,23 @@ class ReportService {    // Get available branches for reports
   // Generate system-wide reports (for superadmins)
   async generateSystemReport(reportType: ReportType, filters: ReportFilters = {}) {
     try {
+      console.log(`ReportService.generateSystemReport called with reportType: "${reportType}", filters:`, filters)
+      
       // For orphans, inventory, staff, fundraising, and volunteers reports, use the new API endpoints
       if (reportType === 'orphans') {
+        console.log('Routing to generateOrphansDemographicsReport')
         return this.generateOrphansDemographicsReport(filters)
       } else if (reportType === 'inventory') {
+        console.log('Routing to generateInventoryReport')
         return this.generateInventoryReport(filters)
       } else if (reportType === 'staff') {
+        console.log('Routing to generateAdminReport')
         return this.generateAdminReport(filters)
       } else if (reportType === 'fundraising') {
+        console.log('Routing to generateFundraiserReport')
         return this.generateFundraiserReport(filters)
       } else if (reportType === 'volunteers') {
+        console.log('Routing to generateVolunteerReport')
         return this.generateVolunteerReport(filters)
       }
       

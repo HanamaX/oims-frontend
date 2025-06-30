@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Loader2, LogOut, Plus, Trash2, UserCheck, UserX, BarChart3, FileText } from "lucide-react"
+import { Loader2, LogOut, Plus, BarChart3, FileText } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { useSearchParams, useRouter } from "next/navigation"
 import SuperuserAuthService from "@/lib/superuser-service-fix" // Using the fixed service
@@ -84,8 +84,6 @@ function SuperuserDashboardContent() {
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("dashboard")
   const [addAdminDialogOpen, setAddAdminDialogOpen] = useState(false)
-  const [deleteAdminDialogOpen, setDeleteAdminDialogOpen] = useState(false)
-  const [selectedAdmin, setSelectedAdmin] = useState<OrphanageAdmin | null>(null)
   const { toast } = useToast()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -272,66 +270,6 @@ function SuperuserDashboardContent() {
     }
   }
 
-  // Handle deleting an admin
-  const handleDeleteClick = (admin: OrphanageAdmin) => {
-    setSelectedAdmin(admin)
-    setDeleteAdminDialogOpen(true)
-  }
-
-  // Confirm admin delete
-  const confirmDeleteAdmin = async () => {
-    if (!selectedAdmin?.publicId) return
-    
-    setSubmitting(true)
-    setError(null)
-    
-    try {
-      await SuperuserAuthService.deleteOrphanageAdmin(selectedAdmin.publicId)
-      
-      toast({
-        title: "Success",
-        description: `Admin ${selectedAdmin.fullName} has been deleted successfully`,
-      })
-      
-      setDeleteAdminDialogOpen(false)
-      setSelectedAdmin(null)
-      await fetchAdmins()
-    } catch (err: any) {
-      console.error("Error deleting admin:", err)
-      setError(err.response?.data?.message ?? "Failed to delete admin")
-      toast({
-        title: "Error",
-        description: "Failed to delete admin",
-        variant: "destructive",
-      })
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
-  // Handle toggling admin suspension status
-  const handleToggleAdminStatus = async (admin: OrphanageAdmin) => {
-    if (!admin.publicId) return
-    
-    try {
-      const newStatus = !admin.suspended
-      await SuperuserAuthService.toggleAdminStatus(admin.publicId, newStatus)
-      
-      toast({
-        title: "Success",
-        description: `Admin ${admin.fullName} has been ${newStatus ? "suspended" : "activated"} successfully`,
-      })
-      
-      await fetchAdmins()
-    } catch (err: any) {
-      console.error("Error updating admin status:", err)
-      toast({
-        title: "Error",
-        description: `Failed to update admin status: ${err.message}`,
-        variant: "destructive",
-      })
-    }
-  }
   // Handle logout
   const handleLogout = () => {
     SuperuserAuthService.logout()
@@ -562,13 +500,12 @@ function SuperuserDashboardContent() {
                     <TableHead>Email</TableHead>
                     <TableHead>Center</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {admins.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center py-4">
+                      <TableCell colSpan={4} className="text-center py-4">
                         No orphanage admins found
                       </TableCell>
                     </TableRow>
@@ -582,28 +519,6 @@ function SuperuserDashboardContent() {
                           <span className={`px-2 py-1 rounded text-xs ${admin.suspended ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"}`}>
                             {admin.suspended ? "Suspended" : "Active"}
                           </span>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleToggleAdminStatus(admin)}
-                            >
-                              {admin.suspended ? (
-                                <UserCheck className="h-4 w-4 text-blue-500" />
-                              ) : (
-                                <UserX className="h-4 w-4 text-amber-500" />
-                              )}
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteClick(admin)}
-                            >
-                              <Trash2 className="h-4 w-4 text-red-500" />
-                            </Button>
-                          </div>
                         </TableCell>
                       </TableRow>
                     )))
@@ -646,38 +561,6 @@ function SuperuserDashboardContent() {
           </Tabs>
         </TabsContent>
       </Tabs>
-        {/* Delete Admin Confirmation Dialog */}
-      <Dialog open={deleteAdminDialogOpen} onOpenChange={setDeleteAdminDialogOpen}>
-        <DialogContent className="bg-white">
-          <DialogHeader>
-            <DialogTitle>{t("admin.confirmDeletion")}</DialogTitle>
-            <DialogDescription>
-              {t("admin.deleteConfirmMessage")} <strong>{selectedAdmin?.fullName}</strong>?
-              <br /><br />
-              {t("admin.deleteWarning")}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteAdminDialogOpen(false)}>
-              {t("common.cancel")}
-            </Button>
-            <Button 
-              variant="destructive" 
-              onClick={confirmDeleteAdmin}
-              disabled={submitting}
-            >
-              {submitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {t("admin.deleting")}
-                </>
-              ) : (
-                t("admin.deleteAdmin")
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

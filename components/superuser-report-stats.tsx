@@ -48,9 +48,10 @@ interface SystemStats {
 
 interface SuperuserReportStatsProps {
   stats: SystemStats
+  showBranches?: boolean // Optional prop to control if branches should be shown
 }
 
-export default function SuperuserReportStats({ stats }: Readonly<SuperuserReportStatsProps>) {
+export default function SuperuserReportStats({ stats, showBranches = false }: Readonly<SuperuserReportStatsProps>) {
   const [activeChart, setActiveChart] = useState("orphanage")
   // Generate sample data for more detailed reports (in a real app, this would come from API)
   // Multi-color palette for charts (blue, red, green, yellow, purple, orange, etc.)
@@ -221,7 +222,9 @@ export default function SuperuserReportStats({ stats }: Readonly<SuperuserReport
         <CardContent>          {/* Replace the summary <div> with animated stat cards */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-6">
             <AnimatedStatCard title={t("branch.orphanageCenters")} value={stats.totalOrphanageCenters ?? 0} color="#2563eb" icon={<span>🏠</span>} />
-            <AnimatedStatCard title={t("branch.branches")} value={stats.totalBranches ?? 0} color="#f59e42" icon={<span>🌿</span>} />
+            {showBranches && (
+              <AnimatedStatCard title={t("branch.branches")} value={stats.totalBranches ?? 0} color="#f59e42" icon={<span>🌿</span>} />
+            )}
             <AnimatedStatCard title={t("orphan.orphans")} value={stats.totalOrphans ?? 0} color="#10b981" icon={<span>🧒</span>} />
             <AnimatedStatCard title={t("admin.admins")} value={stats.totalAdmins ?? 0} color="#a21caf" icon={<span>🧑‍💼</span>} />
             <AnimatedStatCard title={t("fundraiser.donations")} value={(stats.totalDonations ?? 0).toLocaleString()} color="#f43f5e" icon={<span>💰</span>} />

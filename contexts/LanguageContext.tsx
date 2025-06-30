@@ -18,6 +18,550 @@ type LanguageContextType = {
 
 // Create translations object
 const translations: Record<string, Record<AppLanguage, string>> = {
+  
+  // Orphanage Centres Page
+  "superuser.dashboard.orphanageCentres": {
+    en: "Orphanage Centres",
+    sw: "Vituo vya Watoto Yatima",
+  },
+  "orphanageCentres.title": {
+    en: "Orphanage Centres",
+    sw: "Vituo vya Watoto Yatima",
+  },
+  "orphanageCentres.subtitle": {
+    en: "Manage and monitor all registered orphanage centres",
+    sw: "Simamia na fuatilia vituo vyote vya watoto yatima vilivyosajiliwa",
+  },
+  "orphanageCentres.loading": {
+    en: "Loading centres...",
+    sw: "Inapakia vituo...",
+  },
+  "orphanageCentres.errorTitle": {
+    en: "Failed to load centres",
+    sw: "Imeshindwa kupakia vituo",
+  },
+  "orphanageCentres.tryAgain": {
+    en: "Try Again",
+    sw: "Jaribu Tena",
+  },
+  "orphanageCentres.search": {
+    en: "Search by name or location...",
+    sw: "Tafuta kwa jina au eneo...",
+  },
+  "orphanageCentres.filterByStatus": {
+    en: "Filter by status",
+    sw: "Chuja kwa hali",
+  },
+  "orphanageCentres.status": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "orphanageCentres.allCentres": {
+    en: "All Centres",
+    sw: "Vituo Vyote",
+  },
+  "orphanageCentres.active": {
+    en: "Active",
+    sw: "Amilifu",
+  },
+  "orphanageCentres.inactive": {
+    en: "Inactive",
+    sw: "Isiyoamilika",
+  },
+  "orphanageCentres.noCentresFound": {
+    en: "No centres found",
+    sw: "Hakuna vituo vilivyopatikana",
+  },
+  "orphanageCentres.adjustFilters": {
+    en: "Try adjusting your filters to find what you're looking for",
+    sw: "Jaribu kurekebisha vichujio vyako kupata unacho tafuta",
+  },
+  "orphanageCentres.noCentresYet": {
+    en: "No orphanage centres have been registered yet",
+    sw: "Hakuna vituo vya watoto yatima vilivyosajiliwa bado",
+  },
+  "orphanageCentres.showing": {
+    en: "Showing",
+    sw: "Inaonyesha",
+  },
+  "orphanageCentres.of": {
+    en: "of",
+    sw: "kati ya",
+  },
+  "orphanageCentres.centres": {
+    en: "centres",
+    sw: "vituo",
+  },
+  "orphanageCentres.name": {
+    en: "Name",
+    sw: "Jina",
+  },
+  "orphanageCentres.location": {
+    en: "Location",
+    sw: "Eneo",
+  },
+  "orphanageCentres.contact": {
+    en: "Contact",
+    sw: "Mawasiliano",
+  },
+  "orphanageCentres.createdDate": {
+    en: "Created Date",
+    sw: "Tarehe ya Kuundwa",
+  },
+  "orphanageCentres.actions": {
+    en: "Actions",
+    sw: "Vitendo",
+  },
+  "orphanageCentres.details": {
+    en: "Details",
+    sw: "Maelezo",
+  },
+  
+  // Orphanage Centre Details Page
+  "orphanageCentre.details.backToList": {
+    en: "Back to Centres",
+    sw: "Rudi kwenye Vituo",
+  },
+  "orphanageCentre.details.loading": {
+    en: "Loading centre information...",
+    sw: "Inapakia taarifa za kituo...",
+  },
+  "orphanageCentre.details.error": {
+    en: "Error loading centre",
+    sw: "Hitilafu katika kupakia kituo",
+  },
+  "orphanageCentre.details.notFound": {
+    en: "Centre not found",
+    sw: "Kituo hakikupatikana",
+  },
+  "orphanageCentre.details.tabDetails": {
+    en: "Details",
+    sw: "Maelezo",
+  },
+  "orphanageCentre.details.tabCertificate": {
+    en: "Certificate",
+    sw: "Cheti",
+  },
+  "orphanageCentre.details.tabLeaveRequests": {
+    en: "Leave Requests",
+    sw: "Maombi ya Likizo",
+  },
+  "orphanageCentre.details.centreInformation": {
+    en: "Centre Information",
+    sw: "Taarifa za Kituo",
+  },
+  "orphanageCentre.details.centreOverview": {
+    en: "Centre Overview",
+    sw: "Muhtasari wa Kituo",
+  },
+  "orphanageCentre.details.registrationInfo": {
+    en: "Registration Information",
+    sw: "Taarifa za Usajili",
+  },
+  "orphanageCentre.details.registrationNumber": {
+    en: "Registration Number",
+    sw: "Namba ya Usajili",
+  },
+  "orphanageCentre.details.registrationDate": {
+    en: "Registration Date",
+    sw: "Tarehe ya Usajili",
+  },
+  "orphanageCentre.details.contactInfo": {
+    en: "Contact Information",
+    sw: "Taarifa za Mawasiliano",
+  },
+  "orphanageCentre.details.phone": {
+    en: "Phone",
+    sw: "Simu",
+  },
+  "orphanageCentre.details.email": {
+    en: "Email",
+    sw: "Barua pepe",
+  },
+  "orphanageCentre.details.location": {
+    en: "Location",
+    sw: "Eneo",
+  },
+  "orphanageCentre.details.status": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "orphanageCentre.details.active": {
+    en: "Active",
+    sw: "Amilifu",
+  },
+  "orphanageCentre.details.inactive": {
+    en: "Inactive",
+    sw: "Isiyoamilika",
+  },
+  "orphanageCentre.details.activateButton": {
+    en: "Activate Centre",
+    sw: "Washa Kituo",
+  },
+  "orphanageCentre.details.deactivateButton": {
+    en: "Deactivate Centre",
+    sw: "Zima Kituo",
+  },
+  "orphanageCentre.details.confirmStatusChange": {
+    en: "Confirm Status Change",
+    sw: "Thibitisha Mabadiliko ya Hali",
+  },
+  "orphanageCentre.details.statusChangeDescription": {
+    en: "Are you sure you want to change the status of this centre? This will affect all operations at this centre.",
+    sw: "Je, una uhakika unataka kubadilisha hali ya kituo hiki? Hii itaathiri shughuli zote katika kituo hiki.",
+  },
+  "orphanageCentre.details.deactivationReasonRequired": {
+    en: "A reason is required when deactivating an orphanage centre",
+    sw: "Sababu inahitajika wakati wa kuzima kituo cha watoto yatima",
+  },
+  "orphanageCentre.details.reason": {
+    en: "Reason (optional)",
+    sw: "Sababu (hiari)",
+  },
+  "orphanageCentre.details.cancel": {
+    en: "Cancel",
+    sw: "Ghairi",
+  },
+  "orphanageCentre.details.confirm": {
+    en: "Confirm",
+    sw: "Thibitisha",
+  },
+  "orphanageCentre.details.description": {
+    en: "Description",
+    sw: "Maelezo",
+  },
+  "orphanageCentre.details.noDescription": {
+    en: "No description provided",
+    sw: "Hakuna maelezo yaliyotolewa",
+  },
+  "orphanageCentre.details.registrationCertificate": {
+    en: "Registration Certificate",
+    sw: "Cheti cha Usajili",
+  },
+  "orphanageCentre.details.viewCertificateDescription": {
+    en: "View or download the centre's official registration document",
+    sw: "Tazama au pakua waraka wa usajili wa kituo",
+  },
+  "orphanageCentre.details.registrationDocumentFor": {
+    en: "Registration document for",
+    sw: "Waraka wa usajili wa",
+  },
+  "orphanageCentre.details.noCertificate": {
+    en: "No certificate uploaded",
+    sw: "Hakuna cheti kilichopakiwa",
+  },
+  "orphanageCentre.details.noCertificateDescription": {
+    en: "This orphanage centre has not uploaded a registration certificate",
+    sw: "Kituo hiki cha watoto yatima hakijapakia cheti cha usajili",
+  },
+  "orphanageCentre.details.viewFullSize": {
+    en: "View Full Size",
+    sw: "Tazama Ukubwa Kamili",
+  },
+  "orphanageCentre.details.downloadCertificate": {
+    en: "Download Certificate",
+    sw: "Pakua Cheti",
+  },
+  
+  // Orphanage Centre Leave Requests
+  "orphanageCentre.leaveRequests.title": {
+    en: "Staff Leave Requests",
+    sw: "Maombi ya Likizo ya Wafanyakazi",
+  },
+  "orphanageCentre.leaveRequests.empty": {
+    en: "No leave requests found",
+    sw: "Hakuna maombi ya likizo yaliyopatikana",
+  },
+  "orphanageCentre.leaveRequests.loading": {
+    en: "Loading leave requests...",
+    sw: "Inapakia maombi ya likizo...",
+  },
+  "orphanageCentre.leaveRequests.status.pending": {
+    en: "Pending",
+    sw: "Inasubiri",
+  },
+  "orphanageCentre.leaveRequests.status.approved": {
+    en: "Approved",
+    sw: "Imeidhinishwa",
+  },
+  "orphanageCentre.leaveRequests.status.rejected": {
+    en: "Rejected",
+    sw: "Imekataliwa",
+  },
+  "orphanageCentre.leaveRequests.type": {
+    en: "Type",
+    sw: "Aina",
+  },
+  "orphanageCentre.leaveRequests.date": {
+    en: "Request Date",
+    sw: "Tarehe ya Ombi",
+  },
+  "orphanageCentre.leaveRequests.staff": {
+    en: "Staff Member",
+    sw: "Mfanyakazi",
+  },
+  "orphanageCentre.leaveRequests.dateRange": {
+    en: "Leave Period",
+    sw: "Kipindi cha Likizo",
+  },
+  "orphanageCentre.leaveRequests.actions": {
+    en: "Actions",
+    sw: "Vitendo",
+  },
+  "orphanageCentre.leaveRequests.view": {
+    en: "View",
+    sw: "Tazama",
+  },
+  "orphanageCentre.leaveRequests.approve": {
+    en: "Approve",
+    sw: "Idhinisha",
+  },
+  "orphanageCentre.leaveRequests.reject": {
+    en: "Reject",
+    sw: "Kataa",
+  },
+  "orphanageCentre.leaveRequests.viewRequest": {
+    en: "View Leave Request",
+    sw: "Tazama Ombi la Likizo",
+  },
+  "orphanageCentre.leaveRequests.confirmProcessing": {
+    en: "Confirm Leave Request Processing",
+    sw: "Thibitisha Usindikaji wa Ombi la Likizo",
+  },
+  "orphanageCentre.leaveRequests.confirmApproval": {
+    en: "Are you sure you want to approve this leave request?",
+    sw: "Je, una uhakika unataka kuidhinisha ombi hili la likizo?",
+  },
+  "orphanageCentre.leaveRequests.confirmRejection": {
+    en: "Are you sure you want to reject this leave request?",
+    sw: "Je, una uhakika unataka kukataa ombi hili la likizo?",
+  },
+  "orphanageCentre.leaveRequests.comments": {
+    en: "Comments (optional)",
+    sw: "Maoni (hiari)",
+  },
+  "orphanageCentre.leaveRequests.success": {
+    en: "Leave request processed successfully",
+    sw: "Ombi la likizo limesindikwa kwa mafanikio",
+  },
+  "orphanageCentre.leaveRequests.error": {
+    en: "Failed to process leave request",
+    sw: "Imeshindwa kusindika ombi la likizo",
+  },
+  
+  // Superuser Leave Requests Page
+  "leaveRequests.title": {
+    en: "Leave Requests",
+    sw: "Maombi ya Likizo",
+  },
+  "leaveRequests.subtitle": {
+    en: "Review and process orphanage centre leave requests",
+    sw: "Kagua na sindika maombi ya likizo ya vituo vya watoto yatima",
+  },
+  "leaveRequests.loading": {
+    en: "Loading leave requests...",
+    sw: "Inapakia maombi ya likizo...",
+  },
+  "leaveRequests.search": {
+    en: "Search by centre name, admin name, or location...",
+    sw: "Tafuta kwa jina la kituo, jina la msimamizi, au eneo...",
+  },
+  "leaveRequests.status": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "leaveRequests.allRequests": {
+    en: "All Requests",
+    sw: "Maombi Yote",
+  },
+  "leaveRequests.status.pending": {
+    en: "Pending",
+    sw: "Inasubiri",
+  },
+  "leaveRequests.status.approved": {
+    en: "Approved",
+    sw: "Imeidhinishwa",
+  },
+  "leaveRequests.status.rejected": {
+    en: "Rejected",
+    sw: "Imekataliwa",
+  },
+  "leaveRequests.noRequestsFound": {
+    en: "No leave requests found",
+    sw: "Hakuna maombi ya likizo yaliyopatikana",
+  },
+  "leaveRequests.adjustFilters": {
+    en: "Try adjusting your filters to find what you're looking for",
+    sw: "Jaribu kurekebisha vichujio vyako kupata unachokitafuta",
+  },
+  "leaveRequests.noRequestsYet": {
+    en: "No leave requests have been submitted yet",
+    sw: "Hakuna maombi ya likizo yaliyowasilishwa bado",
+  },
+  "leaveRequests.showing": {
+    en: "Showing",
+    sw: "Inaonyesha",
+  },
+  "leaveRequests.of": {
+    en: "of",
+    sw: "kati ya",
+  },
+  "leaveRequests.requests": {
+    en: "requests",
+    sw: "maombi",
+  },
+  "leaveRequests.table.centre": {
+    en: "Centre",
+    sw: "Kituo",
+  },
+  "leaveRequests.table.admin": {
+    en: "Administrator",
+    sw: "Msimamizi",
+  },
+  "leaveRequests.table.requestDate": {
+    en: "Request Date",
+    sw: "Tarehe ya Ombi",
+  },
+  "leaveRequests.table.status": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "leaveRequests.table.actions": {
+    en: "Actions",
+    sw: "Vitendo",
+  },
+  "leaveRequests.actions.view": {
+    en: "View",
+    sw: "Tazama",
+  },
+  "leaveRequests.actions.approve": {
+    en: "Approve",
+    sw: "Idhinisha",
+  },
+  "leaveRequests.actions.reject": {
+    en: "Reject",
+    sw: "Kataa",
+  },
+  "leaveRequests.actions.close": {
+    en: "Close",
+    sw: "Funga",
+  },
+  "leaveRequests.details.title": {
+    en: "Leave Request Details",
+    sw: "Maelezo ya Ombi la Likizo",
+  },
+  "leaveRequests.details.centreInfo": {
+    en: "Centre Information",
+    sw: "Taarifa za Kituo",
+  },
+  "leaveRequests.details.centreName": {
+    en: "Centre Name",
+    sw: "Jina la Kituo",
+  },
+  "leaveRequests.details.centreLocation": {
+    en: "Location",
+    sw: "Eneo",
+  },
+  "leaveRequests.details.centreStatus": {
+    en: "Centre Status",
+    sw: "Hali ya Kituo",
+  },
+  "leaveRequests.details.active": {
+    en: "Active",
+    sw: "Amilifu",
+  },
+  "leaveRequests.details.inactive": {
+    en: "Inactive",
+    sw: "Isiyoamilika",
+  },
+  "leaveRequests.details.adminInfo": {
+    en: "Administrator Information",
+    sw: "Taarifa za Msimamizi",
+  },
+  "leaveRequests.details.adminName": {
+    en: "Name",
+    sw: "Jina",
+  },
+  "leaveRequests.details.adminEmail": {
+    en: "Email",
+    sw: "Barua pepe",
+  },
+  "leaveRequests.details.adminPhone": {
+    en: "Phone",
+    sw: "Simu",
+  },
+  "leaveRequests.details.requestInfo": {
+    en: "Request Information",
+    sw: "Taarifa za Ombi",
+  },
+  "leaveRequests.details.requestDate": {
+    en: "Request Date",
+    sw: "Tarehe ya Ombi",
+  },
+  "leaveRequests.details.requestStatus": {
+    en: "Status",
+    sw: "Hali",
+  },
+  "leaveRequests.details.reason": {
+    en: "Reason",
+    sw: "Sababu",
+  },
+  "leaveRequests.details.rejectionReason": {
+    en: "Rejection Reason",
+    sw: "Sababu ya Kukataa",
+  },
+  "leaveRequests.process.approveTitle": {
+    en: "Approve Leave Request",
+    sw: "Idhinisha Ombi la Likizo",
+  },
+  "leaveRequests.process.rejectTitle": {
+    en: "Reject Leave Request",
+    sw: "Kataa Ombi la Likizo",
+  },
+  "leaveRequests.process.approveDescription": {
+    en: "Are you sure you want to approve this leave request? This will deactivate the orphanage centre.",
+    sw: "Je, una uhakika unataka kuidhinisha ombi hili la kujitoa? Hii itazima kituo cha watoto yatima.",
+  },
+  "leaveRequests.process.rejectDescription": {
+    en: "Please provide a reason for rejecting this leave request.",
+    sw: "Tafadhali toa sababu ya kukataa ombi hili la likizo.",
+  },
+  "leaveRequests.process.rejectionReason": {
+    en: "Rejection Reason",
+    sw: "Sababu ya Kukataa",
+  },
+  "leaveRequests.process.rejectionReasonPlaceholder": {
+    en: "Enter the reason for rejecting this request...",
+    sw: "Ingiza sababu ya kukataa ombi hili...",
+  },
+  "leaveRequests.process.processing": {
+    en: "Processing...",
+    sw: "Inasindika...",
+  },
+  "leaveRequests.success.approve": {
+    en: "Leave request approved successfully",
+    sw: "Ombi la likizo limeidhinishwa kwa mafanikio",
+  },
+  "leaveRequests.success.reject": {
+    en: "Leave request rejected successfully",
+    sw: "Ombi la likizo limekataliwa kwa mafanikio",
+  },
+  "leaveRequests.error.fetch": {
+    en: "Failed to load leave requests",
+    sw: "Imeshindwa kupakia maombi ya likizo",
+  },
+  "leaveRequests.error.approve": {
+    en: "Failed to approve leave request",
+    sw: "Imeshindwa kuidhinisha ombi la likizo",
+  },
+  "leaveRequests.error.reject": {
+    en: "Failed to reject leave request",
+    sw: "Imeshindwa kukataa ombi la likizo",
+  },
+  "leaveRequests.error.reasonRequired": {
+    en: "Rejection reason is required",
+    sw: "Sababu ya kukataa inahitajika",
+  },
     
   // Navigation translations
   "nav.profile": {
@@ -474,6 +1018,52 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Loading center information...",
     sw: "Inapakia taarifa za kituo...",
   },
+  
+  // Center Management Leave Request translations
+  "centerManagement.leaveRequest.title": {
+    en: "Request Centre Leave",
+    sw: "Omba Likizo ya Kituo",
+  },
+  "centerManagement.leaveRequest.description": {
+    en: "Submit a request to temporarily close or leave your orphanage centre. This request will be reviewed by the administrators.",
+    sw: "Wasilisha ombi la kufunga au kuacha kituo chako cha watoto yatima kwa muda. Ombi hili litakagulwa na wasimamizi.",
+  },
+  "centerManagement.leaveRequest.reasonLabel": {
+    en: "Reason for Leave Request",
+    sw: "Sababu ya Ombi la Likizo",
+  },
+  "centerManagement.leaveRequest.reasonPlaceholder": {
+    en: "Please provide a detailed reason for your leave request...",
+    sw: "Tafadhali toa sababu ya kina ya ombi lako la likizo...",
+  },
+  "centerManagement.leaveRequest.reasonNote": {
+    en: "Please provide a clear and detailed explanation for your leave request.",
+    sw: "Tafadhali toa maelezo ya wazi na ya kina ya ombi lako la likizo.",
+  },
+  "centerManagement.leaveRequest.submitButton": {
+    en: "Submit Leave Request",
+    sw: "Wasilisha Ombi la Likizo",
+  },
+  "centerManagement.leaveRequest.submitting": {
+    en: "Submitting...",
+    sw: "Inawasilisha...",
+  },
+  "centerManagement.leaveRequest.success": {
+    en: "Leave request submitted successfully. You will be notified once it's reviewed.",
+    sw: "Ombi la likizo limewasilishwa kwa mafanikio. Utajulishwa mara tu litakapokaguliwa.",
+  },
+  "centerManagement.leaveRequest.error": {
+    en: "Unable to submit leave request. Centre information not found.",
+    sw: "Imeshindikana kuwasilisha ombi la likizo. Taarifa za kituo hazijapatikana.",
+  },
+  "centerManagement.leaveRequest.reasonRequired": {
+    en: "Please provide a reason for your leave request.",
+    sw: "Tafadhali toa sababu ya ombi lako la likizo.",
+  },
+  "centerManagement.leaveRequest.submitError": {
+    en: "Failed to submit leave request. Please try again.",
+    sw: "Imeshindikana kuwasilisha ombi la likizo. Tafadhali jaribu tena.",
+  },
 
   // Center Overview specific translations  
   "centerOverview.createCenter": {
@@ -547,9 +1137,9 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Edit Details",
     sw: "Hariri Maelezo",
   },
-  "centerOverview.actions.deleteCenter": {
-    en: "Delete Center",
-    sw: "Futa Kituo",
+  "centerOverview.actions.leaveRequest": {
+    en: "Request Leave",
+    sw: "Omba Likizo",
   },
   "centerOverview.edit.title": {
     en: "Edit Center",
@@ -4598,6 +5188,10 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Branch Comparison",
     sw: "Ulinganisho wa Matawi"
   },
+  "report.centreComparison": {
+    en: "Centre Comparison",
+    sw: "Ulinganisho wa Vituo"
+  },
   "report.performanceMetrics": {
     en: "Performance Metrics",
     sw: "Vigezo vya Utendaji"
@@ -4605,6 +5199,10 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   "report.branchPrefix": {
     en: "Branch",
     sw: "Tawi"
+  },
+  "report.centrePrefix": {
+    en: "Centre",
+    sw: "Kituo"
   },
   "report.topPerformer": {
     en: "Top Performer",
@@ -4637,6 +5235,10 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   "report.branchPerformanceAnalysis": {
     en: "Branch Performance Analysis",
     sw: "Uchambuzi wa Utendaji wa Matawi"
+  },
+  "report.centrePerformanceAnalysis": {
+    en: "Centre Performance Analysis",
+    sw: "Uchambuzi wa Utendaji wa Vituo"
   },
   "report.staffEfficiencyReport": {
     en: "Staff Efficiency Report",
@@ -4901,6 +5503,14 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   "report.selectBranch": {
     en: "Select Branch",
     sw: "Chagua Tawi",
+  },
+  "report.selectCentre": {
+    en: "Select Centre", 
+    sw: "Chagua Kituo",
+  },
+  "report.allCentres": {
+    en: "All Centres",
+    sw: "Vituo Vyote",
   },  // report.systemReport is defined elsewhere
   "centre.yourCentre": {
     en: "Your Centre",
@@ -5098,6 +5708,10 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Registration Requests",
     sw: "Maombi ya Usajili",
   },
+  "superuser.dashboard.leaveRequests": {
+    en: "Leave Requests",
+    sw: "Maombi ya Kujitoa",
+  },
   "superuser.dashboard.systemReports": {
     en: "System Reports",
     sw: "Ripoti za Mfumo",
@@ -5173,6 +5787,7 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Logout",
     sw: "Toka",
   },
+
 }
 
 // Use the context type we already defined at the top of the file
