@@ -3,21 +3,12 @@
 import React, { useState, useEffect, Suspense } from "react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Loader2, LogOut, Plus, BarChart3, FileText } from "lucide-react"
+import { Loader2, LogOut, BarChart3, FileText } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
 import { useSearchParams, useRouter } from "next/navigation"
 import SuperuserAuthService from "@/lib/superuser-service-fix" // Using the fixed service
 import { useAuth } from "@/components/auth-provider"
 import { useLanguage, T } from "@/contexts/LanguageContext"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import {
   Card,
   CardContent,
@@ -33,8 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import SuperuserReportStats from "@/components/superuser-report-stats"
 import SuperuserReportGenerator from "@/components/superuser-report-generator"
 
@@ -66,11 +56,6 @@ function SuperuserDashboardContent() {
   const { t } = useLanguage()
   // Admin state
   const [admins, setAdmins] = useState<OrphanageAdmin[]>([])
-  const [newAdmin, setNewAdmin] = useState<OrphanageAdmin>({
-    email: "",
-    phoneNumber: "",
-    fullName: "",
-  })
   const [stats, setStats] = useState<SystemStats>({
     totalOrphanageCenters: 0,
     totalBranches: 0,
@@ -80,10 +65,8 @@ function SuperuserDashboardContent() {
   })
   // UI state
   const [loading, setLoading] = useState(true)
-  const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("dashboard")
-  const [addAdminDialogOpen, setAddAdminDialogOpen] = useState(false)
   const { toast } = useToast()
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -221,54 +204,7 @@ function SuperuserDashboardContent() {
     }
   }
 
-  // Handle admin form change
-  const handleAdminFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setNewAdmin(prev => ({ ...prev, [name]: value }))
-  }
-
-  // Handle adding a new admin
-  const handleAddAdmin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitting(true)
-    setError(null)
-    
-    try {
-      if (!newAdmin.email || !newAdmin.fullName) {
-        throw new Error("Email and Name are required")
-      }
-      
-      await SuperuserAuthService.addOrphanageAdmin({
-        email: newAdmin.email,
-        fullName: newAdmin.fullName,
-        phoneNumber: newAdmin.phoneNumber,
-      })
-      
-      toast({
-        title: t("superuser.dashboard.success"),
-        description: t("superuser.dashboard.adminAdded"),
-      })
-      
-      // Reset form and refresh data
-      setNewAdmin({
-        email: "",
-        phoneNumber: "",
-        fullName: "",
-      })
-      setAddAdminDialogOpen(false)
-      await fetchAdmins()
-    } catch (err: any) {
-      console.error("Error adding admin:", err)
-      setError(err.response?.data?.message ?? err.message ?? "Failed to add admin")
-      toast({
-        title: "Error",
-        description: `Failed to add admin: ${err.message}`,
-        variant: "destructive",
-      })
-    } finally {
-      setSubmitting(false)
-    }
-  }
+  // No admin form functions needed
 
   // Handle logout
   const handleLogout = () => {
@@ -421,74 +357,6 @@ function SuperuserDashboardContent() {
         {/* Orphanage Admins Tab */}
         <TabsContent value="admins" className="space-y-4">          <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold"><T k="superuser.dashboard.adminsManagement" /></h2>
-            <Dialog open={addAdminDialogOpen} onOpenChange={setAddAdminDialogOpen}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" />
-                  <T k="superuser.dashboard.addNewAdmin" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-white">
-                <DialogHeader>
-                  <DialogTitle><T k="superuser.dashboard.addNewAdminTitle" /></DialogTitle>
-                  <DialogDescription>
-                    Create a new admin account for an orphanage center
-                  </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={handleAddAdmin}>
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="fullName" className="text-right">Full Name</Label>
-                      <Input
-                        id="fullName"
-                        name="fullName"
-                        value={newAdmin.fullName ?? ""}
-                        onChange={handleAdminFormChange}
-                        className="col-span-3"
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="email" className="text-right">Email</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={newAdmin.email || ""}
-                        onChange={handleAdminFormChange}
-                        className="col-span-3"
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="phoneNumber" className="text-right">Phone Number</Label>
-                      <Input
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        value={newAdmin.phoneNumber ?? ""}
-                        onChange={handleAdminFormChange}
-                        className="col-span-3"
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button type="button" variant="outline" onClick={() => setAddAdminDialogOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button type="submit" disabled={submitting}>
-                      {submitting ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Adding...
-                        </>
-                      ) : (
-                        "Add Admin"
-                      )}
-                    </Button>
-                  </DialogFooter>
-                </form>
-              </DialogContent>
-            </Dialog>
           </div>
           
           <Card>
