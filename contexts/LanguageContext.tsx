@@ -3698,6 +3698,106 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Options",
     sw: "Chaguo",
   },
+  
+  // Orphan Certificates Tab
+  "orphan.certificates.addTitle": {
+    en: "Add Certificate",
+    sw: "Ongeza Cheti",
+  },
+  "orphan.certificates.addDescription": {
+    en: "Upload an official document or certificate for this orphan",
+    sw: "Pakia hati rasmi au cheti cha mtoto huyu yatima",
+  },
+  "orphan.certificates.detailsTitle": {
+    en: "Certificate Details",
+    sw: "Maelezo ya Cheti",
+  },
+  "orphan.certificates.type": {
+    en: "Certificate Type",
+    sw: "Aina ya Cheti",
+  },
+  "orphan.certificates.selectType": {
+    en: "Select certificate type",
+    sw: "Chagua aina ya cheti",
+  },
+  "orphan.certificates.birthCertificate": {
+    en: "Birth Certificate",
+    sw: "Cheti cha Kuzaliwa",
+  },
+  "orphan.certificates.class7": {
+    en: "Class 7 Certificate",
+    sw: "Cheti cha Darasa la 7",
+  },
+  "orphan.certificates.form4": {
+    en: "Form 4 Certificate",
+    sw: "Cheti cha Kidato cha 4",
+  },
+  "orphan.certificates.form6": {
+    en: "Form 6 Certificate",
+    sw: "Cheti cha Kidato cha 6",
+  },
+  "orphan.certificates.issueDate": {
+    en: "Issue Date",
+    sw: "Tarehe ya Kutolewa",
+  },
+  "orphan.certificates.file": {
+    en: "Certificate File",
+    sw: "Faili ya Cheti",
+  },
+  "orphan.certificates.fileDescription": {
+    en: "Upload PDF, JPG, PNG or document file. Maximum size: 5MB.",
+    sw: "Pakia faili ya PDF, JPG, PNG au waraka. Ukubwa wa juu: 5MB.",
+  },
+  "orphan.certificates.description": {
+    en: "Description",
+    sw: "Maelezo",
+  },
+  "orphan.certificates.descriptionPlaceholder": {
+    en: "Enter a brief description of this certificate",
+    sw: "Ingiza maelezo mafupi ya cheti hiki",
+  },
+  "orphan.certificates.cancel": {
+    en: "Cancel",
+    sw: "Ghairi",
+  },
+  "orphan.certificates.save": {
+    en: "Save Certificate",
+    sw: "Hifadhi Cheti",
+  },
+  "orphan.certificates.saving": {
+    en: "Saving...",
+    sw: "Inahifadhi...",
+  },
+  "orphan.certificates.requiredFields": {
+    en: "Please fill in all required fields",
+    sw: "Tafadhali jaza sehemu zote zinazohitajika",
+  },
+  
+  // Additional certificate types for display
+  "orphan.details.class7Certificate": {
+    en: "Class 7 Certificate",
+    sw: "Cheti cha Darasa la 7",
+  },
+  "orphan.details.form4Certificate": {
+    en: "Form 4 Certificate",
+    sw: "Cheti cha Kidato cha 4",
+  },
+  "orphan.details.form6Certificate": {
+    en: "Form 6 Certificate",
+    sw: "Cheti cha Kidato cha 6",
+  },
+  "orphan.details.viewCertificate": {
+    en: "View",
+    sw: "Angalia",
+  },
+  "orphan.details.uploadGuardianPhoto": {
+    en: "Upload Photo",
+    sw: "Pakia Picha",
+  },
+  "orphan.details.uploadPhoto": {
+    en: "Upload Photo",
+    sw: "Pakia Picha",
+  },
   "orphan.details.currentSchool": {
     en: "Current School",
     sw: "Shule ya Sasa",

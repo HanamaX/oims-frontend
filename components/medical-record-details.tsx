@@ -136,14 +136,14 @@ export default function MedicalRecordDetails({
         actions={
           !readOnly ? (
             <>
-              <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+              <Button variant="outline" size="sm" onClick={() => setIsEditing(true)} className="rounded-xl">
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
               </Button>
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+                className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600 rounded-xl"
                 onClick={() => setDeleteDialogOpen(true)}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
@@ -154,51 +154,60 @@ export default function MedicalRecordDetails({
         }
       >
         <div className="space-y-6">
-          <div>
-            <h3 className="text-lg font-semibold">{record.diagnosis}</h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              {new Date(record.createdAt.replace(' ', 'T')).toLocaleDateString()}
-            </p>
+          <div className="mb-4">
+            <div className="mb-2">
+              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Diagnosis</span>
+              <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.diagnosis}</span>
+            </div>
+            <div className="mb-2">
+              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Date</span>
+              <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{new Date(record.createdAt.replace(' ', 'T')).toLocaleDateString()}</span>
+            </div>
           </div>
 
           {record.description && (
-            <div className="space-y-1">
-              <h4 className="text-sm font-medium text-muted-foreground">Description</h4>
-              <p className="text-sm">{record.description}</p>
+            <div className="mb-4">
+              <div className="mb-2">
+                <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Description</span>
+                <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.description}</span>
+              </div>
             </div>
           )}
 
-          <div className="space-y-1">
-            <h4 className="text-sm font-medium text-muted-foreground">Treatment</h4>
-            <p className="text-sm">{record.treatment}</p>
+          <div className="mb-4">
+            <div className="mb-2">
+              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Treatment</span>
+              <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.treatment}</span>
+            </div>
           </div>
 
-          <div className="bg-gray-50 p-4 rounded-md space-y-3">
-            <h4 className="text-sm font-medium">Hospital Information</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-muted-foreground text-xs">Hospital Name</p>
-                <p>{record.hospitalName}</p>
+          <div className="mb-4">
+            <h3 className="text-lg font-medium mb-3">Hospital Information</h3>
+            
+            <div className="space-y-2">
+              <div className="mb-2">
+                <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Hospital Name</span>
+                <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.hospitalName}</span>
               </div>
               
               {record.hospitalAddress && (
-                <div>
-                  <p className="text-muted-foreground text-xs">Address</p>
-                  <p>{record.hospitalAddress}</p>
+                <div className="mb-2">
+                  <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Address</span>
+                  <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.hospitalAddress}</span>
                 </div>
               )}
               
               {record.hospitalPhoneNumber && (
-                <div>
-                  <p className="text-muted-foreground text-xs">Phone</p>
-                  <p>{record.hospitalPhoneNumber}</p>
+                <div className="mb-2">
+                  <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Phone</span>
+                  <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.hospitalPhoneNumber}</span>
                 </div>
               )}
               
               {record.doctorName && (
-                <div>
-                  <p className="text-muted-foreground text-xs">Doctor</p>
-                  <p>{record.doctorName}</p>
+                <div className="mb-2">
+                  <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Doctor</span>
+                  <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.doctorName}</span>
                 </div>
               )}
             </div>

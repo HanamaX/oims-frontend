@@ -133,7 +133,7 @@ export default function OrphanAcademicTab({
       
       {!readOnly && (
         <div className="flex justify-end mb-6">
-          <Button onClick={() => setShowForm(true)}>
+          <Button onClick={() => setShowForm(true)} className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800">
             <Plus className="mr-2 h-4 w-4" />
             Add New Record
           </Button>
@@ -141,17 +141,17 @@ export default function OrphanAcademicTab({
       )}
       
       {records.map((record) => (
-        <Card key={record.publicId || `academic-${record.schoolName}-${record.semester}`} className="mb-4">
+        <Card key={record.publicId || `academic-${record.schoolName}-${record.semester}`} className="mb-4 shadow-lg rounded-xl overflow-hidden">
           <div className="flex flex-col md:flex-row">
             {/* Image column - only shown on medium screens and above */}
             {orphanImage && (
-              <div className="hidden md:block w-[100px] h-[100px] overflow-hidden relative m-4">
+              <div className="hidden md:block w-[120px] h-[120px] overflow-hidden relative m-4">
                 <Image 
                   src={orphanImage}
                   alt="Orphan"
                   fill
                   style={{ objectFit: "cover" }}
-                  className="rounded-md"
+                  className="rounded-lg border-2 border-blue-100"
                 />
               </div>
             )}
@@ -159,12 +159,18 @@ export default function OrphanAcademicTab({
             <div className="flex-1">
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                  <CardTitle>{record.schoolName}</CardTitle>
+                  <div className="flex items-center">
+                    <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[80px]">School</span>
+                    <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.schoolName}</span>
+                  </div>
                   <Badge className="bg-blue-50 text-blue-700 hover:bg-blue-100">
                     {record.semester}
                   </Badge>
                 </div>
-                <CardDescription>Grade Level: {record.gradeLevel || "Unknown"}</CardDescription>
+                <CardDescription className="mt-2 flex items-center">
+                  <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[80px]">Grade</span>
+                  <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.gradeLevel || "Unknown"}</span>
+                </CardDescription>
               </CardHeader>
               
               <CardContent className="pb-4">
@@ -176,7 +182,7 @@ export default function OrphanAcademicTab({
                       alt="Orphan"
                       fill
                       style={{ objectFit: "cover" }}
-                      className="rounded-md"
+                      className="rounded-lg border-2 border-blue-100"
                     />
                   </div>
                 )}
@@ -184,26 +190,26 @@ export default function OrphanAcademicTab({
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
                   <div className="flex-1">
                     {record.subjects && record.subjects.length > 0 ? (
-                      <>
-                        <h3 className="text-sm font-medium mb-2">Subjects</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {record.subjects.map((subject) => (
+                      <div>
+                        <h3 className="text-lg font-medium mb-3">Subjects</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          {record.subjects.map((subject, index) => (
                             <div 
                               key={`${record.publicId}-${subject.name}`} 
-                              className="flex justify-between items-center border-b pb-2"
+                              className="mb-2"
                             >
-                              <span>{subject.name}</span>
                               <div className="flex items-center">
-                                <Badge variant={getBadgeVariant(subject.grade)}>
+                                <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[80px]">{subject.name}</span>
+                                <Badge variant={getBadgeVariant(subject.grade)} className="min-w-16 font-medium bg-gray-50 dark:bg-gray-800/30 px-3 py-1">
                                   {subject.grade}
                                 </Badge>
                               </div>
                             </div>
                           ))}
                         </div>
-                      </>
+                      </div>
                     ) : (
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-muted-foreground p-3 bg-gray-50 rounded-lg">
                         {record.createdAt && <p>Record Date: {new Date(record.createdAt.replace(" ", "T")).toLocaleDateString()}</p>}
                       </div>
                     )}
@@ -212,9 +218,9 @@ export default function OrphanAcademicTab({
                   <div className="sm:self-end">
                     <Button 
                       variant="outline" 
-                      size="sm" 
+                      size="sm"
                       onClick={() => setSelectedRecordId(record.publicId)}
-                      className="w-full sm:w-auto"
+                      className="border-blue-300 hover:bg-blue-50 dark:border-blue-700 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-300"
                     >
                       <Eye className="mr-2 h-4 w-4" />
                       View Details

@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation"
 interface OrphanFormProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  onSubmit: (data: OrphanCreateRequest) => void
+  onSubmit: (data: OrphanCreateRequest, orphanImage?: File | undefined, guardianData?: any) => void
 }
 
 export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<OrphanFormProps>) {
@@ -29,7 +29,7 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
   const [origin, setOrigin] = useState('')
   const [fullName, setFullName] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
-  const [arrivalDate, setArrivalDate] = useState('') // New: Date of arrival
+  const [arrivalDate, setArrivalDate] = useState('') // Match the API field name
   const [religion, setReligion] = useState('')
   const [adoptionReason, setAdoptionReason] = useState('')
   const [gender, setGender] = useState('')
@@ -42,42 +42,24 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
   // Education fields
   const [educationLevel, setEducationLevel] = useState('')
   const [previousSchoolName, setPreviousSchoolName] = useState('')
-  const [educationStartDate, setEducationStartDate] = useState('') // New: Education time frame start
-  const [educationEndDate, setEducationEndDate] = useState('') // New: Education time frame end
   
-  // Referral information
-  const [referralOfficer, setReferralOfficer] = useState('') // New: Officer name
-  const [referralDepartment, setReferralDepartment] = useState('') // New: Department
-  const [referralPhone, setReferralPhone] = useState('') // New: Phone
-  const [referralDate, setReferralDate] = useState('') // New: Referral date
-  const [referralDocument, setReferralDocument] = useState<File | null>(null) // New: Referral document
+  // Social Welfare Officer information
+  const [socialWelfareOfficerName, setSocialWelfareOfficerName] = useState('')
+  const [socialWelfareOfficerWorkPlace, setSocialWelfareOfficerWorkPlace] = useState('')
+  const [socialWelfareOfficerPhoneNumber, setSocialWelfareOfficerPhoneNumber] = useState('')
+  const [socialWelfareOfficerEmail, setSocialWelfareOfficerEmail] = useState('')
+  const [socialWelfareOfficerNotes, setSocialWelfareOfficerNotes] = useState('')
   
-  // Guardian information and files
-  const [guardianName, setGuardianName] = useState('') // New: Guardian name
-  const [guardianPhone, setGuardianPhone] = useState('') // New: Guardian phone number
-  const [guardianResidence, setGuardianResidence] = useState('') // New: Guardian place of residence
-  const [relationship, setRelationship] = useState('') // New: Relationship with the child
-  const [childPhoto, setChildPhoto] = useState<File | null>(null) // New: Child photo
-  const [guardianPhoto, setGuardianPhoto] = useState<File | null>(null) // New: Guardian photo
-  const [birthCertificate, setBirthCertificate] = useState<File | null>(null) // New: Birth certificate
-  const [additionalFiles, setAdditionalFiles] = useState<File[]>([]) // New: Additional files
+  // Guardian information
+  const [guardianName, setGuardianName] = useState('')
+  const [guardianSex, setGuardianSex] = useState('')
+  const [guardianRelationship, setGuardianRelationship] = useState('')
+  const [guardianContactNumber, setGuardianContactNumber] = useState('')
+  const [guardianEmail, setGuardianEmail] = useState('')
+  const [guardianAddress, setGuardianAddress] = useState('')
+  const [guardianOccupation, setGuardianOccupation] = useState('')
   
-  // Function to handle file input change
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    setter: React.Dispatch<React.SetStateAction<File | null>>
-  ) => {
-    if (e.target.files && e.target.files[0]) {
-      setter(e.target.files[0])
-    }
-  }
-  
-  // Function to handle multiple file input change
-  const handleMultipleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setAdditionalFiles(Array.from(e.target.files))
-    }
-  }
+  // Guardian data state only - no image handling in the form
   
   // Function to handle form submission
   const handleSubmit = (e: React.FormEvent) => {
@@ -92,7 +74,7 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
     // Process allergies from comma-separated text to array
     const allergies = allergiesText ? allergiesText.split(',').map(item => item.trim()) : []
     
-    // Create orphan data object
+    // Create orphan data object matching the backend API endpoint
     const orphanData: OrphanCreateRequest = {
       origin,
       fullName,
@@ -109,28 +91,30 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
       educationLevel,
       previousSchoolName,
       
-      // Add new fields
-      educationStartDate,
-      educationEndDate,
-      
-      referralOfficer,
-      referralDepartment,
-      referralPhone,
-      referralDate,
-      referralDocument: referralDocument || undefined,
-      
-      guardianName,
-      guardianPhone,
-      guardianResidence,
-      relationship,
-      childPhoto: childPhoto || undefined,
-      guardianPhoto: guardianPhoto || undefined,
-      birthCertificate: birthCertificate || undefined,
-      additionalFiles: additionalFiles.length > 0 ? additionalFiles : undefined
+      // Map social welfare officer data to the API fields
+      referralOfficer: socialWelfareOfficerName,
+      referralDepartment: socialWelfareOfficerWorkPlace,
+      referralPhone: socialWelfareOfficerPhoneNumber,
+      // Use referral fields for the email and notes as well
+      referralDate: new Date().toISOString().split('T')[0] // Current date in YYYY-MM-DD format
     }
     
-    // Submit the data
-    onSubmit(orphanData)
+    // Guardian data to be submitted after orphan creation
+    const guardianData = {
+      name: guardianName,
+      sex: guardianSex,
+      relationship: guardianRelationship,
+      contactNumber: guardianContactNumber,
+      email: guardianEmail,
+      address: guardianAddress,
+      occupation: guardianOccupation
+    }
+    
+    // Submit the data to parent component which should:
+    // 1. Create orphan and get orphanPublicId from response
+    // 2. Create guardian using orphanPublicId
+    // 3. Guardian image upload will be handled in the orphan details view
+    onSubmit(orphanData, undefined, guardianData)
     
     // Reset form fields
     setOrigin('')
@@ -147,21 +131,18 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
     setHobbies('')
     setEducationLevel('')
     setPreviousSchoolName('')
-    setEducationStartDate('')
-    setEducationEndDate('')
-    setReferralOfficer('')
-    setReferralDepartment('')
-    setReferralPhone('')
-    setReferralDate('')
-    setReferralDocument(null)
+    setSocialWelfareOfficerName('')
+    setSocialWelfareOfficerWorkPlace('')
+    setSocialWelfareOfficerPhoneNumber('')
+    setSocialWelfareOfficerEmail('')
+    setSocialWelfareOfficerNotes('')
     setGuardianName('')
-    setGuardianPhone('')
-    setGuardianResidence('')
-    setRelationship('')
-    setChildPhoto(null)
-    setGuardianPhoto(null)
-    setBirthCertificate(null)
-    setAdditionalFiles([])
+    setGuardianSex('')
+    setGuardianRelationship('')
+    setGuardianContactNumber('')
+    setGuardianEmail('')
+    setGuardianAddress('')
+    setGuardianOccupation('')
   }
 
   return (
@@ -367,76 +348,40 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
                     />
                   </div>
                 </div>
-                
-                {/* Education Time Frame */}
-                <div className="mt-2">
-                  <h4 className="text-blue-700 font-medium mb-2 ml-2">
-                    {getLabel('orphan.form.educationTimeFrame', 'Education Time Frame')}
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex">
-                      <Label htmlFor="educationStartDate" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                        {getLabel('orphan.form.educationStartDate', 'Start Date')}
-                      </Label>
-                      <Input
-                        id="educationStartDate"
-                        type="date"
-                        value={educationStartDate}
-                        onChange={(e) => setEducationStartDate(e.target.value)}
-                        className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                      />
-                    </div>
-                    
-                    <div className="flex">
-                      <Label htmlFor="educationEndDate" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                        {getLabel('orphan.form.educationEndDate', 'End Date')}
-                      </Label>
-                      <Input
-                        id="educationEndDate"
-                        type="date"
-                        value={educationEndDate}
-                        onChange={(e) => setEducationEndDate(e.target.value)}
-                        className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-
               </div>
             </div>
             
-            {/* Referral Information section */}
+            {/* Social Welfare Officer Information section */}
             <div className="mt-6 border rounded-xl p-4 bg-gradient-to-r from-blue-50 to-slate-50 shadow-sm border-blue-200">
               <h3 className="text-blue-700 font-medium mb-4 flex items-center">
                 <span className="w-1.5 h-6 bg-blue-500 rounded-full inline-block mr-2"></span>
-                {getLabel('orphan.form.referralSection', 'Referral Information')}
+                {getLabel('orphan.form.socialWelfareSection', 'Social Welfare Officer Information')}
               </h3>
               
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex">
-                    <Label htmlFor="referralOfficer" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.referralOfficer', 'Referring Officer')}
+                    <Label htmlFor="socialWelfareOfficerName" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
+                      {getLabel('orphan.form.socialWelfareOfficerName', 'Officer Name')}
                     </Label>
                     <Input
-                      id="referralOfficer"
-                      value={referralOfficer}
-                      onChange={(e) => setReferralOfficer(e.target.value)}
-                      placeholder={getPlaceholder('orphan.form.referralOfficerPlaceholder', 'Enter name of referring officer')}
+                      id="socialWelfareOfficerName"
+                      value={socialWelfareOfficerName}
+                      onChange={(e) => setSocialWelfareOfficerName(e.target.value)}
+                      placeholder={getPlaceholder('orphan.form.socialWelfareOfficerNamePlaceholder', 'Enter name of social welfare officer')}
                       className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                     />
                   </div>
                   
                   <div className="flex">
-                    <Label htmlFor="referralDepartment" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.referralDepartment', 'Department')}
+                    <Label htmlFor="socialWelfareOfficerWorkPlace" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
+                      {getLabel('orphan.form.socialWelfareOfficerWorkPlace', 'Work Place')}
                     </Label>
                     <Input
-                      id="referralDepartment"
-                      value={referralDepartment}
-                      onChange={(e) => setReferralDepartment(e.target.value)}
-                      placeholder={getPlaceholder('orphan.form.referralDepartmentPlaceholder', 'Enter referring department')}
+                      id="socialWelfareOfficerWorkPlace"
+                      value={socialWelfareOfficerWorkPlace}
+                      onChange={(e) => setSocialWelfareOfficerWorkPlace(e.target.value)}
+                      placeholder={getPlaceholder('orphan.form.socialWelfareOfficerWorkPlacePlaceholder', 'Enter work place')}
                       className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                     />
                   </div>
@@ -444,44 +389,43 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex">
-                    <Label htmlFor="referralPhone" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.referralPhone', 'Officer Phone')}
+                    <Label htmlFor="socialWelfareOfficerPhoneNumber" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
+                      {getLabel('orphan.form.socialWelfareOfficerPhoneNumber', 'Phone Number')}
                     </Label>
                     <Input
-                      id="referralPhone"
-                      value={referralPhone}
-                      onChange={(e) => setReferralPhone(e.target.value)}
-                      placeholder={getPlaceholder('orphan.form.referralPhonePlaceholder', 'Enter referring officer\'s phone number')}
+                      id="socialWelfareOfficerPhoneNumber"
+                      value={socialWelfareOfficerPhoneNumber}
+                      onChange={(e) => setSocialWelfareOfficerPhoneNumber(e.target.value)}
+                      placeholder={getPlaceholder('orphan.form.socialWelfareOfficerPhoneNumberPlaceholder', 'Enter phone number')}
                       className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                     />
                   </div>
                   
                   <div className="flex">
-                    <Label htmlFor="referralDate" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.referralDate', 'Referral Date')}
+                    <Label htmlFor="socialWelfareOfficerEmail" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
+                      {getLabel('orphan.form.socialWelfareOfficerEmail', 'Email')}
                     </Label>
                     <Input
-                      id="referralDate"
-                      type="date"
-                      value={referralDate}
-                      onChange={(e) => setReferralDate(e.target.value)}
+                      id="socialWelfareOfficerEmail"
+                      type="email"
+                      value={socialWelfareOfficerEmail}
+                      onChange={(e) => setSocialWelfareOfficerEmail(e.target.value)}
                       className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                     />
                   </div>
                 </div>
                 
                 <div className="flex">
-                  <Label htmlFor="referralDocument" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                    {getLabel('orphan.form.referralDocument', 'Referral Document')}
+                  <Label htmlFor="socialWelfareOfficerNotes" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
+                    {getLabel('orphan.form.socialWelfareOfficerNotes', 'Notes')}
                   </Label>
                   <div className="flex-1">
-                    <Input
-                      id="referralDocument"
-                      type="file"
-                      onChange={(e) => handleFileChange(e, setReferralDocument)}
+                    <Textarea
+                      id="socialWelfareOfficerNotes"
+                      value={socialWelfareOfficerNotes}
+                      onChange={(e) => setSocialWelfareOfficerNotes(e.target.value)}
                       className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                     />
-                    <p className="text-xs text-gray-500 mt-1">{getLabel('orphan.form.uploadDocument', 'Upload Document')}</p>
                   </div>
                 </div>
               </div>
@@ -545,7 +489,7 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
               </h3>
               
               <div className="space-y-4">
-                {/* Guardian Name & Phone Number row */}
+                {/* Guardian Name & Sex row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex">
                     <Label htmlFor="guardianName" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
@@ -561,118 +505,100 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
                   </div>
                   
                   <div className="flex">
-                    <Label htmlFor="guardianPhone" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.guardianPhone', 'Guardian Phone')}
+                    <Label htmlFor="guardianSex" className="min-w-[120px] text-right pr-4 flex-shrink-0 pt-2 text-blue-800">
+                      {getLabel('orphan.form.guardianSex', 'Gender')}
                     </Label>
-                    <Input
-                      id="guardianPhone"
-                      value={guardianPhone}
-                      onChange={(e) => setGuardianPhone(e.target.value)}
-                      placeholder={getPlaceholder('orphan.form.guardianPhonePlaceholder', 'Enter guardian\'s phone number')}
-                      className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                    />
+                    <Select value={guardianSex} onValueChange={setGuardianSex}>
+                      <SelectTrigger className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                        <SelectValue placeholder={getPlaceholder('orphan.form.selectGender', 'Select gender')} />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl">
+                        <SelectItem value="MALE">{getLabel('orphan.form.male', 'Male')}</SelectItem>
+                        <SelectItem value="FEMALE">{getLabel('orphan.form.female', 'Female')}</SelectItem>
+                        <SelectItem value="OTHER">{getLabel('orphan.form.other', 'Other')}</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 
-                {/* Residence & Relationship row */}
+                {/* Contact Number & Email row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex">
-                    <Label htmlFor="guardianResidence" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.guardianResidence', 'Place of Residence')}
+                    <Label htmlFor="guardianContactNumber" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
+                      {getLabel('orphan.form.guardianContactNumber', 'Contact Number')}
                     </Label>
                     <Input
-                      id="guardianResidence"
-                      value={guardianResidence}
-                      onChange={(e) => setGuardianResidence(e.target.value)}
-                      placeholder={getPlaceholder('orphan.form.guardianResidencePlaceholder', 'Enter guardian\'s place of residence')}
+                      id="guardianContactNumber"
+                      value={guardianContactNumber}
+                      onChange={(e) => setGuardianContactNumber(e.target.value)}
+                      placeholder={getPlaceholder('orphan.form.guardianContactNumberPlaceholder', 'Enter contact number')}
                       className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                     />
                   </div>
                   
                   <div className="flex">
-                    <Label htmlFor="relationship" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.relationship', 'Relationship with Child')}
+                    <Label htmlFor="guardianEmail" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
+                      {getLabel('orphan.form.guardianEmail', 'Email')}
                     </Label>
                     <Input
-                      id="relationship"
-                      value={relationship}
-                      onChange={(e) => setRelationship(e.target.value)}
-                      placeholder={getPlaceholder('orphan.form.relationshipPlaceholder', 'Enter relationship (e.g. uncle, none)')}
+                      id="guardianEmail"
+                      type="email"
+                      value={guardianEmail}
+                      onChange={(e) => setGuardianEmail(e.target.value)}
+                      placeholder={getPlaceholder('orphan.form.guardianEmailPlaceholder', 'Enter email address')}
                       className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
                     />
                   </div>
                 </div>
                 
-                {/* Photos row */}
+                {/* Address & Occupation row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex">
-                    <Label htmlFor="childPhoto" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.childPhoto', 'Child Photo')}
+                    <Label htmlFor="guardianAddress" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
+                      {getLabel('orphan.form.guardianAddress', 'Address')}
                     </Label>
-                    <div className="flex-1">
-                      <Input
-                        id="childPhoto"
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleFileChange(e, setChildPhoto)}
-                        className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">{getLabel('orphan.form.uploadChildPhoto', 'Upload Child Photo')}</p>
-                    </div>
+                    <Input
+                      id="guardianAddress"
+                      value={guardianAddress}
+                      onChange={(e) => setGuardianAddress(e.target.value)}
+                      placeholder={getPlaceholder('orphan.form.guardianAddressPlaceholder', 'Enter address')}
+                      className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                    />
                   </div>
                   
                   <div className="flex">
-                    <Label htmlFor="guardianPhoto" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.guardianPhoto', 'Guardian Photo')}
+                    <Label htmlFor="guardianOccupation" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
+                      {getLabel('orphan.form.guardianOccupation', 'Occupation')}
                     </Label>
-                    <div className="flex-1">
-                      <Input
-                        id="guardianPhoto"
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleFileChange(e, setGuardianPhoto)}
-                        className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">{getLabel('orphan.form.uploadGuardianPhoto', 'Upload Guardian Photo')}</p>
-                    </div>
+                    <Input
+                      id="guardianOccupation"
+                      value={guardianOccupation}
+                      onChange={(e) => setGuardianOccupation(e.target.value)}
+                      placeholder={getPlaceholder('orphan.form.guardianOccupationPlaceholder', 'Enter occupation')}
+                      className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                    />
                   </div>
                 </div>
                 
-                {/* Documents row */}
+                {/* Relationship & Photos row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex">
-                    <Label htmlFor="birthCertificate" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.birthCertificate', 'Birth Certificate')}
+                    <Label htmlFor="guardianRelationship" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
+                      {getLabel('orphan.form.guardianRelationship', 'Relationship')}
                     </Label>
-                    <div className="flex-1">
-                      <Input
-                        id="birthCertificate"
-                        type="file"
-                        onChange={(e) => handleFileChange(e, setBirthCertificate)}
-                        className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">{getLabel('orphan.form.uploadBirthCertificate', 'Upload Birth Certificate')}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex">
-                    <Label htmlFor="additionalFiles" className="min-w-[120px] text-right pr-4 flex-shrink-0 text-blue-800">
-                      {getLabel('orphan.form.additionalFiles', 'Additional Files')}
-                    </Label>
-                    <div className="flex-1">
-                      <Input
-                        id="additionalFiles"
-                        type="file"
-                        multiple
-                        onChange={handleMultipleFileChange}
-                        className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                      />
-                      <p className="text-xs text-gray-500 mt-1">{getLabel('orphan.form.uploadAdditionalFiles', 'Upload Additional Files')}</p>
-                    </div>
+                    <Input
+                      id="guardianRelationship"
+                      value={guardianRelationship}
+                      onChange={(e) => setGuardianRelationship(e.target.value)}
+                      placeholder={getPlaceholder('orphan.form.guardianRelationshipPlaceholder', 'Enter relationship (e.g. uncle, aunt)')}
+                      className="flex-1 rounded-xl border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                    />
                   </div>
                 </div>
               </div>
             </div>
+            
+
             
             <DialogFooter className="pt-4 pb-2 border-t border-blue-100 mt-4 bg-blue-50 bg-opacity-50 rounded-b-xl">
               <div className="w-full flex justify-end gap-4">

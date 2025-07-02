@@ -145,11 +145,20 @@ export default function OrphanMedicalTab({
   // Render empty state
   if (records.length === 0) {
     return (
-      <Card>
-        <CardContent className="flex flex-col items-center justify-center py-12">
-          <p className="text-muted-foreground mb-4">{t('orphan.medical.noRecords')}</p>
+      <Card className="border-blue-100 dark:border-blue-800 shadow-sm">
+        <CardHeader className="bg-blue-50 dark:bg-blue-900/20 border-b border-blue-100 dark:border-blue-800">
+          <CardTitle className="text-blue-700 dark:text-blue-300">{t('orphan.medical.records')}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center justify-center py-8">
+          <div className="mb-2">
+            <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.status')}</span>
+            <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{t('orphan.medical.noRecords')}</span>
+          </div>
           {!readOnly && (
-            <Button variant="outline" onClick={() => setShowForm(true)}>
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 mt-4" 
+              onClick={() => setShowForm(true)}
+            >
               <Plus className="mr-2 h-4 w-4" />
               {t('orphan.medical.addRecord')}
             </Button>
@@ -174,7 +183,7 @@ export default function OrphanMedicalTab({
       
       {!readOnly && (
         <div className="flex justify-end mb-6">
-          <Button onClick={() => setShowForm(true)}>
+          <Button onClick={() => setShowForm(true)} className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800">
             <Plus className="mr-2 h-4 w-4" />
             {t('orphan.medical.addNewRecord')}
           </Button>
@@ -182,7 +191,7 @@ export default function OrphanMedicalTab({
       )}
       
       {records.map((record) => (
-        <Card key={record.publicId || `medical-${record.diagnosis}`} className="mb-4">
+        <Card key={record.publicId || `medical-${record.diagnosis}`} className="mb-4 border-blue-100 dark:border-blue-800 overflow-hidden shadow-sm">
           <div className="flex flex-col md:flex-row">
             {/* Image column - only shown on medium screens and above */}
             {orphanImage && (
@@ -198,14 +207,17 @@ export default function OrphanMedicalTab({
             )}
             
             <div className="flex-1">
-              <CardHeader className="pb-2">
+              <CardHeader className="pb-2 bg-blue-50 dark:bg-blue-900/20 border-b border-blue-100">
                 <div className="flex items-center justify-between">
-                  <CardTitle>{record.diagnosis}</CardTitle>
-                  <Badge variant="outline" className="ml-2">
+                  <CardTitle className="text-blue-700 dark:text-blue-300">{record.diagnosis}</CardTitle>
+                  <Badge variant="outline" className="ml-2 bg-blue-100 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700">
                     {record.createdAt ? new Date(record.createdAt.replace(" ", "T")).toLocaleDateString() : "No date"}
                   </Badge>
                 </div>
-                <CardDescription>{t('orphan.medical.hospital')}: {record.hospitalName}</CardDescription>
+                <CardDescription className="flex items-center mt-2">
+                  <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 min-w-[120px] mr-2">{t('orphan.medical.hospital')}</span>
+                  <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1">{record.hospitalName}</span>
+                </CardDescription>
               </CardHeader>
               
               <CardContent className="pb-4">
@@ -223,25 +235,25 @@ export default function OrphanMedicalTab({
                 )}
                 
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-                  <div className="flex-1 space-y-3">
+                  <div className="flex-1 space-y-2">
                     {record.treatment && (
-                      <div>
-                        <h3 className="text-sm font-medium text-muted-foreground mb-1">{t('orphan.medical.treatment')}</h3>
-                        <p>{record.treatment}</p>
+                      <div className="mb-2">
+                        <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.treatment')}</span>
+                        <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.treatment}</span>
                       </div>
                     )}
                     
                     {record.notes && (
-                      <div>
-                        <h3 className="text-sm font-medium text-muted-foreground mb-1">{t('orphan.medical.notes')}</h3>
-                        <p>{record.notes}</p>
+                      <div className="mb-2">
+                        <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.notes')}</span>
+                        <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.notes}</span>
                       </div>
                     )}
                     
                     {record.followUpDate && (
-                      <div>
-                        <h3 className="text-sm font-medium text-muted-foreground mb-1">{t('orphan.medical.followUpDate')}</h3>
-                        <p>{new Date(record.followUpDate).toLocaleDateString()}</p>
+                      <div className="mb-2">
+                        <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.followUpDate')}</span>
+                        <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{new Date(record.followUpDate).toLocaleDateString()}</span>
                       </div>
                     )}
                   </div>
@@ -249,7 +261,8 @@ export default function OrphanMedicalTab({
                   <div className="sm:self-end">
                     <Button 
                       variant="outline" 
-                      size="sm" 
+                      size="sm"
+                      className="border-blue-300 hover:bg-blue-50 dark:border-blue-700 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-300" 
                       onClick={() => setSelectedRecordId(record.publicId)}
                     >
                       <Eye className="mr-2 h-4 w-4" />

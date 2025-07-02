@@ -14,7 +14,7 @@ import { ScrollAnimation } from "@/components/scroll-animation"
 export default function HomePage() {
   const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { t } = useLanguage()
+  const t = useLanguage()
 
   const handleVolunteerRegistration = () => {
     router.push("/volunteer/register")

@@ -98,6 +98,76 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     setGuardianImageError(true)
   }, [])
   
+  // Handle orphan image upload
+  const handleOrphanImageUpload = async (file: File, orphanPublicId: string) => {
+    setIsSubmitting(true)
+    try {
+      // Create form data for file upload
+      const formData = new FormData()
+      formData.append('file', file)
+      
+      // Upload the image using the appropriate endpoint
+      await API.post(`/app/oims/orphans/orphanimage/${orphanPublicId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      
+      // Show success message
+      toast({
+        title: t("orphan.details.photoUploaded") || "Photo uploaded",
+        description: t("orphan.details.photoUploadedDesc") || "Orphan photo has been uploaded successfully"
+      })
+      
+      // Refresh the page to show the new image
+      window.location.reload()
+    } catch (error: any) {
+      console.error("Failed to upload orphan image:", error)
+      toast({
+        title: t("orphan.details.photoUploadFailed") || "Upload failed",
+        description: error.response?.data?.message || t("orphan.details.errorOccurred") || "An error occurred",
+        variant: "destructive"
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+  
+  // Handle guardian image upload
+  const handleGuardianImageUpload = async (file: File, guardianPublicId: string) => {
+    setIsSubmitting(true)
+    try {
+      // Create form data for file upload
+      const formData = new FormData()
+      formData.append('file', file)
+      
+      // Upload the image using the appropriate endpoint for guardian images
+      await API.post(`/app/oims/orphans/guardians/image/${guardianPublicId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      
+      // Show success message
+      toast({
+        title: t("orphan.details.guardianPhotoUploaded") || "Photo uploaded",
+        description: t("orphan.details.guardianPhotoUploadedDesc") || "Guardian photo has been uploaded successfully"
+      })
+      
+      // Refresh the page to show the new image
+      window.location.reload()
+    } catch (error: any) {
+      console.error("Failed to upload guardian image:", error)
+      toast({
+        title: t("orphan.details.photoUploadFailed") || "Upload failed",
+        description: error.response?.data?.message || t("orphan.details.errorOccurred") || "An error occurred",
+        variant: "destructive"
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+  
   if (!orphan) return null
   
   // Handle guardian operations
@@ -301,32 +371,38 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
   const handleAddCertificate = async (certificate: Certificate) => {
     if (!orphan?.publicId) return
     
-    setIsSubmitting(true)
+    // The actual certificate upload is now handled in the CertificateForm component
+    // using the correct API endpoint: /api/certificates/upload/{orphanPublicId}/{certificateType}
+    
+    // Here we just need to update our local state to reflect the change
     try {
-      // In a real implementation, you would upload the file and certificate data to the server
-      // For now, we'll simulate this by adding it to the local state
+      // Add the certificate to our local state
       const newCertificate = {
         ...certificate,
-        id: `temp-${Date.now()}`, // Temporary ID
-        publicId: `temp-${Date.now()}`, // Temporary public ID
+        id: `cert-${Date.now()}`, 
+        publicId: `cert-${Date.now()}`,
         orphanPublicId: orphan.publicId
       }
       
       // Add the new certificate to the list
       setCertificates([...certificates, newCertificate])
       
-      toast({
-        title: t("orphan.certificates.addSuccess"),
-        description: t("orphan.certificates.addSuccessDesc")
-      })
-      
       // Close the form
       setIsCertificateFormOpen(false)
+      
+      // Show success message
+      toast({
+        title: t("orphan.certificates.addSuccess") || "Certificate Added",
+        description: t("orphan.certificates.addSuccessDesc") || "Certificate has been added successfully"
+      })
+      
+      // In a real implementation, we might want to refresh the page or fetch updated certificates
+      // window.location.reload()
     } catch (error: any) {
       console.error("Failed to add certificate:", error)
       toast({
-        title: t("orphan.certificates.addFailed"),
-        description: error.message || t("orphan.details.errorOccurred"),
+        title: t("orphan.certificates.addFailed") || "Failed to add certificate",
+        description: error.message || t("orphan.details.errorOccurred") || "An error occurred",
         variant: "destructive"
       })
     } finally {
@@ -335,145 +411,192 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
   }
 
     return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 animate-fadeIn">
+    <div className="grid grid-cols-1 gap-6 animate-fadeIn">
 
-      {/* Main Details */}
-      <Card className="md:col-span-5 shadow-lg rounded-xl overflow-hidden">        <CardHeader>
-    <div className="flex items-center space-x-2">
-      <CardTitle className="flex items-center gap-3">
-        {/* Small profile image next to name */}
-        <span className="flex items-center gap-2">
-          <span className="relative w-10 h-10 cursor-pointer group" onClick={() => document.getElementById('orphan-profile-upload')?.click()}>
-            {orphanImageUrl ? (
-              <Image
-                src={orphanImageUrl}
-                alt={`${orphan.fullName} Profile`}
-                fill
-                style={{ objectFit: 'cover' }}
-                className="rounded-full border border-blue-300 shadow-sm"
-                onError={handleOrphanImageError}
-                unoptimized
-                priority
-              />
-            ) : (
-              <span className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center border border-blue-300 text-blue-400">
-                <User className="h-6 w-6" />
+      {/* Main Details - Full width */}
+      <Card className="shadow-lg rounded-xl overflow-hidden">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-3">
+              {/* Small profile image next to name */}
+              <span className="flex items-center gap-2">
+                <span className="relative w-10 h-10 cursor-pointer group" onClick={() => document.getElementById('orphan-profile-upload')?.click()}>
+                  {orphanImageUrl ? (
+                    <Image
+                      src={orphanImageUrl}
+                      alt={`${orphan.fullName} Profile`}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      className="rounded-full border border-blue-300 shadow-sm"
+                      onError={handleOrphanImageError}
+                      unoptimized
+                      priority
+                    />
+                  ) : (
+                    <span className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center border border-blue-300 text-blue-400">
+                      <User className="h-6 w-6" />
+                    </span>
+                  )}
+                  <input
+                    id="orphan-profile-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={e => {
+                      const file = e.target.files?.[0];
+                      if (file && orphan?.publicId) {
+                        handleOrphanImageUpload(file, orphan.publicId);
+                      }
+                    }}
+                  />
+                  <span className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1 text-xs opacity-80 group-hover:opacity-100 transition-opacity">
+                    <Edit className="h-3 w-3" />
+                  </span>
+                </span>
+                <span className="font-bold text-lg">{orphan.fullName}</span>
               </span>
+            </CardTitle>
+            {orphan.status && (
+              <Badge className={`${orphan.status?.toLowerCase() === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                {orphan.status === 'ACTIVE' ? t("orphan.details.active") : t("orphan.details.inactive")}
+              </Badge>
             )}
-            <input
-              id="orphan-profile-upload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={e => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  // TODO: Implement upload logic here
-                  // You can call a handler or set state to upload the image
-                }
-              }}
-            />
-            <span className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1 text-xs opacity-80 group-hover:opacity-100 transition-opacity">
-              <Edit className="h-3 w-3" />
-            </span>
-          </span>
-          <span>{orphan.fullName}</span>
-        </span>
-      </CardTitle>
-      {orphan.status && (
-        <Badge className={`${orphan.status?.toLowerCase() === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-          {orphan.status === 'ACTIVE' ? t("orphan.details.active") : t("orphan.details.inactive")}
-        </Badge>
-      )}
-    </div>
-  </CardHeader>
-        <CardContent className="space-y-4">          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.fullName")}</h3>
-              <p className="text-base font-medium">{orphan.fullName}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.age")}</h3>
-              <p className="text-base font-medium">{orphan.age} {t("orphan.details.years")}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.dateOfBirth")}</h3>
-              <p className="text-base font-medium">{formatDate(orphan.dateOfBirth ?? '')}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.gender")}</h3>
-              <p className="text-base font-medium">{orphan.gender === 'M' ? t("orphan.details.male") : t("orphan.details.female")}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.origin")}</h3>
-              <p className="text-base font-medium">{orphan.origin}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.religion")}</h3>
-              <p className="text-base font-medium">{orphan.religion}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.bloodGroup")}</h3>
-              <p className="text-base font-medium">{orphan.bloodGroup}</p>
-            </div>
-            <div>
-              <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.branch")}</h3>
-              <p className="text-base font-medium">{orphan.branchName}</p>
-            </div>
           </div>
-
-          <Separator />          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">{t("orphan.details.adoptionReason")}</h3>
-            <p className="text-base">{orphan.adoptionReason}</p>
+        </CardHeader>
+        
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.fullName")}</span>
+              <span className="px-3 py-1 inline-block">{orphan.fullName}</span>
+            </div>
+            
+            <div>
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.age")}</span>
+              <span className="px-3 py-1 inline-block">{orphan.age} {t("orphan.details.years")}</span>
+            </div>
+            
+            <div>
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.dateOfBirth")}</span>
+              <span className="px-3 py-1 inline-block">{formatDate(orphan.dateOfBirth ?? '')}</span>
+            </div>
+            
+            <div>
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.gender")}</span>
+              <span className="px-3 py-1 inline-block">{orphan.gender === 'M' ? t("orphan.details.male") : t("orphan.details.female")}</span>
+            </div>
+            
+            <div>
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.origin")}</span>
+              <span className="px-3 py-1 inline-block">{orphan.origin}</span>
+            </div>
+            
+            <div>
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.religion")}</span>
+              <span className="px-3 py-1 inline-block">{orphan.religion}</span>
+            </div>
+            
+            <div>
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.bloodGroup")}</span>
+              <span className="px-3 py-1 inline-block">{orphan.bloodGroup}</span>
+            </div>
+            
+            <div className="mb-2">
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.branch")}</span>
+              <span className="px-3 py-1 inline-block">{orphan.branchName || "-"}</span>
+            </div>
           </div>
 
           <Separator />
-
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">{t("orphan.details.education")}</h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h4 className="text-xs text-muted-foreground">{t("orphan.details.currentLevel")}</h4>
-                <p className="text-sm">{orphan.educationLevel}</p>
-              </div>
-              <div>
-                <h4 className="text-xs text-muted-foreground">{t("orphan.details.currentSchool")}</h4>
-                <p className="text-sm">{orphan.currentSchoolName ?? t("orphan.details.notEnrolled")}</p>
-              </div>
-              <div>
-                <h4 className="text-xs text-muted-foreground">{t("orphan.details.previousSchool")}</h4>
-                <p className="text-sm">{orphan.previousSchoolName ?? t("orphan.details.none")}</p>
-              </div>
+          
+          <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
+            <div className="mb-2">
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.adoptionReason")}</span>
+              <span className="px-3 py-1 inline-block">{orphan.adoptionReason || "-"}</span>
             </div>
           </div>
 
           <Separator />
 
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">{t("orphan.details.specialNeeds")}</h3>
-            <p className="text-base">{orphan.specialNeeds ?? t("orphan.details.none")}</p>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">{t("orphan.details.hobbies")}</h3>
-            <p className="text-base">{orphan.hobbies ?? t("orphan.details.none")}</p>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">{t("orphan.details.allergies")}</h3>
-            {orphan.allergies && orphan.allergies.length > 0 ? (
-              <div className="flex flex-wrap gap-2">
-                {orphan.allergies.map((allergy) => (
-                  <Badge key={`allergy-${allergy}`} variant="outline" className="rounded-xl">{allergy}</Badge>
-                ))}
+          <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
+            <h3 className="text-lg font-medium mb-3 bg-blue-100 px-2 py-1 inline-block rounded">{t("orphan.details.education")}</h3>
+            <div className="mt-4">
+              <div className="mb-2">
+                <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.currentLevel")}</span>
+                <span className="px-3 py-1 inline-block">{orphan.educationLevel || t("orphan.details.none")}</span>
               </div>
-            ) : (
-              <p className="text-base">{t("orphan.details.noKnownAllergies")}</p>
-            )}
+              <div className="mb-2">
+                <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.currentSchool")}</span>
+                <span className="px-3 py-1 inline-block">{orphan.currentSchoolName ?? t("orphan.details.notEnrolled")}</span>
+              </div>
+              <div className="mb-2">
+                <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.previousSchool")}</span>
+                <span className="px-3 py-1 inline-block">{orphan.previousSchoolName ?? t("orphan.details.none")}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
+              <div className="mb-2">
+                <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.specialNeeds")}</span>
+                <span className="px-3 py-1 inline-block">{orphan.specialNeeds ?? t("orphan.details.none")}</span>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
+              <div className="mb-2">
+                <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.hobbies")}</span>
+                <span className="px-3 py-1 inline-block">{orphan.hobbies ?? t("orphan.details.none")}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
+            <div className="mb-2">
+              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.allergies")}</span>
+              {orphan.allergies && orphan.allergies.length > 0 ? (
+                <span className="px-3 py-1 inline-block">
+                  {orphan.allergies.map((allergy, index) => (
+                    <span key={`allergy-${allergy}`}>{allergy}{index < orphan.allergies.length - 1 ? ', ' : ''}</span>
+                  ))}
+                </span>
+              ) : (
+                <span className="px-3 py-1 inline-block">{t("orphan.details.none")}</span>
+              )}
+            </div>
           </div>
         </CardContent>
+        
         {!readOnly && (
-          <div className="border-t p-4 flex justify-end space-x-2 bg-gray-50">
+          <div className="border-t p-4 flex flex-wrap justify-end gap-2 bg-gray-50">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => document.getElementById('orphan-photo-upload-btn')?.click()}
+              className="rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 mr-auto"
+              disabled={isSubmitting}
+            >
+              <input
+                id="orphan-photo-upload-btn"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={e => {
+                  const file = e.target.files?.[0];
+                  if (file && orphan?.publicId) {
+                    handleOrphanImageUpload(file, orphan.publicId);
+                  }
+                }}
+              />
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+              ) : (
+                <Image className="h-4 w-4 mr-1" width={16} height={16} src="/icons/camera.svg" alt="Upload" />
+              )}
+              {t("orphan.details.uploadPhoto") || "Upload Photo"}
+            </Button>
+            
             <Button 
               variant="outline" 
               size="sm" 
@@ -605,8 +728,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
         </AlertDialogContent>
       </AlertDialog>
       
-      {/* Guardian Information */}
-      <Card className="md:col-span-3 shadow-lg rounded-xl overflow-hidden min-w-[250px]">        
+      {/* Guardian Information - Full width */}
+      <Card className="shadow-lg rounded-xl overflow-hidden">        
         <CardHeader>
           <div>
             <CardTitle>{t("orphan.details.guardianInformation")}</CardTitle>
@@ -615,69 +738,131 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
         </CardHeader>
         <CardContent>
           {orphan.guardian ? (
-            <div className="space-y-4">              
-              {/* Guardian Image - centered at top */}
-              <div className="flex flex-col items-center">
-                {guardianImageUrl ? (
-                  <div className="w-32 h-32 overflow-hidden relative rounded-full border shadow-md">
-                    <Image 
-                      src={guardianImageUrl}
-                      alt={`${orphan.guardian.name} Profile`}
-                      fill
-                      style={{ objectFit: "cover" }}
-                      className="rounded-full"
-                      onError={handleGuardianImageError}
-                      unoptimized
-                      priority
-                    />
-                  </div>
-                ) : (
-                  <div className="w-32 h-32 bg-gray-100 rounded-full border flex items-center justify-center">
-                    <div className="text-blue-500">
-                      <User className="h-12 w-12" />
+            <div className="space-y-6">              
+              {/* Guardian Image - centered at top, clickable for upload */}
+              <div className="flex flex-col items-center mb-6">
+                <div className="relative group cursor-pointer" onClick={() => document.getElementById('guardian-profile-upload')?.click()}>
+                  {guardianImageUrl ? (
+                    <div className="w-36 h-36 overflow-hidden relative rounded-full border-4 border-blue-100 shadow-md">
+                      <Image 
+                        src={guardianImageUrl}
+                        alt={`${orphan.guardian.name} Profile`}
+                        fill
+                        style={{ objectFit: "cover" }}
+                        className="rounded-full"
+                        onError={handleGuardianImageError}
+                        unoptimized
+                        priority
+                      />
+                      {!readOnly && (
+                        <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Edit className="h-6 w-6 text-white" />
+                        </div>
+                      )}
                     </div>
-                  </div>
+                  ) : (
+                    <div className="w-36 h-36 bg-gray-100 rounded-full border-4 border-blue-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                      <div className="text-blue-500">
+                        <User className="h-16 w-16" />
+                      </div>
+                      {!readOnly && (
+                        <div className="absolute inset-0 bg-black bg-opacity-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
+                          <Edit className="h-6 w-6 text-white" />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+                {!readOnly && orphan.guardian?.publicId && (
+                  <input
+                    id="guardian-profile-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={e => {
+                      const file = e.target.files?.[0];
+                      if (file && orphan?.guardian?.publicId) {
+                        handleGuardianImageUpload(file, orphan.guardian.publicId);
+                      }
+                    }}
+                  />
                 )}
               </div>
+              
               {/* Guardian Details */}
-              <div className="space-y-3">
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.name")}</h3>
-                  <p className="text-base font-medium">{orphan.guardian.name}</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white rounded-lg p-3 border border-blue-100 shadow-sm">
+                  <div className="mb-2">
+                    <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.name")}</span>
+                    <span className="px-3 py-1 inline-block">{orphan.guardian.name}</span>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.relationship")}</h3>
-                  <p className="text-base">{orphan.guardian.relationship}</p>
+                
+                <div className="mb-2">
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.relationship")}</span>
+                  <span className="px-3 py-1 inline-block">{orphan?.guardian?.relationship || "-"}</span>
                 </div>
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.phoneNumber")}</h3>
-                  <p className="text-base">{orphan.guardian.contactNumber || "-"}</p>
+                
+                <div className="mb-2">
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.phoneNumber")}</span>
+                  <span className="px-3 py-1 inline-block">{orphan.guardian.contactNumber || "-"}</span>
                 </div>
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.email")}</h3>
-                  <p className="text-base">{orphan.guardian.email || "-"}</p>
+                
+                <div className="mb-2">
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.email")}</span>
+                  <span className="px-3 py-1 inline-block">{orphan.guardian.email || "-"}</span>
                 </div>
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.address")}</h3>
-                  <p className="text-base">{orphan.guardian.address || "-"}</p>
+                
+                <div className="mb-2">
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.address")}</span>
+                  <span className="px-3 py-1 inline-block">{orphan.guardian.address || "-"}</span>
                 </div>
-                <div>
-                  <h3 className="text-sm font-medium text-muted-foreground">{t("orphan.details.occupation")}</h3>
-                  <p className="text-base">{orphan.guardian.occupation || "-"}</p>
+                
+                <div className="mb-2">
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.occupation")}</span>
+                  <span className="px-3 py-1 inline-block">{orphan.guardian.occupation || "-"}</span>
                 </div>
               </div>
             </div>
           ) : (
-            <p className="text-muted-foreground italic">{t("orphan.details.noGuardianInfo")}</p>
+            <p className="text-muted-foreground italic p-4 text-center">{t("orphan.details.noGuardianInfo")}</p>
           )}
         </CardContent>
         {!readOnly && (
-          <div className="border-t p-4 flex justify-end space-x-2 bg-gray-50">
+          <div className="border-t p-4 flex flex-wrap justify-end gap-2 bg-gray-50">
+            {orphan.guardian?.publicId && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => document.getElementById('guardian-photo-upload-btn')?.click()}
+                className="rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 mr-auto"
+                disabled={isSubmitting}
+              >
+                <input
+                  id="guardian-photo-upload-btn"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (file && orphan?.guardian?.publicId) {
+                      handleGuardianImageUpload(file, orphan.guardian.publicId);
+                    }
+                  }}
+                />
+                {isSubmitting ? (
+                  <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                ) : (
+                  <Image className="h-4 w-4 mr-1" width={16} height={16} src="/icons/camera.svg" alt="Upload" />
+                )}
+                {t("orphan.details.uploadGuardianPhoto") || "Upload Photo"}
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"
               onClick={() => setIsGuardianFormOpen(true)}
-              className="rounded-xl flex items-center w-full"
+              className="rounded-xl flex items-center"
             >
               {orphan.guardian ? (
                 <>
@@ -695,8 +880,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
         )}
       </Card>
 
-      {/* Certificate Records */}
-      <Card className="md:col-span-4 shadow-lg rounded-xl overflow-hidden">
+      {/* Certificate Records - Full width */}
+      <Card className="shadow-lg rounded-xl overflow-hidden">
         <CardHeader>
           <div>
             <CardTitle>{t("orphan.details.certificateRecords")}</CardTitle>
@@ -706,37 +891,43 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
         <CardContent>
           <div className="space-y-4">
             {certificates.length === 0 ? (
-              <p className="text-muted-foreground italic">{t("orphan.details.noCertificates")}</p>
+              <p className="text-muted-foreground italic p-4 text-center border border-dashed border-gray-200 rounded-lg bg-gray-50">{t("orphan.details.noCertificates")}</p>
             ) : (
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto bg-white rounded-lg border border-blue-100 shadow-sm">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-2 font-medium text-muted-foreground">{t("orphan.details.certificateType")}</th>
-                      <th className="text-left py-2 font-medium text-muted-foreground">{t("orphan.details.certificateDate")}</th>
-                      <th className="text-right py-2 font-medium text-muted-foreground">{t("orphan.details.certificateOptions")}</th>
+                    <tr>
+                      <th className="text-left py-3 px-4 bg-blue-100 text-blue-800 font-bold border-b border-blue-200">{t("orphan.details.certificateType")}</th>
+                      <th className="text-left py-3 px-4 bg-blue-100 text-blue-800 font-bold border-b border-blue-200">{t("orphan.details.certificateDate")}</th>
+                      <th className="text-right py-3 px-4 bg-blue-100 text-blue-800 font-bold border-b border-blue-200">{t("orphan.details.certificateOptions")}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {certificates.map((cert, index) => (
-                      <tr key={cert.id || `cert-${index}`} className="border-b">
-                        <td className="py-3">
+                      <tr key={cert.id || `cert-${index}`} className={`border-b hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                        <td className="py-4 px-4">
                           <div className="flex items-center">
-                            <File className="h-4 w-4 mr-2 text-blue-500" />
-                            {cert.type === 'BIRTH_CERTIFICATE' && t("orphan.details.birthCertificate")}
-                            {cert.type === 'EDUCATION_CERTIFICATE' && t("orphan.details.educationCertificate")}
-                            {cert.type === 'MEDICAL_CERTIFICATE' && t("orphan.details.medicalCertificate")}
-                            {cert.type === 'OTHER' && t("orphan.details.otherCertificate")}
+                            <div className="bg-blue-100 p-2 rounded-full mr-3">
+                              <File className="h-5 w-5 text-blue-600" />
+                            </div>
+                            <span className="font-medium">
+                              {cert.type === 'BIRTH_CERTIFICATE' && (t("orphan.details.birthCertificate") || "Birth Certificate")}
+                              {cert.type === 'CLASS_7' && (t("orphan.details.class7Certificate") || "Class 7 Certificate")}
+                              {cert.type === 'FORM_4' && (t("orphan.details.form4Certificate") || "Form 4 Certificate")}
+                              {cert.type === 'FORM_6' && (t("orphan.details.form6Certificate") || "Form 6 Certificate")}
+                            </span>
                           </div>
                         </td>
-                        <td className="py-3">
+                        <td className="py-4 px-4">
                           <div className="flex items-center">
-                            <Calendar className="h-4 w-4 mr-2 text-gray-400" />
-                            {cert.issueDate ? new Date(cert.issueDate).toLocaleDateString() : '-'}
+                            <div className="bg-gray-100 p-2 rounded-full mr-3">
+                              <Calendar className="h-5 w-5 text-gray-600" />
+                            </div>
+                            <span>{cert.issueDate ? formatDate(cert.issueDate) : '-'}</span>
                           </div>
                         </td>
-                        <td className="py-3 text-right">
-                          <Button variant="ghost" size="sm" className="h-8 px-2 text-blue-600">
+                        <td className="py-4 px-4 text-right">
+                          <Button variant="outline" size="sm" className="h-9 px-4 text-blue-600 rounded-lg border-blue-200 hover:bg-blue-50 font-medium">
                             {t("orphan.details.viewCertificate")}
                           </Button>
                         </td>

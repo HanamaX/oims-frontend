@@ -146,14 +146,14 @@ export default function AcademicRecordDetails({
         actions={
           !readOnly ? (
             <>
-              <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+              <Button variant="outline" size="sm" onClick={() => setIsEditing(true)} className="rounded-xl">
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
               </Button>
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600"
+                className="text-red-500 border-red-200 hover:bg-red-50 hover:text-red-600 rounded-xl"
                 onClick={() => setDeleteDialogOpen(true)}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
@@ -164,34 +164,43 @@ export default function AcademicRecordDetails({
         }
       >
         <div className="space-y-6">
-          <div className="space-y-1">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold">{record.schoolName}</h3>
+          <div className="mb-4">
+            <div className="flex justify-between items-center mb-3">
+              <div className="mb-2">
+                <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">School Name</span>
+                <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.schoolName}</span>
+              </div>
               <Badge className="bg-blue-50 text-blue-700 hover:bg-blue-100">
                 {record.semester}
               </Badge>
             </div>
-            <p className="text-sm text-muted-foreground">Grade Level: {record.gradeLevel}</p>
+          </div>
+          
+          <div className="mb-4">
+            <div className="mb-2">
+              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Grade Level</span>
+              <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.gradeLevel}</span>
+            </div>
           </div>
 
-          <div>
-            <h4 className="text-sm font-medium mb-3">Subjects & Grades</h4>
-            <div className="bg-gray-50 p-4 rounded-md">
+          <div className="mb-4">
+            <h3 className="text-lg font-medium mb-3">Subjects & Grades</h3>
+            <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="text-xs text-muted-foreground">
+                <thead>
                   <tr>
-                    <th className="text-left py-2">Subject</th>
-                    <th className="text-left py-2">Code</th>
-                    <th className="text-center py-2">Grade</th>
+                    <th className="text-left py-2 px-3 bg-blue-100 text-blue-800 font-medium">Subject</th>
+                    <th className="text-left py-2 px-3 bg-blue-100 text-blue-800 font-medium">Code</th>
+                    <th className="text-center py-2 px-3 bg-blue-100 text-blue-800 font-medium">Grade</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {record.subjects.map((subject) => (
-                    <tr key={subject.publicId ?? subject.name} className="border-t border-gray-200">
-                      <td className="py-3">{subject.name}</td>
-                      <td className="py-3 text-muted-foreground text-sm">{subject.code ?? "N/A"}</td>
-                      <td className="py-3 text-center">
-                        <Badge variant={getBadgeVariant(subject.grade)} className="min-w-16">
+                  {record.subjects.map((subject, index) => (
+                    <tr key={subject.publicId ?? subject.name} className={`border-b ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
+                      <td className="py-2 px-3 font-medium">{subject.name}</td>
+                      <td className="py-2 px-3">{subject.code ?? "N/A"}</td>
+                      <td className="py-2 px-3 text-center">
+                        <Badge variant={getBadgeVariant(subject.grade)} className="min-w-16 font-medium">
                           {subject.grade}
                         </Badge>
                       </td>
