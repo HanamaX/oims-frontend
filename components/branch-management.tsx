@@ -328,14 +328,14 @@ export default function BranchManagement({
                     )}
                   </CardHeader>
                   <CardContent className="p-4 pt-0">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <p className="text-sm font-medium">Phone</p>
-                        <p className="text-sm text-muted-foreground">{branch.phoneNumber}</p>
+                    <div className="grid grid-cols-1 gap-3">
+                      <div className="flex">
+                        <span className="bg-blue-100 px-3 py-2 rounded-l-md text-xs text-blue-600 font-medium flex items-center w-1/3">Phone</span>
+                        <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-2/3">{branch.phoneNumber}</span>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium">Staff</p>
-                        <p className="text-sm text-muted-foreground">{branch.staffCount || 0} members</p>
+                      <div className="flex">
+                        <span className="bg-blue-100 px-3 py-2 rounded-l-md text-xs text-blue-600 font-medium flex items-center w-1/3">Staff</span>
+                        <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-2/3">{branch.staffCount || 0} members</span>
                       </div>
                     </div>
                   </CardContent>

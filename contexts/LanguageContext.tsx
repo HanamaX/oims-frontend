@@ -1149,6 +1149,14 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Update the center's information",
     sw: "Sasisha taarifa za kituo",
   },
+  "centerOverview.centerOverviewDescription": {
+    en: "View and manage your orphanage center details below.",
+    sw: "Tazama na simamia maelezo ya kituo chako cha yatima hapa chini.",
+  },
+  "centerOverview.readOnlyMode": {
+    en: "You are viewing this center in read-only mode as a superuser.",
+    sw: "Unatazama kituo hiki katika hali ya kusoma tu kama mtumiaji mkuu.",
+  },
   "centerOverview.updateCenter": {
     en: "Update Center",
     sw: "Sasisha Kituo",
@@ -5101,6 +5109,54 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Update the orphan's details below. Required fields are marked with an asterisk (*).",
     sw: "Sasisha taarifa za yatima hapa chini. Sehemu muhimu zimeonyeshwa kwa alama ya nyota (*).",
   },
+  "orphanage.registration.howTo": {
+    en: "How to Register Your Orphanage",
+    sw: "Jinsi ya Kusajili Kituo chako cha Watoto Yatima",
+  },
+  "orphanage.registration.step1.title": {
+    en: "Complete Registration Form",
+    sw: "Jaza Fomu ya Usajili",
+  },
+  "orphanage.registration.step1.desc": {
+    en: "Fill out all required information on this registration page.",
+    sw: "Jaza taarifa zote zinazohitajika kwenye ukurasa huu wa usajili.",
+  },
+  "orphanage.registration.step2.title": {
+    en: "Document Verification",
+    sw: "Uthibitishaji wa Nyaraka",
+  },
+  "orphanage.registration.step2.desc": {
+    en: "Submit your government certificate and official documents.",
+    sw: "Wasilisha cheti chako cha serikali na nyaraka rasmi.",
+  },
+  "orphanage.registration.step3.title": {
+    en: "Review Process",
+    sw: "Mchakato wa Ukaguzi",
+  },
+  "orphanage.registration.step3.desc": {
+    en: "Our team will review your application within 5-7 business days.",
+    sw: "Timu yetu itakagua maombi yako ndani ya siku 5-7 za kazi.",
+  },
+  "orphanage.registration.step4.title": {
+    en: "Account Activation",
+    sw: "Uanzishaji wa Akaunti",
+  },
+  "orphanage.registration.step4.desc": {
+    en: "Once approved, you'll receive login credentials via email.",
+    sw: "Mara tu inapoidhinishwa, utapokea hati za kuingia kupitia barua pepe.",
+  },
+  "orphanage.registration.whyRegister": {
+    en: "Benefits of Registration",
+    sw: "Faida za Usajili",
+  },
+  "orphanage.registration.benefit1.title": {
+    en: "Centralized Management",
+    sw: "Usimamizi wa Pamoja",
+  },
+  "orphanage.registration.benefit1.desc": {
+    en: "Manage orphans, staff, donations, and operations all in one place.",
+    sw: "Simamia watoto yatima, wafanyakazi, michango, na shughuli zote mahali pamoja.",
+  },
   "orphanage.registration.benefit2.desc": {
     en: "Connect with donors, volunteers, and support networks more efficiently.",
     sw: "Unganisha na wafadhili, kujitolea, na mitandao ya msaada kwa ufanisi zaidi.",
@@ -5120,6 +5176,42 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   "orphanage.registration.benefit4.desc": {
     en: "Enhance transparency and trust with stakeholders and the community.",
     sw: "Boresha uwazi na imani na washikadau na jamii.",
+  },
+  "orphanage.registration.title": {
+    en: "Orphanage Registration",
+    sw: "Usajili wa Kituo cha Watoto Yatima",
+  },
+  "orphanage.registration.description": {
+    en: "Register your orphanage in our system to streamline management, increase visibility, and connect with potential donors and volunteers.",
+    sw: "Sajili kituo chako cha watoto yatima katika mfumo wetu ili kurahisisha usimamizi, kuongeza uelewa, na kuunganisha na wafadhili na watu wa kujitolea.",
+  },
+  "orphanage.registration.formTitle": {
+    en: "Registration Form",
+    sw: "Fomu ya Usajili",
+  },
+  "orphanage.registration.formDescription": {
+    en: "Please fill out all required fields marked with an asterisk (*)",
+    sw: "Tafadhali jaza sehemu zote zinazohitajika zilizowekwa alama ya nyota (*)",
+  },
+  "orphanage.registration.benefit2.title": {
+    en: "Connect & Network",
+    sw: "Unganisha na Mtandao",
+  },
+  "orphanage.registration.chooseFile": {
+    en: "Choose file",
+    sw: "Chagua faili",
+  },
+  "orphanage.registration.noFile": {
+    en: "No file chosen",
+    sw: "Hakuna faili iliyochaguliwa",
+  },
+  "orphanage.registration.pdfOnly": {
+    en: "Only PDF files are accepted",
+    sw: "Faili za PDF pekee zinakubaliwa",
+  },
+  "orphanage.registration.errorMessage": {
+    en: "There was an error submitting your registration request. Please try again later.",
+    sw: "Kulikuwa na hitilafu katika kuwasilisha ombi lako la usajili. Tafadhali jaribu tena baadaye.",
   },
   "orphanage.registration.personalDetails": {
     en: "Personal Details",

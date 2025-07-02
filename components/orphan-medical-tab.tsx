@@ -151,7 +151,7 @@ export default function OrphanMedicalTab({
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-8">
           <div className="mb-2">
-            <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.status')}</span>
+            <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.status')}</span>
             <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{t('orphan.medical.noRecords')}</span>
           </div>
           {!readOnly && (
@@ -215,7 +215,7 @@ export default function OrphanMedicalTab({
                   </Badge>
                 </div>
                 <CardDescription className="flex items-center mt-2">
-                  <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 min-w-[120px] mr-2">{t('orphan.medical.hospital')}</span>
+                  <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 min-w-[120px] mr-2">{t('orphan.medical.hospital')}</span>
                   <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1">{record.hospitalName}</span>
                 </CardDescription>
               </CardHeader>
@@ -238,21 +238,21 @@ export default function OrphanMedicalTab({
                   <div className="flex-1 space-y-2">
                     {record.treatment && (
                       <div className="mb-2">
-                        <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.treatment')}</span>
+                        <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.treatment')}</span>
                         <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.treatment}</span>
                       </div>
                     )}
                     
                     {record.notes && (
                       <div className="mb-2">
-                        <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.notes')}</span>
+                        <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.notes')}</span>
                         <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.notes}</span>
                       </div>
                     )}
                     
                     {record.followUpDate && (
                       <div className="mb-2">
-                        <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.followUpDate')}</span>
+                        <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">{t('orphan.medical.followUpDate')}</span>
                         <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{new Date(record.followUpDate).toLocaleDateString()}</span>
                       </div>
                     )}

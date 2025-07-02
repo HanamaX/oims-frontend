@@ -467,42 +467,42 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.fullName")}</span>
+              <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.fullName")}</span>
               <span className="px-3 py-1 inline-block">{orphan.fullName}</span>
             </div>
             
             <div>
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.age")}</span>
+              <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.age")}</span>
               <span className="px-3 py-1 inline-block">{orphan.age} {t("orphan.details.years")}</span>
             </div>
             
             <div>
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.dateOfBirth")}</span>
+              <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.dateOfBirth")}</span>
               <span className="px-3 py-1 inline-block">{formatDate(orphan.dateOfBirth ?? '')}</span>
             </div>
             
             <div>
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.gender")}</span>
+              <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.gender")}</span>
               <span className="px-3 py-1 inline-block">{orphan.gender === 'M' ? t("orphan.details.male") : t("orphan.details.female")}</span>
             </div>
             
             <div>
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.origin")}</span>
+              <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.origin")}</span>
               <span className="px-3 py-1 inline-block">{orphan.origin}</span>
             </div>
             
             <div>
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.religion")}</span>
+              <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.religion")}</span>
               <span className="px-3 py-1 inline-block">{orphan.religion}</span>
             </div>
             
             <div>
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.bloodGroup")}</span>
+              <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.bloodGroup")}</span>
               <span className="px-3 py-1 inline-block">{orphan.bloodGroup}</span>
             </div>
             
             <div className="mb-2">
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.branch")}</span>
+              <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.branch")}</span>
               <span className="px-3 py-1 inline-block">{orphan.branchName || "-"}</span>
             </div>
           </div>
@@ -511,7 +511,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
           
           <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
             <div className="mb-2">
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.adoptionReason")}</span>
+              <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.adoptionReason")}</span>
               <span className="px-3 py-1 inline-block">{orphan.adoptionReason || "-"}</span>
             </div>
           </div>
@@ -519,18 +519,18 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
           <Separator />
 
           <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
-            <h3 className="text-lg font-medium mb-3 bg-blue-100 px-2 py-1 inline-block rounded">{t("orphan.details.education")}</h3>
+            <h3 className="text-lg font-medium mb-3 text-blue-700 px-2 py-1 inline-block">{t("orphan.details.education")}</h3>
             <div className="mt-4">
               <div className="mb-2">
-                <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.currentLevel")}</span>
+                <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.currentLevel")}</span>
                 <span className="px-3 py-1 inline-block">{orphan.educationLevel || t("orphan.details.none")}</span>
               </div>
               <div className="mb-2">
-                <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.currentSchool")}</span>
+                <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.currentSchool")}</span>
                 <span className="px-3 py-1 inline-block">{orphan.currentSchoolName ?? t("orphan.details.notEnrolled")}</span>
               </div>
               <div className="mb-2">
-                <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.previousSchool")}</span>
+                <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.previousSchool")}</span>
                 <span className="px-3 py-1 inline-block">{orphan.previousSchoolName ?? t("orphan.details.none")}</span>
               </div>
             </div>
@@ -539,14 +539,14 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
               <div className="mb-2">
-                <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.specialNeeds")}</span>
+                <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.specialNeeds")}</span>
                 <span className="px-3 py-1 inline-block">{orphan.specialNeeds ?? t("orphan.details.none")}</span>
               </div>
             </div>
 
             <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
               <div className="mb-2">
-                <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.hobbies")}</span>
+                <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.hobbies")}</span>
                 <span className="px-3 py-1 inline-block">{orphan.hobbies ?? t("orphan.details.none")}</span>
               </div>
             </div>
@@ -554,7 +554,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
 
           <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
             <div className="mb-2">
-              <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.allergies")}</span>
+              <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.allergies")}</span>
               {orphan.allergies && orphan.allergies.length > 0 ? (
                 <span className="px-3 py-1 inline-block">
                   {orphan.allergies.map((allergy, index) => (
@@ -793,33 +793,33 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white rounded-lg p-3 border border-blue-100 shadow-sm">
                   <div className="mb-2">
-                    <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.name")}</span>
+                    <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.name")}</span>
                     <span className="px-3 py-1 inline-block">{orphan.guardian.name}</span>
                   </div>
                 </div>
                 
                 <div className="mb-2">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.relationship")}</span>
+                  <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.relationship")}</span>
                   <span className="px-3 py-1 inline-block">{orphan?.guardian?.relationship || "-"}</span>
                 </div>
                 
                 <div className="mb-2">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.phoneNumber")}</span>
+                  <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.phoneNumber")}</span>
                   <span className="px-3 py-1 inline-block">{orphan.guardian.contactNumber || "-"}</span>
                 </div>
                 
                 <div className="mb-2">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.email")}</span>
+                  <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.email")}</span>
                   <span className="px-3 py-1 inline-block">{orphan.guardian.email || "-"}</span>
                 </div>
                 
                 <div className="mb-2">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.address")}</span>
+                  <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.address")}</span>
                   <span className="px-3 py-1 inline-block">{orphan.guardian.address || "-"}</span>
                 </div>
                 
                 <div className="mb-2">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.occupation")}</span>
+                  <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.occupation")}</span>
                   <span className="px-3 py-1 inline-block">{orphan.guardian.occupation || "-"}</span>
                 </div>
               </div>
@@ -897,9 +897,9 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                 <table className="w-full">
                   <thead>
                     <tr>
-                      <th className="text-left py-3 px-4 bg-blue-100 text-blue-800 font-bold border-b border-blue-200">{t("orphan.details.certificateType")}</th>
-                      <th className="text-left py-3 px-4 bg-blue-100 text-blue-800 font-bold border-b border-blue-200">{t("orphan.details.certificateDate")}</th>
-                      <th className="text-right py-3 px-4 bg-blue-100 text-blue-800 font-bold border-b border-blue-200">{t("orphan.details.certificateOptions")}</th>
+                      <th className="text-left py-3 px-4 text-blue-600 font-bold border-b border-blue-200">{t("orphan.details.certificateType")}</th>
+                      <th className="text-left py-3 px-4 text-blue-600 font-bold border-b border-blue-200">{t("orphan.details.certificateDate")}</th>
+                      <th className="text-right py-3 px-4 text-blue-600 font-bold border-b border-blue-200">{t("orphan.details.certificateOptions")}</th>
                     </tr>
                   </thead>
                   <tbody>

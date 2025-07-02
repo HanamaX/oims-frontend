@@ -73,29 +73,29 @@ export default function BranchDetails({
         </CardHeader>
         <CardContent>
           <div className="space-y-6">            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm font-medium"><T k="branch.phoneNumber" /></p>
-                <p className="text-sm text-muted-foreground">{branch.phoneNumber}</p>
+              <div className="flex">
+                <span className="px-3 py-2 text-xs text-blue-600 font-medium flex items-center w-1/3"><T k="branch.phoneNumber" /></span>
+                <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-2/3">{branch.phoneNumber}</span>
               </div>
               {branch.createdDate && (
-                <div>
-                  <p className="text-sm font-medium"><T k="branch.createdDate" /></p>
-                  <p className="text-sm text-muted-foreground">
+                <div className="flex">
+                  <span className="px-3 py-2 text-xs text-blue-600 font-medium flex items-center w-1/3"><T k="branch.createdDate" /></span>
+                  <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-2/3">
                     {new Date(branch.createdDate.replace(' ', 'T')).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
                     })}
-                  </p>
+                  </span>
                 </div>
               )}
-              <div>
-                <p className="text-sm font-medium"><T k="branch.orphans" /></p>
-                <p className="text-sm text-muted-foreground">{branch.orphanCount ?? 0} <T k="branch.orphansInBranch" /></p>
+              <div className="flex">
+                <span className="px-3 py-2 text-xs text-blue-600 font-medium flex items-center w-1/3"><T k="branch.orphans" /></span>
+                <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-2/3">{branch.orphanCount ?? 0} <T k="branch.orphansInBranch" /></span>
               </div>
-              <div>
-                <p className="text-sm font-medium"><T k="staff.staff" /></p>
-                <p className="text-sm text-muted-foreground">{branch.staffCount ?? 0} <T k="staff.staffMembers" /></p>
+              <div className="flex">
+                <span className="px-3 py-2 text-xs text-blue-600 font-medium flex items-center w-1/3"><T k="staff.staff" /></span>
+                <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-2/3">{branch.staffCount ?? 0} <T k="staff.staffMembers" /></span>
               </div>
             </div>
             

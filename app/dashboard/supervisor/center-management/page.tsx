@@ -577,36 +577,39 @@ export default function CenterManagementPage() {
                   <CardDescription className="text-blue-700"><T k="centerOverview.centerOverviewDescription" /></CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm font-medium text-blue-900"><T k="centerOverview.form.centerName" /></p>
-                      <p className="text-lg font-bold text-blue-800">{centre.name}</p>
-                      <p className="text-sm text-blue-700">{centre.location}</p>
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="flex">
+                      <span className="bg-blue-100 px-3 py-2 rounded-l-md text-xs text-blue-600 font-medium flex items-center w-1/4"><T k="centerOverview.form.centerName" /></span>
+                      <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-3/4">{centre.name}</span>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-blue-900"><T k="centerOverview.form.phoneNumber" /></p>
-                      <p className="text-blue-800">{centre.phoneNumber}</p>
+                    <div className="flex">
+                      <span className="bg-blue-100 px-3 py-2 rounded-l-md text-xs text-blue-600 font-medium flex items-center w-1/4"><T k="centerOverview.form.location" /></span>
+                      <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-3/4">{centre.location}</span>
                     </div>
-                  </div>
-                  <div className="mt-4">
-                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.form.address" /></p>
-                    <p className="text-blue-700">{centre.address}</p>
-                  </div>
-                  <div className="mt-2">
-                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.form.email" /></p>
-                    <p className="text-blue-700">{centre.email}</p>
-                  </div>
-                  <div className="mt-2">
-                    <p className="text-sm font-medium text-blue-900"><T k="centerOverview.form.description" /></p>
-                    <p className="text-blue-700">{centre.description}</p>
+                    <div className="flex">
+                      <span className="bg-blue-100 px-3 py-2 rounded-l-md text-xs text-blue-600 font-medium flex items-center w-1/4"><T k="centerOverview.form.phoneNumber" /></span>
+                      <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-3/4">{centre.phoneNumber}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="bg-blue-100 px-3 py-2 rounded-l-md text-xs text-blue-600 font-medium flex items-center w-1/4"><T k="centerOverview.form.address" /></span>
+                      <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-3/4">{centre.address}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="bg-blue-100 px-3 py-2 rounded-l-md text-xs text-blue-600 font-medium flex items-center w-1/4"><T k="centerOverview.form.email" /></span>
+                      <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-3/4">{centre.email}</span>
+                    </div>
+                    <div className="flex">
+                      <span className="bg-blue-100 px-3 py-2 rounded-l-md text-xs text-blue-600 font-medium flex items-center w-1/4"><T k="centerOverview.form.description" /></span>
+                      <span className="bg-gray-50 px-3 py-2 rounded-r-md text-sm text-black w-3/4">{centre.description}</span>
+                    </div>
                   </div>
                 </CardContent>
-                <CardFooter className="bg-blue-50 rounded-b-lg flex justify-between items-center">                  <Button variant="outline" className="border-blue-600 text-blue-700 hover:bg-blue-100 hover:text-blue-900">
-                    <T k="centerOverview.actions.editDetails" />
-                  </Button>
-                  <Button variant="outline" className="border-red-600 text-red-700 hover:bg-red-50 hover:text-red-900">
-                    <T k="centerOverview.actions.deleteCenter" />
-                  </Button>
+                <CardFooter className="bg-blue-50 rounded-b-lg">
+                  <div className="w-full p-4 bg-blue-100 rounded-lg border border-blue-200 text-center">
+                    <p className="text-sm text-blue-800 font-medium">
+                      🔒 <T k="centerOverview.readOnlyMode" />
+                    </p>
+                  </div>
                 </CardFooter>
               </Card>
             )}

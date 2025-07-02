@@ -156,11 +156,11 @@ export default function MedicalRecordDetails({
         <div className="space-y-6">
           <div className="mb-4">
             <div className="mb-2">
-              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Diagnosis</span>
+              <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">Diagnosis</span>
               <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.diagnosis}</span>
             </div>
             <div className="mb-2">
-              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Date</span>
+              <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">Date</span>
               <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{new Date(record.createdAt.replace(' ', 'T')).toLocaleDateString()}</span>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function MedicalRecordDetails({
           {record.description && (
             <div className="mb-4">
               <div className="mb-2">
-                <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Description</span>
+                <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">Description</span>
                 <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.description}</span>
               </div>
             </div>
@@ -176,7 +176,7 @@ export default function MedicalRecordDetails({
 
           <div className="mb-4">
             <div className="mb-2">
-              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Treatment</span>
+              <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">Treatment</span>
               <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.treatment}</span>
             </div>
           </div>
@@ -186,27 +186,27 @@ export default function MedicalRecordDetails({
             
             <div className="space-y-2">
               <div className="mb-2">
-                <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Hospital Name</span>
+                <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">Hospital Name</span>
                 <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.hospitalName}</span>
               </div>
               
               {record.hospitalAddress && (
                 <div className="mb-2">
-                  <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Address</span>
+                  <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">Address</span>
                   <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.hospitalAddress}</span>
                 </div>
               )}
               
               {record.hospitalPhoneNumber && (
                 <div className="mb-2">
-                  <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Phone</span>
+                  <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">Phone</span>
                   <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.hospitalPhoneNumber}</span>
                 </div>
               )}
               
               {record.doctorName && (
                 <div className="mb-2">
-                  <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Doctor</span>
+                  <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">Doctor</span>
                   <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.doctorName}</span>
                 </div>
               )}

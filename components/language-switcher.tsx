@@ -1,8 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { useLanguage, type Language } from "@/contexts/LanguageContext"
+import { useLanguage } from "@/contexts/LanguageContext"
 import { Globe } from "lucide-react"
+
+type Language = "en" | "sw"
 
 export function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage()

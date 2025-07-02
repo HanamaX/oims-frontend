@@ -167,7 +167,7 @@ export default function AcademicRecordDetails({
           <div className="mb-4">
             <div className="flex justify-between items-center mb-3">
               <div className="mb-2">
-                <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">School Name</span>
+                <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">School Name</span>
                 <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.schoolName}</span>
               </div>
               <Badge className="bg-blue-50 text-blue-700 hover:bg-blue-100">
@@ -178,7 +178,7 @@ export default function AcademicRecordDetails({
           
           <div className="mb-4">
             <div className="mb-2">
-              <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 mr-2 inline-block min-w-[120px]">Grade Level</span>
+              <span className="text-blue-600 font-medium dark:text-blue-300 px-2 py-1 mr-2 inline-block min-w-[120px]">Grade Level</span>
               <span className="bg-gray-50 dark:bg-gray-800/30 px-3 py-1 inline-block">{record.gradeLevel}</span>
             </div>
           </div>
@@ -189,9 +189,9 @@ export default function AcademicRecordDetails({
               <table className="w-full">
                 <thead>
                   <tr>
-                    <th className="text-left py-2 px-3 bg-blue-100 text-blue-800 font-medium">Subject</th>
-                    <th className="text-left py-2 px-3 bg-blue-100 text-blue-800 font-medium">Code</th>
-                    <th className="text-center py-2 px-3 bg-blue-100 text-blue-800 font-medium">Grade</th>
+                    <th className="text-left py-2 px-3 border-b text-blue-600 font-medium">Subject</th>
+                    <th className="text-left py-2 px-3 border-b text-blue-600 font-medium">Code</th>
+                    <th className="text-center py-2 px-3 border-b text-blue-600 font-medium">Grade</th>
                   </tr>
                 </thead>
                 <tbody>
