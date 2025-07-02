@@ -21,6 +21,8 @@ interface AuthContextType {
     branchName?: string | null
     username?: string | null
     publicId?: string | null
+    branchPublicId?: string | null
+    orphanageCentrePublicId?: string | null
     isCentreCreated?: boolean
     dashboardStats?: {
       totalOrphans: number
@@ -52,6 +54,8 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
     branchName?: string | null
     username?: string | null
     publicId?: string | null
+    branchPublicId?: string | null
+    orphanageCentrePublicId?: string | null
     isCentreCreated?: boolean
     dashboardStats?: {
       totalOrphans: number
@@ -153,7 +157,12 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
       const response = await AuthService.login({ username, password })
 
       // Extract user data from the response
-      const adminData = response.data.admin      // Determine role from the roles array
+      const adminData = response.data.admin
+      
+      // Log the admin data to help with debugging
+      console.log("Admin data from login response:", adminData);
+
+      // Determine role from the roles array
       const isSupervisor = adminData.roles.includes("ROLE_SUPERVISOR") || adminData.roles.includes("ROLE_ADMIN")
       const isOrphanageAdmin = adminData.roles.includes("ROLE_ORPHANAGE_ADMIN") || adminData.roles.includes("ROLE_SUPER_ADMIN")
       const isSuperuser = adminData.roles.includes("ROLE_SUPERUSER")
@@ -191,6 +200,9 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
         enabled: adminData.enabled,
         username: adminData.username,
         publicId: adminData.publicId,
+        // Add branch and orphanage center IDs from admin data
+        branchPublicId: adminData.branchPublicId ?? null,
+        orphanageCentrePublicId: adminData.orphanageCentrePublicId ?? null,
         firstLogin: response.data.isFirstTimeLogin ?? false,
         isCentreCreated: response.data.isCentreCreated ?? false,
         dashboardStats: {
@@ -202,7 +214,11 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
         unreadNotificationsCount: response.data.unreadNotificationsCount ?? 0,
       }
       
-      console.log("Branch name before saving to localStorage:", userData.branchName)
+      console.log("Branch info before saving to localStorage:", {
+        branchName: userData.branchName,
+        branchPublicId: userData.branchPublicId,
+        orphanageCentrePublicId: userData.orphanageCentrePublicId
+      })
 
       // Store user data in state
       setUser(userData)

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import { LayoutDashboard, Users, FileBarChart, LogOut, Loader2, Heading1 } from 'lucide-react'
+import { LayoutDashboard, Users, FileBarChart, LogOut, Loader2, Building, ClipboardList, FileX } from 'lucide-react'
 import { cn } from "@/lib/utils"
 import SuperuserAuthService from "@/lib/superuser-auth-service"
 import { useToast } from "@/components/ui/use-toast"
@@ -54,10 +54,22 @@ function SuperuserNavContent() {  const router = useRouter()
       url: "/superuser/dashboard?tab=admins"
     },
     {
+      name: t("superuser.dashboard.orphanageCentres"),
+      tab: "orphanage-centres",
+      icon: <Building className="mr-2 h-5 w-5" />,
+      url: "/superuser/dashboard/orphanage-centres"
+    },
+    {
       name: t("superuser.dashboard.registrationRequests"),
       tab: "registration-requests",
-      icon: <FileBarChart className="mr-2 h-5 w-5" />,
+      icon: <ClipboardList className="mr-2 h-5 w-5" />,
       url: "/superuser/dashboard/registration-requests"
+    },
+    {
+      name: t("superuser.dashboard.leaveRequests"),
+      tab: "leave-requests",
+      icon: <FileX className="mr-2 h-5 w-5" />,
+      url: "/superuser/dashboard/leave-requests"
     },
     {
       name: t("superuser.dashboard.systemReports"),
@@ -89,7 +101,8 @@ function SuperuserNavContent() {  const router = useRouter()
 
   return (
     <nav className="h-screen flex flex-col bg-blue-50 border-r border-blue-200 p-4">
-      <div className="space-y-2">        <h1 className="text-xl font-bold text-blue-900 px-10 mb-2 flex items-center font-semibold">
+      <div className="space-y-2">
+        <h1 className="text-xl font-bold text-blue-900 px-10 mb-2 flex items-center">
           <T k="superuser.title" />
         </h1>
         {navItems.map((item) => (

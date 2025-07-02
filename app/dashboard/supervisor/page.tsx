@@ -107,9 +107,23 @@ export default function SupervisorDashboardPage() {
     try {
       setMarkingAsRead('all');
       
-      // Call API to mark all notifications as read for current branch
-      // Use the JWT token for authentication which identifies the branch
-      await API.patch(`/app/oims/orphanages/notifications/read/all-current`);
+      // Get the branch publicId directly from the user object
+      // This is the correct ID to use as the recipientId for notifications
+      let branchPublicId = user?.branchPublicId;
+      
+      // Debug the publicId 
+      console.log("Using branch publicId for marking all notifications as read:", branchPublicId);
+      
+      // Call API to mark all notifications as read for the specific branch
+      if (branchPublicId) {
+        // Use the correct endpoint with the branch publicId as the recipientId
+        await API.patch(`/app/oims/orphanages/notifications/read/all/${branchPublicId}`);
+        console.log(`Successfully marked all notifications as read for branch: ${branchPublicId}`);
+      } else {
+        // Fallback to the current user's branch if we couldn't get the publicId
+        console.warn("Branch publicId not found in user data, falling back to current branch endpoint");
+        await API.patch(`/app/oims/orphanages/notifications/read/all-current`);
+      }
       
       // Update local state - mark all as read
       const updatedNotifications = allNotifications.map(n => ({ ...n, isRead: true }));
@@ -171,6 +185,9 @@ export default function SupervisorDashboardPage() {
   // Effect to load dashboard data
   useEffect(() => {
     if (user) {
+      // Log the user data to help identify where branch ID might be stored
+      console.log("User data:", JSON.stringify(user, null, 2));
+      
       // Set stats from user data
       setStats({
         totalOrphans: user.dashboardStats?.totalOrphans ?? 0,

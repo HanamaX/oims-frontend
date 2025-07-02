@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Building, Edit, Loader2, Trash2 } from "lucide-react"
+import { Building, Edit, Loader2, FileX } from "lucide-react"
 import API from "@/lib/api-service"
 import { useToast } from "@/components/ui/use-toast"
 import { T, useLanguage } from "@/contexts/LanguageContext"
@@ -27,7 +27,7 @@ interface CenterOverviewProps {
   readonly centre: OrphanageCentre
   readonly centerExists: boolean
   readonly onCentreChange: (centre: OrphanageCentre) => void
-  readonly onCenterDelete: () => void
+  readonly onCenterDelete: () => void // Function to handle leave request
   readonly onFetchBranches: () => Promise<void>
   readonly error: string | null
 }
@@ -285,11 +285,12 @@ export default function CenterOverview({
               <Edit className="mr-2 h-4 w-4" /> <T k="centerOverview.actions.editDetails" />
             </Button>
             <Button 
-              variant="destructive" 
+              variant="outline" 
               onClick={onCenterDelete}
               disabled={submitting}
+              className="border-orange-200 text-orange-700 hover:bg-orange-50"
             >
-              <Trash2 className="mr-2 h-4 w-4" /> <T k="centerOverview.actions.deleteCenter" />
+              <FileX className="mr-2 h-4 w-4" /> <T k="centerOverview.actions.leaveRequest" />
             </Button>
           </CardFooter>
         </Card>

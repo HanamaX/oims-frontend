@@ -220,7 +220,7 @@ const VolunteerService = {
         payload.reason = reason ?? "No reason provided";
       }
       
-      await API.patch(`/oims/events/volunteers/status`, payload)
+      await API.patch(`app/oims/events/volunteers/status`, payload)
     } catch (error) {
       console.error("Update volunteer status error:", error)
       throw error

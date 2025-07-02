@@ -4,6 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
 import { DateRangePicker } from "@/components/ui/date-range-picker"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -26,12 +27,14 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
   const [loading, setLoading] = useState(false)
   const [generating, setGenerating] = useState(false)
   const [activeTab, setActiveTab] = useState<ReportType>("orphans")
-  const [availableBranches, setAvailableBranches] = useState<any[]>([])
-  const [selectedBranch, setSelectedBranch] = useState<string>("all")
+  const [availableCentres, setAvailableCentres] = useState<any[]>([])
+  const [selectedCentre, setSelectedCentre] = useState<string>("all")
   const [dateRange, setDateRange] = useState<DateRange>({
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date()
   })
+  
+  const [useDateRange, setUseDateRange] = useState(true)
   
   const [filters, setFilters] = useState<{
     category: string
@@ -43,44 +46,44 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
     exportFormat: "pdf"
   })
 
-  // Load branches
+  // Load centres
   useEffect(() => {
-    loadBranches()
+    loadCentres()
   }, [])
 
-  const loadBranches = async () => {
+  const loadCentres = async () => {
     try {
       setLoading(true)
-      const branches = await ReportService.getBranches()
+      const centres = await ReportService.getOrphanageCentres()
       
-      // Check if branches is an array, if not, initialize an empty array
-      if (Array.isArray(branches)) {
-        setAvailableBranches(branches)
-      } else if (branches?.data && Array.isArray(branches.data)) {
+      // Check if centres is an array, if not, initialize an empty array
+      if (Array.isArray(centres)) {
+        setAvailableCentres(centres)
+      } else if (centres?.data && Array.isArray(centres.data)) {
         // Handle the case when the API returns { data: [] }
-        setAvailableBranches(branches.data)
+        setAvailableCentres(centres.data)
       } else {
-        console.warn("Branches data is not in expected format", branches)
-        setAvailableBranches([])
+        console.warn("Centres data is not in expected format", centres)
+        setAvailableCentres([])
       }
       
       setLoading(false)
     } catch (error) {
-      console.error("Failed to load branches", error)
+      console.error("Failed to load centres", error)
       toast({
         title: "Error",
-        description: "Failed to load branches. Please try again.",
+        description: "Failed to load centres. Please try again.",
         variant: "destructive"
       })
       // Initialize with empty array on error
-      setAvailableBranches([])
+      setAvailableCentres([])
       setLoading(false)
     }
   }
 
   const handleGenerateReport = async () => {
     try {
-      if (!dateRange.from || !dateRange.to) {
+      if (useDateRange && (!dateRange.from || !dateRange.to)) {
         toast({
           title: "Error",
           description: "Please select a valid date range",
@@ -100,42 +103,82 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
       
       // Prepare filters
       const reportFilters: ReportFilters = {
-        startDate: format(dateRange.from, "yyyy-MM-dd"),
-        endDate: format(dateRange.to, "yyyy-MM-dd"),
         category: filters.category !== "all" ? filters.category : undefined,
         status: filters.status !== "all" ? filters.status : undefined,
         exportFormat: filters.exportFormat,
       }
       
-      // Add branch filter if selected
-      if (selectedBranch && selectedBranch !== "all") {
-        reportFilters.branchId = selectedBranch
+      // Add date range only if checkbox is checked
+      if (useDateRange && dateRange.from && dateRange.to) {
+        reportFilters.startDate = format(dateRange.from, "yyyy-MM-dd")
+        reportFilters.endDate = format(dateRange.to, "yyyy-MM-dd")
+      }
+      
+      // Add centre filter if selected
+      if (selectedCentre && selectedCentre !== "all") {
+        reportFilters.centreId = selectedCentre
       }
       
       // Generate the appropriate report
       let result;
       
-      if (selectedBranch && selectedBranch !== "all") {
-        result = await ReportService.generateBranchReport(activeTab, reportFilters)
-      } else {
-        result = await ReportService.generateSystemReport(activeTab, reportFilters)
-      }
+      console.log(`Generating ${activeTab} report with filters:`, reportFilters)
       
-      // Success toast with appropriate styling
-      if (result?.success) {
-        toast({
-          title: "Report Generated Successfully ✅",
-          description: `Your ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} report has been downloaded in ${filters.exportFormat.toUpperCase()} format.`,
-          variant: "default"
+      try {
+        console.log(`About to generate ${activeTab} report with:`, {
+          selectedCentre,
+          reportFilters,
+          method: selectedCentre && selectedCentre !== "all" ? "generateBranchReport" : "generateSystemReport"
         })
-      } else {
-        throw new Error("Report generation failed")
+        
+        if (selectedCentre && selectedCentre !== "all") {
+          // For centre-specific reports, we use the existing branch report method but with centreId
+          console.log(`Calling ReportService.generateBranchReport("${activeTab}", ${JSON.stringify(reportFilters)})`)
+          result = await ReportService.generateBranchReport(activeTab, reportFilters)
+        } else {
+          console.log(`Calling ReportService.generateSystemReport("${activeTab}", ${JSON.stringify(reportFilters)})`)
+          result = await ReportService.generateSystemReport(activeTab, reportFilters)
+        }
+        
+        console.log(`${activeTab} report result:`, result)
+        
+        // Success toast with appropriate styling - handle different response formats
+        if (result?.success !== false) {
+          toast({
+            title: "Report Generated Successfully ✅",
+            description: `Your ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} report has been downloaded in ${filters.exportFormat.toUpperCase()} format.`,
+            variant: "default"
+          })
+        } else {
+          throw new Error(result?.message ?? "Report generation failed - no result returned")
+        }
+      } catch (reportError: any) {
+        console.error(`Error generating ${activeTab} report:`, reportError)
+        
+        // Show more specific error information
+        let errorMessage = `Failed to generate ${activeTab} report.`
+        
+        if (reportError?.response?.status === 404) {
+          errorMessage += ` API endpoint not found (404). Please check if the ${activeTab} report endpoint is implemented.`
+        } else if (reportError?.response?.status === 500) {
+          errorMessage += ` Server error (500). Please check server logs.`
+        } else if (reportError?.message) {
+          errorMessage += ` Error: ${reportError.message}`
+        }
+        
+        toast({
+          title: "Error Generating Report",
+          description: errorMessage,
+          variant: "destructive"
+        })
+        
+        throw reportError
       }
     } catch (error) {
       console.error("Failed to generate report", error)
       toast({
         title: "Error Generating Report",
-        description: "Failed to generate report. Please try again later.",
+        description: `Failed to generate ${activeTab} report. Please check the console for details and try again later.`,
         variant: "destructive"
       })
     } finally {
@@ -189,7 +232,8 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
         );
       case "inventory":
         return (
-          <>            <div className="flex flex-col space-y-2">
+          <>            
+          <div className="flex flex-col space-y-2">
               <Label htmlFor="category"><T k="report.category" /></Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
@@ -222,44 +266,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
             </div>
           </>
         );
-      case "fundraising":
-        return (
-          <>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="category">{t("report.campaign")}</Label>
-              <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
-                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.campaign")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t("report.allCampaigns")}</SelectItem>
-                  <SelectItem value="education">{t("report.education")}</SelectItem>
-                  <SelectItem value="healthcare">{t("report.healthcare")}</SelectItem>
-                  <SelectItem value="facilities">{t("report.facilities")}</SelectItem>
-                  <SelectItem value="events">{t("report.events")}</SelectItem>
-                  <SelectItem value="other">{t("report.other")}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="status">{t("report.campaignStatus")}</Label>
-              <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
-                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                  <SelectValue placeholder={t("report.campaignStatus")} />
-                </SelectTrigger>                <SelectContent>
-                  <SelectItem value="all"><T k="report.allStatuses" /></SelectItem>
-                  <SelectItem value="pending"><T k="report.pending" /></SelectItem>
-                  <SelectItem value="approved"><T k="report.approved" /></SelectItem>
-                  <SelectItem value="completed"><T k="report.completed" /></SelectItem>
-                  <SelectItem value="rejected"><T k="report.rejected" /></SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </>
-        );
-      case "volunteers":
       case "staff":
-      case "branches":
         return (
           <div className="flex flex-col space-y-2">
             <Label htmlFor="status">{t("report.status")}</Label>
@@ -300,7 +307,8 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
               onValueChange={(value) => setActiveTab(value as ReportType)} 
               className="w-full"
             >
-              <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-6 bg-blue-100">                <TabsTrigger 
+              <TabsList className="grid grid-cols-3 mb-6 bg-blue-100">
+                <TabsTrigger 
                   value="orphans"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
@@ -313,58 +321,54 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
                   <T k="report.inventory" />
                 </TabsTrigger>
                 <TabsTrigger 
-                  value="fundraising"
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
-                >
-                  <T k="report.fundraising" />
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="volunteers"
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
-                >
-                  <T k="report.volunteers" />
-                </TabsTrigger>
-                <TabsTrigger 
                   value="staff"
                   className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
                 >
                   <T k="report.staff" />
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="branches"
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white hover:bg-blue-200 transition-all"
-                >
-                  <T k="report.branches" />
-                </TabsTrigger>
               </TabsList>
             </Tabs>
 
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-4">                <div className="space-y-2">
-                  <Label htmlFor="dateRange"><T k="report.dateRange" /></Label>
-                  <DateRangePicker
-                    date={{ from: dateRange.from, to: dateRange.to }}
-                    onDateChange={handleDateRangeChange}
-                    className="w-full"
-                  />
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="useDateRange" 
+                      checked={useDateRange} 
+                      onCheckedChange={(checked) => setUseDateRange(checked === true)}
+                    />
+                    <Label htmlFor="useDateRange" className="text-sm font-medium">
+                      <T k="report.useDateRange" />
+                    </Label>
+                  </div>
+                  <div className={`space-y-2 ${!useDateRange ? 'opacity-50 pointer-events-none' : ''}`}>
+                    <Label htmlFor="dateRange"><T k="report.dateRange" /></Label>
+                    <DateRangePicker
+                      date={{ from: dateRange.from, to: dateRange.to }}
+                      onDateChange={handleDateRangeChange}
+                      className="w-full"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="branch"><T k="report.selectBranch" /></Label>
-                  <Select value={selectedBranch} onValueChange={setSelectedBranch}>
+                  <Label htmlFor="centre"><T k="report.selectCentre" /></Label>
+                  <Select value={selectedCentre} onValueChange={setSelectedCentre}>
                     <SelectTrigger className="border-blue-200 focus:ring-blue-500">
-                      <SelectValue placeholder={t("report.selectBranch")} />
-                    </SelectTrigger>                    <SelectContent>
-                      <SelectItem value="all"><T k="report.allBranches" /></SelectItem>
-                      {Array.isArray(availableBranches) && availableBranches.length > 0 ? (
-                        availableBranches.map((branch) => (
-                          <SelectItem key={branch.id} value={branch.id}>
-                            {branch.name}
+                      <SelectValue placeholder={t("report.selectCentre")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all"><T k="report.allCentres" /></SelectItem>
+                      {Array.isArray(availableCentres) && availableCentres.length > 0 ? (
+                        availableCentres.map((centre) => (
+                          <SelectItem key={centre.publicId} value={centre.publicId}>
+                            {centre.name}
                           </SelectItem>
                         ))
                       ) : (
                         <SelectItem value="loading" disabled>
-                          {loading ? "Loading branches..." : "No branches available"}
+                          {loading ? "Loading centres..." : "No centres available"}
                         </SelectItem>
                       )}
                     </SelectContent>
@@ -422,14 +426,10 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
         <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-100">
           <CardTitle className="text-base text-blue-800"><T k="report.systemSummary" /></CardTitle>
           <CardDescription><T k="report.orgWide" /></CardDescription>
-        </CardHeader><CardContent className="space-y-4 pt-4">
+        </CardHeader>        <CardContent className="space-y-4 pt-4">
           <div className="flex justify-between">
             <span className="text-blue-700"><T k="report.totalOrphanageCenters" /></span>
             <span className="font-medium text-blue-800">{stats?.totalOrphanageCenters ?? 0}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-blue-700"><T k="report.totalBranches" /></span>
-            <span className="font-medium text-blue-800">{stats?.totalBranches ?? 0}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-blue-700"><T k="report.totalOrphans" /></span>
@@ -438,47 +438,48 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
           <div className="flex justify-between">
             <span className="text-blue-700"><T k="report.totalAdmins" /></span>
             <span className="font-medium text-blue-800">{stats?.totalAdmins ?? 0}</span>
-          </div>          <div className="flex justify-between">
+          </div>
+          <div className="flex justify-between">
             <span className="text-blue-700"><T k="report.totalVolunteers" /></span>
             <span className="font-medium text-blue-800">{stats?.totalVolunteers ?? 0}</span>
           </div>
         </CardContent>
       </Card>
 
-      {/* Branch Comparison Card */}
+      {/* Centre Comparison Card */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
           <CardHeader className="pb-2 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200">
-            <CardTitle className="text-base text-blue-800"><T k="report.branchComparison" /></CardTitle>
+            <CardTitle className="text-base text-blue-800"><T k="report.centreComparison" /></CardTitle>
             <CardDescription><T k="report.performanceMetrics" /></CardDescription>
           </CardHeader>
           <CardContent className="pt-4">
             <ul className="space-y-3">
               <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
                 <div className="flex items-center gap-2">
-                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">🏢</span>
-                  <span className="text-blue-700"><T k="report.branchPrefix" /> A</span>
+                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">�</span>
+                  <span className="text-blue-700"><T k="report.centrePrefix" /> Hope Foundation</span>
                 </div>
                 <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-300 hover:bg-blue-200 transition-all"><T k="report.topPerformer" /></Badge>
               </li>
               <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
                 <div className="flex items-center gap-2">
-                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">🏢</span>
-                  <span className="text-blue-700"><T k="report.branchPrefix" /> C</span>
+                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">�</span>
+                  <span className="text-blue-700"><T k="report.centrePrefix" /> Sunshine Centre</span>
                 </div>
                 <Badge variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-100 transition-all"><T k="report.highGrowth" /></Badge>
               </li>
               <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
                 <div className="flex items-center gap-2">
-                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">🏢</span>
-                  <span className="text-blue-700"><T k="report.branchPrefix" /> E</span>
+                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">�</span>
+                  <span className="text-blue-700"><T k="report.centrePrefix" /> Rainbow House</span>
                 </div>
                 <Badge variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-100 transition-all"><T k="report.mostVolunteers" /></Badge>
               </li>
               <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
                 <div className="flex items-center gap-2">
-                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">🏢</span>
-                  <span className="text-blue-700"><T k="report.branchPrefix" /> B</span>
+                  <span className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-all">�</span>
+                  <span className="text-blue-700"><T k="report.centrePrefix" /> New Dawn Centre</span>
                 </div>
                 <Badge variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-100 transition-all"><T k="report.needsAttention" /></Badge>
               </li>
@@ -499,7 +500,7 @@ export default function SuperuserReportGenerator({ stats }: Readonly<SuperuserRe
                 <span className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110">⬇️</span>
               </li>
               <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">
-                <span className="text-blue-700"><T k="report.branchPerformanceAnalysis" /></span>
+                <span className="text-blue-700"><T k="report.centrePerformanceAnalysis" /></span>
                 <span className="h-4 w-4 text-blue-600 cursor-pointer hover:text-blue-800 transition-all hover:scale-110">⬇️</span>
               </li>
               <li className="flex items-center justify-between text-sm group hover:bg-blue-50 p-2 rounded-md transition-all">

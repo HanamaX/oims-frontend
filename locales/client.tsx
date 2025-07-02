@@ -302,6 +302,137 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       en: "Decline",
       sw: "Kataa",
     },
+    // Superuser Dashboard Translations
+    "superuser.title": {
+      en: "Superuser Dashboard",
+      sw: "Dashibodi ya Msimamizi Mkuu",
+    },
+    "superuser.dashboard.overview": {
+      en: "Dashboard Overview",
+      sw: "Muhtasari wa Dashibodi",
+    },
+    "superuser.dashboard.orphanageAdmins": {
+      en: "Orphanage Admins",
+      sw: "Wasimamizi wa Vituo",
+    },
+    "superuser.dashboard.orphanageCentres": {
+      en: "Orphanage Centres",
+      sw: "Vituo vya Mayatima",
+    },
+    "superuser.dashboard.registrationRequests": {
+      en: "Registration Requests",
+      sw: "Maombi ya Usajili",
+    },
+    "superuser.dashboard.systemReports": {
+      en: "System Reports",
+      sw: "Ripoti za Mfumo",
+    },
+    "superuser.dashboard.adminsManagement": {
+      en: "Orphanage Admins Management",
+      sw: "Usimamizi wa Wasimamizi wa Vituo",
+    },
+    "superuser.dashboard.addNewAdmin": {
+      en: "Add New Admin",
+      sw: "Ongeza Msimamizi Mpya",
+    },
+    "superuser.dashboard.addNewAdminTitle": {
+      en: "Add New Orphanage Admin",
+      sw: "Ongeza Msimamizi Mpya wa Kituo",
+    },
+    // Orphanage Centres Page Translations
+    "orphanageCentres.title": {
+      en: "Orphanage Centres",
+      sw: "Vituo vya Mayatima",
+    },
+    "orphanageCentres.subtitle": {
+      en: "Manage all orphanage centres in the system",
+      sw: "Simamia vituo vyote vya mayatima katika mfumo",
+    },
+    "orphanageCentres.search": {
+      en: "Search by name, location or email...",
+      sw: "Tafuta kwa jina, eneo au barua pepe...",
+    },
+    "orphanageCentres.filterByStatus": {
+      en: "Filter by status",
+      sw: "Chuja kwa hali",
+    },
+    "orphanageCentres.allCentres": {
+      en: "All Centres",
+      sw: "Vituo Vyote",
+    },
+    "orphanageCentres.active": {
+      en: "Active",
+      sw: "Inafanya Kazi",
+    },
+    "orphanageCentres.inactive": {
+      en: "Inactive",
+      sw: "Haifanyi Kazi",
+    },
+    "orphanageCentres.noCentresFound": {
+      en: "No Orphanage Centres Found",
+      sw: "Hakuna Vituo vya Mayatima Vilivyopatikana",
+    },
+    "orphanageCentres.adjustFilters": {
+      en: "Try adjusting your filters",
+      sw: "Jaribu kurekebisha vichujio vyako",
+    },
+    "orphanageCentres.noCentresYet": {
+      en: "There are no orphanage centres in the system yet",
+      sw: "Bado hakuna vituo vya mayatima katika mfumo",
+    },
+    "orphanageCentres.showing": {
+      en: "Showing",
+      sw: "Inaonyesha",
+    },
+    "orphanageCentres.of": {
+      en: "of",
+      sw: "kati ya",
+    },
+    "orphanageCentres.centres": {
+      en: "centres",
+      sw: "vituo",
+    },
+    // Table Headers
+    "orphanageCentres.name": {
+      en: "Name",
+      sw: "Jina",
+    },
+    "orphanageCentres.location": {
+      en: "Location",
+      sw: "Eneo",
+    },
+    "orphanageCentres.contact": {
+      en: "Contact",
+      sw: "Mawasiliano",
+    },
+    "orphanageCentres.createdDate": {
+      en: "Created Date",
+      sw: "Tarehe ya Kuundwa",
+    },
+    "orphanageCentres.status": {
+      en: "Status",
+      sw: "Hali",
+    },
+    "orphanageCentres.actions": {
+      en: "Actions",
+      sw: "Vitendo",
+    },
+    "orphanageCentres.details": {
+      en: "Details",
+      sw: "Maelezo",
+    },
+    "orphanageCentres.loading": {
+      en: "Loading orphanage centres...",
+      sw: "Inapakia vituo vya mayatima...",
+    },
+    "orphanageCentres.errorTitle": {
+      en: "Error Loading Data",
+      sw: "Hitilafu Kupakia Data",
+    },
+    "orphanageCentres.tryAgain": {
+      en: "Try Again",
+      sw: "Jaribu Tena",
+    },
   };
 
   const t = (key: string): string => {
