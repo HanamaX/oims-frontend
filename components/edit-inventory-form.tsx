@@ -194,25 +194,6 @@ export default function EditInventoryForm({
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="itemQuantity" className="text-blue-800">
-                  {t("inventory.edit.quantity")}
-                </Label>
-                <Input
-                  id="itemQuantity"
-                  name="itemQuantity"
-                  type="number"
-                  min="0"
-                  value={formData.itemQuantity}
-                  onChange={handleInputChange}
-                  className={`border-blue-200 focus:border-blue-400 bg-white rounded-xl ${
-                    errorFields.includes('itemQuantity') ? 'border-red-500 focus:border-red-500' : ''
-                  }`}
-                  autoComplete="off"
-                  required
-                />
-              </div>
-
               <div className="space-y-2">                
                 <Label htmlFor="itemPrice" className="text-blue-800">
                   {t("inventory.edit.price")}

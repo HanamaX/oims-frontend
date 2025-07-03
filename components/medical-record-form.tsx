@@ -54,10 +54,10 @@ export default function MedicalRecordForm({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target
-    setFormData({
-      ...formData,
+    setFormData(prev => ({
+      ...prev,
       [name]: value
-    })
+    }))
   }
   
   // Handle delete medical record

@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { Calendar, Users, DollarSign, ClipboardList, ChevronLeft, Mail, Phone, ArrowLeft, Loader2 } from "lucide-react"
 import FundraiserService from "@/lib/fundraiser-service"
+import ReportService from "@/lib/report-service"
 import Link from "next/link"
 import { useLanguage } from "@/contexts/LanguageContext"
 
@@ -50,7 +51,7 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
         setError(null)
       } catch (err: any) {
         console.error("Error fetching campaign data:", err)
-        setError(err.message || "Failed to load campaign information")
+        setError(err.message ?? "Failed to load campaign information")
       } finally {
         setLoading(false)
       }
@@ -84,7 +85,7 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="text-red-500 mb-4 text-xl">⚠️ {error || t("campaign.details.notFound")}</div>
+          <div className="text-red-500 mb-4 text-xl">⚠️ {error ?? t("campaign.details.notFound")}</div>
           <Button 
             onClick={() => window.history.back()} 
             variant="outline"
@@ -97,15 +98,15 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
     )
   }
   // Extract fundraiser data from campaign response
-  const fundraiser = campaign.fundraiser || campaign
-  const raisedAmount = campaign.raisedAmount || 0
-  const progressPercentage = (raisedAmount / (fundraiser.goal || 1)) * 100
+  const fundraiser = campaign.fundraiser ?? campaign
+  const raisedAmount = campaign.raisedAmount ?? 0
+  const progressPercentage = (raisedAmount / (fundraiser.goal ?? 1)) * 100
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{fundraiser.eventName || t("campaign.saveAChild")}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{fundraiser.eventName ?? t("campaign.saveAChild")}</h1>
           <p className="text-muted-foreground mt-1">{t("campaign.details.andContributors")}</p>
         </div>
         <Button variant="outline" onClick={() => window.history.back()}>
@@ -126,12 +127,16 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="aspect-[4/3] overflow-hidden rounded-md">
                   <img
-                    src={fundraiser.imageUrl 
-                      ? fundraiser.imageUrl.startsWith('http') 
-                        ? fundraiser.imageUrl 
-                        : `https://oims-4510ba404e0e.herokuapp.com${fundraiser.imageUrl}`
-                      : `/placeholder.svg?height=300&width=400&text=${encodeURIComponent(t("campaign.image.placeholder"))}`}
-                    alt={fundraiser.eventName || t("campaign.saveAChild")}
+                    src={(() => {
+                      if (!fundraiser.imageUrl) {
+                        return `/placeholder.svg?height=300&width=400&text=${encodeURIComponent(t("campaign.image.placeholder"))}`;
+                      }
+                      
+                      return fundraiser.imageUrl.startsWith('http')
+                        ? fundraiser.imageUrl
+                        : `https://oims-4510ba404e0e.herokuapp.com${fundraiser.imageUrl}`;
+                    })()}
+                    alt={fundraiser.eventName ?? t("campaign.saveAChild")}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       // Handle image load error by falling back to placeholder
@@ -141,19 +146,52 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                 </div>
                 
                 <div className="space-y-6">
+                  {/* Campaign Status Banner */}
+                  <div className="mb-2">
+                    <div className="flex justify-between items-center">
+                      <div className="flex space-x-3">
+                        {/* Status Badge - Campaign Status */}
+                        {(() => {
+                          let statusClass = "";
+                          if (campaign.campignStatus === "COMPLETED") {
+                            statusClass = "bg-green-100 text-green-800";
+                          } else if (campaign.campignStatus === "IN_PROGRESS") {
+                            statusClass = "bg-blue-100 text-blue-800";
+                          } else if (campaign.campignStatus === "CANCELLED") {
+                            statusClass = "bg-red-100 text-red-800";
+                          } else {
+                            statusClass = "bg-yellow-100 text-yellow-800";
+                          }
+                          return (
+                            <div className={`px-3 py-1 rounded-full text-sm font-medium ${statusClass}`}>
+                              {t(`campaign.status.${campaign.campignStatus?.toLowerCase()}`) ?? campaign.campignStatus ?? "Unknown Status"}
+                            </div>
+                          );
+                        })()}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {campaign.branchName && (
+                          <span className="inline-flex items-center">
+                            <span className="font-semibold">{t("campaign.details.branch")}:</span> {campaign.branchName}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
                   <div>
                     <h2 className="text-xl font-semibold mb-2">{t("campaign.details.progress")}</h2>
                     <div className="mb-2">
                       <div className="flex justify-between text-sm">
-                        <span className="font-medium">Tshs {(campaign.raisedAmount || 0).toLocaleString()} {t("campaign.details.raised")}</span>
-                        <span className="text-muted-foreground">{t("campaign.details.goal")} Tshs {(fundraiser.goal || 0).toLocaleString()}</span>
+                        <span className="font-medium">Tshs {(campaign.raisedAmount ?? 0).toLocaleString()} {t("campaign.details.raised")}</span>
+                        <span className="text-muted-foreground">{t("campaign.details.goal")} Tshs {(fundraiser.goal ?? 0).toLocaleString()}</span>
                       </div>
                       <Progress value={progressPercentage} className="h-2 mt-2" />
                     </div>
                     <div className="text-sm text-muted-foreground mt-2">
-                      <span className="font-medium">{campaign.contributors || 0} {t("campaign.details.contributors.count")}</span>
-                      {(campaign.amountRemaining || 0) > 0 && (
-                        <span className="ml-4">Tshs {(campaign.amountRemaining || 0).toLocaleString()} {t("campaign.details.remaining")}</span>
+                      <span className="font-medium">{campaign.contributors ?? 0} {t("campaign.details.contributors.count")}</span>
+                      {(campaign.amountRemaining ?? 0) > 0 && (
+                        <span className="ml-4">Tshs {(campaign.amountRemaining ?? 0).toLocaleString()} {t("campaign.details.remaining")}</span>
                       )}
                     </div>
                   </div>
@@ -225,26 +263,50 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                       <div className="bg-slate-50 p-4 rounded-md text-center">
                         <p className="font-medium text-sm">{t("campaign.details.orphanageAmount")}</p>
                         <p className="text-2xl font-bold text-blue-600 mt-1">
-                          Tshs {(campaign.orphanageAmount || 0).toLocaleString()}
+                          Tshs {(campaign.orphanageAmount ?? 0).toLocaleString()}
                         </p>
+                        {campaign.orphanageAmountPerIndividual > 0 && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            Tshs {campaign.orphanageAmountPerIndividual.toLocaleString()} {t("campaign.details.perIndividual")}
+                          </p>
+                        )}
                       </div>
                       <div className="bg-slate-50 p-4 rounded-md text-center">
                         <p className="font-medium text-sm">{t("campaign.details.eventAmount")}</p>
                         <p className="text-2xl font-bold text-blue-600 mt-1">
-                          Tshs {(campaign.eventAmount || 0).toLocaleString()}
+                          Tshs {(campaign.eventAmount ?? 0).toLocaleString()}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {t("campaign.details.forEventExpenses")}
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="mt-8">
-                <Link 
-                  href={`/news/ongoing/${campaign.publicId}`} 
-                  className="text-blue-600 hover:text-blue-800 underline"
-                >
-                  {t("campaign.details.viewPublic")}
-                </Link>
+              <div className="mt-8 space-y-4">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button 
+                    onClick={async () => {
+                      try {
+                        await ReportService.downloadComprehensiveCampaignReport(campaign.publicId);
+                      } catch (error) {
+                        console.error("Error downloading report:", error);
+                      }
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <ClipboardList className="mr-2 h-4 w-4" />
+                    {t("campaign.details.downloadReport") ?? "Download Comprehensive Report"}
+                  </Button>
+                  
+                  <Link 
+                    href={`/news/ongoing/${campaign.publicId}`} 
+                    className="text-blue-600 hover:text-blue-800 underline"
+                  >
+                    {t("campaign.details.viewPublic")}
+                  </Link>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -276,24 +338,34 @@ export default function CampaignDetailsPage({ params }: { readonly params: { cam
                     <tbody>
                       {contributors.map((contributor) => (
                         <tr key={contributor.publicId} className="border-b hover:bg-slate-50">                          
-                          <td className="py-3">{contributor.name || t("campaign.contributors.anonymous")}</td>
-                          <td className="py-3">{contributor.email || "N/A"}</td>
-                          <td className="py-3">{contributor.phoneNumber || "N/A"}</td>
-                          <td className="py-3">Tshs {(contributor.amount || 0).toLocaleString()}</td>
-                          <td className="py-3">{formatDate(contributor.date || "")}</td>
-                          <td className="py-3">{contributor.paymentMethod || "N/A"}</td>
+                          <td className="py-3">{contributor.name ?? t("campaign.contributors.anonymous")}</td>
+                          <td className="py-3">{contributor.email ?? "N/A"}</td>
+                          <td className="py-3">{contributor.phoneNumber ?? "N/A"}</td>
+                          <td className="py-3">Tshs {(contributor.amount ?? 0).toLocaleString()}</td>
+                          <td className="py-3">{formatDate(contributor.date ?? "")}</td>
+                          <td className="py-3">{contributor.paymentMethod ?? "N/A"}</td>
                           <td className="py-3">
-                            <span className={`px-2 py-1 rounded-full text-xs ${
-                              contributor.status === "COMPLETED" ? "bg-green-100 text-green-800" :
-                              contributor.status === "PENDING" ? "bg-yellow-100 text-yellow-800" :
-                              "bg-red-100 text-red-800"
-                            }`}>
-                              {contributor.status === "COMPLETED" 
-                                ? t("campaign.status.completed") 
-                                : contributor.status === "PENDING" 
-                                  ? t("campaign.status.pending")
-                                  : t("campaign.status.unknown")}
-                            </span>
+                            {(() => {
+                              let statusClass = "";
+                              let statusText = "";
+                              
+                              if (contributor.status === "COMPLETED") {
+                                statusClass = "bg-green-100 text-green-800";
+                                statusText = t("campaign.status.completed");
+                              } else if (contributor.status === "PENDING") {
+                                statusClass = "bg-yellow-100 text-yellow-800";
+                                statusText = t("campaign.status.pending");
+                              } else {
+                                statusClass = "bg-red-100 text-red-800";
+                                statusText = t("campaign.status.unknown");
+                              }
+                              
+                              return (
+                                <span className={`px-2 py-1 rounded-full text-xs ${statusClass}`}>
+                                  {statusText}
+                                </span>
+                              );
+                            })()}
                           </td>
                         </tr>
                       ))}

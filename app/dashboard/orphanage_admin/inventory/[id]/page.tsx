@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Loader2, Package, ArrowDown, ArrowUp, Calendar } from "lucide-react"
+import { ArrowLeft, Loader2, Package, ArrowDown, ArrowUp, Calendar, Download } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import API from "@/lib/api-service"
 import { T, useLanguage } from "@/contexts/LanguageContext"
+import ReportService from "@/lib/report-service"
+import { useToast } from "@/hooks/use-toast"
 
 // Types
 interface InventoryItem {
@@ -37,6 +39,7 @@ export default function SuperAdminInventoryDetailsPage() {
   const params = useParams()
   const router = useRouter()
   const itemId = params.id as string
+  const { toast } = useToast()
   
   const [item, setItem] = useState<InventoryItem | null>(null)
   const [transactions, setTransactions] = useState<Transaction[]>([])
@@ -44,6 +47,7 @@ export default function SuperAdminInventoryDetailsPage() {
   const [error, setError] = useState<string | null>(null)
   const [totalIn, setTotalIn] = useState(0)
   const [totalOut, setTotalOut] = useState(0)
+  const [isDownloadingReport, setIsDownloadingReport] = useState(false)
 
   // Fetch item details and transactions
   useEffect(() => {
@@ -98,6 +102,27 @@ export default function SuperAdminInventoryDetailsPage() {
       month: "short",
       day: "numeric",
     })
+  }
+
+  // Handle downloading transactions report
+  const handleDownloadTransactionsReport = async () => {
+    setIsDownloadingReport(true)
+    try {
+      await ReportService.downloadInventoryItemTransactionsReport(itemId)
+      toast({
+        title: t("common.success"),
+        description: t("common.downloadStarted"),
+      })
+    } catch (error) {
+      console.error("Error downloading inventory transactions report:", error)
+      toast({
+        title: t("common.error"),
+        description: t("common.errorTryAgain"),
+        variant: "destructive"
+      })
+    } finally {
+      setIsDownloadingReport(false)
+    }
   }
 
   // Get category badge color
@@ -205,7 +230,22 @@ export default function SuperAdminInventoryDetailsPage() {
       
       {/* Transaction History */}
       <div>
-        <h2 className="text-xl font-bold mb-4"><T k="inventoryDetails.transactionHistory" /></h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold"><T k="inventoryDetails.transactionHistory" /></h2>
+          
+          <Button 
+            onClick={handleDownloadTransactionsReport} 
+            className="bg-blue-600 text-white hover:bg-blue-700"
+            disabled={isDownloadingReport || transactions.length === 0}
+          >
+            {isDownloadingReport ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Download className="h-4 w-4 mr-2" />
+            )}
+            <T k="inventory.downloadTransactionsReport" />
+          </Button>
+        </div>
         
         <div className="space-y-4">
           {transactions.length === 0 ? (

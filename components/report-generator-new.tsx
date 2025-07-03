@@ -50,11 +50,13 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
     status: string
     exportFormat: 'pdf' | 'excel'
     orphanId?: string
+    gender?: string
   }>({
     category: "all",
     status: "all",
     exportFormat: "pdf",
-    orphanId: orphanId
+    orphanId: orphanId,
+    gender: "all"
   })  // Load branches for superadmin and orphanage admin only
   useEffect(() => {
     if (userRole === "superadmin") {
@@ -120,12 +122,15 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
       toast({
         title: t("report.generatingReport"),
         description: t("report.pleaseWait"),
-      })// Prepare filters
+      })      // Prepare filters
       const reportFilters: ReportFilters = {
-        category: filters.category !== "all" ? filters.category : undefined,
+        category: filters.gender !== "all" ? filters.gender : (filters.category !== "all" ? filters.category : undefined),
         status: filters.status !== "all" ? filters.status : undefined,
         exportFormat: filters.exportFormat,
-        orphanId: filters.orphanId
+        orphanId: filters.orphanId,
+        // Map the UI filter to the appropriate ageGroup enum value
+        ageGroup: filters.category !== "all" && filters.category !== undefined ? 
+          filters.category.toUpperCase() as any : undefined
       }
       
       // Only add date range if enabled
@@ -198,7 +203,7 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
       case "orphans":
         return (
           <>            <div className="flex flex-col space-y-2">
-              <Label htmlFor="category"><T k="report.ageGroup" /></Label>
+              <Label htmlFor="ageGroup"><T k="report.ageGroup" /></Label>
               <Select value={filters.category} onValueChange={(value) => setFilters({ ...filters, category: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">
                   <SelectValue placeholder={<T k="report.ageGroup" />} />
@@ -209,9 +214,24 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
                   <SelectItem value="toddler"><T k="report.toddler" /></SelectItem>
                   <SelectItem value="child"><T k="report.child" /></SelectItem>
                   <SelectItem value="teenager"><T k="report.teenager" /></SelectItem>
+                  <SelectItem value="young_adult"><T k="report.youngAdult" /></SelectItem>
                 </SelectContent>
               </Select>
-            </div>            <div className="flex flex-col space-y-2">
+            </div>
+            <div className="flex flex-col space-y-2">
+              <Label htmlFor="gender"><T k="report.gender" /></Label>
+              <Select value={filters.gender ?? "all"} onValueChange={(value) => setFilters({ ...filters, gender: value })}>
+                <SelectTrigger className="border-blue-200 focus:ring-blue-500">
+                  <SelectValue placeholder={<T k="report.gender" />} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all"><T k="report.allGenders" /></SelectItem>
+                  <SelectItem value="MALE"><T k="report.male" /></SelectItem>
+                  <SelectItem value="FEMALE"><T k="report.female" /></SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-col space-y-2">
               <Label htmlFor="status"><T k="report.status" /></Label>
               <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
                 <SelectTrigger className="border-blue-200 focus:ring-blue-500">

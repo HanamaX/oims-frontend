@@ -64,7 +64,7 @@ export default function AcademicRecordForm({
   
   // Add a blank subject field
   const addSubject = () => {
-    setSubjects([...subjects, { name: "", code: "", grade: "C" }])
+    setSubjects(prevSubjects => [...prevSubjects, { name: "", code: "", grade: "C" }])
   }
   
   // Remove a subject field by index
@@ -77,24 +77,73 @@ export default function AcademicRecordForm({
       return
     }
     
-    // For new subjects just remove from the array
-    setSubjects(subjects.filter((_, i) => i !== index))
+    // For new subjects just remove from the array using functional update
+    setSubjects(prevSubjects => prevSubjects.filter((_, i) => i !== index))
   }
   
-  // Update a subject field
+  // Handle subject field changes directly
+  const handleSubjectNameChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    console.log(`Subject name change: ${newValue}`)
+    setSubjects(prevSubjects => {
+      // Create a deep copy of the subjects array
+      const newSubjects = [...prevSubjects]
+      // Create a new object for the updated subject
+      newSubjects[index] = { 
+        ...newSubjects[index], 
+        name: newValue 
+      }
+      return newSubjects
+    })
+  }
+  
+  // Handle subject code changes directly
+  const handleSubjectCodeChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    console.log(`Subject code change: ${newValue}`)
+    setSubjects(prevSubjects => {
+      // Create a deep copy of the subjects array
+      const newSubjects = [...prevSubjects]
+      // Create a new object for the updated subject
+      newSubjects[index] = { 
+        ...newSubjects[index], 
+        code: newValue 
+      }
+      return newSubjects
+    })
+  }
+  
+  // Handle subject grade changes 
+  const handleSubjectGradeChange = (index: number, newValue: string) => {
+    setSubjects(prevSubjects => {
+      // Create a deep copy of the subjects array
+      const newSubjects = [...prevSubjects]
+      // Create a new object for the updated subject
+      newSubjects[index] = { 
+        ...newSubjects[index], 
+        grade: newValue 
+      }
+      return newSubjects
+    })
+  }
+  
+  // This function is now unused since we're using the specific handlers
+  // Keeping it just for reference
   const updateSubject = (index: number, field: keyof SubjectField, value: string) => {
-    const updatedSubjects = [...subjects]
-    updatedSubjects[index] = { ...updatedSubjects[index], [field]: value }
-    setSubjects(updatedSubjects)
+    setSubjects(prevSubjects => {
+      const updatedSubjects = [...prevSubjects]
+      updatedSubjects[index] = { ...updatedSubjects[index], [field]: value }
+      return updatedSubjects
+    })
   }
   
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setFormData({
-      ...formData,
+    setFormData(prev => ({
+      ...prev,
       [name]: value
-    })
+    }))
   }
   
   // Handle delete academic record
@@ -280,26 +329,30 @@ export default function AcademicRecordForm({
               )}
               
               {subjects.map((subject, index) => (
-                <div key={subject.publicId ?? `subject-new-${subject.name}-${subject.code}-${Date.now()}-${index}`} className="grid grid-cols-12 gap-2 items-start border p-3 rounded-md">
+                <div key={subject.publicId ?? `subject-new-${index}`} className="grid grid-cols-12 gap-2 items-start border p-3 rounded-md">
                   <div className="col-span-4">
                     <Label htmlFor={`subject-name-${index}`} className="text-xs mb-1 block">Subject Name</Label>
-                    <Input
-                      id={`subject-name-${index}`}
+                    <input
+                      name={`subject-name-${index}`}
                       value={subject.name}
-                      onChange={(e) => updateSubject(index, "name", e.target.value)}
+                      onChange={(e) => handleSubjectNameChange(index, e)}
                       placeholder="e.g. Mathematics"
                       required
+                      autoComplete="off"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     />
                   </div>
                   
                   <div className="col-span-3">
                     <Label htmlFor={`subject-code-${index}`} className="text-xs mb-1 block">Subject Code</Label>
-                    <Input
-                      id={`subject-code-${index}`}
+                    <input
+                      name={`subject-code-${index}`}
                       value={subject.code}
-                      onChange={(e) => updateSubject(index, "code", e.target.value)}
+                      onChange={(e) => handleSubjectCodeChange(index, e)}
                       placeholder="e.g. MATH101"
                       required
+                      autoComplete="off"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     />
                   </div>
                   
@@ -307,7 +360,7 @@ export default function AcademicRecordForm({
                     <Label htmlFor={`subject-grade-${index}`} className="text-xs mb-1 block">Grade</Label>
                     <Select
                       value={subject.grade}
-                      onValueChange={(value) => updateSubject(index, "grade", value)}
+                      onValueChange={(value) => handleSubjectGradeChange(index, value)}
                     >
                       <SelectTrigger id={`subject-grade-${index}`}>
                         <SelectValue placeholder="Grade" />

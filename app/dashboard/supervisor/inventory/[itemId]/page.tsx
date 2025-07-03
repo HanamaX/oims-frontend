@@ -14,7 +14,8 @@ import {
   Loader2,
   PlusCircle,
   Edit,
-  Trash2
+  Trash2,
+  Download
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { T, useLanguage } from "@/contexts/LanguageContext"
@@ -35,6 +36,7 @@ import InventoryService, {
   AddInventoryTransactionRequest,
   UpdateInventoryTransactionRequest
 } from "@/lib/inventory-service"
+import ReportService from "@/lib/report-service"
 import EditInventoryForm from "@/components/edit-inventory-form"
 import TransactionForm from "@/components/inventory-transaction-form"
 
@@ -49,6 +51,7 @@ export default function InventoryItemDetailsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isDownloadingReport, setIsDownloadingReport] = useState(false)
   
   // Modal states
   const [isEditItemOpen, setIsEditItemOpen] = useState(false)
@@ -235,6 +238,27 @@ export default function InventoryItemDetailsPage() {
   const openDeleteTransaction = (transaction: InventoryTransactionResponse) => {
     setSelectedTransaction(transaction)
     setIsDeleteTransactionDialogOpen(true)
+  }
+  
+  // Download inventory item transactions report
+  const handleDownloadTransactionsReport = async () => {
+    setIsDownloadingReport(true)
+    try {
+      await ReportService.downloadInventoryItemTransactionsReport(itemId)
+      toast({
+        title: t("common.success"),
+        description: t("common.downloadStarted"),
+      })
+    } catch (error) {
+      console.error("Error downloading inventory transactions report:", error)
+      toast({
+        title: t("common.error"),
+        description: t("common.errorTryAgain"),
+        variant: "destructive"
+      })
+    } finally {
+      setIsDownloadingReport(false)
+    }
   }
 
   // Calculate totals
@@ -511,6 +535,19 @@ export default function InventoryItemDetailsPage() {
       <Card>
         <CardHeader className="pb-3 flex flex-row items-center justify-between">
           <CardTitle><T k="inventoryDetails.transactionHistory" /></CardTitle>
+          <Button 
+            onClick={handleDownloadTransactionsReport} 
+            className="bg-blue-600 text-white hover:bg-blue-700"
+            disabled={isDownloadingReport || !itemDetails.inventoryTransactions || itemDetails.inventoryTransactions.length === 0}
+            size="sm"
+          >
+            {isDownloadingReport ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Download className="h-4 w-4 mr-2" />
+            )}
+            <T k="inventory.downloadTransactionsReport" />
+          </Button>
         </CardHeader>
         <CardContent>
           {itemDetails.inventoryTransactions && itemDetails.inventoryTransactions.length > 0 ? (

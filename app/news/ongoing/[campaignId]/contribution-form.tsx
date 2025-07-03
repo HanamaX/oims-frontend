@@ -192,10 +192,10 @@ export default function ContributionForm({ campaignId, suggestedAmount, onCancel
                 <RadioGroupItem value="credit-card" id="credit-card" />
                 <Label htmlFor="credit-card">Credit Card</Label>
               </div>
-              <div className="flex items-center space-x-2">
+              {/* <div className="flex items-center space-x-2">
                 <RadioGroupItem value="bank-transfer" id="bank-transfer" />
                 <Label htmlFor="bank-transfer">Bank Transfer</Label>
-              </div>
+              </div> */}
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="mobile-money" id="mobile-money" />
                 <Label htmlFor="mobile-money">Mobile Money</Label>

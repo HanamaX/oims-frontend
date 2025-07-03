@@ -29,7 +29,6 @@ import {
   Phone,
   Mail,
   Calendar,
-  FileText,
   AlertTriangle
 } from "lucide-react"
 
@@ -276,23 +275,14 @@ export default function OrphanageCentreDetailsPage() {
               ? <><CheckCircle2 className="h-4 w-4 mr-2" /> <T k="orphanageCentre.details.active" /></> 
               : <><XCircle className="h-4 w-4 mr-2" /> <T k="orphanageCentre.details.inactive" /></>}
           </Badge>
-          
-          <Button 
-            variant="outline"
-            onClick={handleLeaveRequestClick}
-            className="border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
-          >
-            Process Leave Request
-          </Button>
         </div>
       </div>
 
       {/* Tabs */}
       <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="details"><T k="orphanageCentre.details.tabDetails" /></TabsTrigger>
-          <TabsTrigger value="certificate"><T k="orphanageCentre.details.tabCertificate" /></TabsTrigger>
-          <TabsTrigger value="admins"><T k="orphanageCentre.details.tabLeaveRequests" /></TabsTrigger>
+          <TabsTrigger value="admins">Orphanage Admin</TabsTrigger>
         </TabsList>
         
         {/* Details Tab */}
@@ -399,48 +389,6 @@ export default function OrphanageCentreDetailsPage() {
                 {centre.isActive ? "Deactivate Centre" : "Activate Centre"}
               </Button>
             </CardFooter>
-          </Card>
-        </TabsContent>
-        
-        {/* Certificate Tab */}
-        <TabsContent value="certificate">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <FileText className="h-5 w-5 mr-2" /> <T k="orphanageCentre.details.registrationCertificate" />
-              </CardTitle>
-              <CardDescription>
-                <T k="orphanageCentre.details.viewCertificateDescription" />
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {centre.certificateUrl ? (
-                <div className="flex items-center justify-between border rounded-md p-6 bg-gray-50">
-                  <div className="flex items-center">
-                    <FileText className="h-8 w-8 text-blue-500 mr-4" />
-                    <div>
-                      <h3 className="font-medium">{centre.certificateFileName ?? "Certificate Document"}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        <T k="orphanageCentre.details.registrationDocumentFor" /> {centre.name}
-                      </p>
-                    </div>
-                  </div>
-                  <Button 
-                    variant="outline"
-                    className="ml-4"
-                    onClick={() => centre.certificateUrl && window.open(centre.certificateUrl, '_blank')}
-                  >
-                    <T k="orphanageCentre.details.downloadCertificate" />
-                  </Button>
-                </div>
-              ) : (
-                <div className="text-center py-10">
-                  <AlertTriangle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
-                  <p className="text-lg font-medium text-amber-700 mb-2"><T k="orphanageCentre.details.noCertificate" /></p>
-                  <p className="text-muted-foreground"><T k="orphanageCentre.details.noCertificateDescription" /></p>
-                </div>
-              )}
-            </CardContent>
           </Card>
         </TabsContent>
         

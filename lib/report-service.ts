@@ -3,15 +3,42 @@ import API from "./api-service"
 // Define the report types
 export type ReportType = 'orphans' | 'inventory' | 'fundraising' | 'volunteers' | 'staff' | 'branches'
 
+/**
+ * Age group categorization for orphans:
+ * - INFANT: 0-2 years old
+ * - CHILD: 3-12 years old 
+ * - TEENAGER: 13-17 years old
+ * - YOUNG_ADULT: 18+ years old
+ * 
+ * Gender mapping:
+ * The API expects gender information in the 'category' field:
+ * - "MALE" or "male" for male orphans
+ * - "FEMALE" or "female" for female orphans
+ * - undefined or null for all genders
+ */
 // Interface for report filters
 export interface ReportFilters {
   startDate?: string
   endDate?: string
   branchId?: string
   centreId?: string  // Added for the new API
+  /**
+   * For orphan reports:
+   * - When used for gender filter: "MALE", "FEMALE", or undefined for all genders
+   * - When used for inventory: "food", "clothing", "medicine", "school", "other"
+   * This field is mapped to the backend's 'category' parameter
+   */
   category?: string
   status?: string
   orphanId?: string
+  /**
+   * Age group categorization for orphans:
+   * - INFANT: 0-2 years old
+   * - CHILD: 3-12 years old
+   * - TEENAGER: 13-17 years old
+   * - YOUNG_ADULT: 18+ years old
+   */
+  ageGroup?: 'INFANT' | 'CHILD' | 'TEENAGER' | 'YOUNG_ADULT'
   exportFormat?: 'pdf' | 'excel' | 'json'
 }
 
@@ -75,8 +102,9 @@ class ReportService {    // Get available branches for reports
       const payload = {
         branchId: filters.branchId,
         centreId: filters.centreId,
-        category: filters.category, // For orphans: MALE, FEMALE, null = all genders
+        category: filters.category, // Gender filter: MALE, FEMALE, null = all genders
         status: filters.status, // For orphans: ACTIVE, INACTIVE, null = all statuses
+        ageGroup: filters.ageGroup, // INFANT, CHILD, TEENAGER, YOUNG_ADULT
         startDate: filters.startDate,
         endDate: filters.endDate,
         format: filters.exportFormat ?? 'json'
@@ -284,10 +312,22 @@ class ReportService {    // Get available branches for reports
   // Generate orphan-specific report
   async generateOrphanReport(orphanId: string, filters: ReportFilters = {}) {
     try {
-      const response = await API.post(`/api/reports/orphan/${orphanId}`, filters, {
+      // Prepare the request payload according to the API requirements
+      const payload = {
+        orphanId: orphanId,
+        ageGroup: filters.ageGroup,
+        status: filters.status,
+        category: filters.category,
+        startDate: filters.startDate,
+        endDate: filters.endDate,
+        format: filters.exportFormat ?? 'json'
+      }
+      
+      const response = await API.post(`/api/reports/orphan/${orphanId}`, payload, {
         responseType: filters.exportFormat === 'pdf' ? 'blob' : 'json'
       })
-        if (filters.exportFormat === 'pdf' || filters.exportFormat === 'excel') {
+      
+      if (filters.exportFormat === 'pdf' || filters.exportFormat === 'excel') {
         return this.handleFileDownload(response, `orphan-${orphanId}`, filters.exportFormat)
       }
       
@@ -295,7 +335,112 @@ class ReportService {    // Get available branches for reports
     } catch (error) {
       console.error('Error generating orphan report:', error)
       throw error
-    }  }
+    }
+  }
+  
+  // Download a single orphan's report as PDF
+  async downloadOrphanReport(orphanId: string, filters: ReportFilters = {}) {
+    try {
+      // Build query parameters
+      const queryParams = new URLSearchParams()
+      queryParams.append('format', 'pdf')
+      
+      if (filters.ageGroup) {
+        queryParams.append('ageGroup', filters.ageGroup)
+      }
+      
+      if (filters.status) {
+        queryParams.append('status', filters.status)
+      }
+      
+      if (filters.category) {
+        queryParams.append('category', filters.category)
+      }
+      
+      const response = await API.get(`/app/oims/reports/orphan/${orphanId}?${queryParams.toString()}`, {
+        responseType: 'blob'
+      })
+      
+      return this.handleFileDownload(response, `orphan-${orphanId}`, 'pdf')
+    } catch (error) {
+      console.error('Error downloading orphan report:', error)
+      throw error
+    }
+  }
+  
+  // Download academic records report for an orphan as PDF
+  async downloadAcademicReport(orphanId: string, filters: ReportFilters = {}) {
+    try {
+      // Build query parameters
+      const queryParams = new URLSearchParams()
+      queryParams.append('format', 'pdf')
+      
+      if (filters.ageGroup) {
+        queryParams.append('ageGroup', filters.ageGroup)
+      }
+      
+      if (filters.status) {
+        queryParams.append('status', filters.status)
+      }
+      
+      if (filters.category) {
+        queryParams.append('category', filters.category)
+      }
+      
+      const response = await API.get(`/app/oims/reports/academic/${orphanId}?${queryParams.toString()}`, {
+        responseType: 'blob'
+      })
+      
+      return this.handleFileDownload(response, `academic-records-${orphanId}`, 'pdf')
+    } catch (error) {
+      console.error('Error downloading academic report:', error)
+      throw error
+    }
+  }
+  
+  // Download medical records report for an orphan as PDF
+  async downloadMedicalReport(orphanId: string, filters: ReportFilters = {}) {
+    try {
+      // Build query parameters
+      const queryParams = new URLSearchParams()
+      queryParams.append('format', 'pdf')
+      
+      if (filters.ageGroup) {
+        queryParams.append('ageGroup', filters.ageGroup)
+      }
+      
+      if (filters.status) {
+        queryParams.append('status', filters.status)
+      }
+      
+      if (filters.category) {
+        queryParams.append('category', filters.category)
+      }
+      
+      const response = await API.get(`/app/oims/reports/medical/${orphanId}?${queryParams.toString()}`, {
+        responseType: 'blob'
+      })
+      
+      return this.handleFileDownload(response, `medical-records-${orphanId}`, 'pdf')
+    } catch (error) {
+      console.error('Error downloading medical report:', error)
+      throw error
+    }
+  }
+  
+  // Download inventory item transaction report as PDF
+  async downloadInventoryItemTransactionsReport(itemId: string) {
+    try {
+      const response = await API.get(`/app/oims/reports/inventory/item/${itemId}/transactions?format=pdf`, {
+        responseType: 'blob'
+      })
+      
+      return this.handleFileDownload(response, `inventory-transactions-${itemId}`, 'pdf')
+    } catch (error) {
+      console.error('Error downloading inventory transactions report:', error)
+      throw error
+    }
+  }
     // Download report file using API instance but with custom handling for blob response
   private async downloadReportFile(endpoint: string, payload: any, reportType: string, format: string) {
     try {      // Use API instance to make the request with all interceptors and proper config
@@ -377,6 +522,84 @@ class ReportService {    // Get available branches for reports
     } catch (error) {
       console.error('Error during file download:', error)
       return { success: false, message: `Failed to download ${format.toUpperCase()} report` }
+    }
+  }
+
+  // Download comprehensive campaign report as PDF
+  async downloadComprehensiveCampaignReport(campaignId: string) {
+    try {
+      // Download the report using our generic file download method
+      const endpoint = `/app/oims/reports/fundraising/campaign/${campaignId}/comprehensive`
+      const response = await API.get(endpoint, {
+        responseType: 'blob'
+      })
+      
+      return this.handleFileDownload(response, `campaign-report-${campaignId}`, 'pdf')
+    } catch (error) {
+      console.error('Error downloading comprehensive campaign report:', error)
+      throw error
+    }
+  }
+
+  // Download comprehensive orphan report as PDF with age group and gender filtering
+  async downloadComprehensiveOrphanReport(filters: ReportFilters = {}) {
+    try {
+      // Prepare the request payload according to the API requirements
+      const payload = {
+        branchId: filters.branchId,
+        centreId: filters.centreId,
+        ageGroup: filters.ageGroup ?? 'CHILD', // Default to CHILD if not specified
+        status: filters.status ?? 'ACTIVE', // Default to ACTIVE if not specified
+        /**
+         * Map category to gender: 
+         * - "MALE" or "male" for male orphans
+         * - "FEMALE" or "female" for female orphans
+         * - undefined for all genders
+         */
+        category: filters.category?.toLowerCase(), // gender: male, female, null = all
+        format: 'pdf' // Always PDF for comprehensive reports
+      }
+      
+      // Build query parameters
+      const queryParams = new URLSearchParams()
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          queryParams.append(key, value.toString())
+        }
+      })
+      
+      const endpoint = `/app/oims/reports/orphans/comprehensive?${queryParams.toString()}`
+      const response = await API.get(endpoint, {
+        responseType: 'blob'
+      })
+      
+      // Create a descriptive report name based on filters
+      const ageGroupNames: Record<string, string> = {
+        'INFANT': 'infants-0-2yrs',
+        'CHILD': 'children-3-12yrs',
+        'TEENAGER': 'teenagers-13-17yrs',
+        'YOUNG_ADULT': 'young-adults-18plus'
+      }
+      
+      const ageGroupText = filters.ageGroup && ageGroupNames[filters.ageGroup] 
+        ? ageGroupNames[filters.ageGroup] 
+        : 'all-ages'
+      const statusText = filters.status?.toLowerCase() ?? 'all'
+      
+      // Create gender text for filename based on category filter
+      let genderText = 'all-genders';
+      if (filters.category?.toLowerCase() === 'male') {
+        genderText = 'males';
+      } else if (filters.category?.toLowerCase() === 'female') {
+        genderText = 'females';
+      }
+      
+      const reportName = `orphans-${ageGroupText}-${statusText}-${genderText}`
+      
+      return this.handleFileDownload(response, reportName, 'pdf')
+    } catch (error) {
+      console.error('Error downloading comprehensive orphan report:', error)
+      throw error
     }
   }
 }

@@ -272,6 +272,22 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Download Certificate",
     sw: "Pakua Cheti",
   },
+  "orphan.downloadReport": {
+    en: "Download Report",
+    sw: "Pakua Ripoti"
+  },
+  "orphan.downloadAcademicReport": {
+    en: "Download Academic Report",
+    sw: "Pakua Ripoti ya Kielimu"
+  },
+  "orphan.downloadMedicalReport": {
+    en: "Download Medical Report",
+    sw: "Pakua Ripoti ya Matibabu"
+  },
+  "inventory.downloadTransactionsReport": {
+    en: "Download Transactions Report",
+    sw: "Pakua Ripoti ya Miamala"
+  },
   
   // Orphanage Centre Leave Requests
   "orphanageCentre.leaveRequests.title": {
@@ -1164,7 +1180,7 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     sw: "Tazama na simamia maelezo ya kituo chako cha yatima hapa chini.",
   },
   "centerOverview.readOnlyMode": {
-    en: "You are viewing this center in read-only mode as a superuser.",
+    en: "You are viewing this center in read-only mode as a supervisor.",
     sw: "Unatazama kituo hiki katika hali ya kusoma tu kama mtumiaji mkuu.",
   },
   "centerOverview.updateCenter": {
@@ -2805,7 +2821,7 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   },
   "campaign.details.loading": {
     en: "Loading campaign details...",
-    sw: "Inapakia maelezo ya kampeni..."
+    sw: "Inapakia maelezo ya kampeni...",
   },
   "campaign.details.notFound": {
     en: "Campaign not found",
@@ -2887,6 +2903,10 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "View Public Campaign Page",
     sw: "Angalia Ukurasa wa Kampeni ya Umma"
   },
+  "campaign.details.downloadReport": {
+    en: "Download Comprehensive Report",
+    sw: "Pakua Ripoti Kamili"
+  },
   "campaign.backToFundraisers": {
     en: "Back to Fundraisers",
     sw: "Rudi kwa Miradi ya Kuchangisha"
@@ -2967,9 +2987,25 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "ACTIVE",
     sw: "INAFANYA KAZI"
   },
+  "campaign.status.in_progress": {
+    en: "IN PROGRESS",
+    sw: "INAENDELEA"
+  },
   "campaign.status.cancelled": {
     en: "CANCELLED",
     sw: "IMESITISHWA"
+  },
+  "campaign.details.branch": {
+    en: "Branch",
+    sw: "Tawi"
+  },
+  "campaign.details.perIndividual": {
+    en: "per individual",
+    sw: "kwa mtu mmoja"
+  },
+  "campaign.details.forEventExpenses": {
+    en: "For event expenses",
+    sw: "Kwa gharama za tukio"
   },
   
   // Fundraiser status translations
@@ -3851,6 +3887,10 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   "common.errorTryAgain": {
     en: "Something went wrong. Please try again.",
     sw: "Hitilafu imetokea. Tafadhali jaribu tena.",
+  },
+  "common.downloadStarted": {
+    en: "Your download has started",
+    sw: "Upakuaji wako umeanza"
   },
   "orphans.editSuccess": {
     en: "Orphan record updated successfully",
@@ -5860,6 +5900,26 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Teenager (13-17 years)",
     sw: "Kijana (miaka 13-17)",
   },
+  "report.youngAdult": {
+    en: "Young Adult (18+ years)",
+    sw: "Kijana Mzima (miaka 18+)",
+  },
+  "report.gender": {
+    en: "Gender",
+    sw: "Jinsia",
+  },
+  "report.allGenders": {
+    en: "All Genders",
+    sw: "Jinsia Zote",
+  },
+  "report.male": {
+    en: "Male",
+    sw: "Kiume",
+  },
+  "report.female": {
+    en: "Female",
+    sw: "Kike",
+  },
   "report.allStatuses": {
     en: "All Statuses",
     sw: "Hali Zote",
@@ -5908,7 +5968,8 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   },
   "report.totalOrphanageCenters": {
     en: "Total Orphanage Centers",
-    sw: "Jumla ya Vituo vya Yatima",  },
+    sw: "Jumla ya Vituo vya Yatima",
+  },
   "report.totalAdmins": {
     en: "Total Admins",
     sw: "Jumla ya Wasimamizi",
