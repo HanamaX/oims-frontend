@@ -529,7 +529,7 @@ class ReportService {    // Get available branches for reports
   async downloadComprehensiveCampaignReport(campaignId: string) {
     try {
       // Download the report using our generic file download method
-      const endpoint = `/app/oims/reports/fundraising/campaign/${campaignId}/comprehensive`
+      const endpoint = `/app/oims/reports/fundraising/campaign/${campaignId}/comprehensive?format=pdf`
       const response = await API.get(endpoint, {
         responseType: 'blob'
       })
