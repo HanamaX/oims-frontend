@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { T, useLanguage } from "@/contexts/LanguageContext"
 import API from "@/lib/api-service"
+import OrphanService, { OrphanCreateRequest } from "@/lib/orphan-service"
 import { Orphan } from "@/lib/orphan-types"
 import { 
   Pagination, 
@@ -171,33 +172,41 @@ export default function SupervisorOrphansPage() {  const router = useRouter()
     setOrphans(orphans.filter((orphan) => orphan.publicId !== publicId))
   }
 
-  const handleAddOrphan = (data: any) => {
-    console.log("New orphan data:", data)
+  const handleAddOrphan = async (orphanData: OrphanCreateRequest, orphanImage?: File, guardianData?: any) => {
+    console.log("New orphan data:", orphanData)
+    console.log("Guardian data:", guardianData)
     
-    // Format the data according to the API requirements
-    const orphanData = {
-      fullName: data.fullName,
-      dateOfBirth: formatDateOfBirth(data.dateOfBirth),
-      gender: data.gender ?? 'O', // O for Other as default if not provided
-      background: data.background ?? data.adoptionReason ?? 'No background information provided',
-      branchPublicId: data.branchPublicId ?? '',
-      educationLevel: data.educationLevel
-    };
-    
-    // Create a new orphan via API
-    API.post('/app/oims/orphans/addorphan', orphanData)
-      .then(response => {
-        console.log('Orphan created successfully:', response.data);
+    try {
+      // Use the new OrphanService to create orphan with guardian
+      if (guardianData?.name) {
+        // If guardian data is provided, use the combined method
+        const result = await OrphanService.createOrphanWithGuardian(orphanData, guardianData)
+        console.log('Orphan and guardian created successfully:', result)
         
-        // Close the form
-        setIsFormOpen(false);
+        // If there's an orphan image, upload it
+        if (orphanImage && result.orphan.publicId) {
+          await OrphanService.uploadOrphanPhoto(result.orphan.publicId, orphanImage)
+        }
+      } else {
+        // If no guardian data, create orphan only
+        const orphan = await OrphanService.createOrphan(orphanData)
+        console.log('Orphan created successfully:', orphan)
         
-        // Refresh the orphans list
-        fetchOrphans();
-      })
-      .catch(error => {        console.error('Failed to add orphan:', error);
-        alert(`${t("orphans.addFail")}: ${error.response?.data?.message ?? error.message}`);
-      });
+        // If there's an orphan image, upload it
+        if (orphanImage && orphan.publicId) {
+          await OrphanService.uploadOrphanPhoto(orphan.publicId, orphanImage)
+        }
+      }
+      
+      // Close the form
+      setIsFormOpen(false)
+      
+      // Refresh the orphans list
+      fetchOrphans()
+    } catch (error: any) {
+      console.error('Failed to add orphan:', error)
+      alert(`${t("orphans.addFail")}: ${error.friendlyMessage ?? error.message}`)
+    }
   }
 
   return (

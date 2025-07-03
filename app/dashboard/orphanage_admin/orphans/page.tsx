@@ -20,7 +20,7 @@ import {
   PaginationPrevious 
 } from "@/components/ui/pagination"
 import OrphanForm from "@/components/orphan-form"
-import { OrphanCreateRequest } from "@/lib/orphan-service"
+import OrphanService, { OrphanCreateRequest } from "@/lib/orphan-service"
 import { toast } from "@/components/ui/use-toast"
 
 // Utility function to calculate age from date of birth
@@ -156,33 +156,45 @@ export default function OrphanageAdminOrphansPage() {
   }, [filteredOrphans.length, orphansPerPage, currentPage]);
 
   // Function to handle creating a new orphan
-  const handleCreateOrphan = async (orphanData: OrphanCreateRequest) => {
+  const handleCreateOrphan = async (orphanData: OrphanCreateRequest, orphanImage?: File, guardianData?: any) => {
     try {
-      const response = await API.post("/app/oims/orphans", orphanData);
+      let result;
       
-      if (response.data?.data) {
-        const newOrphan = response.data.data;
-        
-        // Add the new orphan to the list and refresh
-        await fetchOrphans();
-        
-        // Close the form
-        setShowAddOrphanForm(false);
-        
-        // Show success message
-        toast({
-          title: t("orphans.createdTitle"),
-          description: t("orphans.createdDescription"),
-          variant: "default",
-          className: "bg-green-100 border-green-500 text-green-800"
-        });
+      if (guardianData?.name) {
+        // If guardian data is provided, use the combined method
+        result = await OrphanService.createOrphanWithGuardian(orphanData, guardianData);
+        console.log('Orphan and guardian created successfully:', result);
+      } else {
+        // If no guardian data, create orphan only
+        const orphan = await OrphanService.createOrphan(orphanData);
+        result = { orphan };
+        console.log('Orphan created successfully:', orphan);
       }
+      
+      // If there's an orphan image, upload it
+      if (orphanImage && result.orphan.publicId) {
+        await OrphanService.uploadOrphanPhoto(result.orphan.publicId, orphanImage);
+      }
+      
+      // Add the new orphan to the list and refresh
+      await fetchOrphans();
+      
+      // Close the form
+      setShowAddOrphanForm(false);
+      
+      // Show success message
+      toast({
+        title: t("orphans.createdTitle"),
+        description: t("orphans.createdDescription"),
+        variant: "default",
+        className: "bg-green-100 border-green-500 text-green-800"
+      });
     } catch (err: any) {
       console.error("Failed to create orphan:", err);
       
       toast({
         title: t("orphans.errorTitle"),
-        description: err.message || t("orphans.errorDescription"),
+        description: err.friendlyMessage ?? err.message ?? t("orphans.errorDescription"),
         variant: "destructive"
       });
     }
@@ -194,9 +206,10 @@ export default function OrphanageAdminOrphansPage() {
           <h1 className="text-3xl font-bold tracking-tight"><T k="orphans.management" /></h1>
           <p className="text-muted-foreground mt-2"><T k="orphans.description" /></p>
         </div>
-        <Button 
-          onClick={() => setShowAddOrphanForm(true)} 
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+
+        <Button
+          onClick={() => setShowAddOrphanForm(true)}
+          className="rounded-xl bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="mr-2 h-4 w-4" />
           <T k="orphans.addOrphan" />

@@ -128,6 +128,9 @@ const AuthService = {
           phoneNumber: adminData.phone ?? "", // Add both formats for compatibility
           imageUrl: adminData.imageUrl ?? "",
           branchName: adminData.branchName ?? "",
+          branchPublicId: adminData.branchPublicId ?? "",
+          orphanageCentrePublicId: adminData.orphanageCentrePublicId ?? "",
+          orphanageCentreName: adminData.orphanageCentreName ?? "",
           
           // Account status properties
           enabled: adminData.enabled,

@@ -1,11 +1,11 @@
 import API, { getErrorMessage } from "./api-service"
-import { Orphan, Certificate } from "./orphan-types"
+import { Orphan } from "./orphan-types"
 
 export interface OrphanCreateRequest {
   origin: string
   fullName: string
   dateOfBirth: string
-  arrivalDate: string      // New field: Date of arrival at the orphanage
+  dateOfArrival: string
   religion: string
   adoptionReason: string
   gender: string
@@ -18,30 +18,24 @@ export interface OrphanCreateRequest {
   // Education fields
   educationLevel: string
   previousSchoolName: string
-  educationStartDate?: string  // New field: Education time frame start
-  educationEndDate?: string    // New field: Education time frame end
   
-  // Referral information
-  referralOfficer?: string    // New field: Officer who brought the orphan
-  referralDepartment?: string // New field: Department of referring officer
-  referralPhone?: string      // New field: Phone of referring officer
-  referralDate?: string       // New field: Date of referral
-  referralDocument?: File     // New field: Referral document
-  
-  // Guardian information and files
-  guardianName?: string       // New field: Guardian name
-  guardianPhone?: string      // New field: Guardian phone number
-  guardianResidence?: string  // New field: Guardian place of residence
-  relationship?: string       // New field: Relationship with the child
-  
-  // Files moved to certificate records
-  birthCertificate?: File     // New field: Birth certificate
-  educationCertificate?: File // New field: Education certificate
-  additionalFiles?: File[]    // New field: Other necessary files
-  
-  // Photos for guardian records
-  childPhoto?: File           // New field: Child photo
-  guardianPhoto?: File        // New field: Guardian photo
+  // Social welfare officer information
+  socialWelfareOfficerName: string
+  socialWelfareOfficerWorkPlace: string
+  socialWelfareOfficerPhoneNumber: string
+  socialWelfareOfficerEmail: string
+}
+
+export interface GuardianCreateRequest {
+  publicId: string
+  name: string
+  sex: string
+  relationship: string
+  contactNumber: string
+  email: string
+  address: string
+  occupation: string
+  orphanPublicId: string
 }
 
 export interface OrphanUpdateRequest {
@@ -75,10 +69,54 @@ export interface CertificateUploadRequest {
 }
 
 const OrphanService = {
-  createOrphan: async (orphanData: OrphanCreateRequest): Promise<Orphan> => {
+  createGuardian: async (guardianData: GuardianCreateRequest): Promise<any> => {
     try {
-      const response = await API.post<Orphan>("/app/oims/orphans/addorphan", orphanData)
+      const response = await API.post("/app/oims/orphans/guardians", guardianData)
       return response.data
+    } catch (error: any) {
+      console.error("Create guardian error:", error)
+      error.friendlyMessage = `Failed to create guardian: ${getErrorMessage(error)}`
+      throw error
+    }
+  },
+
+  createOrphanWithGuardian: async (orphanData: OrphanCreateRequest, guardianData?: Omit<GuardianCreateRequest, 'orphanPublicId'>): Promise<{ orphan: any, guardian?: any }> => {
+    try {
+      // First create the orphan
+      const orphanResponse = await API.post("/app/oims/orphans/addorphan", orphanData)
+      
+      // Extract orphan data from the nested response structure
+      const orphan = orphanResponse.data.data ?? orphanResponse.data
+      
+      console.log("Orphan created:", orphan)
+      console.log("Orphan publicId:", orphan.publicId)
+
+      let guardian = null
+      // If guardian data is provided, create the guardian using the orphan's publicId
+      if (guardianData && orphan.publicId) {
+        const guardianPayload: GuardianCreateRequest = {
+          ...guardianData,
+          orphanPublicId: orphan.publicId
+        }
+        
+        console.log("Creating guardian with payload:", guardianPayload)
+        guardian = await OrphanService.createGuardian(guardianPayload)
+        console.log("Guardian created:", guardian)
+      }
+
+      return { orphan, guardian }
+    } catch (error: any) {
+      console.error("Create orphan with guardian error:", error)
+      error.friendlyMessage = `Failed to create orphan and guardian: ${getErrorMessage(error)}`
+      throw error
+    }
+  },
+
+  createOrphan: async (orphanData: OrphanCreateRequest): Promise<any> => {
+    try {
+      const response = await API.post("/app/oims/orphans/addorphan", orphanData)
+      // Extract orphan data from the nested response structure
+      return response.data.data ?? response.data
     } catch (error: any) {
       console.error("Create orphan error:", error)
       // Enhance error with a more specific message

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
+import { useState, useMemo, useCallback, useEffect } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -25,7 +25,6 @@ import {
 import OrphanFormEdit from "./orphan-form-edit"
 import Image from "next/image"
 import { useLanguage } from "@/contexts/LanguageContext"
-import { usePathname } from "next/navigation"
 
 interface OrphanDetailsPersonalProps {
   readonly orphan: OrphanDetails | null
@@ -35,8 +34,6 @@ interface OrphanDetailsPersonalProps {
 export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Readonly<OrphanDetailsPersonalProps>) {
   const { toast } = useToast()
   const { t, language } = useLanguage()
-  const pathname = usePathname();
-  const isSupervisorDashboard = pathname?.includes("/dashboard/supervisor/");
   const [isGuardianFormOpen, setIsGuardianFormOpen] = useState(false)
   const [isDeleteGuardianDialogOpen, setIsDeleteGuardianDialogOpen] = useState(false)
   const [isDeleteOrphanDialogOpen, setIsDeleteOrphanDialogOpen] = useState(false)
@@ -49,7 +46,14 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
   const [statusChangeReason, setStatusChangeReason] = useState("")
   
   // Add state for certificates
-  const [certificates, setCertificates] = useState<Certificate[]>(orphan?.certificates || [])
+  const [certificates, setCertificates] = useState<Certificate[]>([])
+  
+  // Update certificates when orphan changes
+  useEffect(() => {
+    if (orphan?.certificates) {
+      setCertificates(orphan.certificates)
+    }
+  }, [orphan?.certificates])
   
   // Image error states
   const [orphanImageError, setOrphanImageError] = useState(false)
@@ -115,8 +119,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       
       // Show success message
       toast({
-        title: t("orphan.details.photoUploaded") || "Photo uploaded",
-        description: t("orphan.details.photoUploadedDesc") || "Orphan photo has been uploaded successfully"
+        title: t("orphan.details.photoUploaded") ?? "Photo uploaded",
+        description: t("orphan.details.photoUploadedDesc") ?? "Orphan photo has been uploaded successfully"
       })
       
       // Refresh the page to show the new image
@@ -124,8 +128,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     } catch (error: any) {
       console.error("Failed to upload orphan image:", error)
       toast({
-        title: t("orphan.details.photoUploadFailed") || "Upload failed",
-        description: error.response?.data?.message || t("orphan.details.errorOccurred") || "An error occurred",
+        title: t("orphan.details.photoUploadFailed") ?? "Upload failed",
+        description: error.response?.data?.message ?? t("orphan.details.errorOccurred") ?? "An error occurred",
         variant: "destructive"
       })
     } finally {
@@ -150,8 +154,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       
       // Show success message
       toast({
-        title: t("orphan.details.guardianPhotoUploaded") || "Photo uploaded",
-        description: t("orphan.details.guardianPhotoUploadedDesc") || "Guardian photo has been uploaded successfully"
+        title: t("orphan.details.guardianPhotoUploaded") ?? "Photo uploaded",
+        description: t("orphan.details.guardianPhotoUploadedDesc") ?? "Guardian photo has been uploaded successfully"
       })
       
       // Refresh the page to show the new image
@@ -159,8 +163,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     } catch (error: any) {
       console.error("Failed to upload guardian image:", error)
       toast({
-        title: t("orphan.details.photoUploadFailed") || "Upload failed",
-        description: error.response?.data?.message || t("orphan.details.errorOccurred") || "An error occurred",
+        title: t("orphan.details.photoUploadFailed") ?? "Upload failed",
+        description: error.response?.data?.message ?? t("orphan.details.errorOccurred") ?? "An error occurred",
         variant: "destructive"
       })
     } finally {
@@ -192,7 +196,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       // Close form and refresh page
       setIsGuardianFormOpen(false)
       window.location.reload()
-    } catch (error: any) {      console.error("Failed to add guardian:", error);
+    } catch (error: any) {      
+      console.error("Failed to add guardian:", error);
       toast({
         title: t("orphan.details.guardianAddFailed"),
         description: error.response?.data?.message ?? t("orphan.details.errorOccurred"),
@@ -379,9 +384,9 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       // Add the certificate to our local state
       const newCertificate = {
         ...certificate,
-        id: `cert-${Date.now()}`, 
         publicId: `cert-${Date.now()}`,
-        orphanPublicId: orphan.publicId
+        orphanPublicId: orphan.publicId,
+        uploadedAt: new Date().toISOString()
       }
       
       // Add the new certificate to the list
@@ -392,8 +397,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
       
       // Show success message
       toast({
-        title: t("orphan.certificates.addSuccess") || "Certificate Added",
-        description: t("orphan.certificates.addSuccessDesc") || "Certificate has been added successfully"
+        title: t("orphan.certificates.addSuccess") ?? "Certificate Added",
+        description: t("orphan.certificates.addSuccessDesc") ?? "Certificate has been added successfully"
       })
       
       // In a real implementation, we might want to refresh the page or fetch updated certificates
@@ -401,8 +406,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
     } catch (error: any) {
       console.error("Failed to add certificate:", error)
       toast({
-        title: t("orphan.certificates.addFailed") || "Failed to add certificate",
-        description: error.message || t("orphan.details.errorOccurred") || "An error occurred",
+        title: t("orphan.certificates.addFailed") ?? "Failed to add certificate",
+        description: error.message ?? t("orphan.details.errorOccurred") ?? "An error occurred",
         variant: "destructive"
       })
     } finally {
@@ -418,43 +423,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-3">
-              {/* Small profile image next to name */}
-              <span className="flex items-center gap-2">
-                <span className="relative w-10 h-10 cursor-pointer group" onClick={() => document.getElementById('orphan-profile-upload')?.click()}>
-                  {orphanImageUrl ? (
-                    <Image
-                      src={orphanImageUrl}
-                      alt={`${orphan.fullName} Profile`}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                      className="rounded-full border border-blue-300 shadow-sm"
-                      onError={handleOrphanImageError}
-                      unoptimized
-                      priority
-                    />
-                  ) : (
-                    <span className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center border border-blue-300 text-blue-400">
-                      <User className="h-6 w-6" />
-                    </span>
-                  )}
-                  <input
-                    id="orphan-profile-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={e => {
-                      const file = e.target.files?.[0];
-                      if (file && orphan?.publicId) {
-                        handleOrphanImageUpload(file, orphan.publicId);
-                      }
-                    }}
-                  />
-                  <span className="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1 text-xs opacity-80 group-hover:opacity-100 transition-opacity">
-                    <Edit className="h-3 w-3" />
-                  </span>
-                </span>
-                <span className="font-bold text-lg">{orphan.fullName}</span>
-              </span>
+              <span className="font-bold text-lg">{orphan.fullName}</span>
             </CardTitle>
             {orphan.status && (
               <Badge className={`${orphan.status?.toLowerCase() === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
@@ -465,6 +434,62 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
         </CardHeader>
         
         <CardContent className="space-y-6">
+          {/* Orphan Image - centered at top, clickable for upload */}
+          <div className="flex flex-col items-center mb-6">
+            <button 
+              type="button"
+              className="relative group cursor-pointer bg-transparent border-0 p-0" 
+              onClick={() => document.getElementById('orphan-profile-upload')?.click()}
+              aria-label={t("orphan.details.uploadProfilePhoto") ?? "Upload profile photo"}
+            >
+              {orphanImageUrl ? (
+                <div className="w-36 h-36 overflow-hidden relative rounded-full border-4 border-blue-100 shadow-md">
+                  <Image 
+                    src={orphanImageUrl}
+                    alt={`${orphan.fullName} Profile`}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    className="rounded-full"
+                    onError={handleOrphanImageError}
+                    unoptimized
+                    priority
+                  />
+                  {!readOnly && (
+                    <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Edit className="h-6 w-6 text-white" />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="w-36 h-36 bg-gray-100 rounded-full border-4 border-blue-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                  <div className="text-blue-500">
+                    <User className="h-16 w-16" />
+                  </div>
+                  {!readOnly && (
+                    <div className="absolute inset-0 bg-black bg-opacity-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
+                      <Edit className="h-6 w-6 text-white" />
+                    </div>
+                  )}
+                </div>
+              )}
+            </button>
+            {!readOnly && (
+              <input
+                id="orphan-profile-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                aria-label={t("orphan.details.uploadProfilePhoto") ?? "Upload profile photo"}
+                title={t("orphan.details.uploadProfilePhoto") ?? "Upload profile photo"}
+                onChange={e => {
+                  const file = e.target.files?.[0];
+                  if (file && orphan?.publicId) {
+                    handleOrphanImageUpload(file, orphan.publicId);
+                  }
+                }}
+              />
+            )}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[100px]">{t("orphan.details.fullName")}</span>
@@ -503,7 +528,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             
             <div className="mb-2">
               <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.branch")}</span>
-              <span className="px-3 py-1 inline-block">{orphan.branchName || "-"}</span>
+              <span className="px-3 py-1 inline-block">{orphan.branchName ?? "-"}</span>
             </div>
           </div>
 
@@ -512,7 +537,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
           <div className="bg-white rounded-lg p-4 border border-blue-100 shadow-sm">
             <div className="mb-2">
               <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.adoptionReason")}</span>
-              <span className="px-3 py-1 inline-block">{orphan.adoptionReason || "-"}</span>
+              <span className="px-3 py-1 inline-block">{orphan.adoptionReason ?? "-"}</span>
             </div>
           </div>
 
@@ -523,7 +548,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             <div className="mt-4">
               <div className="mb-2">
                 <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.currentLevel")}</span>
-                <span className="px-3 py-1 inline-block">{orphan.educationLevel || t("orphan.details.none")}</span>
+                <span className="px-3 py-1 inline-block">{orphan.educationLevel ?? t("orphan.details.none")}</span>
               </div>
               <div className="mb-2">
                 <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">{t("orphan.details.currentSchool")}</span>
@@ -582,6 +607,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                 type="file"
                 accept="image/*"
                 className="hidden"
+                aria-label={t("orphan.details.uploadPhoto") ?? "Upload photo"}
+                title={t("orphan.details.uploadPhoto") ?? "Upload photo"}
                 onChange={e => {
                   const file = e.target.files?.[0];
                   if (file && orphan?.publicId) {
@@ -594,7 +621,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
               ) : (
                 <Image className="h-4 w-4 mr-1" width={16} height={16} src="/icons/camera.svg" alt="Upload" />
               )}
-              {t("orphan.details.uploadPhoto") || "Upload Photo"}
+              {t("orphan.details.uploadPhoto") ?? "Upload Photo"}
             </Button>
             
             <Button 
@@ -728,6 +755,83 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
         </AlertDialogContent>
       </AlertDialog>
       
+      {/* Social Welfare Officer Information - Full width */}
+      {orphan.socialWelfareOfficer && (
+        <Card className="shadow-lg rounded-xl overflow-hidden">
+          <CardHeader>
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5 text-blue-600" />
+                {t("orphan.details.socialWelfareOfficer") ?? "Social Welfare Officer"}
+              </CardTitle>
+              <CardDescription>
+                {t("orphan.details.socialWelfareOfficerDesc") ?? "Information about the social welfare officer who handled this case"}
+              </CardDescription>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">
+                  {t("orphan.details.officerName") ?? "Officer Name"}
+                </span>
+                <span className="px-3 py-1 inline-block font-medium">
+                  {orphan.socialWelfareOfficer.name}
+                </span>
+              </div>
+              
+              <div>
+                <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">
+                  {t("orphan.details.workPlace") ?? "Work Place"}
+                </span>
+                <span className="px-3 py-1 inline-block">
+                  {orphan.socialWelfareOfficer.workPlace}
+                </span>
+              </div>
+              
+              <div>
+                <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">
+                  {t("orphan.details.phoneNumber") ?? "Phone Number"}
+                </span>
+                <span className="px-3 py-1 inline-block">
+                  <a 
+                    href={`tel:${orphan.socialWelfareOfficer.phoneNumber}`}
+                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    {orphan.socialWelfareOfficer.phoneNumber}
+                  </a>
+                </span>
+              </div>
+              
+              <div>
+                <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">
+                  {t("orphan.details.email") ?? "Email"}
+                </span>
+                <span className="px-3 py-1 inline-block">
+                  <a 
+                    href={`mailto:${orphan.socialWelfareOfficer.email}`}
+                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    {orphan.socialWelfareOfficer.email}
+                  </a>
+                </span>
+              </div>
+              
+              {orphan.socialWelfareOfficer.createdDate && (
+                <div>
+                  <span className="text-blue-600 font-medium px-2 py-1 inline-block min-w-[120px]">
+                    {t("orphan.details.assignedDate") ?? "Assigned Date"}
+                  </span>
+                  <span className="px-3 py-1 inline-block">
+                    {new Date(orphan.socialWelfareOfficer.createdDate).toLocaleDateString()}
+                  </span>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      
       {/* Guardian Information - Full width */}
       <Card className="shadow-lg rounded-xl overflow-hidden">        
         <CardHeader>
@@ -741,7 +845,12 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
             <div className="space-y-6">              
               {/* Guardian Image - centered at top, clickable for upload */}
               <div className="flex flex-col items-center mb-6">
-                <div className="relative group cursor-pointer" onClick={() => document.getElementById('guardian-profile-upload')?.click()}>
+                <button 
+                  type="button"
+                  className="relative group cursor-pointer bg-transparent border-0 p-0" 
+                  onClick={() => document.getElementById('guardian-profile-upload')?.click()}
+                  aria-label={t("orphan.details.uploadGuardianPhoto") ?? "Upload guardian photo"}
+                >
                   {guardianImageUrl ? (
                     <div className="w-36 h-36 overflow-hidden relative rounded-full border-4 border-blue-100 shadow-md">
                       <Image 
@@ -772,13 +881,15 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                       )}
                     </div>
                   )}
-                </div>
+                </button>
                 {!readOnly && orphan.guardian?.publicId && (
                   <input
                     id="guardian-profile-upload"
                     type="file"
                     accept="image/*"
                     className="hidden"
+                    aria-label={t("orphan.details.uploadGuardianPhoto") ?? "Upload guardian photo"}
+                    title={t("orphan.details.uploadGuardianPhoto") ?? "Upload guardian photo"}
                     onChange={e => {
                       const file = e.target.files?.[0];
                       if (file && orphan?.guardian?.publicId) {
@@ -843,6 +954,8 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                   type="file"
                   accept="image/*"
                   className="hidden"
+                  aria-label={t("orphan.details.uploadGuardianPhoto") ?? "Upload guardian photo"}
+                  title={t("orphan.details.uploadGuardianPhoto") ?? "Upload guardian photo"}
                   onChange={e => {
                     const file = e.target.files?.[0];
                     if (file && orphan?.guardian?.publicId) {
@@ -855,7 +968,7 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                 ) : (
                   <Image className="h-4 w-4 mr-1" width={16} height={16} src="/icons/camera.svg" alt="Upload" />
                 )}
-                {t("orphan.details.uploadGuardianPhoto") || "Upload Photo"}
+                {t("orphan.details.uploadGuardianPhoto") ?? "Upload Photo"}
               </Button>
             )}
             <Button
@@ -904,17 +1017,17 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                   </thead>
                   <tbody>
                     {certificates.map((cert, index) => (
-                      <tr key={cert.id || `cert-${index}`} className={`border-b hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                      <tr key={cert.publicId ?? `cert-${index}`} className={`border-b hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                         <td className="py-4 px-4">
                           <div className="flex items-center">
                             <div className="bg-blue-100 p-2 rounded-full mr-3">
                               <File className="h-5 w-5 text-blue-600" />
                             </div>
                             <span className="font-medium">
-                              {cert.type === 'BIRTH_CERTIFICATE' && (t("orphan.details.birthCertificate") || "Birth Certificate")}
-                              {cert.type === 'CLASS_7' && (t("orphan.details.class7Certificate") || "Class 7 Certificate")}
-                              {cert.type === 'FORM_4' && (t("orphan.details.form4Certificate") || "Form 4 Certificate")}
-                              {cert.type === 'FORM_6' && (t("orphan.details.form6Certificate") || "Form 6 Certificate")}
+                              {cert.certificateType === 'BIRTH_CERTIFICATE' && (t("orphan.details.birthCertificate") ?? "Birth Certificate")}
+                              {cert.certificateType === 'CLASS_7' && (t("orphan.details.class7Certificate") ?? "Class 7 Certificate")}
+                              {cert.certificateType === 'FORM_4' && (t("orphan.details.form4Certificate") ?? "Form 4 Certificate")}
+                              {cert.certificateType === 'FORM_6' && (t("orphan.details.form6Certificate") ?? "Form 6 Certificate")}
                             </span>
                           </div>
                         </td>
@@ -923,13 +1036,31 @@ export default function OrphanDetailsPersonal({ orphan, readOnly = false }: Read
                             <div className="bg-gray-100 p-2 rounded-full mr-3">
                               <Calendar className="h-5 w-5 text-gray-600" />
                             </div>
-                            <span>{cert.issueDate ? formatDate(cert.issueDate) : '-'}</span>
+                            <span>{cert.uploadedAt ? formatDate(cert.uploadedAt) : '-'}</span>
                           </div>
                         </td>
                         <td className="py-4 px-4 text-right">
-                          <Button variant="outline" size="sm" className="h-9 px-4 text-blue-600 rounded-lg border-blue-200 hover:bg-blue-50 font-medium">
-                            {t("orphan.details.viewCertificate")}
-                          </Button>
+                          {cert.downloadUrl ? (
+                            <a 
+                              href={cert.downloadUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="inline-block"
+                            >
+                              <Button variant="outline" size="sm" className="h-9 px-4 text-blue-600 rounded-lg border-blue-200 hover:bg-blue-50 font-medium">
+                                {t("orphan.details.viewCertificate")}
+                              </Button>
+                            </a>
+                          ) : (
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="h-9 px-4 text-gray-400 rounded-lg border-gray-200 cursor-not-allowed" 
+                              disabled
+                            >
+                              {t("orphan.details.viewCertificate")}
+                            </Button>
+                          )}
                         </td>
                       </tr>
                     ))}

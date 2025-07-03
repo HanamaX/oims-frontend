@@ -218,7 +218,8 @@ export default function SuperAdminReportsPage() {
   const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState<ReportType>("orphans")
   const [selectedBranchId, setSelectedBranchId] = useState<string | undefined>(undefined)
-    if (!user) {
+  
+  if (!user) {
     return <div><T k="common.loading" /></div>
   }
 
@@ -231,7 +232,7 @@ export default function SuperAdminReportsPage() {
             {t("report.comprehensive")}
           </p>
         </div>        <Badge variant="outline" className="px-3 py-1 text-base bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md">
-          <T k="roles.Supervisor" />
+          <T k="roles.OrphanageAdmin" />
         </Badge>
       </div>
 
@@ -262,6 +263,8 @@ export default function SuperAdminReportsPage() {
           <TabsContent value="generator" className="space-y-6">
             <ReportComponent 
               userRole="superadmin"
+              branchId={user.orphanageCentrePublicId ?? undefined}
+              branchName={user.orphanageCentreName ?? user.branchName ?? "Your Centre"}
               onBranchChange={setSelectedBranchId}
             />
           </TabsContent>

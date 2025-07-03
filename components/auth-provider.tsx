@@ -23,6 +23,7 @@ interface AuthContextType {
     publicId?: string | null
     branchPublicId?: string | null
     orphanageCentrePublicId?: string | null
+    orphanageCentreName?: string | null
     isCentreCreated?: boolean
     dashboardStats?: {
       totalOrphans: number

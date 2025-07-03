@@ -19,6 +19,16 @@ type LanguageContextType = {
 // Create translations object
 const translations: Record<string, Record<AppLanguage, string>> = {
   
+  // Supervisor Reports translations
+  "supervisor.reports.title": {
+    en: "Reports Management",
+    sw: "Usimamizi wa Ripoti",
+  },
+  "supervisor.reports.description": {
+    en: "Generate and analyze comprehensive reports for your branch operations",
+    sw: "Unda na uchanganue ripoti za kina za shughuli za tawi lako",
+  },
+  
   // Orphanage Centres Page
   "superuser.dashboard.orphanageCentres": {
     en: "Orphanage Centres",
@@ -4556,6 +4566,36 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     sw: "Imeshindwa Kufuta Mlezi",
   },
   
+  // Social Welfare Officer Details
+  "orphan.details.socialWelfareOfficer": {
+    en: "Social Welfare Officer",
+    sw: "Afisa wa Maendeleo ya Jamii",
+  },
+  "orphan.details.socialWelfareOfficerDesc": {
+    en: "Information about the social welfare officer who handled this case",
+    sw: "Taarifa kuhusu afisa wa maendeleo ya jamii aliyeshughulikia kesi hii",
+  },
+  "orphan.details.officerName": {
+    en: "Officer Name",
+    sw: "Jina la Afisa",
+  },
+  "orphan.details.workPlace": {
+    en: "Work Place",
+    sw: "Mahali pa Kazi",
+  },
+  "orphan.details.officerPhone": {
+    en: "Phone Number",
+    sw: "Namba ya Simu",
+  },
+  "orphan.details.officerEmail": {
+    en: "Email",
+    sw: "Barua Pepe",
+  },
+  "orphan.details.assignedDate": {
+    en: "Assigned Date",
+    sw: "Tarehe ya Kupewa",
+  },
+  
   // Guardian Form
   "guardian.form.addGuardian": {
     en: "Add Guardian",
@@ -4944,6 +4984,44 @@ const translations: Record<string, Record<AppLanguage, string>> = {
     en: "Save Orphan",
     sw: "Hifadhi Yatima",
   },
+  
+  // Social Welfare Officer translations
+  "orphan.form.socialWelfareSection": {
+    en: "Social Welfare Officer Information",
+    sw: "Taarifa za Afisa wa Maendeleo ya Jamii",
+  },
+  "orphan.form.socialWelfareOfficerName": {
+    en: "Officer Name",
+    sw: "Jina la Afisa",
+  },
+  "orphan.form.socialWelfareOfficerNamePlaceholder": {
+    en: "Enter name of social welfare officer",
+    sw: "Ingiza jina la afisa wa maendeleo ya jamii",
+  },
+  "orphan.form.socialWelfareOfficerWorkPlace": {
+    en: "Work Place",
+    sw: "Mahali pa Kazi",
+  },
+  "orphan.form.socialWelfareOfficerWorkPlacePlaceholder": {
+    en: "Enter work place",
+    sw: "Ingiza mahali pa kazi",
+  },
+  "orphan.form.socialWelfareOfficerPhoneNumber": {
+    en: "Phone Number",
+    sw: "Namba ya Simu",
+  },
+  "orphan.form.socialWelfareOfficerPhoneNumberPlaceholder": {
+    en: "Enter phone number",
+    sw: "Ingiza namba ya simu",
+  },
+  "orphan.form.socialWelfareOfficerEmail": {
+    en: "Email",
+    sw: "Barua Pepe",
+  },
+  "orphan.form.socialWelfareOfficerNotes": {
+    en: "Notes",
+    sw: "Maelezo",
+  },
   // New translation keys for new orphan form fields
   "orphan.form.arrivalDate": {
     en: "Date of Arrival",
@@ -5052,6 +5130,50 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   "orphan.form.relationshipPlaceholder": {
     en: "Enter relationship (e.g. uncle, none)",
     sw: "Ingiza uhusiano (mfano mjomba, hakuna)",
+  },
+  "orphan.form.guardianSex": {
+    en: "Gender",
+    sw: "Jinsia",
+  },
+  "orphan.form.guardianContactNumber": {
+    en: "Contact Number",
+    sw: "Namba ya Mawasiliano",
+  },
+  "orphan.form.guardianContactNumberPlaceholder": {
+    en: "Enter contact number",
+    sw: "Ingiza namba ya mawasiliano",
+  },
+  "orphan.form.guardianEmail": {
+    en: "Email",
+    sw: "Barua Pepe",
+  },
+  "orphan.form.guardianEmailPlaceholder": {
+    en: "Enter email address",
+    sw: "Ingiza anwani ya barua pepe",
+  },
+  "orphan.form.guardianAddress": {
+    en: "Address",
+    sw: "Anwani",
+  },
+  "orphan.form.guardianAddressPlaceholder": {
+    en: "Enter address",
+    sw: "Ingiza anwani",
+  },
+  "orphan.form.guardianOccupation": {
+    en: "Occupation",
+    sw: "Kazi",
+  },
+  "orphan.form.guardianOccupationPlaceholder": {
+    en: "Enter occupation",
+    sw: "Ingiza aina ya kazi",
+  },
+  "orphan.form.guardianRelationship": {
+    en: "Relationship",
+    sw: "Uhusiano",
+  },
+  "orphan.form.guardianRelationshipPlaceholder": {
+    en: "Enter relationship (e.g. uncle, aunt)",
+    sw: "Ingiza uhusiano (k.m. mjomba, shangazi)",
   },
   "orphan.form.childPhoto": {
     en: "Child Photo",
@@ -5508,6 +5630,10 @@ const translations: Record<string, Record<AppLanguage, string>> = {
   "roles.Supervisor": {
     en: "Supervisor",
     sw: "Msimamizi",
+  },
+  "roles.OrphanageAdmin": {
+    en: "Orphanage Admin",
+    sw: "Msimamizi wa Kituo cha Watoto Yatima",
   },
   "report.fullAccess": {
     en: "Full Access",

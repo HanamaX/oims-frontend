@@ -20,7 +20,7 @@ import { useLanguage, T } from "@/contexts/LanguageContext"
 import { useAnalyticsTranslations } from "@/hooks/use-analytics-translations"
 
 interface ReportComponentProps {
-  userRole: "admin" | "superadmin" | "supervisor"
+  userRole: "admin" | "superadmin" | "supervisor" | "orphanage_admin"
   branchId?: string
   branchName?: string
   orphanId?: string
@@ -58,9 +58,14 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
   })  // Load branches for superadmin and orphanage admin only
   useEffect(() => {
     if (userRole === "superadmin") {
-      // Super admin can view all branches
-      loadAllBranches()
-    } else if (userRole === "admin" && branchId) {
+      if (branchId) {
+        // If branchId (centreId) is provided, load branches for that specific centre
+        loadBranchesForCentre(branchId)
+      } else {
+        // Super admin can view all branches when no specific centre is selected
+        loadAllBranches()
+      }
+    } else if ((userRole === "admin" || userRole === "orphanage_admin") && branchId) {
       // Orphanage admin can only view branches in their center
       loadBranchesForCentre(branchId)
     }
@@ -77,7 +82,8 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
     try {
       setLoading(true)
       const response = await ReportService.getBranches(undefined, userRole)
-      setAvailableBranches(response.data || [])
+      // ReportService.getBranches returns the data directly, not wrapped in a response object
+      setAvailableBranches(response || [])
       setLoading(false)
     } catch (error) {
       console.error("Failed to load branches", error)
@@ -94,7 +100,8 @@ export default function ReportComponent({ userRole, branchId, branchName, orphan
     try {
       setLoading(true)
       const response = await ReportService.getBranches(centreId, userRole)
-      setAvailableBranches(response.data || [])
+      // ReportService.getBranches returns the data directly, not wrapped in a response object
+      setAvailableBranches(response || [])
       setLoading(false)
     } catch (error) {
       console.error("Failed to load branches", error)

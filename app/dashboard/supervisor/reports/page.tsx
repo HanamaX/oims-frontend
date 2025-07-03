@@ -213,9 +213,9 @@ export default function SupervisorReportsPage() {
   return (
     <div className="container mx-auto py-6 space-y-8">
       <div className="flex items-center justify-between">
-        <div>          <h1 className="text-3xl font-bold"><T k="report.title" /></h1>
+        <div>          <h1 className="text-3xl font-bold"><T k="supervisor.reports.title" /></h1>
           <p className="text-muted-foreground">
-            <T k="report.generate" />
+            <T k="supervisor.reports.description" />
           </p>
         </div>        <Badge variant="outline" className="px-3 py-1 text-base bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md">
           {user.branchName ?? <T k="branch.label" />}

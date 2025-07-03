@@ -13,14 +13,22 @@ export interface Guardian {
   imageUrl?: string | null
 }
 
+export interface SocialWelfareOfficer {
+  publicId: string
+  name: string
+  workPlace: string
+  phoneNumber: string
+  email: string
+  createdDate?: string
+  lastModifiedDate?: string
+}
+
 export interface Certificate {
-  id?: string
-  publicId?: string
-  type: string
-  fileUrl: string
-  filename: string
-  issueDate: string
-  description?: string
+  publicId: string
+  certificateType: string
+  fileName: string
+  downloadUrl: string
+  uploadedAt: string
   orphanPublicId?: string
 }
 
@@ -45,6 +53,7 @@ export interface OrphanDetails {
   branchPublicId: string
   branchName: string
   guardian: Guardian | null
+  socialWelfareOfficer?: SocialWelfareOfficer | null
   status?: string
   certificates?: Certificate[]
 }

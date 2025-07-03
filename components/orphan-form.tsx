@@ -79,7 +79,7 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
       origin,
       fullName,
       dateOfBirth,
-      arrivalDate,
+      dateOfArrival: arrivalDate,
       religion,
       adoptionReason,
       gender,
@@ -91,29 +91,40 @@ export default function OrphanForm({ open, onOpenChange, onSubmit }: Readonly<Or
       educationLevel,
       previousSchoolName,
       
-      // Map social welfare officer data to the API fields
-      referralOfficer: socialWelfareOfficerName,
-      referralDepartment: socialWelfareOfficerWorkPlace,
-      referralPhone: socialWelfareOfficerPhoneNumber,
-      // Use referral fields for the email and notes as well
-      referralDate: new Date().toISOString().split('T')[0] // Current date in YYYY-MM-DD format
+      // Social welfare officer data using the correct API fields
+      socialWelfareOfficerName,
+      socialWelfareOfficerWorkPlace,
+      socialWelfareOfficerPhoneNumber,
+      socialWelfareOfficerEmail
     }
     
-    // Guardian data to be submitted after orphan creation
-    const guardianData = {
-      name: guardianName,
-      sex: guardianSex,
-      relationship: guardianRelationship,
-      contactNumber: guardianContactNumber,
-      email: guardianEmail,
-      address: guardianAddress,
-      occupation: guardianOccupation
+    // Guardian data to be submitted after orphan creation (only if guardian name is provided)
+    let guardianData = null
+    if (guardianName.trim()) {
+      // Generate a UUID for the guardian
+      const generateUUID = () => {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          const r = Math.random() * 16 | 0;
+          const v = c === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+      };
+      
+      guardianData = {
+        publicId: generateUUID(),
+        name: guardianName,
+        sex: guardianSex,
+        relationship: guardianRelationship,
+        contactNumber: guardianContactNumber,
+        email: guardianEmail,
+        address: guardianAddress,
+        occupation: guardianOccupation
+      }
     }
     
     // Submit the data to parent component which should:
     // 1. Create orphan and get orphanPublicId from response
-    // 2. Create guardian using orphanPublicId
-    // 3. Guardian image upload will be handled in the orphan details view
+    // 2. Create guardian using orphanPublicId (if guardian data is provided)
     onSubmit(orphanData, undefined, guardianData)
     
     // Reset form fields
