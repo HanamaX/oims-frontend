@@ -207,13 +207,13 @@ export default function OrphanageAdminOrphansPage() {
           <p className="text-muted-foreground mt-2"><T k="orphans.description" /></p>
         </div>
 
-        <Button
+        {/* <Button
           onClick={() => setShowAddOrphanForm(true)}
           className="rounded-xl bg-blue-600 hover:bg-blue-700"
         >
           <Plus className="mr-2 h-4 w-4" />
           <T k="orphans.addOrphan" />
-        </Button>
+        </Button> */}
         
         {/* Add Orphan Form Dialog */}
         <OrphanForm 
